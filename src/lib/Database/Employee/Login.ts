@@ -1,19 +1,28 @@
 "use server";
 import sql from "mssql";
-import { config, ConfigType } from "../Connection";
-import Query from "../Query";
+import { User, fetchPool } from "../Pool";
 
 interface AuthenticateLoginData {
     Username: string;
     Password: string;
 }
 
-export default async function AuthenticateLogin(configType: ConfigType, data: AuthenticateLoginData)
-: Promise<number> {
+export default async function AuthenticateLogin(
+    data: AuthenticateLoginData, 
+    user: User = User.Default
+): Promise<number> {
     try {
-        await sql.connect(await config(configType, data));
-        const res = await sql.query(Query("EXEC Employee.AuthenticateLogin", data));
-        return res.recordset[0].EmployeeID;
+        const pool = await fetchPool(user, data);
+        if (!pool)
+            throw "Undefined Pool";
+
+        const output = await pool.request()
+            .input('Username', sql.VarChar(50), data.Username)
+            .input('Password', sql.VarChar(50), data.Password)
+            .output('EmployeeID', sql.Int)
+            .execute("AuthenticateLogin");
+
+        return output.output.EmployeeID;
     }
     catch (err) {
         console.error(err);

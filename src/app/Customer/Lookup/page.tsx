@@ -7,7 +7,7 @@ import Error from "@/views/Customer/Lookup/Error";
 import LookupForm from "@/views/Customer/Lookup/Lookup";
 import "../../../lib/Database/Connection";
 import { processForm } from "@/lib/Form/Customer/Lookup/ProcessedForm";
-import { config, ConfigType } from "../../../lib/Database/Connection";
+import { config, UserType } from "../../../lib/Database/Connection";
 import { GetAppointmentSummary, AuthenticateLookup } from "@/lib/Database/Export";
 import { Appointment } from "@/lib/Database/Appointment/Appointment";
 

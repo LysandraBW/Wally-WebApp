@@ -1,7 +1,6 @@
 "use server";
 import sql from "mssql";
-import { config, ConfigType } from "../../Connection";
-import Query from "../../Query";
+import { User, fetchPool } from "../../Pool";
 
 interface UpdateFixData {
     EmployeeID: number;
@@ -10,11 +9,23 @@ interface UpdateFixData {
     Fix: string;
 }
 
-export default async function UpdateFix(data: UpdateFixData)
+export default async function UpdateFix(
+    data: UpdateFixData, 
+    user: User = User.Employee
+)
 : Promise<boolean> {
     try {
-        await sql.connect(await config(ConfigType.Employee, data));
-        await sql.query(Query("EXEC Appointment.UpdateFix", data));
+        const pool = await fetchPool(user, data);
+        if (!pool)
+            throw '';
+
+        await pool.request()
+            .input('EmployeeID', sql.Int, data.EmployeeID)
+            .input('AppointmentID', sql.Int, data.AppointmentID)
+            .input('FixID', sql.Int, data.FixID)
+            .input('Fix', sql.Int, data.Fix)
+            .execute('Appointment.UpdateFix');
+
         return true;
     }
     catch (err) {

@@ -1,7 +1,6 @@
 "use server";
 import sql from "mssql";
-import { config, ConfigType } from "../../Connection";
-import Query from "../../Query";
+import { User, fetchPool } from "../../Pool";
 
 interface InsertDiagnosisData {
     EmployeeID: number;
@@ -10,12 +9,24 @@ interface InsertDiagnosisData {
     Diagnosis: string;
 }
 
-export default async function InsertDiagnosis(data: InsertDiagnosisData)
-: Promise<number> {
+export default async function InsertDiagnosis(
+    data: InsertDiagnosisData, 
+    user: User = User.Employee
+): Promise<number> {
     try {
-        await sql.connect(await config(ConfigType.Employee, data));
-        const res = await sql.query(Query("EXEC Appointment.InsertDiagnosis", data));
-        return res.recordset[0].DiagnosisID;
+        const pool = await fetchPool(user, data);
+        if (!pool)
+            throw '';
+
+        const output = await pool.request()
+            .input('EmployeeID', sql.Int, data.EmployeeID)
+            .input('AppointmentID', sql.Int, data.AppointmentID)
+            .input('Code', sql.VarChar, data.Code)
+            .input('Diagnosis', sql.VarChar, data.Diagnosis)
+            .output('DiagnosisID', sql.Int)
+            .execute('Appointment.InsertDiagnosis');
+
+        return output.output.DiagnosisID;
     }   
     catch (err) {
         console.error(err);

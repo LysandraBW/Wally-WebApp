@@ -1,7 +1,6 @@
 "use server";
 import sql from "mssql";
-import { config, ConfigType } from "../Connection";
-import Query from "../Query";
+import { User, fetchPool } from "../Pool";
 
 interface UpdateCustomerData {
     EmployeeID: number;
@@ -12,11 +11,22 @@ interface UpdateCustomerData {
     Phone: string;
 }
 
-export default async function UpdateCustomer(data: UpdateCustomerData)
+export default async function UpdateCustomer(data: UpdateCustomerData, user: User = User.Employee)
 : Promise<boolean> {
     try {
-        await sql.connect(await config(ConfigType.Employee, data));
-        await sql.query(Query("EXEC Customer.UpdateCustomer", data));
+        const pool = await fetchPool(user, data);
+        if (!pool)
+            throw 'Undefined Error';
+
+        await pool.request()
+            .input('EmployeeID', sql.Int, data.EmployeeID)
+            .input('AppointmentID', sql.Int, data.AppointmentID)
+            .input('FName', sql.VarChar(50), data.FName)
+            .input('LName', sql.VarChar(50), data.LName)
+            .input('Email', sql.VarChar(320), data.Email)
+            .input('Phone', sql.VarChar(15), data.Phone)
+            .execute('Customer.UpdateCustomer');
+            
         return true;
     }
     catch (err) {

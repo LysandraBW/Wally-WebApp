@@ -1,7 +1,6 @@
 "use server";
 import sql from "mssql";
-import { config, ConfigType } from "../../Connection";
-import Query from "../../Query";
+import { User, fetchPool } from "../../Pool";
 
 interface UpdateNoteData {
     NoteOwnerID: number;
@@ -13,11 +12,25 @@ interface UpdateNoteData {
     ShowCustomer: number;
 }
 
-export default async function UpdateNote(data: UpdateNoteData)
-: Promise<boolean> {
+export default async function UpdateNote(
+    data: UpdateNoteData, 
+    user: User = User.Employee
+): Promise<boolean> {
     try {
-        await sql.connect(await config(ConfigType.Employee, data));
-        await sql.query(Query("EXEC Appointment.UpdateNote", data));
+        const pool = await fetchPool(user, data);
+        if (!pool)
+            throw '';
+        
+        await pool.request()
+            .input('NoteOwnerID', sql.Int, data.NoteOwnerID)
+            .input('AppointmentID', sql.Int, data.AppointmentID)
+            .input('NoteID', sql.Int, data.NoteID)
+            .input('Head', sql.Int, data.Head)
+            .input('Body', sql.Int, data.Body)
+            .input('Attachment', sql.Int, data.Attachment)
+            .input('ShowCustomer', sql.Int, data.ShowCustomer)
+            .execute('Appointment.UpdateNote');
+
         return true;
     }
     catch (err) {

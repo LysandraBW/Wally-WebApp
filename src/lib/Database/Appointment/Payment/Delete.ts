@@ -1,7 +1,6 @@
 "use server";
 import sql from "mssql";
-import { config, ConfigType } from "../../Connection";
-import Query from "../../Query";
+import { User, fetchPool } from "../../Pool";
 
 interface DeletePaymentData {
     EmployeeID: number;
@@ -9,11 +8,21 @@ interface DeletePaymentData {
     PaymentID: number;
 }
 
-export default async function DeletePayment(data: DeletePaymentData)
-: Promise<boolean> {
+export default async function DeletePayment(
+    data: DeletePaymentData, 
+    user: User = User.Employee
+): Promise<boolean> {
     try {
-        await sql.connect(await config(ConfigType.Employee, data));
-        await sql.query(Query("EXEC Appointment.DeletePayment", data));
+        const pool = await fetchPool(user, data);
+        if (!pool)
+            throw 'Undefined Pool';
+
+        await pool.request()
+            .input('EmployeeID', sql.Int, data.EmployeeID)
+            .input('AppointmentID', sql.Int, data.AppointmentID)
+            .input('PaymentID', sql.Int, data.PaymentID)
+            .execute('Appointment.DeletePayment');
+
         return true;
     }
     catch (err) {

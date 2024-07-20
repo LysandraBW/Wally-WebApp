@@ -1,21 +1,30 @@
 "use server";
 import sql from "mssql";
-import { config, ConfigType } from "../../Connection";
-import Query from "../../Query";
+import { User, fetchPool } from "../../Pool";
 
 interface UpdateEventData {
     EventOwnerID: number;
     EventID: number;
-    Name: string;
-    Date: string;
-    Summary: string;
+    Name: string | null;
+    Date: string | null;
+    Summary: string | null;
 }
 
-export default async function UpdateEvent(data: UpdateEventData)
+export default async function UpdateEvent(data: UpdateEventData, user: User = User.Employee)
 : Promise<boolean> {
     try {
-        await sql.connect(await config(ConfigType.Employee, data));
-        await sql.query(Query("EXEC Employee.UpdateEvent", data));
+        const pool = await fetchPool(user, data);
+        if (!pool)
+            throw 'Undefined Pool';
+
+        await pool.request()
+            .input('EventOwnerID', sql.Int, data.EventOwnerID)
+            .input('EventID', sql.Int, data.EventID)
+            .input('Name', sql.VarChar(100), data.Name)
+            .input('Date', sql.NVarChar, data.Date)
+            .input('Summary', sql.NVarChar(500), data.Summary)
+            .execute('Employee.UpdateEvent');
+            
         return true;
     }
     catch (err) {

@@ -1,7 +1,6 @@
 "use server";
 import sql from "mssql";
-import { config, ConfigType } from "../../Connection";
-import Query from "../../Query";
+import { User, fetchPool } from "../../Pool";
 
 interface InsertFixData {
     EmployeeID: number;
@@ -9,12 +8,24 @@ interface InsertFixData {
     Fix: string;
 }
 
-export default async function InsertFix(data: InsertFixData)
+export default async function InsertFix(
+    data: InsertFixData, 
+    user: User = User.Employee
+)
 : Promise<number> {
     try {
-        await sql.connect(await config(ConfigType.Employee, data));
-        const res = await sql.query(Query("EXEC Appointment.InsertFix", data));
-        return res.recordset[0].FixID;
+        const pool = await fetchPool(user, data);
+        if (!pool)
+            throw '';
+
+        const output = await pool.request()
+            .input('EmployeeID', sql.Int, data.EmployeeID)
+            .input('AppointmentID', sql.Int, data.AppointmentID)
+            .input('Fix', sql.VarChar, data.Fix)
+            .output('FixID', sql.Int)
+            .execute('Appointment.InsertFix');
+
+        return output.output.FixID;
     }   
     catch (err) {
         console.error(err);

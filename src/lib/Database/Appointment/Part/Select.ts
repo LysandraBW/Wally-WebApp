@@ -1,7 +1,6 @@
 "use server";
 import sql from "mssql";
-import { config, ConfigType } from "../../Connection";
-import Query from "../../Query";
+import { User, fetchPool } from "../../Pool";
 
 interface GetPartsData {
     EmployeeID: number;
@@ -16,12 +15,21 @@ interface Part {
     UnitCost: string;
 }
 
-export default async function GetParts(data: GetPartsData)
-: Promise<Array<Part> | null> {
+export default async function GetParts(
+    data: GetPartsData, 
+    user: User = User.Employee
+): Promise<Array<Part> | null> {
     try {
-        await sql.connect(await config(ConfigType.Employee, data));
-        const res = await sql.query(Query("EXEC Appointment.GetParts", data));
-        return res.recordset;   
+        const pool = await fetchPool(user, data);
+        if (!pool)
+            throw 'Undefined Pool';
+
+        const output = await pool.request()
+            .input('EmployeeID', sql.Int, data.EmployeeID)
+            .input('AppointmentID', sql.Int, data.AppointmentID)
+            .execute('Appointment.GetParts')
+
+        return output.recordset;   
     }
     catch (err) {
         console.error(err);

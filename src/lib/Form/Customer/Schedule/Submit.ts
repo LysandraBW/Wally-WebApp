@@ -2,13 +2,13 @@
 import { FormStructure } from "./Form";
 import { processForm } from "./ProcessedForm";
 import { InsertAppointment, InsertDefinedService } from "@/lib/Database/Export";
-import { ConfigType } from "@/lib/Database/Connection";
+import { UserType } from "@/lib/Database/Connection";
 
 const submitForm = async (form: FormStructure): Promise<number> => {
     let processedForm = processForm(form);
 
     const AppointmentID = await InsertAppointment(
-        ConfigType.Default,
+        UserType.Default,
         {
             EmployeeID: null,
             ...processedForm.Scalar
@@ -20,7 +20,7 @@ const submitForm = async (form: FormStructure): Promise<number> => {
 
     for (const ServiceID of processedForm.NonScalar.Services) {
         const serviceID = await InsertDefinedService(
-            ConfigType.Default,
+            UserType.Default,
             {
                 EmployeeID: null,
                 AppointmentID,

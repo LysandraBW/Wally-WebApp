@@ -1,7 +1,6 @@
 "use server";
 import sql from "mssql";
-import { config, ConfigType } from "../../Connection";
-import Query from "../../Query";
+import { User, fetchPool } from "../../Pool";
 
 interface GetServicesData {
     AppointmentID: number;
@@ -18,12 +17,23 @@ export type Service = {
     Service: string;
 }
 
-export default async function GetServices(configType: ConfigType, data: GetServicesData)
-: Promise<Array<Service> | null> {
+export default async function GetServices(
+    data: GetServicesData, 
+    user = User.Customer
+): Promise<Array<Service> | null> {
     try {
-        await sql.connect(await config(configType, data));
-        const res = await sql.query(Query("EXEC Appointment.GetServices", data));
-        return res.recordset;
+        const pool = await fetchPool(user, data);
+        if (!pool)
+            throw 'Undefined Pool';
+
+        const output = await pool.request()
+        .input('AppointmentID', sql.Int, data.AppointmentID)
+        .input('FName', sql.VarChar(50), data.FName)
+        .input('LName', sql.VarChar(50), data.LName)
+        .input('Email', sql.VarChar(320), data.Email)
+        .execute('Appointment.GetServices');
+
+        return output.recordset;
     }
     catch (err) {
         console.error(err);

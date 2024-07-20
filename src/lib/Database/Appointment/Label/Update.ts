@@ -1,7 +1,6 @@
 "use server";
 import sql from "mssql";
-import { config, ConfigType } from "../../Connection";
-import Query from "../../Query";
+import { User, fetchPool } from "../../Pool";
 
 interface UpdateLabelData {
     EmployeeID: number;
@@ -9,11 +8,21 @@ interface UpdateLabelData {
     Label: string;
 }
 
-export default async function UpdateLabel(data: UpdateLabelData)
-: Promise<boolean> {
+export default async function UpdateLabel(
+    data: UpdateLabelData, 
+    user = User.Employee
+): Promise<boolean> {
     try {
-        await sql.connect(await config(ConfigType.Employee, data));
-        await sql.query(Query("EXEC Appointment.UpdateLabel", data));
+        const pool = await fetchPool(user, data);
+        if (!pool)
+            throw '';
+
+        await pool.request()
+            .input('EmployeeID', sql.Int, data.EmployeeID)
+            .input('AppointmentID', sql.Int, data.AppointmentID)
+            .input('Label', sql.VarChar, data.Label)
+            .execute('Appointment.UpdateLabel');
+
         return true;
     }
     catch (err) {

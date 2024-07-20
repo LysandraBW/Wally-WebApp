@@ -1,17 +1,20 @@
 "use server";
-import sql from "mssql";
-import { config, ConfigType } from "../Connection";
+import { User, fetchPool } from "../Pool";
 
 type Status = {
     StatusID: number;
     Status: string;
 }
 
-export async function GetStatus(configType: ConfigType = ConfigType.Default): Promise<Array<Status>> {
+export async function GetStatus(user: User = User.Default)
+: Promise<Array<Status>> {
     try {
-        const pool = await sql.connect(await config(configType));
-        const res = await sql.query("EXEC Info.GetStatus");
-        return res.recordset;
+        const pool = await fetchPool(user);
+        if (!pool)
+            throw "Undefined Pool";
+
+        const output = await pool.request().execute("Info.GetStatus");
+        return output.recordset;
     }
     catch (err) {
         console.error(err);
@@ -25,11 +28,15 @@ type StatusDesc = {
     Description: string;
 }
 
-export async function GetStatusDesc(configType: ConfigType = ConfigType.Default): Promise<Array<StatusDesc>> {
+export async function GetStatusDesc(user: User = User.Default)
+: Promise<Array<StatusDesc>> {
     try {
-        await sql.connect(await config(configType));
-        const res = await sql.query("EXEC Info.GetStatusDesc");
-        return res.recordset;
+        const pool = await fetchPool(user);
+        if (!pool)
+            throw "Undefined Pool";
+
+        const output = await pool.request().execute("EXEC GetStatusDesc");
+        return output.recordset;
     }
     catch (err) {
         console.error(err);
@@ -46,11 +53,15 @@ type Service = {
     ServiceID: number;
 }
 
-export async function GetService(configType: ConfigType = ConfigType.Default): Promise<Array<Service>> {
+export async function GetService(user: User = User.Default)
+: Promise<Array<Service>> {
     try {
-        await sql.connect(await config(configType));
-        const res = await sql.query("EXEC Info.GetService");
-        return res.recordset;
+        const pool = await fetchPool(user);
+        if (!pool)
+            throw "Undefined Pool";
+        
+        const output = await pool.request().execute("Info.GetService");
+        return output.recordset;
     }
     catch (err) {
         console.error(err);
@@ -62,11 +73,15 @@ type Label = {
     Label: string;
 }
 
-export async function GetLabel(configType: ConfigType = ConfigType.Default): Promise<Array<Label>> {
+export async function GetLabel(user: User = User.Default)
+: Promise<Array<Label>> {
     try {
-        await sql.connect(await config(configType));
-        const res = await sql.query("EXEC Info.GetLabel");
-        return res.recordset;
+        const pool = await fetchPool(user);
+        if (!pool)
+            throw "Undefined Pool";
+        
+        const output = await pool.request().execute("Info.GetLabel");
+        return output.recordset;
     }
     catch (err) {
         console.error(err);
@@ -78,11 +93,15 @@ type Make = {
     Make: string;
 }
 
-export async function GetMake(configType: ConfigType = ConfigType.Default): Promise<Array<Make>> {
+export async function GetMake(user: User = User.Default)
+: Promise<Array<Make>> {
     try {
-        await sql.connect(await config(configType));
-        const res = await sql.query("EXEC Info.GetMake");
-        return res.recordset;
+        const pool = await fetchPool(user);
+        if (!pool)
+            throw "Undefined Pool";
+        
+        const output = await pool.request().execute("Info.GetMake");
+        return output.recordset;
     }
     catch (err) {
         console.error(err);

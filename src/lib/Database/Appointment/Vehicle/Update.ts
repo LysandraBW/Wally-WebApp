@@ -1,7 +1,6 @@
 "use server";
 import sql from "mssql";
-import { config, ConfigType } from "../../Connection";
-import Query from "../../Query";
+import { User, fetchPool } from "../../Pool";
 
 interface UpdateVehicleData {
     EmployeeID: number;
@@ -14,14 +13,30 @@ interface UpdateVehicleData {
     LicensePlate: string;
 }
 
-export default async function UpdateVehicle(data: UpdateVehicleData) {
+export default async function UpdateVehicle(
+    data: UpdateVehicleData, 
+    user: User = User.Employee
+): Promise<boolean> {
     try {
-        await sql.connect(await config(ConfigType.Employee, data));
-        await sql.query(Query("EXEC Appointment.UpdateVehicle", data));
+        const pool = await fetchPool(user, data);
+        if (!pool)
+            throw 'Undefined Pool';
+
+        await pool.request()
+            .input('EmployeeID', sql.Int, data.EmployeeID)
+            .input('AppointmentID', sql.Int, data.AppointmentID)
+            .input('Make', sql.Int, data.Make)
+            .input('Model', sql.Int, data.Model)
+            .input('ModelYear', sql.Int, data.ModelYear)
+            .input('VIN', sql.Int, data.VIN)
+            .input('Mileage', sql.Int, data.Mileage)
+            .input('LicensePlate', sql.Int, data.LicensePlate)
+            .execute('Appointment.UpdateVehicle');
+
         return true;
     }
     catch (err) {
         console.error(err);
-        return null;
+        return false;
     }
 }

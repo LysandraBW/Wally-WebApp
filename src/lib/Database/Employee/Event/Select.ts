@@ -1,6 +1,6 @@
 "use server";
 import sql from "mssql";
-import { config, ConfigType } from "../../Connection";
+import { User, fetchPool } from "../../Pool";
 
 interface GetEventsData {
     EmployeeID: number;
@@ -14,12 +14,18 @@ type Event = {
     Summary: string;
 }
 
-export default async function GetEvents(data: GetEventsData)
+export default async function GetEvents(data: GetEventsData, user: User = User.Employee)
 : Promise<Array<Event> | null> {
     try {
-        await sql.connect(await config(ConfigType.Employee, data));
-        const res = await sql.query(`EXEC Employee.GetEvents @EmployeeID=${data.EmployeeID}`);
-        return res.recordset;
+        const pool = await fetchPool(user, data);
+        if (!pool)
+            throw 'Undefined Pool';
+
+        const output = await pool.request()
+            .input('EmployeeID', sql.Int, data.EmployeeID)
+            .execute('Employee.GetEvents');
+        
+        return output.recordset;
     }
     catch (err) {
         console.error(err);

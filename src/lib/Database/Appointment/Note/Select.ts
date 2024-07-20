@@ -1,7 +1,6 @@
 "use server";
 import sql from "mssql";
-import { config, ConfigType } from "../../Connection";
-import Query from "../../Query";
+import { User, fetchPool } from "../../Pool";
 
 interface GetEmployeeNotesData {
     EmployeeID: number;
@@ -27,12 +26,21 @@ interface Note {
     UpdationDate: string;
 }
 
-export async function GetEmployeeNotesData(data: GetEmployeeNotesData)
-: Promise<Array<Note> | null> {
+export async function GetEmployeeNotesData(
+    data: GetEmployeeNotesData, 
+    user: User = User.Employee
+): Promise<Array<Note> | null> {
     try {
-        await sql.connect(await config(ConfigType.Employee, data));
-        const res = await sql.query(Query("EXEC Appointment.GetEmployeeNotes", data));
-        return res.recordset;   
+        const pool = await fetchPool(user, data);
+        if (!pool)
+            throw '';
+
+        const output = await pool.request()
+            .input('EmployeeID', sql.Int, data.EmployeeID)
+            .input('AppointmentID', sql.Int, data.AppointmentID)
+            .execute('Appointment.GetEmployeeNotes');
+
+        return output.recordset;   
     }
     catch (err) {
         console.error(err);
@@ -40,12 +48,23 @@ export async function GetEmployeeNotesData(data: GetEmployeeNotesData)
     }
 }
 
-export async function GetCustomerNotesData(data: GetCustomerNotesData)
-: Promise<Array<Note> | null> {
+export async function GetCustomerNotesData(
+    data: GetCustomerNotesData, 
+    user: User = User.Customer
+): Promise<Array<Note> | null> {
     try {
-        await sql.connect(await config(ConfigType.Customer, data));
-        const res = await sql.query(Query("EXEC Appointment.GetCustomerNotes", data));
-        return res.recordset;   
+        const pool = await fetchPool(user, data);
+        if (!pool)
+            throw '';
+
+        const output = await pool.request()
+            .input('AppointmentID', sql.Int, data.AppointmentID)
+            .input('FName', sql.VarChar, data.FName)
+            .input('LName', sql.VarChar, data.LName)
+            .input('Email', sql.VarChar, data.Email)
+            .execute('Appointment.GetCustomerNotes');
+
+        return output.recordset;   
     }
     catch (err) {
         console.error(err);

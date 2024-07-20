@@ -1,7 +1,6 @@
 "use server";
 import sql from "mssql";
-import { config, ConfigType } from "../Connection";
-import Query from "../Query";
+import { User, fetchPool } from "../Pool";
 
 interface InsertAppointmentData {
     EmployeeID: number | null;
@@ -15,12 +14,29 @@ interface InsertAppointmentData {
     VIN:        string | null;
 }
 
-export default async function InsertAppointment(configType: ConfigType, data: InsertAppointmentData)
-: Promise<number> {
+export default async function InsertAppointment(
+    data: InsertAppointmentData, 
+    user: User = User.Default
+): Promise<number> {
     try {
-        await sql.connect(await config(configType, data));
-        const res = await sql.query(Query("EXEC Appointment.InsertAppointment", data));
-        return res.recordset[0].AppointmentID;
+        const pool = await fetchPool(user, data);
+        if (!pool)
+            throw 'Undefined Pool';
+
+        const output = await pool.request()
+            .input('EmployeeID', sql.Int, data.EmployeeID)
+            .input('FName', sql.Int, data.FName)
+            .input('LName', sql.Int, data.LName)
+            .input('Email', sql.Int, data.Email)
+            .input('Phone', sql.Int, data.Phone)
+            .input('Make', sql.Int, data.Make)
+            .input('Model', sql.Int, data.Model)
+            .input('ModelYear', sql.Int, data.ModelYear)
+            .input('VIN', sql.Int, data.VIN)
+            .output('AppointmentID', sql.Int)
+            .execute('Appointment.InsertAppointment');
+
+        return output.output.AppointmentID;
     }
     catch (err) {
         console.error(err);

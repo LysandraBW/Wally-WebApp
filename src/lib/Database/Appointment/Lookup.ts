@@ -1,7 +1,6 @@
 "use server";
 import sql from "mssql";
-import { config, ConfigType } from "../Connection";
-import Query from "../Query";
+import { User, fetchPool } from "../Pool";
 
 interface AuthenticateLookupData {
     AppointmentID: number;
@@ -10,13 +9,24 @@ interface AuthenticateLookupData {
     Email: string;
 }
 
-export default async function AuthenticateLookup(configType: ConfigType, data: AuthenticateLookupData)
-: Promise<boolean> {
+export default async function AuthenticateLookup(
+    data: AuthenticateLookupData, 
+    user: User = User.Default
+): Promise<boolean> {
     try {
-        const pool = await sql.connect(await config(configType, data));
-        const res = await sql.query(Query("EXEC Appointment.AuthenticateLookup", data));
-        await pool.close();
-        return res.recordset[0].Found === 1;
+        const pool = await fetchPool(user, data);
+        if (!pool)
+            throw 'Undefined Pool';
+
+        const output = await pool.request()
+            .input('AppointmentID', sql.Int, data.AppointmentID)
+            .input('FName', sql.VarChar(50), data.FName)
+            .input('LName', sql.VarChar(50), data.LName)
+            .input('Email', sql.VarChar(320), data.Email)
+            .output('Found', sql.Bit)
+            .execute('Appointment.AuthenticateLookup');
+
+        return output.output.Found === 1;
     }
     catch (err) {
         console.error(err);

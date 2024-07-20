@@ -1,7 +1,6 @@
 "use server";
 import sql from "mssql";
-import { config, ConfigType } from "../../Connection";
-import Query from "../../Query";
+import { User, fetchPool } from "../../Pool";
 
 interface InsertDefinedServiceData {
     EmployeeID: number | null;
@@ -12,12 +11,24 @@ interface InsertDefinedServiceData {
     Email: string | null;
 }
 
-export async function InsertDefinedService(configType: ConfigType, data: InsertDefinedServiceData)
+export async function InsertDefinedService(data: InsertDefinedServiceData, user: User = User.Default)
 : Promise<number> {
     try {
-        await sql.connect(await config(configType, data));
-        const res = await sql.query(Query("EXEC Appointment.InsertDefinedService", data));
-        return res.recordset[0].ServiceID;
+        const pool = await fetchPool(user, data);
+        if (!pool)
+            throw 'Undefined Pool';
+
+        const output = await pool.request()
+            .input('EmployeeID', sql.Int, data.EmployeeID)
+            .input('AppointmentID', sql.Int, data.AppointmentID)
+            .input('ServiceID', sql.Int, data.ServiceID)
+            .input('FName', sql.Int, data.FName)
+            .input('LName', sql.Int, data.LName)
+            .input('Email', sql.Int, data.Email)
+            .output('ServiceID', sql.Int)
+            .execute('Appointment.InsertDefinedService');
+ 
+        return output.output.ServiceID;
     }
     catch (err) {
         console.error(err);
@@ -34,12 +45,26 @@ interface InsertServiceData {
     Type: string;
 }
 
-export async function InsertService(data: InsertServiceData)
-: Promise<number> {
+export async function InsertService(
+    data: InsertServiceData, 
+    user: User = User.Employee
+): Promise<number> {
     try {
-        await sql.connect(await config(ConfigType.Employee, data));
-        const res = await sql.query(Query("EXEC Appointment.InsertService", data));
-        return res.recordset[0].ServiceID;
+        const pool = await fetchPool(user, data);
+        if (!pool)
+            throw 'Undefined Pool';
+
+        const output = await pool.request()
+            .input('EmployeeID', sql.Int, data.EmployeeID)
+            .input('AppointmentID', sql.Int, data.AppointmentID)
+            .input('ServiceID', sql.Int, data.ServiceID)
+            .input('Service', sql.Int, data.Service)
+            .input('Group', sql.Int, data.Group)
+            .input('Type', sql.Int, data.Type)
+            .output('ServiceID', sql.Int)
+            .execute('Appointment.InsertService');
+ 
+        return output.output.ServiceID;
     }
     catch (err) {
         console.error(err);

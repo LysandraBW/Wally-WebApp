@@ -1,7 +1,6 @@
 "use server";
 import sql from "mssql";
-import { config, ConfigType } from "../../Connection";
-import Query from "../../Query";
+import { User, fetchPool } from "../../Pool";
 
 interface DeletePartData {
     EmployeeID: number;
@@ -9,11 +8,21 @@ interface DeletePartData {
     PartID: number;
 }
 
-export default async function DeletePart(data: DeletePartData)
-: Promise<boolean> {
+export default async function DeletePart(
+    data: DeletePartData, 
+    user: User = User.Employee
+): Promise<boolean> {
     try {
-        await sql.connect(await config(ConfigType.Employee, data));
-        await sql.query(Query("EXEC Appointment.DeletePart", data));
+        const pool = await fetchPool(user, data);
+        if (!pool)
+            throw '';
+
+        await pool.request()
+            .input('EmployeeID', sql.Int, data.EmployeeID)
+            .input('AppointmentID', sql.Int, data.AppointmentID)
+            .input('PartID', sql.Int, data.PartID)
+            .execute('Appointment.DeletePart');
+
         return true;
     }
     catch (err) {
