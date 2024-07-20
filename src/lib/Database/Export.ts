@@ -37,6 +37,7 @@ export {default as GetEventSharees} from "./Employee/SharedEvent/Select";
 export {default as InsertEventSharee} from "./Employee/SharedEvent/Insert";
 export {default as DeleteEventSharees} from "./Employee/SharedEvent/Delete";
 export {default as AuthenticateLogin} from "./Employee/Login";
+export {default as AuthenticateToken} from "./Employee/Token";
 
 export { 
     GetStatus,

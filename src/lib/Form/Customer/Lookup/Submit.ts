@@ -1,13 +1,11 @@
 "use server";
-import { processForm } from "./ProcessedForm";
+import { processForm } from "./Process";
 import { FormStructure } from "./Form";
 import { Appointment } from "@/lib/Database/Appointment/Appointment";
 import { Service } from "@/lib/Database/Appointment/Service/Select";
-import { AuthenticateLookup, GetAppointmentSummary, GetDiagnosis, GetFixes, GetServices } from "@/lib/Database/Export";
+import { AuthenticateLookup, GetAppointmentSummary } from "@/lib/Database/Export";
 import { Diagnosis } from "@/lib/Database/Appointment/Diagnosis/Select";
 import { Fix } from "@/lib/Database/Appointment/Fix/Select";
-import { config, UserType } from "@/lib/Database/Connection";
-import "../../../Database/Connection.ts";
 
 export type Summary = {
     Services: Array<Service>,
@@ -17,38 +15,15 @@ export type Summary = {
 
 export const submitForm = async (form: FormStructure)
 : Promise<Summary|null> => {
-    let processedForm = processForm(form);
+    const processedForm = processForm(form);
 
-    if (!AuthenticateLookup(UserType.Default, processedForm))
+    if (!AuthenticateLookup(processedForm))
         return null;
 
-    const Appointment: Appointment | null = await GetAppointmentSummary(
-        UserType.Customer, 
-        processedForm
-    );
-    if (!Appointment)
+    const info = await GetAppointmentSummary(processedForm);
+
+    if (!info)
         return null;
 
-    const Services: Array<Service> | null = await GetServices(
-        UserType.Customer, 
-        processedForm
-    );
-    if (!Services)
-        return null;
-
-    const Diagnosis: Array<Diagnosis> | null = await GetDiagnosis(
-        UserType.Customer, 
-        processedForm
-    );
-    if (!Diagnosis)
-        return null;
-
-    const Fixes: Array<Fix> | null = await GetFixes(
-        UserType.Customer, 
-        processedForm
-    );
-    if (!Fixes)
-        return null;
-
-    return {...Appointment, Services, Diagnosis, Fixes};
+    return info;
 }

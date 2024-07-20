@@ -6,7 +6,7 @@ interface GetData {
     EmployeeID: number;
 }
 
-type GetReturnType = {
+export type Employee = {
     EmployeeID: number;
     FName: string;
     LName: string;
@@ -15,7 +15,7 @@ type GetReturnType = {
 }
 
 export async function Get(data: GetData, user: User = User.Employee)
-: Promise<GetReturnType | null> {
+: Promise<Employee | null> {
     try {
         const pool = await fetchPool(user, data);
         if (!pool)

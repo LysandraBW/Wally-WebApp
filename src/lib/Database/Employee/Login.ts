@@ -14,15 +14,14 @@ export default async function AuthenticateLogin(
     try {
         const pool = await fetchPool(user, data);
         if (!pool)
-            throw "Undefined Pool";
+            throw "AuthenticateLogin: Undefined Pool";
 
         const output = await pool.request()
             .input('Username', sql.VarChar(50), data.Username)
             .input('Password', sql.VarChar(50), data.Password)
-            .output('EmployeeID', sql.Int)
-            .execute("AuthenticateLogin");
+            .execute("Employee.AuthenticateLogin");
 
-        return output.output.EmployeeID;
+        return output.recordset[0].EmployeeID;
     }
     catch (err) {
         console.error(err);

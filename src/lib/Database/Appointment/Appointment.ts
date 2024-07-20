@@ -78,7 +78,7 @@ interface GetSummaryData {
 
 export async function GetSummary(
     data: GetSummaryData, 
-    user: User = User.Employee
+    user: User = User.Customer
 ): Promise<Appointment | null> {
     try {
         const pool = await fetchPool(user, data);
@@ -87,16 +87,18 @@ export async function GetSummary(
 
         const output = await pool.request()
             .input('AppointmentID', sql.Int, data.AppointmentID)
-            .input('FName', sql.Int, data.FName)
-            .input('LName', sql.Int, data.LName)
-            .input('Email', sql.Int, data.Email)
+            .input('FName', sql.VarChar(50), data.FName)
+            .input('LName', sql.VarChar(50), data.LName)
+            .input('Email', sql.VarChar(50), data.Email)
             .execute('Appointment.GetSummary');
 
+        const recordsets = <sql.IRecordSet<any>> output.recordsets;
+
         return {
-            ...(<sql.IRecordSet<any>> output.recordsets)[0],
-            Services: (<sql.IRecordSet<any>> output.recordsets)[1],
-            Diagnosis: (<sql.IRecordSet<any>> output.recordsets)[2],
-            Fixes: (<sql.IRecordSet<any>> output.recordsets)[3]
+            ...recordsets[0][0],
+            Services: recordsets[1],
+            Diagnosis: recordsets[2],
+            Fixes: recordsets[3]
         }
     }
     catch (err) {
@@ -107,29 +109,29 @@ export async function GetSummary(
 
 interface GetAllData {
     EmployeeID: number;
-    StartIndex: number;
-    PageSize: number;
-    Label: string;
-    StatusID: number;
-    OrderByFName: number;
-    OrderDirFName: string;
-    OrderByLName: number;
-    OrderDirLName: string;
-    OrderByMake: number;
-    OrderDirMake: string;
-    OrderByModel: number;
-    OrderDirModel: string;
-    OrderByModelYear: number;
-    OrderDirModelYear: string;
-    OrderByCreationDate: number;
-    OrderDirCreationDate: string;
-    OrderByStartDate: number;
-    OrderDirStartDate: string;
-    OrderByEndDate: number;
-    OrderDirEndDate: string;
-    OrderByCost: number;
-    OrderDirCost: string;
-    Search: string;
+    StartIndex?: number;
+    PageSize?: number;
+    Label?: string;
+    StatusID?: number;
+    OrderByFName?: number;
+    OrderDirFName?: string;
+    OrderByLName?: number;
+    OrderDirLName?: string;
+    OrderByMake?: number;
+    OrderDirMake?: string;
+    OrderByModel?: number;
+    OrderDirModel?: string;
+    OrderByModelYear?: number;
+    OrderDirModelYear?: string;
+    OrderByCreationDate?: number;
+    OrderDirCreationDate?: string;
+    OrderByStartDate?: number;
+    OrderDirStartDate?: string;
+    OrderByEndDate?: number;
+    OrderDirEndDate?: string;
+    OrderByCost?: number;
+    OrderDirCost?: string;
+    Search?: string;
 }
 
 export async function GetAll(

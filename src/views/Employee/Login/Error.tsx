@@ -6,13 +6,13 @@ interface ErrorProps {
 
 export default function Error(props: ErrorProps) {
     return (
-        <Message 
+        <Message
             message={(
                 <>
-                    <b>Error</b>
-                    <p>Unfortunately, an appointment with the given information was not found. Please try again</p>
+                    <div><b>Uh Oh</b></div>
+                    <div>We couldn't find an appointment with your username or password.</div>
                 </>
-            )} 
+            )}
             close={() => props.close()}
         />
     )

@@ -2,12 +2,12 @@ import sql, { ConnectionPool } from "mssql";
 import { AuthenticateLogin, AuthenticateLookup } from "./Export";
 
 // Environment Variables
-const DB =      process.env.DB || "";
-const DB_C1 =   process.env.C1 || "";
-const DB_C2 =   process.env.C2 || "";
-const DB_D1 =   process.env.D1 || "";
-const DB_D2 =   process.env.D2 || "";
-const DB_HOST = process.env.DB_HOST || "";
+const DB        =   process.env.DB      || "";
+const DB_C1     =   process.env.DB_C1   || "";
+const DB_C2     =   process.env.DB_C2   || "";
+const DB_D1     =   process.env.DB_D1   || "";
+const DB_D2     =   process.env.DB_D2   || "";
+const DB_HOST   =   process.env.DB_HOST || "";
 
 // Pool Storage
 export enum User { Employee, Customer, Default };
@@ -35,9 +35,6 @@ pools.set(User.Default, defaultConfig.connect());
 const customerConfig: ConnectionPool = new sql.ConnectionPool(config(DB_C1, DB_C2));
 pools.set(User.Customer, customerConfig.connect());
 
-// Stores Authenticated Employee
-let employee: ConnectionPool | null = null;
-
 // Referring To
 // npmjs.com/package/mssql#connections-1
 export const fetchPool = async (user: User, data: {[k: string]: any} = {}) => {
@@ -48,7 +45,7 @@ export const fetchPool = async (user: User, data: {[k: string]: any} = {}) => {
         // to be stored in pools[User.Employee]. Moreover,
         // the query shouldn't run successfully for procedures
         // that mutate data.
-        if (!data.has('Username') || !data.has('Password')) {
+        if (!data['Username'] || !data['Password']) {
             return pools.get(User.Employee);
         }
         
@@ -70,6 +67,7 @@ export const fetchPool = async (user: User, data: {[k: string]: any} = {}) => {
         }
 
         pools.set(User.Employee, pool.connect());
+        return pools.get(User.Employee);
     }
     else if (user === User.Customer) {
         const authenticated = await AuthenticateLookup({

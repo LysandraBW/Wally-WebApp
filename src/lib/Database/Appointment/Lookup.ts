@@ -23,10 +23,9 @@ export default async function AuthenticateLookup(
             .input('FName', sql.VarChar(50), data.FName)
             .input('LName', sql.VarChar(50), data.LName)
             .input('Email', sql.VarChar(320), data.Email)
-            .output('Found', sql.Bit)
             .execute('Appointment.AuthenticateLookup');
 
-        return output.output.Found === 1;
+        return output.recordset[0].Found === 1;
     }
     catch (err) {
         console.error(err);

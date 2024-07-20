@@ -5,11 +5,6 @@ import {submitForm, Summary as SummaryData} from "@/lib/Form/Customer/Lookup/Sub
 import Summary from "@/views/Customer/Lookup/Summary";
 import Error from "@/views/Customer/Lookup/Error";
 import LookupForm from "@/views/Customer/Lookup/Lookup";
-import "../../../lib/Database/Connection";
-import { processForm } from "@/lib/Form/Customer/Lookup/ProcessedForm";
-import { config, UserType } from "../../../lib/Database/Connection";
-import { GetAppointmentSummary, AuthenticateLookup } from "@/lib/Database/Export";
-import { Appointment } from "@/lib/Database/Appointment/Appointment";
 
 export default function Lookup() {
     const [form, setForm] = useState<FormStructure>(Form);

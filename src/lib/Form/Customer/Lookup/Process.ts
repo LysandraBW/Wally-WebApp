@@ -9,7 +9,7 @@ export interface ProcessedFormStructure {
 
 export const processForm = (form: FormStructure): ProcessedFormStructure => {
     return {
-        AppointmentID: form.appointmentID,
+        AppointmentID: form.appointmentID || -1,
         FName: form.fName.trim(),
         LName: form.lName.trim(),
         Email: form.email.trim(),
