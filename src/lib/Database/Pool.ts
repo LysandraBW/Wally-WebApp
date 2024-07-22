@@ -1,5 +1,8 @@
+"use server";
 import sql, { ConnectionPool } from "mssql";
 import { AuthenticateLogin, AuthenticateLookup } from "./Export";
+import { decrypt } from "../Hash/Hash";
+import { User } from "./User";
 
 // Environment Variables
 const DB        =   process.env.DB      || "";
@@ -10,7 +13,6 @@ const DB_D2     =   process.env.DB_D2   || "";
 const DB_HOST   =   process.env.DB_HOST || "";
 
 // Pool Storage
-export enum User { Employee, Customer, Default };
 const pools = new Map<User|string, Promise<ConnectionPool>>();
 
 const config = (
@@ -37,7 +39,7 @@ pools.set(User.Customer, customerConfig.connect());
 
 // Referring To
 // npmjs.com/package/mssql#connections-1
-export const fetchPool = async (user: User, data: {[k: string]: any} = {}) => {
+export const fetchPool = async (user: User, data: {[k: string]: any} = {}, hashed = false) => {
     if (user === User.Employee) {
         // We assume that we're dealing with an authenticated employee.
         // Only an employee could get this far, as you would need
@@ -49,9 +51,15 @@ export const fetchPool = async (user: User, data: {[k: string]: any} = {}) => {
             return pools.get(User.Employee);
         }
         
+        let {Username, Password} = data;
+        if (hashed) {
+            Username = await decrypt(Username);
+            Password = await decrypt(Password);
+        }
+        
         const authenticated = await AuthenticateLogin({
-            Username: data.Username || "",
-            Password: data.Password || ""
+            Username: Username,
+            Password: Password
         }, User.Default);
 
         // Employee Failed Authentication
@@ -59,10 +67,10 @@ export const fetchPool = async (user: User, data: {[k: string]: any} = {}) => {
             return pools.get(User.Default);
 
         // Make and Return Pool
-        const pool = new sql.ConnectionPool(config(data.Username, data.Password));
+        const pool = new sql.ConnectionPool(config(Username, Password));
         const close = pool.close.bind(pool);
         pool.close = (...args: any[]) => {
-            pools.delete(data.Username);
+            pools.delete(Username);
             return close(...(args as []));
         }
 
@@ -92,4 +100,8 @@ export const drainPool = async () => {
     Promise.all(Array.from(pools.values()).map(async (connect) => {
         return connect.then(async (pool) => await pool.close());
     }));
+}
+
+export const poolEmployee = async (data: any) => {
+    await fetchPool(User.Employee, data, true);
 }

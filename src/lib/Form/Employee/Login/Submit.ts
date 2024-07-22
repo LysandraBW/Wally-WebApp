@@ -5,7 +5,7 @@ import { processForm } from "./Process";
 import { Employee } from "@/lib/Database/Employee/Employee";
 import { setToken } from "@/lib/Authorize/Authorize";
 import { EmployeeToken } from "@/lib/Authorize/Employee";
-import { User } from "@/lib/Database/Pool";
+import { User } from "@/lib/Database/User";
 import { encrypt } from "@/lib/Hash/Hash";
 
 export const submitForm = async (form: FormStructure)

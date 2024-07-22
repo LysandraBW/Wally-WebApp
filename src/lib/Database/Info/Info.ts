@@ -1,5 +1,6 @@
 "use server";
-import { User, fetchPool } from "../Pool";
+import { fetchPool } from "../Pool";
+import { User } from "../User";
 
 type Status = {
     StatusID: number;

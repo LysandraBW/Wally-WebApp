@@ -1,6 +1,7 @@
 "use server";
 import sql from "mssql";
-import { User, fetchPool } from "../../Pool";
+import { fetchPool } from "../../Pool";
+import { User } from "../../User";
 
 interface GetEmployeeNotesData {
     EmployeeID: number;

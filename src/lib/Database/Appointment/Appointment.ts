@@ -1,6 +1,7 @@
 "use server";
 import sql from "mssql";
-import { User, fetchPool } from "../Pool";
+import { fetchPool } from "../Pool";
+import { User } from "../User";
 import { Service } from "./Service/Select";
 import { Diagnosis } from "./Diagnosis/Select";
 import { Fix } from "./Fix/Select";
@@ -35,7 +36,7 @@ export type Appointment  = {
     Fixes:          Array<Fix>;
 }
 
-type FullAppointment = Appointment & {
+export type FullAppointment = Appointment & {
     EmployeeID:     number;
     Seen:           number;
     Flag:           number;
