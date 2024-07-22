@@ -4,23 +4,22 @@ import { fetchPool } from "../../Pool";
 import { User } from "../../User";
 
 interface Data {
-    EmployeeID: number;
-    AppointmentID: number;
+    SessionID: string;
+    AppointmentID: string;
 }
 
-export async function Remove(
+export async function Delete(
     data: Data, 
     user: User = User.Employee
-)
-: Promise<boolean> {
+): Promise<boolean> {
     try {
         const pool = await fetchPool(user, data);
         if (!pool)
-            throw '';
+            throw 'Appointment.Delete: Undefined Pool';
 
         await pool.request()
-            .input('EmployeeID', sql.Int, data.EmployeeID)
-            .input('AppointmentID', sql.Int, data.AppointmentID)
+            .input('SessionID', sql.VarBinary, data.SessionID)
+            .input('AppointmentID', sql.UniqueIdentifier, data.AppointmentID)
             .execute('Appointment.Remove');
 
         return true;
@@ -31,16 +30,15 @@ export async function Remove(
     }
 }
 
-export async function Restore(data: Data, user: User = User.Employee)
-: Promise<boolean> {
+export async function Restore(data: Data, user: User = User.Employee): Promise<boolean> {
     try {
         const pool = await fetchPool(user, data);
         if (!pool)
-            throw '';
+            throw 'Appointment.Restore: Undefined Pool';
 
         await pool.request()
-            .input('EmployeeID', sql.Int, data.EmployeeID)
-            .input('AppointmentID', sql.Int, data.AppointmentID)
+            .input('SessionID', sql.VarBinary, data.SessionID)
+            .input('AppointmentID', sql.UniqueIdentifier, data.AppointmentID)
             .execute('Appointment.PutBack');
 
         return true;

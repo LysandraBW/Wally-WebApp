@@ -4,22 +4,21 @@ import { fetchPool } from "../../Pool";
 import { User } from "../../User";
 
 interface UpdateEventData {
-    EventOwnerID: number;
+    SessionID: string;
     EventID: number;
     Name: string | null;
     Date: string | null;
     Summary: string | null;
 }
 
-export default async function UpdateEvent(data: UpdateEventData, user: User = User.Employee)
-: Promise<boolean> {
+export default async function UpdateEvent(data: UpdateEventData, user: User = User.Employee): Promise<boolean> {
     try {
         const pool = await fetchPool(user, data);
         if (!pool)
-            throw 'Undefined Pool';
+            throw 'Employee.UpdateEvent: Undefined Pool';
 
         await pool.request()
-            .input('EventOwnerID', sql.Int, data.EventOwnerID)
+            .input('SessionID', sql.VarBinary, data.SessionID)
             .input('EventID', sql.Int, data.EventID)
             .input('Name', sql.VarChar(100), data.Name)
             .input('Date', sql.NVarChar, data.Date)

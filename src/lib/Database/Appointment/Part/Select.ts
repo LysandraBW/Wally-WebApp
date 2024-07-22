@@ -4,11 +4,11 @@ import { fetchPool } from "../../Pool";
 import { User } from "../../User";
 
 interface GetPartsData {
-    EmployeeID: number;
-    AppointmentID: number;
+    SessionID: string;
+    AppointmentID: string;
 }
 
-interface Part {
+export interface Part {
     PartID: number;
     PartName: string;
     PartNumber: string;
@@ -23,11 +23,11 @@ export default async function GetParts(
     try {
         const pool = await fetchPool(user, data);
         if (!pool)
-            throw 'Undefined Pool';
+            throw 'Appointment.GetParts: Undefined Pool';
 
         const output = await pool.request()
-            .input('EmployeeID', sql.Int, data.EmployeeID)
-            .input('AppointmentID', sql.Int, data.AppointmentID)
+            .input('SessionID', sql.VarBinary, data.SessionID)
+            .input('AppointmentID', sql.UniqueIdentifier, data.AppointmentID)
             .execute('Appointment.GetParts')
 
         return output.recordset;   

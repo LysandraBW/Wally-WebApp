@@ -4,10 +4,10 @@ import { fetchPool } from "../../Pool";
 import { User } from "../../User";
 
 interface InsertDiagnosisData {
-    EmployeeID: number;
-    AppointmentID: number;
+    SessionID: string;
+    AppointmentID: string;
     Code: string;
-    Diagnosis: string;
+    Message: string;
 }
 
 export default async function InsertDiagnosis(
@@ -17,17 +17,16 @@ export default async function InsertDiagnosis(
     try {
         const pool = await fetchPool(user, data);
         if (!pool)
-            throw '';
+            throw 'Appointment.InsertDiagnosis: Undefined Pool';
 
         const output = await pool.request()
-            .input('EmployeeID', sql.Int, data.EmployeeID)
-            .input('AppointmentID', sql.Int, data.AppointmentID)
+            .input('SessionID', sql.VarBinary, data.SessionID)
+            .input('AppointmentID', sql.UniqueIdentifier, data.AppointmentID)
             .input('Code', sql.VarChar, data.Code)
-            .input('Diagnosis', sql.VarChar, data.Diagnosis)
-            .output('DiagnosisID', sql.Int)
+            .input('Message', sql.VarChar, data.Message)
             .execute('Appointment.InsertDiagnosis');
 
-        return output.output.DiagnosisID;
+        return output.recordset[0].DiagnosisID;
     }   
     catch (err) {
         console.error(err);

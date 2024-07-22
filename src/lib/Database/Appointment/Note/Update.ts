@@ -4,8 +4,8 @@ import { fetchPool } from "../../Pool";
 import { User } from "../../User";
 
 interface UpdateNoteData {
-    NoteOwnerID: number;
-    AppointmentID: number;
+    SessionID: string;
+    AppointmentID: string;
     NoteID: number;
     Head: string;
     Body: string;
@@ -20,11 +20,11 @@ export default async function UpdateNote(
     try {
         const pool = await fetchPool(user, data);
         if (!pool)
-            throw '';
+            throw 'Appointment.UpdateNote: Undefined Pool';
         
         await pool.request()
-            .input('NoteOwnerID', sql.Int, data.NoteOwnerID)
-            .input('AppointmentID', sql.Int, data.AppointmentID)
+            .input('SessionID', sql.VarBinary, data.SessionID)
+            .input('AppointmentID', sql.UniqueIdentifier, data.AppointmentID)
             .input('NoteID', sql.Int, data.NoteID)
             .input('Head', sql.Int, data.Head)
             .input('Body', sql.Int, data.Body)

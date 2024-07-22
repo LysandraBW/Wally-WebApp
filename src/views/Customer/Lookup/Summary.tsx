@@ -36,10 +36,10 @@ export default function Summary(props: SummaryProps) {
             {props.info.Diagnosis.map((diagnosis, i) => (
                 <div key={i}>{diagnosis.Code} {diagnosis.Diagnosis}</div>
             ))}
-            <div><b>Fixes</b></div>
-            {props.info.Fixes.map((fix, i) => (
+            <div><b>Repairs</b></div>
+            {props.info.Repairs.map((Repair, i) => (
                 <div key={i}>
-                    {fix.Fix}
+                    {Repair.Repair}
                 </div>
             ))}
         </div>

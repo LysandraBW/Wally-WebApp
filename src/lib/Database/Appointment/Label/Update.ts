@@ -4,9 +4,9 @@ import { fetchPool } from "../../Pool";
 import { User } from "../../User";
 
 interface UpdateLabelData {
-    EmployeeID: number;
-    AppointmentID: number;
-    Label: string;
+    SessionID: string;
+    AppointmentID: string;
+    LabelID: number;
 }
 
 export default async function UpdateLabel(
@@ -16,12 +16,12 @@ export default async function UpdateLabel(
     try {
         const pool = await fetchPool(user, data);
         if (!pool)
-            throw '';
+            throw 'Appointment.UpdateLabel: Undefined Pool';
 
         await pool.request()
-            .input('EmployeeID', sql.Int, data.EmployeeID)
-            .input('AppointmentID', sql.Int, data.AppointmentID)
-            .input('Label', sql.VarChar, data.Label)
+            .input('SessionID', sql.VarBinary, data.SessionID)
+            .input('AppointmentID', sql.UniqueIdentifier, data.AppointmentID)
+            .input('LabelID', sql.Int, data.LabelID)
             .execute('Appointment.UpdateLabel');
 
         return true;

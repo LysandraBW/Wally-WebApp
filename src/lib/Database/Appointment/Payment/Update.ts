@@ -4,8 +4,8 @@ import { fetchPool } from "../../Pool";
 import { User } from "../../User";
 
 interface UpdateCostData {
-    EmployeeID: number;
-    AppointmentID: number;
+    SessionID: string;
+    AppointmentID: string;
     Cost: string;
 }
 
@@ -16,11 +16,11 @@ export default async function UpdateCost(
     try {
         const pool = await fetchPool(user, data);
         if (!pool)
-            throw 'Undefined Pool';
+            throw 'Appointment.UpdateCost: Undefined Pool';
 
         await pool.request()
-            .input('EmployeeID', sql.Int, data.EmployeeID)
-            .input('AppointmentID', sql.Int, data.AppointmentID)
+            .input('SessionID', sql.VarBinary, data.SessionID)
+            .input('AppointmentID', sql.UniqueIdentifier, data.AppointmentID)
             .input('Cost', sql.Int, data.Cost)
             .execute('Appointment.UpdateCost');
 

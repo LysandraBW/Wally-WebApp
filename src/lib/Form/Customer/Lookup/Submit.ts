@@ -1,26 +1,26 @@
 "use server";
 import { processForm } from "./Process";
 import { FormStructure } from "./Form";
-import { Appointment } from "@/lib/Database/Appointment/Appointment";
-import { Service } from "@/lib/Database/Appointment/Service/Select";
-import { AuthenticateLookup, GetAppointmentSummary } from "@/lib/Database/Export";
-import { Diagnosis } from "@/lib/Database/Appointment/Diagnosis/Select";
-import { Fix } from "@/lib/Database/Appointment/Fix/Select";
+import { AuthenticateAppointmentSession, AuthenticateLookup, GetAppointmentSummary } from "@/lib/Database/Export";
+import { AppointmentSummary } from "@/lib/Database/Appointment/Appointment";
 
-export type Summary = {
-    Services: Array<Service>,
-    Diagnosis: Array<Diagnosis>,
-    Fixes: Array<Fix>
-} & Appointment
-
-export const submitForm = async (form: FormStructure)
-: Promise<Summary|null> => {
+export const submitForm = async (form: FormStructure): Promise<AppointmentSummary|null> => {
     const processedForm = processForm(form);
 
-    if (!AuthenticateLookup(processedForm))
+    const sessionID = await AuthenticateLookup(processedForm);
+    if (!sessionID)
         return null;
 
-    const info = await GetAppointmentSummary(processedForm);
+    const appointmentID = await AuthenticateAppointmentSession({
+        SessionID: sessionID
+    });
+    if (!appointmentID)
+        return null;
+
+    const info = await GetAppointmentSummary({
+        SessionID: sessionID,
+        AppointmentID: appointmentID
+    });
 
     if (!info)
         return null;

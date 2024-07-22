@@ -4,8 +4,8 @@ import { fetchPool } from "../../Pool";
 import { User } from "../../User";
 
 interface InsertNoteData {
-    EmployeeID: number;
-    AppointmentID: number;
+    SessionID: string;
+    AppointmentID: string;
     Head: string;
     Body: string;
     Attachment: string;
@@ -19,11 +19,11 @@ export default async function InsertNote(
     try {
         const pool = await fetchPool(user, data);
         if (!pool)
-            throw '';
+            throw 'Appointment.InsertNote: Undefined Pool';
 
         const output = await pool.request()
-            .input('EmployeeID', sql.Int, data.EmployeeID)
-            .input('AppointmentID', sql.Int, data.AppointmentID)
+            .input('SessionID', sql.VarBinary, data.SessionID)
+            .input('AppointmentID', sql.UniqueIdentifier, data.AppointmentID)
             .input('Head', sql.VarChar, data.Head)
             .input('Body', sql.VarChar, data.Body)
             .input('Attachment', sql.VarChar, data.Attachment)

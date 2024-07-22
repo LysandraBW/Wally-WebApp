@@ -4,7 +4,7 @@ import { fetchPool } from "../../Pool";
 import { User } from "../../User";
 
 interface GetNoteShareesData {
-    NoteOwnerID: number;
+    SessionID: string;
     NoteID: number;
 }
 
@@ -21,10 +21,10 @@ export default async function GetNoteSharees(
     try {
         const pool = await fetchPool(user, data);
         if (!pool)
-            throw 'Undefined Pool';
+            throw 'Appointment.GetNoteSharees: Undefined Pool';
 
         const output = await pool.request()
-            .input('NoteOwnerID', sql.Int, data.NoteOwnerID)
+            .input('SessionID', sql.VarBinary, data.SessionID)
             .input('NoteID', sql.Int, data.NoteID)
             .execute('Appointment.GetNoteSharees');
 

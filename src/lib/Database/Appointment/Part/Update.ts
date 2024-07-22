@@ -4,8 +4,8 @@ import { fetchPool } from "../../Pool";
 import { User } from "../../User";
 
 interface UpdatePartData {
-    EmployeeID: number;
-    AppointmentID: number;
+    SessionID: string;
+    AppointmentID: string;
     PartID: number;
     PartName: string;
     PartNumber: string;
@@ -20,11 +20,11 @@ export default async function UpdatePart(
     try {
         const pool = await fetchPool(user, data);
         if (!pool)
-            throw 'Undefined Pool';
+            throw 'Appointment.UpdatePart: Undefined Pool';
 
         await pool.request()
-            .input('EmployeeID', sql.Int, data.EmployeeID)
-            .input('AppointmentID', sql.Int, data.AppointmentID)
+            .input('SessionID', sql.VarBinary, data.SessionID)
+            .input('AppointmentID', sql.UniqueIdentifier, data.AppointmentID)
             .input('PartID', sql.Int, data.PartID)
             .input('PartName', sql.VarChar, data.PartName)
             .input('PartNumber', sql.VarChar, data.PartNumber)

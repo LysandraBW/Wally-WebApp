@@ -3,28 +3,28 @@ import sql from "mssql";
 import { fetchPool } from "../../Pool";
 import { User } from "../../User";
 
-interface UpdateDateData {
+interface UpdateRepairData {
     SessionID: string;
     AppointmentID: string;
-    StartDate: string;
-    EndDate: string;
+    RepairID: number;
+    Repair: string;
 }
 
-export default async function UpdateDate(
-    data: UpdateDateData, 
+export default async function UpdateRepair(
+    data: UpdateRepairData, 
     user: User = User.Employee
 ): Promise<boolean> {
     try {
         const pool = await fetchPool(user, data);
         if (!pool)
-            throw 'Appointment.UpdateDate: Undefined Pool';
+            throw 'Appointment.UpdateRepair: Undefined Pool';
 
         await pool.request()
             .input('SessionID', sql.VarBinary, data.SessionID)
             .input('AppointmentID', sql.UniqueIdentifier, data.AppointmentID)
-            .input('StartDate', sql.VarChar, data.StartDate)
-            .input('EndDate', sql.VarChar, data.EndDate)
-            .execute('Appointment.UpdateDate');
+            .input('RepairID', sql.Int, data.RepairID)
+            .input('Repair', sql.Int, data.Repair)
+            .execute('Appointment.UpdateRepair');
 
         return true;
     }

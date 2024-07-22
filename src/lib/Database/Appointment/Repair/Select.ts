@@ -3,31 +3,34 @@ import sql from "mssql";
 import { fetchPool } from "../../Pool";
 import { User } from "../../User";
 
-interface DeleteDiagnosisData {
+interface GetRepairsData {
     SessionID: string;
     AppointmentID: string;
-    DiagnosisID: number;
 }
 
-export default async function DeleteDiagnosis(
-    data: DeleteDiagnosisData, 
-    user: User = User.Employee
-): Promise<boolean> {
+export interface Repair {
+    RepairID: number;
+    Repair: string;
+}
+
+export default async function GetRepairs(
+    data: GetRepairsData, 
+    user: User = User.Customer
+): Promise<Array<Repair> | null> {
     try {
         const pool = await fetchPool(user, data);
         if (!pool)
-            throw 'Appointment.DeleteDiagnosis: Undefined Pool';
+            throw 'Appointment.GetRepairs: Undefined Pool';
 
-        await pool.request()
+        const output = await pool.request()
             .input('SessionID', sql.VarBinary, data.SessionID)
             .input('AppointmentID', sql.UniqueIdentifier, data.AppointmentID)
-            .input('DiagnosisID', sql.Int, data.DiagnosisID)
-            .execute('Appointment.DeleteDiagnosis');
+            .execute('Appointment.GetRepairs');
 
-        return true;
+        return output.recordset;   
     }
     catch (err) {
         console.error(err);
-        return false;
+        return null;
     }
 }

@@ -4,7 +4,7 @@ import { fetchPool } from "../../Pool";
 import { User } from "../../User";
 
 interface DeleteNoteShareeData {
-    NoteOwnerID: number;
+    SessionID: string;
     NoteID: number;
     NoteShareeID: number;
 }
@@ -19,7 +19,7 @@ export default async function DeleteNoteSharee(
             throw 'Undefined Pool';
 
         await pool.request()
-            .input('NoteOwnerID', sql.Int, data.NoteOwnerID)
+            .input('SessionID', sql.VarBinary, data.SessionID)
             .input('NoteID', sql.Int, data.NoteID)
             .input('NoteShareeID', sql.Int, data.NoteShareeID)
             .execute('DeleteNoteSharee');

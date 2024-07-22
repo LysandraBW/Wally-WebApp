@@ -4,19 +4,18 @@ import { fetchPool } from "../../Pool";
 import { User } from "../../User";
 
 interface DeleteEventData {
-    EventOwnerID: number;
+    SessionID: string;
     EventID: number;
 }
 
-export default async function DeleteEvent(data: DeleteEventData, user: User = User.Employee)
-: Promise<boolean> {
+export default async function DeleteEvent(data: DeleteEventData, user: User = User.Employee): Promise<boolean> {
     try {
         const pool = await fetchPool(user, data);
         if (!pool)
-            throw 'Undefined Pool';
+            throw 'Employee.DeleteEvent: Undefined Pool';
 
         await pool.request()
-            .input('EventOwnerID', sql.Int, data.EventOwnerID)
+            .input('SessionID', sql.VarBinary, data.SessionID)
             .input('EventID', sql.Int, data.EventID)
             .execute('Employee.DeleteEvent');
             

@@ -4,33 +4,29 @@ import { fetchPool } from "../../Pool";
 import { User } from "../../User";
 
 interface GetDiagnosisData {
-    AppointmentID: number;
-    FName: string;
-    LName: string;
-    Email: string;
+    SessionID: string;
+    AppointmentID: string;
 }
 
 export interface Diagnosis {
     DiagnosisID: number;
     Code: string;
-    Diagnosis: string;
+    Message: string;
 }
 
-export default async function GetDiagnosis(
+export default async function GetDiagnoses(
     data: GetDiagnosisData, 
     user: User = User.Employee
 ): Promise<Array<Diagnosis> | null> {
     try {
         const pool = await fetchPool(user, data);
         if (!pool)
-            throw '';
+            throw 'Appointment.GetDiagnoses: Undefined Pool';
 
         const output = await pool.request()
-            .input('AppointmentID', sql.Int, data.AppointmentID)
-            .input('FName', sql.VarChar, data.FName)
-            .input('LName', sql.VarChar, data.LName)
-            .input('Email', sql.VarChar, data.Email)
-            .execute('Appointment.GetDiagnosis');
+            .input('SessionID', sql.VarBinary, data.SessionID)
+            .input('AppointmentID', sql.UniqueIdentifier, data.AppointmentID)
+            .execute('Appointment.GetDiagnoses');
 
         return output.recordset; 
     }

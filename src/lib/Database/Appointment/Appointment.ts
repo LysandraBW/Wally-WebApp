@@ -2,13 +2,17 @@
 import sql from "mssql";
 import { fetchPool } from "../Pool";
 import { User } from "../User";
-import { Service } from "./Service/Select";
 import { Diagnosis } from "./Diagnosis/Select";
-import { Fix } from "./Fix/Select";
+import { Service } from "./Service/Select";
+import { Repair } from "./Repair/Select";
+import { Payment } from "./Payment/Select";
+import { Label } from "../Info/Info";
+import { Part } from "./Part/Select";
+import { Note } from "./Note/Select";
 
 interface GetData {
-    AppointmentID: number;
-    EmployeeID: number;
+    SessionID: string;
+    AppointmentID: string;
 }
 
 export type Appointment  = {
@@ -32,36 +36,39 @@ export type Appointment  = {
     Mileage:        number;
     LicensePlate:   string;
     Services:       Array<Service>,
-    Diagnosis:      Array<Diagnosis>,
-    Fixes:          Array<Fix>;
-}
-
-export type FullAppointment = Appointment & {
-    EmployeeID:     number;
-    Seen:           number;
-    Flag:           number;
-    Star:           number;
+    Diagnoses:      Array<Diagnosis>,
+    Repairs:        Array<Repair>
+    Parts:          Array<Part>
+    Payments:       Array<Payment>
+    Labels:         Array<Label>;
+    Notes:          Array<Note>;
 }
 
 export async function Get(
     data: GetData, 
     user: User = User.Employee
-): Promise<FullAppointment | null> {
+): Promise<Appointment | null> {
     try {
         const pool = await fetchPool(user, data);
         if (!pool)
-            throw 'Undefined Pool';
+            throw 'Appointment.Get: Undefined Pool';
 
         const output = await pool.request()
-            .input('AppointmentID', sql.Int, data.AppointmentID)
-            .input('EmployeeID', sql.Int, data.EmployeeID)
+            .input('SessionID', sql.VarBinary, data.SessionID)
+            .input('AppointmentID', sql.UniqueIdentifier, data.AppointmentID)
             .execute('Appointment.Get');
 
+        const recordsets = <sql.IRecordSet<any>> output.recordsets;
+
         return {
-            ...(<sql.IRecordSet<any>> output.recordsets)[0],
-            Services: (<sql.IRecordSet<any>> output.recordsets)[1],
-            Diagnosis: (<sql.IRecordSet<any>> output.recordsets)[2],
-            Fixes: (<sql.IRecordSet<any>> output.recordsets)[3]
+            ...recordsets[0][0],
+            Services:   recordsets[1],
+            Diagnoses:  recordsets[2],
+            Repairs:    recordsets[3],
+            Parts:      recordsets[4],
+            Payments:   recordsets[5],
+            Labels:     recordsets[6],
+            Notes:      recordsets[7]
         }
     }
     catch (err) {
@@ -71,35 +78,57 @@ export async function Get(
 }
 
 interface GetSummaryData {
-    AppointmentID: number;
-    FName: string;
-    LName: string;
-    Email: string;
+    SessionID: string;
+    AppointmentID: string;
+}
+
+export type AppointmentSummary  = {
+    AppointmentID:  number;
+    CustomerID:     number;
+    FName:          string;
+    LName:          string;
+    Email:          string;
+    Phone:          string;
+    CreationDate:   string;
+    UpdationDate:   string;
+    StartDate:      string;
+    EndDate:        string;
+    Cost:           string;
+    StatusID:       number;
+    Status:         string;
+    Make:           string;
+    Model:          string;
+    ModelYear:      number;
+    VIN:            string;
+    Mileage:        number;
+    LicensePlate:   string;
+    Services:       Array<Service>;
+    Diagnoses:      Array<Diagnosis>;
+    Repairs:        Array<Repair>;
+    Notes:          Array<Note>;
 }
 
 export async function GetSummary(
     data: GetSummaryData, 
     user: User = User.Customer
-): Promise<Appointment | null> {
+): Promise<AppointmentSummary | null> {
     try {
         const pool = await fetchPool(user, data);
         if (!pool)
-            throw 'Undefined Pool';
+            throw 'Appointment.GetSummary: Undefined Pool';
 
         const output = await pool.request()
-            .input('AppointmentID', sql.Int, data.AppointmentID)
-            .input('FName', sql.VarChar(50), data.FName)
-            .input('LName', sql.VarChar(50), data.LName)
-            .input('Email', sql.VarChar(50), data.Email)
+            .input('SessionID', sql.VarBinary, data.SessionID)
+            .input('AppointmentID', sql.UniqueIdentifier, data.AppointmentID)
             .execute('Appointment.GetSummary');
 
         const recordsets = <sql.IRecordSet<any>> output.recordsets;
-
         return {
             ...recordsets[0][0],
-            Services: recordsets[1],
-            Diagnosis: recordsets[2],
-            Fixes: recordsets[3]
+            Services:   recordsets[1],
+            Diagnosis:  recordsets[2],
+            Repairs:    recordsets[3],
+            Notes:      recordsets[4]
         }
     }
     catch (err) {
@@ -109,66 +138,72 @@ export async function GetSummary(
 }
 
 interface GetAllData {
-    EmployeeID: number;
-    StartIndex?: number;
-    PageSize?: number;
-    Label?: string;
-    StatusID?: number;
-    OrderByFName?: number;
-    OrderDirFName?: string;
-    OrderByLName?: number;
-    OrderDirLName?: string;
-    OrderByMake?: number;
-    OrderDirMake?: string;
-    OrderByModel?: number;
-    OrderDirModel?: string;
-    OrderByModelYear?: number;
-    OrderDirModelYear?: string;
-    OrderByCreationDate?: number;
-    OrderDirCreationDate?: string;
-    OrderByStartDate?: number;
-    OrderDirStartDate?: string;
-    OrderByEndDate?: number;
-    OrderDirEndDate?: string;
-    OrderByCost?: number;
-    OrderDirCost?: string;
-    Search?: string;
+    SessionID:  string;
+    PageNumber?: number;
+    PageSize?:   number;
+    LookAhead?:  number;
+    Search?:     string;
+    Deleted?:    number;
+    LabelID?:    number;
+    StatusID?:   number;
+    FName?:      number;
+    LName?:      number;
+    Make?:       number;
+    Model?:      number;
+    ModelYear?:  number;
+    CreationDate?: number;
+    StartDate?:  number;
+    EndDate?:    number;
+    Cost?:       number
+}
+
+export type QuickAppointment  = {
+    AppointmentID:  number;
+    CustomerID:     number;
+    FName:          string;
+    LName:          string;
+    Email:          string;
+    Phone:          string;
+    CreationDate:   string;
+    UpdationDate:   string;
+    StartDate:      string;
+    EndDate:        string;
+    Cost:           string;
+    StatusID:       number;
+    Status:         string;
+    Make:           string;
+    Model:          string;
+    ModelYear:      number;
+    VIN:            string;
 }
 
 export async function GetAll(
     data: GetAllData, 
     user: User = User.Employee
-): Promise<Array<FullAppointment> | null> {
+): Promise<Array<QuickAppointment> | null> {
     try {
         const pool = await fetchPool(user, data);
         if (!pool)
-            throw 'Undefined Pool';
+            throw 'Appointment.GetAll: Undefined Pool';
 
         const output = await pool.request()
-            .input('EmployeeID', sql.Int, data.EmployeeID)
-            .input('StartIndex', sql.Int, data.StartIndex)
+            .input('SessionID', sql.VarBinary, data.SessionID)
+            .input('PageNumber', sql.Int, data.PageNumber)
             .input('PageSize', sql.Int, data.PageSize)
-            .input('Label', sql.NVarChar, data.Label)
+            .input('LookAhead', sql.Int, data.LookAhead)
+            .input('Search', sql.VarChar, data.Search)
+            .input('Deleted', sql.Bit, data.Deleted)
+            .input('LabelID', sql.Int, data.LabelID)
             .input('StatusID', sql.Int, data.StatusID)
-            .input('OrderByFName', sql.Int, data.OrderByFName)
-            .input('OrderDirFName', sql.NVarChar, data.OrderDirFName)
-            .input('OrderByLName', sql.Int, data.OrderByLName)
-            .input('OrderDirLName', sql.NVarChar, data.OrderDirLName)
-            .input('OrderByMake', sql.Int, data.OrderByMake)
-            .input('OrderDirMake', sql.NVarChar, data.OrderDirMake)
-            .input('OrderByModel', sql.Int, data.OrderByModel)
-            .input('OrderDirModel', sql.NVarChar, data.OrderDirModel)
-            .input('OrderByModelYear', sql.Int, data.OrderByModelYear)
-            .input('OrderDirModelYear', sql.NVarChar, data.OrderDirModelYear)
-            .input('OrderByCreationDate', sql.Int, data.OrderByCreationDate)
-            .input('OrderDirCreationDate', sql.NVarChar, data.OrderDirCreationDate)
-            .input('OrderByStartDate', sql.Int, data.OrderByStartDate)
-            .input('OrderDirStartDate', sql.NVarChar, data.OrderDirStartDate)
-            .input('OrderByEndDate', sql.Int, data.OrderByEndDate)
-            .input('OrderDirEndDate', sql.NVarChar, data.OrderDirEndDate)
-            .input('OrderByCost', sql.Int, data.OrderByCost)
-            .input('OrderDirCost', sql.NVarChar, data.OrderDirCost)
-            .input('Search', sql.Int, data.Search)
+            .input('FName', sql.Bit, data.FName)
+            .input('LName', sql.Bit, data.LName)
+            .input('Make', sql.Bit, data.Make)
+            .input('Model', sql.Bit, data.Model)
+            .input('ModelYear', sql.Bit, data.ModelYear)
+            .input('CreationDate', sql.Bit, data.CreationDate)
+            .input('StartDate', sql.Bit, data.StartDate)
+            .input('EndDate', sql.Bit, data.EndDate)
+            .input('Cost', sql.Bit, data.Cost)           
             .execute('Appointment.GetAll');
 
         return output.recordset;

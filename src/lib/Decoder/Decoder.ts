@@ -1,7 +1,6 @@
-"use server";
+'use server';
 
-export async function ModelYears()
-: Promise<Array<number>> {
+export async function ModelYears(): Promise<Array<number>> {
     const MIN = 1980;
     const MAX = 2030;
     
@@ -12,14 +11,13 @@ export async function ModelYears()
     return years;
 }
 
-export async function Makes()
-: Promise<Array<{Make_ID: number, Make_Name: string}>> {
-    const URL = "https://vpic.nhtsa.dot.gov/api/vehicles/GetAllMakes?format=json";
+// Not Needed
+export async function Makes(): Promise<Array<{Make_ID: number, Make_Name: string}>> {
+    const URL = 'https://vpic.nhtsa.dot.gov/api/vehicles/GetAllMakes?format=json';
     return (await (await fetch(URL)).json()).Results;
 }
 
-export async function Models(year: number, make: string)
-: Promise<Array<{
+export async function Models(year: number, make: string): Promise<Array<{
     Make_ID: number;
     Make_Name: string;
     Model_ID: number;
@@ -29,8 +27,7 @@ export async function Models(year: number, make: string)
     return (await (await fetch(URL)).json()).Results;
 }
 
-export async function DecodeVIN(vin: string)
-: Promise<{
+export async function DecodeVIN(vin: string): Promise<{
     Make: string;
     Model: string;
     ModelYear: number;

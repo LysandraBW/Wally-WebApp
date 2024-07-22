@@ -4,32 +4,24 @@ import { fetchPool } from "../../Pool";
 import { User } from "../../User";
 
 interface InsertDefinedServiceData {
-    EmployeeID: number | null;
-    AppointmentID: number;
+    SessionID: string | null;
+    AppointmentID: string;
     ServiceID: number;
-    FName: string | null;
-    LName: string | null;
-    Email: string | null;
 }
 
-export async function InsertDefinedService(data: InsertDefinedServiceData, user: User = User.Default)
-: Promise<number> {
+export async function InsertDefinedService(data: InsertDefinedServiceData, user: User = User.Standard): Promise<number> {
     try {
         const pool = await fetchPool(user, data);
         if (!pool)
-            throw 'Undefined Pool';
+            throw 'Appointment.InsertDefinedService: Undefined Pool';
 
         const output = await pool.request()
-            .input('EmployeeID', sql.Int, data.EmployeeID)
-            .input('AppointmentID', sql.Int, data.AppointmentID)
+            .input('SessionID', sql.VarBinary, data.SessionID)
+            .input('AppointmentID', sql.UniqueIdentifier, data.AppointmentID)
             .input('ServiceID', sql.Int, data.ServiceID)
-            .input('FName', sql.Int, data.FName)
-            .input('LName', sql.Int, data.LName)
-            .input('Email', sql.Int, data.Email)
-            .output('ServiceID', sql.Int)
             .execute('Appointment.InsertDefinedService');
  
-        return output.output.ServiceID;
+        return output.recordset[0].ServiceID;
     }
     catch (err) {
         console.error(err);
@@ -38,12 +30,11 @@ export async function InsertDefinedService(data: InsertDefinedServiceData, user:
 }
 
 interface InsertServiceData {
-    EmployeeID: number;
-    AppointmentID: number;
-    ServiceID: string;
+    SessionID: string;
+    AppointmentID: string;
     Service: string;
-    Group: string;
-    Type: string;
+    Division: string;
+    Class: string;
 }
 
 export async function InsertService(
@@ -56,16 +47,14 @@ export async function InsertService(
             throw 'Undefined Pool';
 
         const output = await pool.request()
-            .input('EmployeeID', sql.Int, data.EmployeeID)
-            .input('AppointmentID', sql.Int, data.AppointmentID)
-            .input('ServiceID', sql.Int, data.ServiceID)
+            .input('SessionID', sql.VarBinary, data.SessionID)
+            .input('AppointmentID', sql.UniqueIdentifier, data.AppointmentID)
             .input('Service', sql.Int, data.Service)
-            .input('Group', sql.Int, data.Group)
-            .input('Type', sql.Int, data.Type)
-            .output('ServiceID', sql.Int)
+            .input('Division', sql.Int, data.Division)
+            .input('Class', sql.Int, data.Class)
             .execute('Appointment.InsertService');
  
-        return output.output.ServiceID;
+        return output.recordset[0].ServiceID;
     }
     catch (err) {
         console.error(err);

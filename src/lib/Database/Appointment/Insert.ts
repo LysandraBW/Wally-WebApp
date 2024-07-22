@@ -4,7 +4,7 @@ import { fetchPool } from "../Pool";
 import { User } from "../User";
 
 interface InsertAppointmentData {
-    EmployeeID: number | null;
+    SessionID:  number | null;
     FName:      string;
     LName:      string;
     Email:      string;
@@ -17,15 +17,15 @@ interface InsertAppointmentData {
 
 export default async function InsertAppointment(
     data: InsertAppointmentData, 
-    user: User = User.Default
-): Promise<number> {
+    user: User = User.Standard
+): Promise<string> {
     try {
         const pool = await fetchPool(user, data);
         if (!pool)
-            throw 'Undefined Pool';
+            throw 'Appointment.InsertAppointment: Undefined Pool';
 
         const output = await pool.request()
-            .input('EmployeeID', sql.Int, data.EmployeeID)
+            .input('SessionID', sql.VarBinary, data.SessionID)
             .input('FName', sql.Int, data.FName)
             .input('LName', sql.Int, data.LName)
             .input('Email', sql.Int, data.Email)
@@ -34,13 +34,12 @@ export default async function InsertAppointment(
             .input('Model', sql.Int, data.Model)
             .input('ModelYear', sql.Int, data.ModelYear)
             .input('VIN', sql.Int, data.VIN)
-            .output('AppointmentID', sql.Int)
             .execute('Appointment.InsertAppointment');
 
-        return output.output.AppointmentID;
+        return output.recordset[0].AppointmentID;
     }
     catch (err) {
         console.error(err);
-        return 0;
+        return '';
     }
 }

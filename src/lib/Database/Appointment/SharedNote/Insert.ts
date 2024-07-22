@@ -4,7 +4,7 @@ import { fetchPool } from "../../Pool";
 import { User } from "../../User";
 
 interface InsertNoteShareeData {
-    NoteOwnerID: number;
+    SessionID: string;
     NoteID: number;
     NoteShareeID: number;
 }
@@ -16,10 +16,10 @@ export default async function InsertNoteSharee(
     try {
         const pool = await fetchPool(user, data);
         if (!pool)
-            throw 'Undefined Pool';
+            throw 'Appointment.InsertNoteSharee: Undefined Pool';
 
         await pool.request()
-            .input('NoteOwnerID', sql.Int, data.NoteOwnerID)
+            .input('SessionID', sql.VarBinary, data.SessionID)
             .input('NoteID', sql.Int, data.NoteID)
             .input('NoteShareeID', sql.Int, data.NoteShareeID)
             .execute('Appointment.InsertNoteSharee')

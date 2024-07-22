@@ -2,7 +2,7 @@ import { Text, Button } from "@/components/Input/Export";
 
 interface LookupFormProps {
     form: {
-        appointmentID: number | null;
+        AppointmentID: string | null;
         fName: string;
         lName: string;
         email: string;

@@ -4,21 +4,20 @@ import { fetchPool } from "../../Pool";
 import { User } from "../../User";
 
 interface InsertPaymentData {
-    EmployeeID: number;
-    AppointmentID: number;
+    SessionID: string;
+    AppointmentID: string;
     Payment: string;
 }
 
-export async function InsertPayment(data: InsertPaymentData, user: User = User.Default)
-: Promise<number> {
+export async function InsertPayment(data: InsertPaymentData, user: User = User.Standard): Promise<number> {
     try {
         const pool = await fetchPool(user, data);
         if (!pool)
             throw 'Undefined Pool';
 
         const output = await pool.request()
-            .input('EmployeeID', sql.Int, data.EmployeeID)
-            .input('AppointmentID', sql.Int, data.AppointmentID)
+            .input('SessionID', sql.VarBinary, data.SessionID)
+            .input('AppointmentID', sql.UniqueIdentifier, data.AppointmentID)
             .input('Payment', sql.Money, data.Payment)
             .output('PaymentID', sql.Int)
             .execute('Appointment.InsertPayment');
@@ -32,8 +31,8 @@ export async function InsertPayment(data: InsertPaymentData, user: User = User.D
 }
 
 interface InsertCreditCardData {
-    EmployeeID: number;
-    AppointmentID: number;
+    SessionID: string;
+    AppointmentID: string;
     PaymentID: number;
     Name: string;
     Type: string;
@@ -43,7 +42,7 @@ interface InsertCreditCardData {
 
 export async function InsertCreditCard(
     data: InsertCreditCardData, 
-    user: User = User.Default
+    user: User = User.Standard
 ): Promise<boolean> {
     try {
         const pool = await fetchPool(user, data);
@@ -51,8 +50,8 @@ export async function InsertCreditCard(
             throw 'Undefined Pool';
 
         await pool.request()
-            .input('EmployeeID', sql.Int, data.EmployeeID)
-            .input('AppointmentID', sql.Int, data.AppointmentID)
+            .input('SessionID', sql.VarBinary, data.SessionID)
+            .input('AppointmentID', sql.UniqueIdentifier, data.AppointmentID)
             .input('PaymentID', sql.Int, data.PaymentID)
             .input('Name', sql.VarChar, data.Name)
             .input('Type', sql.VarChar(4), data.Type)

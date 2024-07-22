@@ -2,32 +2,17 @@
 import jwt from 'jsonwebtoken';
 import { cookies } from 'next/headers';
 
-export const setToken = (data: any, name: string = 'JWT'): void => {
+export const setToken = async (data: any, name: string = 'JWT'): Promise<void> => {
     const token = jwt.sign(data, process.env.ACCESS_TOKEN_SECRET || '');
     cookies().set({
         name,
         value: token,
-        httpOnly: true
+        httpOnly: true,
+        sameSite: true
     });
 }
 
-export const authorizeToken = async (callback: (...args: any[]) => Promise<boolean>, name: string = 'JWT'): Promise<any> => {
+export const getToken = async (name: string = 'JWT'): Promise<string | undefined> => {
     const token = cookies().get(name)?.value;
-    if (!token)
-        return null;
-
-    console.log(3);
-    const data = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET || '', async (err, data) => {
-        // Error
-        if (err)
-            return null;
-
-        // Authenticate
-        if (!(await callback(data)))
-            return null;
-
-        // Authorized
-        return data;
-    });
-    return data;
+    return token;
 }

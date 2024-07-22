@@ -3,31 +3,28 @@ import { FormStructure } from "./Form";
 import { processForm } from "./ProcessedForm";
 import { InsertAppointment, InsertDefinedService } from "@/lib/Database/Export";
 
-const submitForm = async (form: FormStructure): Promise<number> => {
+const submitForm = async (form: FormStructure): Promise<string> => {
     let processedForm = processForm(form);
 
     const AppointmentID = await InsertAppointment({
-        EmployeeID: null,
+        SessionID: null,
         ...processedForm.Scalar
     });
 
     // Error on Insertion
     if (!AppointmentID)
-        return 0;
+        return '';
 
     for (const ServiceID of processedForm.NonScalar.Services) {
         const serviceID = await InsertDefinedService({
-                EmployeeID: null,
+                SessionID: null,
                 AppointmentID,
-                ServiceID,
-                FName: processedForm.Scalar.FName,
-                LName: processedForm.Scalar.LName,
-                Email: processedForm.Scalar.Email
+                ServiceID
         });
 
         // Error on Insertion
         if (!serviceID)
-            return 0;
+            return '';
     }
 
     return AppointmentID;

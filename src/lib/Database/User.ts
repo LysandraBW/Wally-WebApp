@@ -1,1 +1,1 @@
-export enum User { Employee, Customer, Default };
+export enum User { Employee, Customer, Standard };

@@ -4,8 +4,8 @@ import { fetchPool } from "../../Pool";
 import { User } from "../../User";
 
 interface InsertPartData {
-    EmployeeID: number;
-    AppointmentID: number;
+    SessionID: string;
+    AppointmentID: string;
     PartName: string;
     PartNumber: string;
     Quantity: number;
@@ -19,19 +19,18 @@ export default async function InsertPart(
     try {
         const pool = await fetchPool(user, data);
         if (!pool)
-            throw 'Undefined Pool';
+            throw 'Appointment.InsertPart: Undefined Pool';
 
         const output = await pool.request()
-            .input('EmployeeID', sql.Int, data.EmployeeID)
-            .input('AppointmentID', sql.Int, data.AppointmentID)
+            .input('SessionID', sql.VarBinary, data.SessionID)
+            .input('AppointmentID', sql.UniqueIdentifier, data.AppointmentID)
             .input('PartName', sql.VarChar, data.PartName)
             .input('PartNumber', sql.Int, data.PartNumber)
             .input('Quantity', sql.Int, data.Quantity)
             .input('UnitCost', sql.Money, data.UnitCost)
-            .output('PartID', sql.Int)
-            .execute('Appointment.InsertParts');
+            .execute('Appointment.InsertPart');
  
-        return output.output.PartID;
+        return output.recordset[0].PartID;
     }   
     catch (err) {
         console.error(err);

@@ -4,15 +4,13 @@ import { fetchPool } from "../../Pool";
 import { User } from "../../User";
 
 interface GetServicesData {
-    AppointmentID: number;
-    FName: string;
-    LName: string;
-    Email: string;
+    SessionID: string;
+    AppointmentID: string;
 }
 
 export type Service = {
     ServiceID: number;
-    AppointmentID: number;
+    AppointmentID: string;
     Type: string;
     GroupName: string;
     Service: string;
@@ -25,14 +23,12 @@ export default async function GetServices(
     try {
         const pool = await fetchPool(user, data);
         if (!pool)
-            throw 'Undefined Pool';
+            throw 'Appointment.GetServices: Undefined Pool';
 
         const output = await pool.request()
-        .input('AppointmentID', sql.Int, data.AppointmentID)
-        .input('FName', sql.VarChar(50), data.FName)
-        .input('LName', sql.VarChar(50), data.LName)
-        .input('Email', sql.VarChar(320), data.Email)
-        .execute('Appointment.GetServices');
+            .input('SessionID', sql.VarBinary, data.SessionID)
+            .input('AppointmentID', sql.UniqueIdentifier, data.AppointmentID)
+            .execute('Appointment.GetServices');
 
         return output.recordset;
     }

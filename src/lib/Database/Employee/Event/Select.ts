@@ -4,7 +4,7 @@ import { fetchPool } from "../../Pool";
 import { User } from "../../User";
 
 interface GetEventsData {
-    EmployeeID: number;
+    SessionID: string;
 }
 
 type Event = {
@@ -15,15 +15,14 @@ type Event = {
     Summary: string;
 }
 
-export default async function GetEvents(data: GetEventsData, user: User = User.Employee)
-: Promise<Array<Event> | null> {
+export default async function GetEvents(data: GetEventsData, user: User = User.Employee): Promise<Array<Event> | null> {
     try {
         const pool = await fetchPool(user, data);
         if (!pool)
-            throw 'Undefined Pool';
+            throw 'Employee.GetEvents: Undefined Pool';
 
         const output = await pool.request()
-            .input('EmployeeID', sql.Int, data.EmployeeID)
+            .input('SessionID', sql.VarBinary, data.SessionID)
             .execute('Employee.GetEvents');
         
         return output.recordset;

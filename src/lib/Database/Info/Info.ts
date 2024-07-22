@@ -2,41 +2,18 @@
 import { fetchPool } from "../Pool";
 import { User } from "../User";
 
-type Status = {
+export type Status = {
     StatusID: number;
-    Status: string;
-}
-
-export async function GetStatus(user: User = User.Default)
-: Promise<Array<Status>> {
-    try {
-        const pool = await fetchPool(user);
-        if (!pool)
-            throw "Undefined Pool";
-
-        const output = await pool.request().execute("Info.GetStatus");
-        return output.recordset;
-    }
-    catch (err) {
-        console.error(err);
-        return [];
-    }
-}
-
-type StatusDesc = {
-    StatusID: string;
     Status: string;
     Description: string;
 }
 
-export async function GetStatusDesc(user: User = User.Default)
-: Promise<Array<StatusDesc>> {
+export async function Statuses(user: User = User.Standard): Promise<Array<Status>> {
     try {
         const pool = await fetchPool(user);
         if (!pool)
-            throw "Undefined Pool";
-
-        const output = await pool.request().execute("EXEC GetStatusDesc");
+            throw "Info.Statuses: Undefined Pool";
+        const output = await pool.request().execute("Info.Statuses");
         return output.recordset;
     }
     catch (err) {
@@ -45,23 +22,21 @@ export async function GetStatusDesc(user: User = User.Default)
     }
 }
 
-type Service = {
-    Type: string;
-    TypeID: number;
-    Group: string;
-    GroupID: number;
+export type Service = {
+    Class: string;
+    ClassID: number;
+    Division: string;
+    DivisionID: number;
     Service: string;
     ServiceID: number;
 }
 
-export async function GetService(user: User = User.Default)
-: Promise<Array<Service>> {
+export async function Services(user: User = User.Standard): Promise<Array<Service>> {
     try {
         const pool = await fetchPool(user);
         if (!pool)
-            throw "Undefined Pool";
-        
-        const output = await pool.request().execute("Info.GetService");
+            throw "Info.Services: Undefined Pool";
+        const output = await pool.request().execute("Info.Services");
         return output.recordset;
     }
     catch (err) {
@@ -70,18 +45,17 @@ export async function GetService(user: User = User.Default)
     }
 }
 
-type Label = {
+export type Label = {
+    LabelID: number;
     Label: string;
 }
 
-export async function GetLabel(user: User = User.Default)
-: Promise<Array<Label>> {
+export async function Labels(user: User = User.Standard): Promise<Array<Label>> {
     try {
         const pool = await fetchPool(user);
         if (!pool)
-            throw "Undefined Pool";
-        
-        const output = await pool.request().execute("Info.GetLabel");
+            throw "Info.Labels: Undefined Pool";
+        const output = await pool.request().execute("Info.Labels");
         return output.recordset;
     }
     catch (err) {
@@ -94,14 +68,12 @@ type Make = {
     Make: string;
 }
 
-export async function GetMake(user: User = User.Default)
-: Promise<Array<Make>> {
+export async function Makes(user: User = User.Standard): Promise<Array<Make>> {
     try {
         const pool = await fetchPool(user);
         if (!pool)
-            throw "Undefined Pool";
-        
-        const output = await pool.request().execute("Info.GetMake");
+            throw "Info.Makes: Undefined Pool";
+        const output = await pool.request().execute("Info.Makes");
         return output.recordset;
     }
     catch (err) {

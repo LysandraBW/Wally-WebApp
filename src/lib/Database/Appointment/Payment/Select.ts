@@ -4,12 +4,12 @@ import { fetchPool } from "../../Pool";
 import { User } from "../../User";
 
 interface GetPaymentData {
-    EmployeeID: number;
-    AppointmentID: number;
+    SessionID: string;
+    AppointmentID: string;
 }
 
-type Payment = {
-    AppointmentID: number;
+export type Payment = {
+    AppointmentID: string;
     PaymentID: number;
     Payment: string;
     PaymentDate: string;
@@ -19,19 +19,19 @@ type Payment = {
     EXP: string;
 }
 
-export default async function GetPayment(
+export default async function GetPayments(
     data: GetPaymentData, 
     user: User = User.Employee
 ): Promise<Array<Payment> | null> {
     try {
         const pool = await fetchPool(user, data);
         if (!pool)
-            throw 'Undefined Pool';
+            throw 'Appointment.GetPayment: Undefined Pool';
 
         const output = await pool.request()
-            .input('EmployeeID', sql.Int, data.EmployeeID)
-            .input('AppointmentID', sql.Int, data.AppointmentID)
-            .execute('Appointment.GetPayment');
+            .input('SessionID', sql.VarBinary, data.SessionID)
+            .input('AppointmentID', sql.UniqueIdentifier, data.AppointmentID)
+            .execute('Appointment.GetPayments');
 
         return output.recordset;
     }

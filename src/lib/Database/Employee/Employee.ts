@@ -1,30 +1,29 @@
-"use server";
-import sql from "mssql";
-import { fetchPool } from "../Pool";
-import { User } from "../User";
+'use server';
+import sql from 'mssql';
+import { fetchPool } from '../Pool';
+import { User } from '../User';
 
 interface GetData {
-    EmployeeID: number;
+    SessionID: string;
 }
 
 export type Employee = {
-    EmployeeID: number;
+    SessionID: string;
     FName: string;
     LName: string;
     Email: string;
     Phone: string;
-}
+} | null;
 
-export async function Get(data: GetData, user: User = User.Employee)
-: Promise<Employee | null> {
+export async function Get(data: GetData, user: User = User.Employee): Promise<Employee> {
     try {
         const pool = await fetchPool(user, data);
         if (!pool)
-            throw "Undefined Pool";
+            throw 'Employee.Get: Undefined Pool';
 
         const output = await pool.request()
-            .input("EmployeeID", sql.Int, data.EmployeeID)
-            .execute("Employee.Get");
+            .input('SessionID', sql.VarBinary, data.SessionID)
+            .execute('Employee.Get');
 
         return output.recordset[0];
     }
@@ -35,21 +34,20 @@ export async function Get(data: GetData, user: User = User.Employee)
 }
 
 type GetAllReturnType = {
-    EmployeeID: number;
+    SessionID: string;
     FName: string;
     LName: string;
 }
 
-export async function GetAll(data: GetData, user = User.Employee)
-: Promise<Array<GetAllReturnType> | null> {
+export async function GetAll(data: GetData, user = User.Employee): Promise<Array<GetAllReturnType> | null> {
     try {
         const pool = await fetchPool(user, data);
         if (!pool)
-            throw "Undefined Pool";
+            throw 'Employee.GetAll: Undefined Pool';
 
         const output = await pool.request()
-            .input("EmployeeID", sql.Int, data.EmployeeID)
-            .execute("Employee.GetAll");
+            .input('SessionID', sql.VarBinary, data.SessionID)
+            .execute('Employee.GetAll');
 
         return output.recordset;
     }

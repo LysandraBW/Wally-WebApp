@@ -1,17 +1,13 @@
 import { FormStructure } from "./Form";
 
 export interface ProcessedFormStructure {
-    AppointmentID: number;
-    FName: string;
-    LName: string;
+    LastDigits: string;
     Email: string;
 }
 
 export const processForm = (form: FormStructure): ProcessedFormStructure => {
     return {
-        AppointmentID: form.appointmentID || -1,
-        FName: form.fName.trim(),
-        LName: form.lName.trim(),
-        Email: form.email.trim(),
+        LastDigits: form.lastDigits,
+        Email: form.email
     }
 }

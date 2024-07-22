@@ -4,12 +4,12 @@ import { fetchPool } from "../../Pool";
 import { User } from "../../User";
 
 interface UpdateServiceData {
-    EmployeeID: number;
-    AppointmentID: number;
+    SessionID: string;
+    AppointmentID: string;
     ServiceID: number;
     Service: string;
-    GroupName: string;
-    Type: string;
+    Division: string;
+    Class: string;
 }
 
 export default async function UpdateService(
@@ -19,15 +19,15 @@ export default async function UpdateService(
     try {
         const pool = await fetchPool(user, data);
         if (!pool)
-            throw 'Undefined Pool';
+            throw 'Appointment.UpdateService: Undefined Pool';
 
         await pool.request()
-            .input('EmployeeID', sql.Int, data.EmployeeID)
-            .input('AppointmentID', sql.Int, data.AppointmentID)
+            .input('SessionID', sql.VarBinary, data.SessionID)
+            .input('AppointmentID', sql.UniqueIdentifier, data.AppointmentID)
             .input('ServiceID', sql.Int, data.ServiceID)
             .input('Service', sql.Int, data.Service)
-            .input('GroupName', sql.Int, data.GroupName)
-            .input('Type', sql.Int, data.Type)
+            .input('Division', sql.Int, data.Division)
+            .input('Class', sql.Int, data.Class)
             .execute('Appointment.UpdateService');
     
         return true;
