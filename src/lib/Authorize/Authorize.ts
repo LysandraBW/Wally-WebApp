@@ -8,6 +8,7 @@ export const setToken = async (data: any, name: string = 'JWT'): Promise<void> =
         name,
         value: token,
         httpOnly: true,
+        secure: true,
         sameSite: true
     });
 }
