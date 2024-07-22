@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 import { cookies } from 'next/headers';
 
 export const setToken = async (data: any, name: string = 'JWT'): Promise<void> => {
-    const token = jwt.sign(data, process.env.ACCESS_TOKEN_SECRET || '');
+    const token = jwt.sign(data, process.env.ATS || '');
     cookies().set({
         name,
         value: token,
