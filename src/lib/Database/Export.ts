@@ -49,7 +49,7 @@ export {
 } from "./Info/Info";
 
 export {
-    Delete as Remove, 
+    Delete, 
     Restore
 } from "./Appointment/Deleted/General";
 

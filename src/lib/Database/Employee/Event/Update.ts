@@ -18,7 +18,7 @@ export default async function UpdateEvent(data: UpdateEventData, user: User = Us
             throw 'Employee.UpdateEvent: Undefined Pool';
 
         await pool.request()
-            .input('SessionID', sql.VarBinary, data.SessionID)
+            .input('SessionID', sql.Char(36), data.SessionID)
             .input('EventID', sql.Int, data.EventID)
             .input('Name', sql.VarChar(100), data.Name)
             .input('Date', sql.NVarChar, data.Date)

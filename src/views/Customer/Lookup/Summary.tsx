@@ -1,7 +1,7 @@
-import { Summary as SummaryData } from "@/lib/Form/Customer/Lookup/Submit";
+import { AppointmentSummary } from "@/lib/Database/Appointment/Appointment";
 
 interface SummaryProps {
-    info: SummaryData;
+    info: AppointmentSummary;
 }
 
 export default function Summary(props: SummaryProps) {
@@ -33,8 +33,8 @@ export default function Summary(props: SummaryProps) {
                 </div>
             ))}
             <div><b>Diagnosis</b></div>
-            {props.info.Diagnosis.map((diagnosis, i) => (
-                <div key={i}>{diagnosis.Code} {diagnosis.Diagnosis}</div>
+            {props.info.Diagnoses.map((diagnosis, i) => (
+                <div key={i}>{diagnosis.Code} {diagnosis.Message}</div>
             ))}
             <div><b>Repairs</b></div>
             {props.info.Repairs.map((Repair, i) => (

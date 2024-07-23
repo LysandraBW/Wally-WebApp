@@ -23,11 +23,11 @@ export default async function UpdatePart(
             throw 'Appointment.UpdatePart: Undefined Pool';
 
         await pool.request()
-            .input('SessionID', sql.VarBinary, data.SessionID)
+            .input('SessionID', sql.Char(36), data.SessionID)
             .input('AppointmentID', sql.UniqueIdentifier, data.AppointmentID)
             .input('PartID', sql.Int, data.PartID)
-            .input('PartName', sql.VarChar, data.PartName)
-            .input('PartNumber', sql.VarChar, data.PartNumber)
+            .input('PartName', sql.VarChar(50), data.PartName)
+            .input('PartNumber', sql.VarChar(50), data.PartNumber)
             .input('Quantity', sql.Int, data.Quantity)
             .input('UnitCost', sql.Money, data.UnitCost)
             .execute('Appointment.UpdatePart');

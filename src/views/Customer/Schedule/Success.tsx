@@ -1,7 +1,7 @@
 import Message from "@/components/Pop-Up/Message/Message";
 
 interface SuccessProps {
-    ID: number;
+    ID: string;
     close: () => void;
 }
 

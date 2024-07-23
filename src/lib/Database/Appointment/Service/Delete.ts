@@ -19,7 +19,7 @@ export default async function DeleteService(
             throw 'Appointment.DeleteService: Undefined Pool';
 
         await pool.request()
-            .input('SessionID', sql.VarBinary, data.SessionID)
+            .input('SessionID', sql.Char(36), data.SessionID)
             .input('AppointmentID', sql.UniqueIdentifier, data.AppointmentID)
             .input('ServiceID', sql.Int, data.ServiceID)
             .execute('Appointment.DeleteService');

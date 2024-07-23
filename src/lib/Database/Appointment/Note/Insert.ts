@@ -22,12 +22,12 @@ export default async function InsertNote(
             throw 'Appointment.InsertNote: Undefined Pool';
 
         const output = await pool.request()
-            .input('SessionID', sql.VarBinary, data.SessionID)
+            .input('SessionID', sql.Char(36), data.SessionID)
             .input('AppointmentID', sql.UniqueIdentifier, data.AppointmentID)
-            .input('Head', sql.VarChar, data.Head)
-            .input('Body', sql.VarChar, data.Body)
-            .input('Attachment', sql.VarChar, data.Attachment)
-            .input('ShowCustomer', sql.VarChar, data.ShowCustomer)
+            .input('Head', sql.VarChar(100), data.Head)
+            .input('Body', sql.VarChar(500), data.Body)
+            .input('Attachment', sql.VarChar(500), data.Attachment)
+            .input('ShowCustomer', sql.Bit, data.ShowCustomer)
             .output('NoteID', sql.Int)
             .execute('Appointment.InsertNote');
 

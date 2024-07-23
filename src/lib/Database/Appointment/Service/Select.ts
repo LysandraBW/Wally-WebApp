@@ -26,7 +26,7 @@ export default async function GetServices(
             throw 'Appointment.GetServices: Undefined Pool';
 
         const output = await pool.request()
-            .input('SessionID', sql.VarBinary, data.SessionID)
+            .input('SessionID', sql.Char(36), data.SessionID)
             .input('AppointmentID', sql.UniqueIdentifier, data.AppointmentID)
             .execute('Appointment.GetServices');
 

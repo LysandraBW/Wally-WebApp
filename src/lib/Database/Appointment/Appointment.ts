@@ -54,7 +54,7 @@ export async function Get(
             throw 'Appointment.Get: Undefined Pool';
 
         const output = await pool.request()
-            .input('SessionID', sql.VarBinary, data.SessionID)
+            .input('SessionID', sql.Char(36), data.SessionID)
             .input('AppointmentID', sql.UniqueIdentifier, data.AppointmentID)
             .execute('Appointment.Get');
 
@@ -118,7 +118,7 @@ export async function GetSummary(
             throw 'Appointment.GetSummary: Undefined Pool';
 
         const output = await pool.request()
-            .input('SessionID', sql.VarBinary, data.SessionID)
+            .input('SessionID', sql.Char(36), data.SessionID)
             .input('AppointmentID', sql.UniqueIdentifier, data.AppointmentID)
             .execute('Appointment.GetSummary');
 
@@ -126,7 +126,7 @@ export async function GetSummary(
         return {
             ...recordsets[0][0],
             Services:   recordsets[1],
-            Diagnosis:  recordsets[2],
+            Diagnoses:  recordsets[2],
             Repairs:    recordsets[3],
             Notes:      recordsets[4]
         }
@@ -187,11 +187,11 @@ export async function GetAll(
             throw 'Appointment.GetAll: Undefined Pool';
 
         const output = await pool.request()
-            .input('SessionID', sql.VarBinary, data.SessionID)
+            .input('SessionID', sql.Char(36), data.SessionID)
             .input('PageNumber', sql.Int, data.PageNumber)
             .input('PageSize', sql.Int, data.PageSize)
             .input('LookAhead', sql.Int, data.LookAhead)
-            .input('Search', sql.VarChar, data.Search)
+            .input('Search', sql.VarChar(320), data.Search)
             .input('Deleted', sql.Bit, data.Deleted)
             .input('LabelID', sql.Int, data.LabelID)
             .input('StatusID', sql.Int, data.StatusID)

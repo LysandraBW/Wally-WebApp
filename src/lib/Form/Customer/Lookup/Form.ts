@@ -1,9 +1,9 @@
 export interface FormStructure {
-    lastDigits: string;
+    appointmentID: string;
     email: string;
 }
 
 export const Form: FormStructure = {
     email: "",
-    lastDigits: ""
+    appointmentID: ""
 }

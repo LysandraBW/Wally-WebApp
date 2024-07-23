@@ -4,7 +4,7 @@ import { fetchPool } from "../Pool";
 import { User } from "../User";
 
 interface AuthenticateLookupData {
-    LastDigits: string;
+    AppointmentID: string;
     Email: string;
 }
 
@@ -18,10 +18,9 @@ export async function AuthenticateLookup(
             throw 'Undefined Pool';
 
         const output = await pool.request()
-            .input('LastDigits', sql.Int, data.LastDigits)
+            .input('AppointmentID', sql.UniqueIdentifier, data.AppointmentID)
             .input('Email', sql.VarChar(320), data.Email)
-            .output('SessionID', sql.VarBinary)
-            .output('AppointmentID', sql.UniqueIdentifier)
+            .output('SessionID', sql.Char(36))
             .execute('Appointment.AuthenticateLookup');
 
         return output.output.SessionID;
@@ -38,17 +37,18 @@ interface AuthenticateSessionData {
 
 export async function AuthenticateSession(
     data: AuthenticateSessionData,
-    user: User = User.Customer
+    user: User = User.Standard
 ): Promise<string> {
     try {
         const pool = await fetchPool(user, data);
         if (!pool)
             throw 'Undefined Pool';
+        
 
         const output = await pool.request()
-            .input('SessionID', sql.VarBinary, data.SessionID)
+            .input('SessionID', sql.Char(36), data.SessionID)
             .output('AppointmentID', sql.UniqueIdentifier)
-            .execute('Appointment.AuthenticateLookup');
+            .execute('Appointment.AuthenticateSession');
 
         return output.output.AppointmentID;
     }

@@ -17,10 +17,9 @@ export default function Login() {
     const submitHandler = async (): Promise<void> => {
         const employeeID = await submitForm(form);
         if (employeeID) {
-            await goTo('/Employee/Dashboard/All');
+            await goTo('/Employee/Dashboard/Dashboard');
             return;
         }
-
         setErrorMessage(<Error close={() => setErrorMessage(null)}/>);
     }
 

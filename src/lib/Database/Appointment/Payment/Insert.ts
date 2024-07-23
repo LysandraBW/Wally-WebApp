@@ -16,7 +16,7 @@ export async function InsertPayment(data: InsertPaymentData, user: User = User.S
             throw 'Undefined Pool';
 
         const output = await pool.request()
-            .input('SessionID', sql.VarBinary, data.SessionID)
+            .input('SessionID', sql.Char(36), data.SessionID)
             .input('AppointmentID', sql.UniqueIdentifier, data.AppointmentID)
             .input('Payment', sql.Money, data.Payment)
             .output('PaymentID', sql.Int)
@@ -50,10 +50,10 @@ export async function InsertCreditCard(
             throw 'Undefined Pool';
 
         await pool.request()
-            .input('SessionID', sql.VarBinary, data.SessionID)
+            .input('SessionID', sql.Char(36), data.SessionID)
             .input('AppointmentID', sql.UniqueIdentifier, data.AppointmentID)
             .input('PaymentID', sql.Int, data.PaymentID)
-            .input('Name', sql.VarChar, data.Name)
+            .input('Name', sql.VarChar(100), data.Name)
             .input('Type', sql.VarChar(4), data.Type)
             .input('CNN', sql.VarChar(3), data.CNN)
             .input('EXP', sql.VarChar(4), data.EXP)

@@ -19,7 +19,7 @@ export default async function DeleteNoteSharee(
             throw 'Undefined Pool';
 
         await pool.request()
-            .input('SessionID', sql.VarBinary, data.SessionID)
+            .input('SessionID', sql.Char(36), data.SessionID)
             .input('NoteID', sql.Int, data.NoteID)
             .input('NoteShareeID', sql.Int, data.NoteShareeID)
             .execute('DeleteNoteSharee');

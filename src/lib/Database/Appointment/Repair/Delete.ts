@@ -19,7 +19,7 @@ export default async function DeleteRepair(
             throw 'Appointment.DeleteRepair: Undefined Pool';
 
         await pool.request()
-            .input('SessionID', sql.VarBinary, data.SessionID)
+            .input('SessionID', sql.Char(36), data.SessionID)
             .input('AppointmentID', sql.UniqueIdentifier, data.AppointmentID)
             .input('RepairID', sql.Int, data.RepairID)
             .execute('Appointment.DeleteRepair');

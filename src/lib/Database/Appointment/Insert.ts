@@ -25,15 +25,15 @@ export default async function InsertAppointment(
             throw 'Appointment.InsertAppointment: Undefined Pool';
 
         const output = await pool.request()
-            .input('SessionID', sql.VarBinary, data.SessionID)
-            .input('FName', sql.Int, data.FName)
-            .input('LName', sql.Int, data.LName)
-            .input('Email', sql.Int, data.Email)
-            .input('Phone', sql.Int, data.Phone)
-            .input('Make', sql.Int, data.Make)
-            .input('Model', sql.Int, data.Model)
+            .input('SessionID', sql.Char(36), data.SessionID)
+            .input('FName', sql.VarChar(50), data.FName)
+            .input('LName', sql.VarChar(50), data.LName)
+            .input('Email', sql.VarChar(320), data.Email)
+            .input('Phone', sql.VarChar(25), data.Phone)
+            .input('Make', sql.VarChar(50), data.Make)
+            .input('Model', sql.VarChar(50), data.Model)
             .input('ModelYear', sql.Int, data.ModelYear)
-            .input('VIN', sql.Int, data.VIN)
+            .input('VIN', sql.VarChar(17), data.VIN)
             .execute('Appointment.InsertAppointment');
 
         return output.recordset[0].AppointmentID;

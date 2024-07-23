@@ -16,7 +16,7 @@ export async function InsertDefinedService(data: InsertDefinedServiceData, user:
             throw 'Appointment.InsertDefinedService: Undefined Pool';
 
         const output = await pool.request()
-            .input('SessionID', sql.VarBinary, data.SessionID)
+            .input('SessionID', sql.Char(36), data.SessionID)
             .input('AppointmentID', sql.UniqueIdentifier, data.AppointmentID)
             .input('ServiceID', sql.Int, data.ServiceID)
             .execute('Appointment.InsertDefinedService');
@@ -47,7 +47,7 @@ export async function InsertService(
             throw 'Undefined Pool';
 
         const output = await pool.request()
-            .input('SessionID', sql.VarBinary, data.SessionID)
+            .input('SessionID', sql.Char(36), data.SessionID)
             .input('AppointmentID', sql.UniqueIdentifier, data.AppointmentID)
             .input('Service', sql.Int, data.Service)
             .input('Division', sql.Int, data.Division)

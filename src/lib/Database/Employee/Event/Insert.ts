@@ -17,7 +17,7 @@ export default async function InsertEvent(data: InsertEventData, user: User = Us
             throw 'Employee.InsertEvent: Undefined Pool';
 
         const output = await pool.request()
-            .input('SessionID', sql.VarBinary, data.SessionID)
+            .input('SessionID', sql.Char(36), data.SessionID)
             .input('Name', sql.NVarChar(100), data.Name)
             .input('Date', sql.NVarChar, data.Date)
             .input('Summary', sql.NVarChar(500), data.Summary)

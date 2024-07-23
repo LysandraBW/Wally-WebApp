@@ -22,7 +22,7 @@ export default async function GetEvents(data: GetEventsData, user: User = User.E
             throw 'Employee.GetEvents: Undefined Pool';
 
         const output = await pool.request()
-            .input('SessionID', sql.VarBinary, data.SessionID)
+            .input('SessionID', sql.Char(36), data.SessionID)
             .execute('Employee.GetEvents');
         
         return output.recordset;

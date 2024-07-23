@@ -20,10 +20,10 @@ export default async function InsertDiagnosis(
             throw 'Appointment.InsertDiagnosis: Undefined Pool';
 
         const output = await pool.request()
-            .input('SessionID', sql.VarBinary, data.SessionID)
+            .input('SessionID', sql.Char(36), data.SessionID)
             .input('AppointmentID', sql.UniqueIdentifier, data.AppointmentID)
-            .input('Code', sql.VarChar, data.Code)
-            .input('Message', sql.VarChar, data.Message)
+            .input('Code', sql.VarChar(20), data.Code)
+            .input('Message', sql.VarChar(500), data.Message)
             .execute('Appointment.InsertDiagnosis');
 
         return output.recordset[0].DiagnosisID;

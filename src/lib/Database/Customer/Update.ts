@@ -17,7 +17,7 @@ export default async function UpdateCustomer(data: UpdateCustomerData, user: Use
             throw 'Customer.UpdateCustomer: Undefined Pool';
 
         await pool.request()
-            .input('SessionID', sql.VarBinary, data.SessionID)
+            .input('SessionID', sql.Char(36), data.SessionID)
             .input('AppointmentID', sql.UniqueIdentifier, data.AppointmentID)
             .input('FName', sql.VarChar(50), data.FName)
             .input('LName', sql.VarChar(50), data.LName)

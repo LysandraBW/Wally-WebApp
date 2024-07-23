@@ -20,10 +20,10 @@ export default async function UpdateDate(
             throw 'Appointment.UpdateDate: Undefined Pool';
 
         await pool.request()
-            .input('SessionID', sql.VarBinary, data.SessionID)
+            .input('SessionID', sql.Char(36), data.SessionID)
             .input('AppointmentID', sql.UniqueIdentifier, data.AppointmentID)
-            .input('StartDate', sql.VarChar, data.StartDate)
-            .input('EndDate', sql.VarChar, data.EndDate)
+            .input('StartDate', sql.VarChar(30), data.StartDate)
+            .input('EndDate', sql.VarChar(30), data.EndDate)
             .execute('Appointment.UpdateDate');
 
         return true;

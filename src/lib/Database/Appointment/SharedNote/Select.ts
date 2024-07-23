@@ -24,7 +24,7 @@ export default async function GetNoteSharees(
             throw 'Appointment.GetNoteSharees: Undefined Pool';
 
         const output = await pool.request()
-            .input('SessionID', sql.VarBinary, data.SessionID)
+            .input('SessionID', sql.Char(36), data.SessionID)
             .input('NoteID', sql.Int, data.NoteID)
             .execute('Appointment.GetNoteSharees');
 

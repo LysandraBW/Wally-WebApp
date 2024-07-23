@@ -2,9 +2,7 @@ import { Text, Button } from "@/components/Input/Export";
 
 interface LookupFormProps {
     form: {
-        AppointmentID: string | null;
-        fName: string;
-        lName: string;
+        appointmentID: string;
         email: string;
     }
     changeHandler: (name: string, value: any) => void;
@@ -17,19 +15,7 @@ export default function LookupForm(props: LookupFormProps) {
             <Text
                 name={"appointmentID"}
                 value={props.form.appointmentID}
-                label={"AppointmentID"}
-                onChange={(name, value) => props.changeHandler(name, value)}
-            />
-            <Text
-                name={"fName"}
-                value={props.form.fName}
-                label={"First Name"}
-                onChange={(name, value) => props.changeHandler(name, value)}
-            />
-            <Text
-                name={"lName"}
-                value={props.form.lName}
-                label={"Last Name"}
+                label={"Appointment ID"}
                 onChange={(name, value) => props.changeHandler(name, value)}
             />
             <Text

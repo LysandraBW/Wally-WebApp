@@ -24,7 +24,7 @@ export default async function UpdateVehicle(
             throw 'Appointment.UpdateVehicle: Undefined Pool';
 
         await pool.request()
-            .input('SessionID', sql.VarBinary, data.SessionID)
+            .input('SessionID', sql.Char(36), data.SessionID)
             .input('AppointmentID', sql.UniqueIdentifier, data.AppointmentID)
             .input('Make', sql.Int, data.Make)
             .input('Model', sql.Int, data.Model)

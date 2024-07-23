@@ -22,7 +22,7 @@ export async function Get(data: GetData, user: User = User.Employee): Promise<Em
             throw 'Employee.Get: Undefined Pool';
 
         const output = await pool.request()
-            .input('SessionID', sql.VarBinary, data.SessionID)
+            .input('SessionID', sql.Char(36), data.SessionID)
             .execute('Employee.Get');
 
         return output.recordset[0];
@@ -46,7 +46,7 @@ export async function GetAll(data: GetData, user = User.Employee): Promise<Array
             throw 'Employee.GetAll: Undefined Pool';
 
         const output = await pool.request()
-            .input('SessionID', sql.VarBinary, data.SessionID)
+            .input('SessionID', sql.Char(36), data.SessionID)
             .execute('Employee.GetAll');
 
         return output.recordset;

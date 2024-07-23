@@ -18,7 +18,7 @@ export async function Delete(
             throw 'Appointment.Delete: Undefined Pool';
 
         await pool.request()
-            .input('SessionID', sql.VarBinary, data.SessionID)
+            .input('SessionID', sql.Char(36), data.SessionID)
             .input('AppointmentID', sql.UniqueIdentifier, data.AppointmentID)
             .execute('Appointment.Remove');
 
@@ -37,7 +37,7 @@ export async function Restore(data: Data, user: User = User.Employee): Promise<b
             throw 'Appointment.Restore: Undefined Pool';
 
         await pool.request()
-            .input('SessionID', sql.VarBinary, data.SessionID)
+            .input('SessionID', sql.Char(36), data.SessionID)
             .input('AppointmentID', sql.UniqueIdentifier, data.AppointmentID)
             .execute('Appointment.PutBack');
 

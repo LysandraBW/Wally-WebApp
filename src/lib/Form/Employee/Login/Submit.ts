@@ -2,10 +2,11 @@
 import { FormStructure } from "./Form";
 import { AuthenticateLogin } from "@/lib/Database/Export";
 import { processForm } from "./Process";
-import { setToken } from "@/lib/Authorize/Authorize";
+import { setSessionID } from "@/lib/Authorize/Authorize";
 
 export const submitForm = async (form: FormStructure): Promise<string> => {
     const processedForm = processForm(form);
+    
     const sessionID = await AuthenticateLogin(processedForm);
 
     // Invalid Login
@@ -13,6 +14,6 @@ export const submitForm = async (form: FormStructure): Promise<string> => {
         return '';
 
     // Set JWT Token
-    setToken(sessionID);
+    setSessionID(sessionID);
     return sessionID;
 }

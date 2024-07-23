@@ -35,7 +35,7 @@ export async function GetEmployeeNotes(
             throw 'Appointment.GetEmployeeNotes: Undefined Pool';
 
         const output = await pool.request()
-            .input('SessionID', sql.VarBinary, data.SessionID)
+            .input('SessionID', sql.Char(36), data.SessionID)
             .input('AppointmentID', sql.UniqueIdentifier, data.AppointmentID)
             .execute('Appointment.GetEmployeeNotes');
 
@@ -57,7 +57,7 @@ export async function GetCustomerNotes(
             throw 'Appointment.GetCustomerNotes: Undefined Pool';
 
         const output = await pool.request()
-            .input('SessionID', sql.VarBinary, data.SessionID)
+            .input('SessionID', sql.Char(36), data.SessionID)
             .input('AppointmentID', sql.UniqueIdentifier, data.AppointmentID)
             .execute('Appointment.GetCustomerNotes');
 

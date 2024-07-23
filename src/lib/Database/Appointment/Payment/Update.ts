@@ -19,7 +19,7 @@ export default async function UpdateCost(
             throw 'Appointment.UpdateCost: Undefined Pool';
 
         await pool.request()
-            .input('SessionID', sql.VarBinary, data.SessionID)
+            .input('SessionID', sql.Char(36), data.SessionID)
             .input('AppointmentID', sql.UniqueIdentifier, data.AppointmentID)
             .input('Cost', sql.Int, data.Cost)
             .execute('Appointment.UpdateCost');

@@ -19,7 +19,7 @@ export default async function DeletePart(
             throw 'Appointment.DeletePart: Undefined Pool';
 
         await pool.request()
-            .input('SessionID', sql.VarBinary, data.SessionID)
+            .input('SessionID', sql.Char(36), data.SessionID)
             .input('AppointmentID', sql.UniqueIdentifier, data.AppointmentID)
             .input('NoteID', sql.Int, data.NoteID)
             .execute('Appointment.DeleteNote');

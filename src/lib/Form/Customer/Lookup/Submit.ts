@@ -1,29 +1,19 @@
-"use server";
-import { processForm } from "./Process";
-import { FormStructure } from "./Form";
-import { AuthenticateAppointmentSession, AuthenticateLookup, GetAppointmentSummary } from "@/lib/Database/Export";
-import { AppointmentSummary } from "@/lib/Database/Appointment/Appointment";
+'use server';
+import { processForm } from './Process';
+import { FormStructure } from './Form';
+import { AuthenticateAppointmentSession, AuthenticateLookup, GetAppointmentSummary } from '@/lib/Database/Export';
+import { AppointmentSummary } from '@/lib/Database/Appointment/Appointment';
 
 export const submitForm = async (form: FormStructure): Promise<AppointmentSummary|null> => {
     const processedForm = processForm(form);
 
-    const sessionID = await AuthenticateLookup(processedForm);
-    if (!sessionID)
+    const SessionID = await AuthenticateLookup(processedForm);
+    if (!SessionID)
         return null;
 
-    const appointmentID = await AuthenticateAppointmentSession({
-        SessionID: sessionID
-    });
-    if (!appointmentID)
+    const AppointmentID = await AuthenticateAppointmentSession({SessionID});
+    if (!AppointmentID)
         return null;
 
-    const info = await GetAppointmentSummary({
-        SessionID: sessionID,
-        AppointmentID: appointmentID
-    });
-
-    if (!info)
-        return null;
-
-    return info;
+    return await GetAppointmentSummary({SessionID, AppointmentID});
 }

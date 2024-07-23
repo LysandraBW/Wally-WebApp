@@ -20,7 +20,7 @@ export default async function UpdateRepair(
             throw 'Appointment.UpdateRepair: Undefined Pool';
 
         await pool.request()
-            .input('SessionID', sql.VarBinary, data.SessionID)
+            .input('SessionID', sql.Char(36), data.SessionID)
             .input('AppointmentID', sql.UniqueIdentifier, data.AppointmentID)
             .input('RepairID', sql.Int, data.RepairID)
             .input('Repair', sql.Int, data.Repair)

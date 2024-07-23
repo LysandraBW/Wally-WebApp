@@ -20,7 +20,7 @@ export async function AuthenticateLogin(
         const output = await pool.request()
             .input('Username', sql.VarChar(50), data.Username)
             .input('Password', sql.VarChar(50), data.Password)
-            .output('SessionID', sql.VarBinary)
+            .output('SessionID', sql.Char(36))
             .execute('Employee.AuthenticateLogin');
 
         return output.output.SessionID;
@@ -45,7 +45,7 @@ export async function AuthenticateSession(
             throw 'Employee.AuthenticateSession: Undefined Pool';
 
         const output = await pool.request()
-            .input('SessionID', sql.VarBinary, data.SessionID)
+            .input('SessionID', sql.Char(36), data.SessionID)
             .output('EmployeeID', sql.UniqueIdentifier)
             .execute('Employee.AuthenticateSession');
 
@@ -71,7 +71,7 @@ export async function LogOut(
             throw 'Employee.LogOut: Undefined Pool';
 
         await pool.request()
-            .input('SessionID', sql.VarBinary, data.SessionID)
+            .input('SessionID', sql.Char(36), data.SessionID)
             .execute('Employee.LogOut');
 
         return true;

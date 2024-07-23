@@ -22,7 +22,7 @@ Promise<Array<EventSharee> | null> {
             throw 'Employee.GetEventSharees: Undefined Pool';
 
         const output = await pool.request()
-            .input('SessionID', sql.VarBinary, data.SessionID)
+            .input('SessionID', sql.Char(36), data.SessionID)
             .input('EventID', sql.Int, data.EventID)
             .execute('Employee.GetEventSharees');
 

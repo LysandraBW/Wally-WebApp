@@ -52,16 +52,18 @@ export const fetchPool = async (user: User, data: {[k: string]: any} = {}) => {
         // Employee Failed Authentication
         if (!authenticated)
             return pools.get(User.Standard);
+
         return pools.get(User.Employee);
     }
     else if (user === User.Customer) {
         const authenticated = await AuthenticateAppointmentSession({
             SessionID: data.SessionID
-        }, User.Customer);
+        }, User.Standard);
 
         // Customer Failed Authentication
         if (!authenticated)
             return pools.get(User.Standard);
+
         return pools.get(User.Customer);
     }
     else {

@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { goTo } from "@/lib/Navigation/Redirect";
 import { AuthenticateEmployeeSession, GetAllAppointments, GetEmployee } from "@/lib/Database/Export";
 import { QuickAppointment } from "@/lib/Database/Appointment/Appointment";
-import { getToken } from "@/lib/Authorize/Authorize";
+import { getSessionID } from "@/lib/Authorize/Authorize";
 import { Employee } from "@/lib/Database/Employee/Employee";
 
 export default function Dashboard() {
@@ -12,23 +12,19 @@ export default function Dashboard() {
 
     useEffect(() => {
         const authorize = async () => {
-            const sessionID = await getToken();
-            if (!sessionID) {
+            const SessionID = await getSessionID();
+            if (!SessionID) {
                 goTo('/Employee/Login');
                 return;
             }
             
-            const employeeID = await AuthenticateEmployeeSession({
-                SessionID: sessionID
-            });
-
-            if (!employeeID) {
+            const EmployeeID = await AuthenticateEmployeeSession({SessionID});
+            if (!EmployeeID) {
                 goTo('/Employee/Login');
                 return;
             }
 
-            const employee = await GetEmployee({SessionID: sessionID});
-            setEmployee(employee);
+            setEmployee(await GetEmployee({SessionID}));
         }
         authorize();            
     }, []);
@@ -38,10 +34,8 @@ export default function Dashboard() {
             if (!employee)
                 return;
 
-            const appointments = await GetAllAppointments({
-                SessionID: employee.SessionID
-            });
-
+            // "A TOP OR FETCH clause contains an invalid value"
+            const appointments = await GetAllAppointments({SessionID: await getSessionID()});
             if (!appointments)
                 return;
             

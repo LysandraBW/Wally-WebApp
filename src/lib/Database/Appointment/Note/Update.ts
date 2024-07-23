@@ -23,7 +23,7 @@ export default async function UpdateNote(
             throw 'Appointment.UpdateNote: Undefined Pool';
         
         await pool.request()
-            .input('SessionID', sql.VarBinary, data.SessionID)
+            .input('SessionID', sql.Char(36), data.SessionID)
             .input('AppointmentID', sql.UniqueIdentifier, data.AppointmentID)
             .input('NoteID', sql.Int, data.NoteID)
             .input('Head', sql.Int, data.Head)

@@ -22,10 +22,10 @@ export default async function InsertPart(
             throw 'Appointment.InsertPart: Undefined Pool';
 
         const output = await pool.request()
-            .input('SessionID', sql.VarBinary, data.SessionID)
+            .input('SessionID', sql.Char(36), data.SessionID)
             .input('AppointmentID', sql.UniqueIdentifier, data.AppointmentID)
-            .input('PartName', sql.VarChar, data.PartName)
-            .input('PartNumber', sql.Int, data.PartNumber)
+            .input('PartName', sql.VarChar(50), data.PartName)
+            .input('PartNumber', sql.VarChar(50), data.PartNumber)
             .input('Quantity', sql.Int, data.Quantity)
             .input('UnitCost', sql.Money, data.UnitCost)
             .execute('Appointment.InsertPart');

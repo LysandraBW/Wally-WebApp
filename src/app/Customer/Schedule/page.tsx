@@ -3,8 +3,7 @@ import { useEffect, useState } from "react";
 import Tracker from "@/components/Form/Tracker/Tracker";
 import { Form, FormStructure } from "@/lib/Form/Customer/Schedule/Form";
 import { ModelYears, Models, DecodeVIN } from "@/lib/Decoder/Decoder";
-import { GetMake } from "@/lib/Database/Export";
-import { GetService } from "@/lib/Database/Export";
+import { Makes, Services } from "@/lib/Database/Export";
 import { LoadedValues, Values } from "@/lib/Form/Customer/Schedule/Load";
 import submitForm from "@/lib/Form/Customer/Schedule/Submit";
 import ContactForm from "@/views/Customer/Schedule/Contact";
@@ -22,20 +21,20 @@ export default function Schedule() {
     useEffect(() => {
         const load = async () => {
             // Load Makes and Model Years
-            const makes: Array<[string, string]> = (await GetMake()).map(m => [m.Make, m.Make]);
+            const makes: Array<[string, string]> = (await Makes()).map(m => [m.Make, m.Make]);
             const modelYears: Array<[number, string]> = (await ModelYears()).map(y => [y, y.toString()]);
             
             // Load Services
             const services: {[k: string]: Array<[number, string]>} = {};
-            const fetchedServices = await GetService();
-            fetchedServices.forEach(service => {
-                // 'Unknown' Option is Done Elsewhere
+            const dbServices = await Services();
+            dbServices.forEach(service => {
+                // 'Unknown' Option is Hard-Coded
                 if (service.ServiceID === 1)
                     return;
-                else if (services[service.Type])
-                    services[service.Type].push([service.ServiceID, service.Service]);
+                else if (services[service.Class])
+                    services[service.Class].push([service.ServiceID, service.Service]);
                 else
-                    services[service.Type] = [[service.ServiceID, service.Service]];
+                    services[service.Class] = [[service.ServiceID, service.Service]];
             });
             
             setValues({...values, makes, modelYears, services});

@@ -21,7 +21,7 @@ export default async function UpdateDiagnosis(
             throw 'Appointment.UpdateDiagnosis: Undefined Pool';
 
         await pool.request()
-            .input('SessionID', sql.VarBinary, data.SessionID)
+            .input('SessionID', sql.Char(36), data.SessionID)
             .input('AppointmentID', sql.UniqueIdentifier, data.AppointmentID)
             .input('DiagnosisID', sql.Int, data.DiagnosisID)
             .input('Code', sql.Int, data.Code)

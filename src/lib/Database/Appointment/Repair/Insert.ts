@@ -19,9 +19,9 @@ export default async function InsertRepair(
             throw 'Appointment.InsertRepair: Undefined Pool';
 
         const output = await pool.request()
-            .input('SessionID', sql.VarBinary, data.SessionID)
+            .input('SessionID', sql.Char(36), data.SessionID)
             .input('AppointmentID', sql.UniqueIdentifier, data.AppointmentID)
-            .input('Repair', sql.VarChar, data.Repair)
+            .input('Repair', sql.VarChar(300), data.Repair)
             .execute('Appointment.InsertRepair');
 
         return output.recordset[0].ServiceID;

@@ -23,7 +23,7 @@ export default async function GetRepairs(
             throw 'Appointment.GetRepairs: Undefined Pool';
 
         const output = await pool.request()
-            .input('SessionID', sql.VarBinary, data.SessionID)
+            .input('SessionID', sql.Char(36), data.SessionID)
             .input('AppointmentID', sql.UniqueIdentifier, data.AppointmentID)
             .execute('Appointment.GetRepairs');
 
