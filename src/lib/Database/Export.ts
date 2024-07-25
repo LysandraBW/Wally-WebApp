@@ -83,3 +83,8 @@ export {
     Get as GetEmployee,
     GetAll as GetAllEmployees
 } from "./Employee/Employee";
+
+export {
+    GetLabels,
+    GetEmployeeLabels
+} from "./Appointment/Label/Select"

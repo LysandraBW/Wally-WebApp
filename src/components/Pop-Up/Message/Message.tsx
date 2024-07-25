@@ -1,4 +1,5 @@
 interface MessageProps {
+    state?: number;
     message: React.ReactNode;
     close: () => any;
 }

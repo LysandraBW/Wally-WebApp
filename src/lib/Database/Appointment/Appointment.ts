@@ -158,7 +158,7 @@ interface GetAllData {
 }
 
 export type QuickAppointment  = {
-    AppointmentID:  number;
+    AppointmentID:  string;
     CustomerID:     number;
     FName:          string;
     LName:          string;
@@ -175,12 +175,17 @@ export type QuickAppointment  = {
     Model:          string;
     ModelYear:      number;
     VIN:            string;
+    Mileage:        number;
+    LicensePlate:   string;
 }
 
 export async function GetAll(
     data: GetAllData, 
     user: User = User.Employee
-): Promise<Array<QuickAppointment> | null> {
+): Promise<{
+    all: Array<QuickAppointment>;
+    count: number;
+} | null> {
     try {
         const pool = await fetchPool(user, data);
         if (!pool)
@@ -206,7 +211,11 @@ export async function GetAll(
             .input('Cost', sql.Bit, data.Cost)           
             .execute('Appointment.GetAll');
 
-        return output.recordset;
+        const recordsets = <sql.IRecordSet<any>> output.recordsets;
+        return {
+            all: recordsets[0],
+            count: recordsets[1][0].COUNT
+        };
     }
     catch (err) {
         console.error(err);
