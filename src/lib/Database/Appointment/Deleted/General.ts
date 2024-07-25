@@ -16,7 +16,6 @@ export async function Delete(
         const pool = await fetchPool(user, data);
         if (!pool)
             throw 'Appointment.Delete: Undefined Pool';
-        console.log('Delete', data);
         
         await pool.request()
             .input('SessionID', sql.Char(36), data.SessionID)
