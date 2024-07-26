@@ -2,15 +2,10 @@
 import sql from "mssql";
 import { fetchPool } from "../../Pool";
 import { User } from "../../User";
-
-interface DeleteServiceData {
-    SessionID: string;
-    AppointmentID: string;
-    ServiceID: number;
-}
+import { DeleteServiceParameters } from "../../Parameters";
 
 export default async function DeleteService(
-    data: DeleteServiceData, 
+    data: DeleteServiceParameters, 
     user: User = User.Employee
 ): Promise<boolean> {
     try {

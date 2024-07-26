@@ -2,15 +2,10 @@
 import sql from "mssql";
 import { fetchPool } from "../../Pool";
 import { User } from "../../User";
-
-interface InsertNoteShareeData {
-    SessionID: string;
-    NoteID: number;
-    NoteShareeID: number;
-}
+import { MutateNoteShareeParameters } from "../../Parameters";
 
 export default async function InsertNoteSharee(
-    data: InsertNoteShareeData, 
+    data: MutateNoteShareeParameters, 
     user: User = User.Employee
 ): Promise<boolean> {
     try {

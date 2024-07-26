@@ -1,105 +1,78 @@
 import { useEffect, useState } from "react";
-import { File, Text, TextArea } from "@/components/Input/Export";
-import { NoteSharee } from "@/lib/Database/Appointment/SharedNote/Select";
-import { GetAllReturnType as Employee } from "@/lib/Database/Employee/Employee";
+import { File, Text, TextArea, Toggle } from "@/components/Input/Export";
 import { GetAllEmployees } from "@/lib/Database/Export";
-import { getSessionID } from "@/lib/Authorize/Authorize";
+import { UpdateNote } from "@/process/Employee/Update/Form";
+import { getSessionID } from "@/lib/Cookies/Cookies";
+import { DB_GeneralEmployee } from "@/lib/Database/Types";
+import { toggleValue } from "@/components/Input/Checkbox/Checkbox";
 
 interface NoteInputProps {
-    employeeID: number;
+    employeeID: string;
+    employees: Array<DB_GeneralEmployee>;
     onChange: (name: string, value: any) => any;
 }
 
 export default function NoteInput(props: NoteInputProps) {
-    const [values, setValues] = useState<{
-        Head: string;
-        Body: string;
-        Attachment: Array<File>;
-        ShowCustomer: number;
-        Sharees: Array<NoteSharee>;
-    }>({
+    const [values, setValues] = useState<UpdateNote>({
+        NoteID: -1,
+        EmployeeID: '',
+        AppointmentID: '',
+        CreationDate: new Date(),
+        UpdationDate: new Date(),
         Head: '',
         Body: '',
-        Attachment: [],
+        Attachments: [],
+        Type: 'File',
         ShowCustomer: 0,
+        Files: [],
         Sharees: []
     });
-    
-    const [employees, setEmployees] = useState<Array<Employee>>();
-
-    useEffect(() => {
-        const loadEmployees = async () => {
-            const employees = await GetAllEmployees({ SessionID: await getSessionID() });
-            setEmployees(employees);
-        }
-        loadEmployees()
-    }, []);
 
     return (
-        
         <div>
             <TextArea
-                name={'Notes'}
+                name={'Head'}
                 value={values.Head}
                 label={'Head'}
-                onChange={(name, value) => {
-                    setValues({...values, 'Head': value});
-                }}
+                onChange={(name, value) => setValues({...values, [`${name}`]: value})}
             />
             <TextArea
-                name={'Notes'}
+                name={'Body'}
                 value={values.Body}
                 label={'Body'}
-                onChange={(name, value) => {
-                    setValues({...values, 'Body': value});
-                }}
+                onChange={(name, value) => setValues({...values, [`${name}`]: value})}
             />
             <File
-                name={'Notes'}
+                name={'Files'}
                 label={'Upload Files'}
                 onChange={(name, value) => {
                     const files: Array<File> = Array.from(value);
-                    setValues({...values, 'Attachment': [...values.Attachment, ...files]})
+                    setValues({...values, [`${name}`]: files})
                 }}
             />
-            <div
-                onClick={() => {
-                    setValues({...values, 'ShowCustomer': 1 - values.ShowCustomer})
-                }}
-            >
-                Show Customer: <span>{values.ShowCustomer ? 'YES' : 'NO'}</span>
-            </div>
+            <Toggle
+                name='ShowCustomer'
+                label='Show Customer'
+                value={values.ShowCustomer}
+                onChange={(name, value) => setValues({...values, [`${name}`]: value})}
+            />
             <div>
-                {employees && employees.map(employee => (
-                    <div
-                        onClick={() => {
-                            // quick and easy unforuntately will change this absolutely ugly code later
-                            const found = values.Sharees.map(sharee => sharee.ShareeID).includes(employee.EmployeeID);
-                            let updatedSharees = values.Sharees;
-                            if (found) {
-                                updatedSharees = updatedSharees.filter(sharee => sharee.ShareeID !== employee.EmployeeID);
-                            }
-                            else {
-                                updatedSharees.push({
-                                    ShareeFName: employee.FName,
-                                    ShareeLName: employee.LName,
-                                    ShareeID: employee.EmployeeID
-                                });
-                            }
-                            setValues({...values, 'ShowCustomer': 1 - values.ShowCustomer})
-                        }}
-                    >
-                        {employee.FName} {employee.LName} <span>{values.Sharees.map(sharee => sharee.ShareeID).includes(employee.EmployeeID) ? 'YES' : 'NO'}</span>
-                    </div>
-                ))}
+                {props.employees.map(employee => {
+                    if (employee.EmployeeID === props.employeeID)
+                        return <></>;
+                    return (
+                        <Toggle
+                            name='Sharees'
+                            label={`Add ${employee.FName} ${employee.LName}`}
+                            value={values.Sharees.includes(employee.EmployeeID) ? 1 : 0}
+                            onChange={(name, value) => {
+                                setValues({...values, Sharees: toggleValue(values.Sharees, employee.EmployeeID)});
+                            }}
+                        />
+                    )
+                })}
             </div>
-            <button
-                onClick={() => {
-                    props.onChange('Notes', values);
-                }}
-            >
-                Add
-            </button>
+            <button onClick={() => props.onChange('Notes', values)}>Add</button>
         </div>
     )
 }

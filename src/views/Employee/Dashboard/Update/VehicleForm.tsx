@@ -1,8 +1,8 @@
 import { Makes } from "@/lib/Database/Export";
-import { DecodeVIN, Models, ModelYears } from "@/lib/Decoder/Decoder";
-import { Parts } from "@/lib/Form/Employee/Update/Form";
+import { LoadMakeModelModelYear, LoadModels, ModelYears } from "@/lib/Decoder/Decoder";
 import { useEffect, useState } from "react";
 import { Text, Search } from "@/components/Input/Export";
+import { Parts } from "@/process/Employee/Update/Form";
 
 interface VehicleProps {
     form: {
@@ -16,23 +16,27 @@ interface VehicleProps {
     changeHandler: (part: Parts, name: string, value: any) => void;
 }
 
+interface LoadedValues {
+    makes: Array<[string, string]>;
+    models: Array<[string, string]>;
+    modelYears: Array<[number, string]>;
+}
+
+const Values: LoadedValues = {
+    makes: [],
+    models: [],
+    modelYears: []
+}
+
 export default function Vehicle(props: VehicleProps) {
-    const [values, setValues] = useState<{
-        makes: Array<[string, string]>;
-        models: Array<[string, string]>;
-        modelYears: Array<[number, string]>;
-    }>({
-        makes: [],
-        models: [],
-        modelYears: []
-    });
+    const [values, setValues] = useState<LoadedValues>(Values);
 
     useEffect(() => {
         const loadValues = async () => {
-            // Load Makes and Model Years
-            const makes: Array<[string, string]> = (await Makes()).map(m => [m.Make, m.Make]);
-            const models: Array<[string, string]> = await getModels(props.form.ModelYear, props.form.Make);
+            // I have to specify the type for the compiler not to throw an error.
             const modelYears: Array<[number, string]> = (await ModelYears()).map(y => [y, y.toString()]);
+            const makes: Array<[string, string]> = (await Makes()).map(m => [m.Make, m.Make]);
+            const models = await LoadModels(props.form.ModelYear, props.form.Make);
 
             setValues({
                 ...values,
@@ -44,103 +48,49 @@ export default function Vehicle(props: VehicleProps) {
         loadValues();
     }, []);
 
-    const getModels = async (modelYear: number, make: string) => {
-        // Requires Model Year + Make
-        if (modelYear && make) {
-            // Get Models
-            const fetchedModels = (await Models(modelYear, make));
-            let models: Array<[string, string]> = fetchedModels.map(m => [m.Model_Name, m.Model_Name]);
-
-            // Removing Duplicates
-            let duplicateModels: {[k: string]: number} = {};
-            models = models.filter(model => {
-                // Duplicate Found
-                if (duplicateModels[model[0]])
-                    return false;
-                duplicateModels[model[0]] = 1;
-                return true;
-            });
-
-            // Sorting by Label
-            models.sort((a, b) => a[1].localeCompare(b[1]));
-            return models;
-        }
-        else {
-            return [];
-        }
-    }
-
+    
     const loadModels = async (modelYear: number, make: string) => {
-        // Requires Model Year + Make
-        if (modelYear && make) {
-            // Get Models
-            const fetchedModels = (await Models(modelYear, make));
-            let models: Array<[string, string]> = fetchedModels.map(m => [m.Model_Name, m.Model_Name]);
-
-            // Removing Duplicates
-            let duplicateModels: {[k: string]: number} = {};
-            models = models.filter(model => {
-                // Duplicate Found
-                if (duplicateModels[model[0]])
-                    return false;
-                duplicateModels[model[0]] = 1;
-                return true;
-            });
-
-            // Sorting by Label
-            models.sort((a, b) => a[1].localeCompare(b[1]));
-            setValues({...values, models});
-        }
-        else {
-            setValues({...values, models: []});
-        }
+        const models = await LoadModels(modelYear, make);
+        setValues({...values, models});
     }
 
     const loadMakeModelModelYear = async (vin: string) => {
         if (!vin)
             return;
 
-        // Getting Make, Model, ModelYear (MMMY)
-        const MMMY = await DecodeVIN(vin);
-        const Make = values.makes.find(m => m[0].toUpperCase() === MMMY.Make.toUpperCase());
-        const Model = MMMY.Model;
-        const ModelYear = MMMY.ModelYear;
-
-        if (!Make)
+        const {make, model, models, modelYear} = await LoadMakeModelModelYear(vin, values.makes);
+        if (!make)        
             return;
 
-        // Load Models
-        loadModels(ModelYear, Make[0]);
-        
-        // Return Decoded Info
+        setValues({...values, models});
         return {
-            make: [Make[0]], 
-            model: [Model], 
-            modelYear: [ModelYear]
+            make: make, 
+            model: model, 
+            modelYear: modelYear
         }
     }
 
     const changeHandler = async (name: string, value: any) => {
+        const part: Parts = 'Vehicle';
         if (name === 'VIN') {
-            props.changeHandler('Vehicle', name, value);
-            const MMMY = await loadMakeModelModelYear(value);
-            if (!MMMY)
+            props.changeHandler(part, name, value);
+            const data = await loadMakeModelModelYear(value);
+            if (!data)
                 return;
-
-            props.changeHandler('Vehicle', 'Make', MMMY.make);
-            props.changeHandler('Vehicle', 'Model', MMMY.model);
-            props.changeHandler('Vehicle', 'ModelYear', MMMY.modelYear);
+            props.changeHandler(part, 'Make', data.make);
+            props.changeHandler(part, 'Model', data.model);
+            props.changeHandler(part, 'ModelYear', data.modelYear);
         }
         else {
             if (name === 'Make') {
                 loadModels(props.form.ModelYear, value[0]);
-                props.changeHandler('Vehicle', 'Model', '');
+                props.changeHandler(part, 'Model', '');
             }
             else if (name === 'ModelYear') {
                 loadModels(value[0], props.form.Make);
-                props.changeHandler('Vehicle', 'Model', '');
+                props.changeHandler(part, 'Model', '');
             }
-            props.changeHandler('Vehicle', name, value[0]);
+            props.changeHandler(part, name, value[0]);
         }
     }
 

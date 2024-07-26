@@ -1,19 +1,11 @@
 "use server";
 import sql from "mssql";
-import { fetchPool } from "../../Pool";
 import { User } from "../../User";
-
-interface InsertPartData {
-    SessionID: string;
-    AppointmentID: string;
-    PartName: string;
-    PartNumber: string;
-    Quantity: number;
-    UnitCost: string;
-}
+import { fetchPool } from "../../Pool";
+import { InsertPartParameters } from "../../Parameters";
 
 export default async function InsertPart(
-    data: InsertPartData, 
+    data: InsertPartParameters, 
     user: User = User.Employee
 ): Promise<number> {
     try {

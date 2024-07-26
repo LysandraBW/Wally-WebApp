@@ -2,16 +2,12 @@
 import sql from "mssql";
 import { fetchPool } from "../../Pool";
 import { User } from "../../User";
+import { UpdateEventParameters } from "../../Parameters";
 
-interface UpdateEventData {
-    SessionID: string;
-    EventID: number;
-    Name: string | null;
-    Date: string | null;
-    Summary: string | null;
-}
-
-export default async function UpdateEvent(data: UpdateEventData, user: User = User.Employee): Promise<boolean> {
+export async function UpdateEvent(
+    data: UpdateEventParameters, 
+    user: User = User.Employee
+): Promise<boolean> {
     try {
         const pool = await fetchPool(user, data);
         if (!pool)

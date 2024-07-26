@@ -2,14 +2,12 @@
 import sql from "mssql";
 import { fetchPool } from "../../Pool";
 import { User } from "../../User";
+import { InsertCreditCardParameters, InsertPaymentParameters } from "../../Parameters";
 
-interface InsertPaymentData {
-    SessionID: string;
-    AppointmentID: string;
-    Payment: string;
-}
-
-export async function InsertPayment(data: InsertPaymentData, user: User = User.Standard): Promise<number> {
+export async function InsertPayment(
+    data: InsertPaymentParameters, 
+    user: User = User.Standard
+): Promise<number> {
     try {
         const pool = await fetchPool(user, data);
         if (!pool)
@@ -19,10 +17,9 @@ export async function InsertPayment(data: InsertPaymentData, user: User = User.S
             .input('SessionID', sql.Char(36), data.SessionID)
             .input('AppointmentID', sql.UniqueIdentifier, data.AppointmentID)
             .input('Payment', sql.Money, data.Payment)
-            .output('PaymentID', sql.Int)
             .execute('Appointment.InsertPayment');
 
-        return output.output.PaymentID;
+        return output.recordset[0].PaymentID;
     }   
     catch (err) {
         console.error(err);
@@ -30,18 +27,8 @@ export async function InsertPayment(data: InsertPaymentData, user: User = User.S
     }
 }
 
-interface InsertCreditCardData {
-    SessionID: string;
-    AppointmentID: string;
-    PaymentID: number;
-    Name: string;
-    Type: string;
-    CNN: string;
-    EXP: string;
-}
-
 export async function InsertCreditCard(
-    data: InsertCreditCardData, 
+    data: InsertCreditCardParameters, 
     user: User = User.Standard
 ): Promise<boolean> {
     try {

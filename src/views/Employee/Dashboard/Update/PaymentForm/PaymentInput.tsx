@@ -1,18 +1,17 @@
 import { useState } from "react";
 import { Text } from "@/components/Input/Export";
+import { DB_Payment } from "@/lib/Database/Types";
 
 interface PaymentInputProps {
     onChange: (name: string, value: any) => any;
 }
 
 export default function PaymentInput(props: PaymentInputProps) {
-    const [values, setValues] = useState<{
-        Payment: string;
-        PaymentDate: string;
-        Name: string; Type: string; CCN: string; EXP: string;
-    }>({
+    const [values, setValues] = useState<DB_Payment>({
+        AppointmentID: '',
+        PaymentID: 0,
         Payment: '',
-        PaymentDate: new Date().toString(),
+        PaymentDate: new Date(),
         Name: '', 
         Type: '', 
         CCN: '', 
@@ -22,52 +21,36 @@ export default function PaymentInput(props: PaymentInputProps) {
     return (
         <div>
             <Text
-                name={'Payments'}
+                name={'Payment'}
                 value={values.Payment}
                 label={'Payment'}
-                onChange={(name, value) => {
-                    setValues({...values, 'Payment': value});
-                }}
+                onChange={(name, value) => setValues({...values, [`${name}`]: value})}
             />
             <Text
-                name={'Payments'}
+                name={'Name'}
                 value={values.Name}
                 label={'Name'}
-                onChange={(name, value) => {
-                    setValues({...values, 'Name': value});
-                }}
+                onChange={(name, value) => setValues({...values, [`${name}`]: value})}
             />
             <Text
-                name={'Payments'}
+                name={'Type'}
                 value={values.Type}
                 label={'Type'}
-                onChange={(name, value) => {
-                    setValues({...values, 'Type': value});
-                }}
+                onChange={(name, value) => setValues({...values, [`${name}`]: value})}
             />
             <Text
-                name={'Payments'}
+                name={'CCN'}
                 value={values.CCN}
-                label={'CCN'}
-                onChange={(name, value) => {
-                    setValues({...values, 'CCN': value});
-                }}
+                label={'Credit Card Number'}
+                onChange={(name, value) => setValues({...values, [`${name}`]: value})}
             />
             <Text
-                name={'Payments'}
+                name={'EXP'}
                 value={values.EXP}
-                label={'EXP'}
-                onChange={(name, value) => {
-                    setValues({...values, 'EXP': value});
-                }}
+                label={'Expiration Date'}
+                onChange={(name, value) => setValues({...values, [`${name}`]: value})}
             />            
-            <button
-                onClick={() => {
-                    props.onChange('Payments', {...values, PaymentDate: new Date().toString()});
-                }}
-            >
-                Add
-            </button>
+            <button onClick={() => props.onChange('Payments', {...values, PaymentDate: new Date()})}>Add</button>
         </div>
     )
 }

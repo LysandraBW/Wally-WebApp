@@ -1,6 +1,6 @@
 export interface FormStructure {
-    appointmentID: string;
     email: string;
+    appointmentID: string;
 }
 
 export const Form: FormStructure = {

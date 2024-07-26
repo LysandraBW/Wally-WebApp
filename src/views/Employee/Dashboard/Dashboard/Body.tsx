@@ -1,19 +1,19 @@
-import { Label } from "@/lib/Database/Info/Info";
 import Appointment from "./Appointment";
-import { QuickAppointment } from "@/lib/Database/Appointment/Appointment"
 import { UpdateLabel } from "@/lib/Database/Export";
-import { getSessionID } from "@/lib/Authorize/Authorize";
+import { getSessionID } from "@/lib/Cookies/Cookies";
+import { DB_AppointmentOverview, DB_EmployeeLabels, DB_Label } from "@/lib/Database/Types";
+import { updateLabels } from "@/lib/Database/Appointment/Label/Select";
 
 interface BodyProps {
     search: string;
-    setOpen: (app: QuickAppointment) => void;
-    current: Array<QuickAppointment>;
+    setOpen: (app: DB_AppointmentOverview) => void;
+    current: Array<DB_AppointmentOverview>;
     deleteHandler: (IDs: Array<string>) => void;
     checked: Array<string>;
     setChecked: (checked: Array<string>) => any;
-    metaLabel: {[labelName: string]: Label};
-    allLabels: {[appID: string]: {[label: string]: number}};
-    setLabels: (label: {[appID: string]: {[label: string]: number}}) => any;
+    labelMeta: {[labelName: string]: DB_Label};
+    allLabels: DB_EmployeeLabels;
+    setLabels: (label: DB_EmployeeLabels) => any;
 }
 
 export default function Body(props: BodyProps) {
@@ -51,23 +51,16 @@ export default function Body(props: BodyProps) {
     }
 
     const updateLabel = async (appID: string, labelName: string) => {
-        let labelID = props.metaLabel[`${labelName}`].LabelID
+        let labelID = props.labelMeta[`${labelName}`].LabelID
         if (labelID === -1) 
             return;
 
-        let labelValue = props.allLabels[`${appID}`] ? props.allLabels[`${appID}`][`${labelName}`] || 0 : 0;
-
+        const updatedLabels = await updateLabels({...props.allLabels}, appID, labelID); 
         const output = await UpdateLabel({SessionID: await getSessionID(), AppointmentID: appID, LabelID: labelID});
         if (!output)
             return;
 
-        props.setLabels({
-            ...props.allLabels,
-            [`${appID}`]: {
-                ...props.allLabels[`${appID}`],
-                [`${labelName}`]: 1 - labelValue
-            }
-        });
+        props.setLabels(updatedLabels);
     }
 
     return (
@@ -78,14 +71,14 @@ export default function Body(props: BodyProps) {
                     onClick={() => props.setOpen(app)}
                 >
                     <Appointment
-                        updateLabel={updateLabel}
-                        labels={props.allLabels[`${app.AppointmentID}`] || {}}
                         app={app}
-                        labelMeta={props.metaLabel}
+                        updateLabel={updateLabel}
+                        labelMeta={props.labelMeta}
+                        labels={props.allLabels[`${app.AppointmentID}`] || []}
                         highlight={highlightEntry}
                         checkAppointment={checkApp}
-                        deleteAppointment={props.deleteHandler}
                         checked={props.checked.includes(app.AppointmentID)}
+                        deleteAppointment={props.deleteHandler}
                     />  
                 </tr>                  
             ))}

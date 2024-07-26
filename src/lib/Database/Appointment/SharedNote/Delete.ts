@@ -1,16 +1,11 @@
 "use server";
 import sql from "mssql";
-import { fetchPool } from "../../Pool";
 import { User } from "../../User";
-
-interface DeleteNoteShareeData {
-    SessionID: string;
-    NoteID: number;
-    NoteShareeID: number;
-}
+import { fetchPool } from "../../Pool";
+import { MutateNoteShareeParameters } from "../../Parameters";
 
 export default async function DeleteNoteSharee(
-    data: DeleteNoteShareeData, 
+    data: MutateNoteShareeParameters, 
     user: User = User.Employee
 ): Promise<boolean> {
     try {

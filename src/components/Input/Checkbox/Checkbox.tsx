@@ -6,6 +6,16 @@ interface CheckboxProps<T> extends WriteInputProps {
     values: {[k: string]: Array<[T, string]>} | {[k: string]: {[k: string]: Array<[T, string]>}};
 }
 
+export function toggleValue<T>(values: Array<T>, value: T): Array<T> {
+    let updatedValue: Array<any> = [...values];
+    const index = updatedValue.indexOf(value);
+    if (index > -1) 
+        updatedValue.splice(index, 1);
+    else 
+        updatedValue.push(value);
+    return updatedValue;
+}
+
 export default function Checkbox(props: CheckboxProps<any>) {
     const tabs = Object.keys(props.values);
     const [tab, setTab] = useState(tabs[0]);
@@ -63,17 +73,7 @@ export default function Checkbox(props: CheckboxProps<any>) {
     }
 
     const changeHandler = (value: any) => {
-        let updatedValue: Array<any> = [...props.value];
-        const index = updatedValue.indexOf(value);
-
-        // Value Found => Remove
-        if (index > -1) 
-            updatedValue.splice(index, 1);
-        // Value Not Found => Add
-        else 
-            updatedValue.push(value);
-
-        props.onChange && props.onChange(props.name, updatedValue);
+        props.onChange && props.onChange(props.name, toggleValue(props.value, value));
     }
 
     const getCheckboxes = (): React.ReactNode => {

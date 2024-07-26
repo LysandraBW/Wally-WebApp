@@ -1,16 +1,11 @@
 "use server";
 import sql from "mssql";
-import { fetchPool } from "../../Pool";
 import { User } from "../../User";
-
-interface DeleteDiagnosisData {
-    SessionID: string;
-    AppointmentID: string;
-    DiagnosisID: number;
-}
+import { fetchPool } from "../../Pool";
+import { DeleteDiagnosisParameters } from "../../Parameters";
 
 export default async function DeleteDiagnosis(
-    data: DeleteDiagnosisData, 
+    data: DeleteDiagnosisParameters, 
     user: User = User.Employee
 ): Promise<boolean> {
     try {

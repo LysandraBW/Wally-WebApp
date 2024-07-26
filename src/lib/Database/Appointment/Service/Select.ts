@@ -2,25 +2,13 @@
 import sql from "mssql";
 import { fetchPool } from "../../Pool";
 import { User } from "../../User";
-
-interface GetServicesData {
-    SessionID: string;
-    AppointmentID: string;
-}
-
-export type Service = {
-    AppointmentServiceID: number;
-    ServiceID: number;
-    AppointmentID: string;
-    Class: string;
-    Division: string;
-    Service: string;
-}
+import { SessionAppParameters } from "../../Parameters";
+import { DB_AppointmentService } from "../../Types";
 
 export default async function GetServices(
-    data: GetServicesData, 
+    data: SessionAppParameters, 
     user = User.Customer
-): Promise<Array<Service> | null> {
+): Promise<Array<DB_AppointmentService>> {
     try {
         const pool = await fetchPool(user, data);
         if (!pool)
@@ -35,6 +23,6 @@ export default async function GetServices(
     }
     catch (err) {
         console.error(err);
-        return null;
+        return [];
     }
 }

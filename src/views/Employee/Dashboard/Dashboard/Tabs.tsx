@@ -1,7 +1,7 @@
-import { Status } from "@/lib/Database/Info/Info";
+import { DB_Status } from "@/lib/Database/Types";
 
 interface TabsProps {
-    statuses: Array<Status>;
+    statuses: Array<DB_Status>;
     updateFilter: (filter: {[k: string]: any}) => void;
 }
 

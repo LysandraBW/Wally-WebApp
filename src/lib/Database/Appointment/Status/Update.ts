@@ -2,15 +2,10 @@
 import sql from "mssql";
 import { fetchPool } from "../../Pool";
 import { User } from "../../User";
-
-interface UpdateStatusData {
-    SessionID: string;
-    AppointmentID: string;
-    StatusID: number;
-}
+import { UpdateStatusParameters } from "../../Parameters";
 
 export default async function UpdateStatus(
-    data: UpdateStatusData, 
+    data: UpdateStatusParameters, 
     user: User = User.Employee
 ): Promise<boolean> {
     try {

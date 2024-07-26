@@ -1,21 +1,14 @@
 "use server";
 import sql from "mssql";
-import { fetchPool } from "../../Pool";
 import { User } from "../../User";
+import { DB_Event } from "../../Types";
+import { fetchPool } from "../../Pool";
+import { SessionParameter } from "../../Parameters";
 
-interface GetEventsData {
-    SessionID: string;
-}
-
-type Event = {
-    EventID: number;
-    EmployeeID: number;
-    Name: string;
-    Date: string;
-    Summary: string;
-}
-
-export default async function GetEvents(data: GetEventsData, user: User = User.Employee): Promise<Array<Event> | null> {
+export async function GetEvents(
+    data: SessionParameter, 
+    user: User = User.Employee
+): Promise<Array<DB_Event>> {
     try {
         const pool = await fetchPool(user, data);
         if (!pool)
@@ -29,6 +22,6 @@ export default async function GetEvents(data: GetEventsData, user: User = User.E
     }
     catch (err) {
         console.error(err);
-        return null;
+        return [];
     }
 }

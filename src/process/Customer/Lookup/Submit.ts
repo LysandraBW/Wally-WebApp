@@ -2,9 +2,10 @@
 import { processForm } from './Process';
 import { FormStructure } from './Form';
 import { AuthenticateAppointmentSession, AuthenticateLookup, GetAppointmentSummary } from '@/lib/Database/Export';
-import { AppointmentSummary } from '@/lib/Database/Appointment/Appointment';
+import { DB_AppointmentSummary } from '@/lib/Database/Types';
 
-export const submitForm = async (form: FormStructure): Promise<AppointmentSummary|null> => {
+export const submitForm = async (form: FormStructure)
+: Promise<DB_AppointmentSummary|null> => {
     const processedForm = processForm(form);
 
     const SessionID = await AuthenticateLookup(processedForm);

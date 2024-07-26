@@ -1,16 +1,14 @@
-import { Checkbox } from "@/components/Input/Export";
-import { Services } from "@/lib/Database/Export";
-import { Payment, Parts } from "@/lib/Form/Employee/Update/Form"
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import PaymentLine from "./PaymentLine";
 import PaymentInput from "./PaymentInput";
 import {Text} from "@/components/Input/Export";
-
+import { DB_Payment } from "@/lib/Database/Types";
+import { Parts } from "@/process/Employee/Update/Form";
 
 interface PaymentFormProps {
     form: {
         Cost: string;
-        Payments: {[paymentID: string]: Payment};
+        Payments: {[paymentID: string]: DB_Payment};
     };
     changeHandler: (part: Parts, name: string, value: any) => void;
 }

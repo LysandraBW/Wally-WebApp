@@ -2,43 +2,27 @@
 import sql from "mssql";
 import { fetchPool } from "../../Pool";
 import { User } from "../../User";
+import { SessionAppParameters } from "../../Parameters";
+import { DB_Attachment, DB_EmployeeNote, DB_Note } from "../../Types";
 
-interface GetEmployeeNotesData {
-    SessionID: string;
-    AppointmentID: string;
-}
+export async function sortNoteAttachments(notes: Array<DB_Note>, attachments: Array<DB_Attachment>) {
+    const sortedAttachments: {[noteID: number]: Array<DB_Attachment>} = {};
+        
+    for (const attachment of attachments) {
+        if (!sortedAttachments[attachment.NoteID])
+            sortedAttachments[attachment.NoteID] = [];
+        sortedAttachments[attachment.NoteID].push(attachment);
+    }
 
-interface GetCustomerNotesData {
-    SessionID: string;
-    AppointmentID: string;
-}
-
-export interface Attachment {
-    URL: string;
-    Name: string;
-    NoteID: number;
-    AttachmentID: number;
-}
-
-export interface Note {
-    NoteID: number;
-    EmployeeID: number;
-    AppointmentID: string;
-    Head: string;
-    Body: string;
-    ShowCustomer: number;
-    CreationDate: string;
-    UpdationDate: string;
+    for (let i = 0; i < notes.length; i++) {
+        notes[i].Attachments = sortedAttachments[notes[i].NoteID];
+    }
 }
 
 export async function GetEmployeeNotes(
-    data: GetEmployeeNotesData, 
+    data: SessionAppParameters, 
     user: User = User.Employee
-): Promise<Array<Note&{
-    OwnerFName: string;
-    OwnerLName: string;
-    OwnerID: string;
-}> | null> {
+): Promise<Array<DB_EmployeeNote>> {
     try {
         const pool = await fetchPool(user, data);
         if (!pool)
@@ -51,21 +35,22 @@ export async function GetEmployeeNotes(
 
         const recordsets = <sql.IRecordSet<any>> output.recordsets;
 
-        return {
-            ...recordsets[0][0],
-            Attachments: recordsets[1]
-        };   
+        const notes: Array<DB_EmployeeNote> = recordsets[0];
+        const attachments: Array<DB_Attachment> = recordsets[1];
+        sortNoteAttachments(notes, attachments);
+    
+        return notes;   
     }
     catch (err) {
         console.error(err);
-        return null;
+        return [];
     }
 }
 
 export async function GetCustomerNotes(
-    data: GetCustomerNotesData, 
+    data: SessionAppParameters, 
     user: User = User.Customer
-): Promise<Array<Note> | null> {
+): Promise<Array<DB_Note>> {
     try {
         const pool = await fetchPool(user, data);
         if (!pool)
@@ -78,13 +63,14 @@ export async function GetCustomerNotes(
 
         const recordsets = <sql.IRecordSet<any>> output.recordsets;
 
-        return {
-            ...recordsets[0][0],
-            Attachments: recordsets[1]
-        };      
+        const notes: Array<DB_EmployeeNote> = recordsets[0];
+        const attachments: Array<DB_Attachment> = recordsets[1];
+        sortNoteAttachments(notes, attachments);
+    
+        return notes;    
     }
     catch (err) {
         console.error(err);
-        return null;
+        return [];
     }
 }

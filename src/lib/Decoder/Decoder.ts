@@ -36,3 +36,50 @@ export async function DecodeVIN(vin: string): Promise<{
     const {Make, Model, ModelYear} = (await (await fetch(URL)).json()).Results[0];
     return {Make, Model, ModelYear: parseInt(ModelYear)};
 }
+
+export async function LoadModels(modelYear: number, make: string): Promise<Array<[string, string]>> {
+    if (!modelYear || !make)
+        return [];
+
+    const fetchedModels = (await Models(modelYear, make));
+    let models: Array<[string, string]> = fetchedModels.map(m => [m.Model_Name, m.Model_Name]);
+
+    // Removing Duplicates
+    let duplicateModels: {[k: string]: number} = {};
+    models = models.filter(model => {
+        // Duplicate Found
+        if (duplicateModels[model[0]])
+            return false;
+        duplicateModels[model[0]] = 1;
+        return true;
+    });
+
+    // Sorting by Label
+    models.sort((a, b) => a[1].localeCompare(b[1]));
+    return models;
+}
+
+export async function LoadMakeModelModelYear(vin: string, makes: Array<[string, string]>): Promise<{
+    make: [string];
+    model: [string];
+    models: Array<[string, string]>;
+    modelYear: [number]
+}> {
+    // Getting Make, Model, ModelYear (MMMY)
+    const MMMY = await DecodeVIN(vin);
+    const Make = makes.find(m => m[0].toUpperCase() === MMMY.Make.toUpperCase());
+    const Model = MMMY.Model;
+    const ModelYear = MMMY.ModelYear;
+
+    if (!Make)
+        return {make: [''], model: [''], models: [], modelYear: [0]};
+
+    const Models: Array<[string, string]> = await LoadModels(ModelYear, Make[0]);
+    
+    return {
+        make: [Make[0]], 
+        model: [Model], 
+        models: Models,
+        modelYear: [ModelYear]
+    }
+}

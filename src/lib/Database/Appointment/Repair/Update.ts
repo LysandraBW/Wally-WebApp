@@ -1,17 +1,11 @@
 "use server";
 import sql from "mssql";
-import { fetchPool } from "../../Pool";
 import { User } from "../../User";
-
-interface UpdateRepairData {
-    SessionID: string;
-    AppointmentID: string;
-    RepairID: number;
-    Repair: string;
-}
+import { fetchPool } from "../../Pool";
+import { UpdateRepairParameters } from "../../Parameters";
 
 export default async function UpdateRepair(
-    data: UpdateRepairData, 
+    data: UpdateRepairParameters, 
     user: User = User.Employee
 ): Promise<boolean> {
     try {

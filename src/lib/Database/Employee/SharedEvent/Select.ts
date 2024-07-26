@@ -1,21 +1,14 @@
 'use server';
 import sql from 'mssql';
-import { fetchPool } from '../../Pool';
 import { User } from '../../User';
+import { fetchPool } from '../../Pool';
+import { DB_EventSharee } from '../../Types';
+import { GetEventShareesParameters } from "../../Parameters";
 
-interface GetEventShareesData {
-    SessionID: string;
-    EventID: number;
-}
-
-type EventSharee = {
-    ShareeFName: string;
-    ShareeLName: string;
-    ShareeID: number;
-}
-
-export default async function GetEventSharees(data: GetEventShareesData, user: User = User.Employee): 
-Promise<Array<EventSharee> | null> {
+export default async function GetEventSharees(
+    data: GetEventShareesParameters, 
+    user: User = User.Employee
+): Promise<Array<DB_EventSharee>> {
     try {
         const pool = await fetchPool(user, data);
         if (!pool)
@@ -30,6 +23,6 @@ Promise<Array<EventSharee> | null> {
     }
     catch (err) {
         console.error(err);
-        return null;
+        return [];
     }
 }

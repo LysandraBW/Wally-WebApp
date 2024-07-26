@@ -2,15 +2,10 @@
 import sql from "mssql";
 import { fetchPool } from "../../Pool";
 import { User } from "../../User";
-
-interface DeletePaymentData {
-    SessionID: string;
-    AppointmentID: string;
-    PaymentID: number;
-}
+import { DeletePaymentParameters } from "../../Parameters";
 
 export default async function DeletePayment(
-    data: DeletePaymentData, 
+    data: DeletePaymentParameters, 
     user: User = User.Employee
 ): Promise<boolean> {
     try {

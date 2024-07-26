@@ -2,15 +2,10 @@
 import sql from "mssql";
 import { fetchPool } from "../../Pool";
 import { User } from "../../User";
-
-interface InsertRepairData {
-    SessionID: string;
-    AppointmentID: string;
-    Repair: string;
-}
+import { InsertRepairParameters } from "../../Parameters";
 
 export default async function InsertRepair(
-    data: InsertRepairData, 
+    data: InsertRepairParameters, 
     user: User = User.Employee
 ): Promise<number> {
     try {

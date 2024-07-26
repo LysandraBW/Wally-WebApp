@@ -6,3 +6,5 @@ export {default as Checkbox} from "@/components/Input/Checkbox/Checkbox";
 export {default as Dropdown} from "@/components/Input/Dropdown/Dropdown/Dropdown";
 export {default as Search} from "@/components/Input/Dropdown/Search/Search";
 export {default as Button} from "@/components/Input/Button/Button";
+export {default as Toggle} from "@/components/Input/Toggle/Toggle";
+export {default as Multiple} from "@/components/Input/Multiple/Multiple";

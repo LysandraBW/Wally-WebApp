@@ -2,13 +2,12 @@
 import sql from "mssql";
 import { fetchPool } from "../../Pool";
 import { User } from "../../User";
+import { DeleteEventParameters } from "../../Parameters";
 
-interface DeleteEventData {
-    SessionID: string;
-    EventID: number;
-}
-
-export default async function DeleteEvent(data: DeleteEventData, user: User = User.Employee): Promise<boolean> {
+export default async function DeleteEvent(
+    data: DeleteEventParameters, 
+    user: User = User.Employee
+): Promise<boolean> {
     try {
         const pool = await fetchPool(user, data);
         if (!pool)

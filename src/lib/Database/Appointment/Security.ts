@@ -2,14 +2,11 @@
 import sql from "mssql";
 import { fetchPool } from "../Pool";
 import { User } from "../User";
-
-interface AuthenticateLookupData {
-    AppointmentID: string;
-    Email: string;
-}
+import { SessionParameter } from "../Parameters";
+import { AuthenticateLookupParameters } from "../Parameters";
 
 export async function AuthenticateLookup(
-    data: AuthenticateLookupData, 
+    data: AuthenticateLookupParameters, 
     user: User = User.Standard
 ): Promise<string> {
     try {
@@ -31,12 +28,8 @@ export async function AuthenticateLookup(
     }
 }
 
-interface AuthenticateSessionData {
-    SessionID: string;
-}
-
 export async function AuthenticateSession(
-    data: AuthenticateSessionData,
+    data: SessionParameter,
     user: User = User.Standard
 ): Promise<string> {
     try {

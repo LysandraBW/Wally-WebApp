@@ -2,14 +2,10 @@
 import sql from "mssql";
 import { fetchPool } from "../../Pool";
 import { User } from "../../User";
-
-interface Data {
-    SessionID: string;
-    AppointmentID: string;
-}
+import { SessionAppParameters } from "../../Parameters";
 
 export async function Delete(
-    data: Data, 
+    data: SessionAppParameters, 
     user: User = User.Employee
 ): Promise<boolean> {
     try {
@@ -30,7 +26,10 @@ export async function Delete(
     }
 }
 
-export async function Restore(data: Data, user: User = User.Employee): Promise<boolean> {
+export async function Restore(
+    data: SessionAppParameters, 
+    user: User = User.Employee
+): Promise<boolean> {
     try {
         const pool = await fetchPool(user, data);
         if (!pool)

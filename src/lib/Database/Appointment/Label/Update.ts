@@ -1,16 +1,11 @@
 "use server";
 import sql from "mssql";
-import { fetchPool } from "../../Pool";
 import { User } from "../../User";
-
-interface UpdateLabelData {
-    SessionID: string;
-    AppointmentID: string;
-    LabelID: number;
-}
+import { fetchPool } from "../../Pool";
+import { UpdateLabelParameters } from "../../Parameters";
 
 export default async function UpdateLabel(
-    data: UpdateLabelData, 
+    data: UpdateLabelParameters, 
     user = User.Employee
 ): Promise<boolean> {
     try {

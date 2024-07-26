@@ -1,16 +1,11 @@
 "use server";
 import sql from "mssql";
-import { fetchPool } from "../../Pool";
 import { User } from "../../User";
-
-interface DeletePartData {
-    SessionID: string;
-    AppointmentID: string;
-    PartID: number;
-}
+import { fetchPool } from "../../Pool";
+import { DeletePartParameters } from "../../Parameters";
 
 export default async function DeletePart(
-    data: DeletePartData, 
+    data: DeletePartParameters, 
     user: User = User.Employee
 ): Promise<boolean> {
     try {

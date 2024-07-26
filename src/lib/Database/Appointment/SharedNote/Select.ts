@@ -2,22 +2,13 @@
 import sql from "mssql";
 import { fetchPool } from "../../Pool";
 import { User } from "../../User";
-
-interface GetNoteShareesData {
-    SessionID: string;
-    NoteID: number;
-}
-
-export interface NoteSharee {
-    ShareeFName: string;
-    ShareeLName: string;
-    ShareeID: number;
-}
+import { DB_NoteSharee } from "../../Types";
+import { GetNoteShareesParameters } from "../../Parameters";
 
 export default async function GetNoteSharees(
-    data: GetNoteShareesData, 
+    data: GetNoteShareesParameters, 
     user: User = User.Employee
-): Promise<Array<NoteSharee>> {
+): Promise<Array<DB_NoteSharee>> {
     try {
         const pool = await fetchPool(user, data);
         if (!pool)

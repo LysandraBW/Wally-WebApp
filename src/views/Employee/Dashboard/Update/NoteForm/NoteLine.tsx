@@ -1,120 +1,101 @@
-import { Text } from "@/components/Input/Export";
-import { getSessionID } from "@/lib/Authorize/Authorize";
-import { Attachment } from "@/lib/Database/Appointment/Note/Select";
-import { NoteSharee } from "@/lib/Database/Appointment/SharedNote/Select";
-import { GetAllReturnType as Employee } from "@/lib/Database/Employee/Employee";
-import { GetAllEmployees } from "@/lib/Database/Export";
-import { useEffect, useState } from "react";
+import { toggleValue } from "@/components/Input/Checkbox/Checkbox";
+import { Multiple, Toggle } from "@/components/Input/Export";
+import { DB_GeneralEmployee } from "@/lib/Database/Types";
+import { UpdateNote } from "@/process/Employee/Update/Form";
+import { useState } from "react";
 
-interface RepairLineProps {
-    note: {
-        Head: string;
-        Body: string;
-        Attachments: Array<['Attachment', Attachment] | ['File', File]>;
-        ShowCustomer: number;
-        Sharees: Array<NoteSharee>;
-    }
+interface NoteLineProps {
+    employeeID: string;
+    employees: Array<DB_GeneralEmployee>;
+    note: UpdateNote;
     onDelete: () => any;
-    onUpdate: (note: {Head: string;
-        Body: string;
-        Attachments: Array<['Attachment', Attachment] | ['File', File]>;
-        ShowCustomer: number;
-        Sharees: Array<NoteSharee>;}) => any;   
+    onUpdate: (note: UpdateNote) => any;   
 }
 
-export default function NoteLine(props: RepairLineProps) {
+export default function NoteLine(props: NoteLineProps) {
     const initialHead = props.note.Head;
     const initialBody = props.note.Body;
-    
     const [edit, setEdit] = useState(false);
     const [values, setValues] = useState(props.note);
-
-    const [employees, setEmployees] = useState<Array<Employee>>();
-
-    useEffect(() => {
-        const loadEmployees = async () => {
-            const employees = await GetAllEmployees({ SessionID: await getSessionID() });
-            setEmployees(employees);
-        }
-        loadEmployees()
-    }, []);
 
     return (
         <>
             {edit && 
-                <div
-                    tabIndex={0}
-                    onBlur={(event) => {
-                        if (event.currentTarget.contains(event.relatedTarget))
-                            return;
-                        setEdit(false)
+                <Multiple
+                    onBlur={() => {
+                        setEdit(false);
                         props.onUpdate(values);
                     }}
-                >
-                    <input 
-                        value={values.Head} 
-                        onChange={(event) => setValues({...values, Head: event.target.value})}
-                        onBlur={() => {
-                            if (!values.Head) {
-                                setValues({...values, Head: initialHead});
-                            }
-                        }}
-                    />
-                    <input 
-                        value={values.Body} 
-                        onChange={(event) => setValues({...values, Body: event.target.value})}
-                        onBlur={() => {
-                            if (!values.Body) {
-                                setValues({...values, Body: initialBody});
-                            }
-                        }}
-                    />
-                    {values.Attachments.map((attachment, i) => (
-                        <>
-                            {attachment[0] === 'Attachment' && attachment[1].Name}
-                            {attachment[0] === 'File' && attachment[1].name}
-                        </>
-                    ))}
-                    <div
-                        onClick={() => {
-                            setValues({...values, 'ShowCustomer': 1 - values.ShowCustomer})
-                        }}
-                    >
-                        Show Customer: <span>{values.ShowCustomer ? 'YES' : 'NO'}</span>
-                    </div>
-                    <div>
-                        {employees && employees.map(employee => (
-                            <div
-                                onClick={() => {
-                                    // quick and easy unforuntately will change this absolutely ugly code later
-                                    const found = values.Sharees.map(sharee => sharee.ShareeID).includes(employee.EmployeeID);
-                                    let updatedSharees = values.Sharees;
-                                    if (found) {
-                                        updatedSharees = updatedSharees.filter(sharee => sharee.ShareeID !== employee.EmployeeID);
+                    children={(
+                        <div>
+                            <input 
+                                value={values.Head} 
+                                onChange={(event) => setValues({...values, Head: event.target.value})}
+                                onBlur={() => {
+                                    if (!values.Head) {
+                                        setValues({...values, Head: initialHead});
                                     }
-                                    else {
-                                        updatedSharees.push({
-                                            ShareeFName: employee.FName,
-                                            ShareeLName: employee.LName,
-                                            ShareeID: employee.EmployeeID
-                                        });
-                                    }
-                                    setValues({...values, 'ShowCustomer': 1 - values.ShowCustomer})
                                 }}
-                            >
-                                {employee.FName} {employee.LName} <span>{values.Sharees.map(sharee => sharee.ShareeID).includes(employee.EmployeeID) ? 'YES' : 'NO'}</span>
+                            />
+                            <input 
+                                value={values.Body} 
+                                onChange={(event) => setValues({...values, Body: event.target.value})}
+                                onBlur={() => {
+                                    if (!values.Body) {
+                                        setValues({...values, Body: initialBody});
+                                    }
+                                }}
+                            />
+                            {values.Attachments.map((attachment, i) => (
+                                <div key={i}>
+                                    {attachment.Name} <span onClick={() => setValues({...values, Attachments: values.Attachments.filter(_attachment => attachment !== _attachment)})}>x</span>
+                                </div>
+                            ))}
+                            {values.Files.map((file, i) => (
+                                <div key={i}>
+                                    {file.name}.{file.type} <span onClick={() => setValues({...values, Files: values.Files.filter(_file => file !== _file)})}>x</span>
+                                </div>
+                            ))}
+                            <Toggle
+                                name='ShowCustomer'
+                                label='Show Customer'
+                                value={values.ShowCustomer}
+                                onChange={(name, value) => setValues({...values, [`${name}`]: value})}
+                            />
+                            <div>
+                                {props.employees.map(employee => {
+                                    if (employee.EmployeeID === props.employeeID)
+                                        return <></>;
+                                    return (
+                                        <Toggle
+                                            name='Sharees'
+                                            label={`Add ${employee.FName} ${employee.LName}`}
+                                            value={values.Sharees.includes(employee.EmployeeID) ? 1 : 0}
+                                            onChange={(name, value) => {
+                                                setValues({...values, Sharees: toggleValue(values.Sharees, employee.EmployeeID)});
+                                            }}
+                                        />
+                                    )
+                                })}
                             </div>
-                        ))}
-                    </div>
-                </div>
+                        </div>
+                    )}
+                />
             }
             {!edit && 
                 <div>
                     <span onClick={() => setEdit(true)}>
                         <h4>{props.note.Head}</h4>
                         <p>{props.note.Body}</p>
-                        {props.note.Attachments && props.note.Attachments.map(attachment => (
-                            <div>{attachment[0] === 'Attachment' ? attachment[1].Name : attachment[1].name}</div>
+                        {values.Attachments.map((attachment, i) => (
+                            <div key={i}>
+                                {attachment.Name}
+                            </div>
+                        ))}
+                        {values.Files.map((file, i) => (
+                            <div key={i}>
+                                {file.name}.{file.type}
+                            </div>
                         ))}
                     </span>
                     <span onClick={() => props.onDelete()}>DELETE</span>

@@ -1,7 +1,7 @@
 "use client";
 import { Button, Text } from "@/components/Input/Export";
-import { Form, FormStructure } from "@/lib/Form/Employee/Login/Form";
-import { submitForm } from "@/lib/Form/Employee/Login/Submit";
+import { Form, FormStructure } from "@/process/Employee/Login/Form";
+import { submitForm } from "@/process/Employee/Login/Submit";
 import { goTo } from "@/lib/Navigation/Redirect";
 import Error from "@/views/Employee/Login/Error";
 import { useState } from "react";

@@ -1,14 +1,9 @@
 "use server";
 import { fetchPool } from "../Pool";
 import { User } from "../User";
+import { DB_Status, DB_Service, DB_Label, DB_Make } from "../Types";
 
-export type Status = {
-    StatusID: number;
-    Status: string;
-    Description: string;
-}
-
-export async function Statuses(user: User = User.Standard): Promise<Array<Status>> {
+export async function DB_Statuses(user: User = User.Standard): Promise<Array<DB_Status>> {
     try {
         const pool = await fetchPool(user);
         if (!pool)
@@ -22,16 +17,7 @@ export async function Statuses(user: User = User.Standard): Promise<Array<Status
     }
 }
 
-export type Service = {
-    Class: string;
-    ClassID: number;
-    Division: string;
-    DivisionID: number;
-    Service: string;
-    ServiceID: number;
-}
-
-export async function Services(user: User = User.Standard): Promise<Array<Service>> {
+export async function DB_Services(user: User = User.Standard): Promise<Array<DB_Service>> {
     try {
         const pool = await fetchPool(user);
         if (!pool)
@@ -45,12 +31,7 @@ export async function Services(user: User = User.Standard): Promise<Array<Servic
     }
 }
 
-export type Label = {
-    LabelID: number;
-    Label: string;
-}
-
-export async function Labels(user: User = User.Standard): Promise<Array<Label>> {
+export async function DB_Labels(user: User = User.Standard): Promise<Array<DB_Label>> {
     try {
         const pool = await fetchPool(user);
         if (!pool)
@@ -64,11 +45,8 @@ export async function Labels(user: User = User.Standard): Promise<Array<Label>> 
     }
 }
 
-type Make = {
-    Make: string;
-}
 
-export async function Makes(user: User = User.Standard): Promise<Array<Make>> {
+export async function DB_Makes(user: User = User.Standard): Promise<Array<DB_Make>> {
     try {
         const pool = await fetchPool(user);
         if (!pool)

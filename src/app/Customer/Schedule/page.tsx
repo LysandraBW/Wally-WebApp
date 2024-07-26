@@ -1,16 +1,15 @@
  "use client";
 import { useEffect, useState } from "react";
 import Tracker from "@/components/Form/Tracker/Tracker";
-import { Form, FormStructure } from "@/lib/Form/Customer/Schedule/Form";
-import { ModelYears, Models, DecodeVIN } from "@/lib/Decoder/Decoder";
+import { Form, FormStructure } from "@/process/Customer/Schedule/Form";
+import { ModelYears, Models, DecodeVIN, LoadModels, LoadMakeModelModelYear } from "@/lib/Decoder/Decoder";
 import { Makes, Services } from "@/lib/Database/Export";
-import { LoadedValues, Values } from "@/lib/Form/Customer/Schedule/Load";
-import submitForm from "@/lib/Form/Customer/Schedule/Submit";
+import { LoadedValues, Values } from "@/process/Customer/Schedule/Load";
+import submitForm from "@/process/Customer/Schedule/Submit";
 import ContactForm from "@/views/Customer/Schedule/Contact";
 import VehicleForm from "@/views/Customer/Schedule/Vehicle";
 import Success from "@/views/Customer/Schedule/Success";
 import Error from "@/views/Customer/Schedule/Error";
-import NoteForm from "@/views/Employee/Dashboard/Update/NoteForm/NoteForm";
 
 export default function Schedule() {
     const [form, setForm] = useState<FormStructure>(Form);
@@ -45,67 +44,36 @@ export default function Schedule() {
     }, []);
 
     const loadModels = async (modelYear: number, make: string) => {
-        // Requires Model Year + Make
-        if (modelYear && make) {
-            // Get Models
-            const fetchedModels = (await Models(modelYear, make));
-            let models: Array<[string, string]> = fetchedModels.map(m => [m.Model_Name, m.Model_Name]);
-
-            // Removing Duplicates
-            let duplicateModels: {[k: string]: number} = {};
-            models = models.filter(model => {
-                // Duplicate Found
-                if (duplicateModels[model[0]])
-                    return false;
-                duplicateModels[model[0]] = 1;
-                return true;
-            });
-
-            // Sorting by Label
-            models.sort((a, b) => a[1].localeCompare(b[1]));
-            setValues({...values, models});
-        }
-        else {
-            setValues({...values, models: []});
-        }
+        const models = await LoadModels(modelYear, make);
+        setValues({...values, models});
     }
 
     const loadMakeModelModelYear = async (vin: string) => {
         if (!vin)
             return;
 
-        // Getting Make, Model, ModelYear (MMMY)
-        const MMMY = await DecodeVIN(vin);
-        const Make = values.makes.find(m => m[0].toUpperCase() === MMMY.Make.toUpperCase());
-        const Model = MMMY.Model;
-        const ModelYear = MMMY.ModelYear;
-
-        if (!Make)
+        const {make, model, models, modelYear} = await LoadMakeModelModelYear(vin, values.makes);
+        if (!modelYear)        
             return;
 
-        // Load Models
-        loadModels(ModelYear, Make[0]);
-        
-        // Return Decoded Info
+        setValues({...values, models});
+
         return {
-            make: [Make[0]], 
-            model: [Model], 
-            modelYear: [ModelYear]
+            make: make, 
+            model: model, 
+            modelYear: modelYear
         }
     }
 
     const changeHandler = async (name: string, value: any) => {
-        // Nothing Changed
         if (form[name] === value)
             return;
 
         if (name === "vin") {
-            const MMMY = await loadMakeModelModelYear(value);
-            if (!MMMY)
+            const data = await loadMakeModelModelYear(value);
+            if (!data)
                 return;
-
-            // Load Model Year, Make, and Model
-            setForm({...form, ...MMMY, [`${name}`]: value});
+            setForm({...form, ...data, [`${name}`]: value});
         }
         else if (name === "make") {
             loadModels(form.modelYear[0], value[0]);
@@ -118,10 +86,6 @@ export default function Schedule() {
         else {
             setForm({...form, [`${name}`]: value});
         }
-    }
-
-    const continueHandler = (part: number): boolean => {
-        return true;
     }
     
     const submitHandler = async (): Promise<boolean> => {
@@ -161,7 +125,8 @@ export default function Schedule() {
                                 form={form}
                                 changeHandler={changeHandler}
                             />
-                        )
+                        ),
+                        onContinue: () => true
                     },
                     {
                         partHeader: "Vehicle",
@@ -171,10 +136,10 @@ export default function Schedule() {
                                 values={{...values}}
                                 changeHandler={changeHandler}
                             />
-                        )
+                        ),
+                        onContinue: () => true
                     }
                 ]}
-                continue={continueHandler}
                 submit={submitHandler}
             />
         </>

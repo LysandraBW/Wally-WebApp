@@ -2,15 +2,10 @@
 import sql from "mssql";
 import { fetchPool } from "../../Pool";
 import { User } from "../../User";
-
-interface DeleteNoteData {
-    SessionID: string;
-    AppointmentID: string;
-    NoteID: number;
-}
+import { DeleteNoteParameters } from "../../Parameters";
 
 export default async function DeleteNote(
-    data: DeleteNoteData, 
+    data: DeleteNoteParameters, 
     user: User = User.Employee
 ): Promise<boolean> {
     try {

@@ -1,7 +1,7 @@
-import { AppointmentSummary } from "@/lib/Database/Appointment/Appointment";
+import { DB_AppointmentSummary } from "@/lib/Database/Types";
 
 interface SummaryProps {
-    info: AppointmentSummary;
+    info: DB_AppointmentSummary;
 }
 
 export default function Summary(props: SummaryProps) {

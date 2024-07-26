@@ -1,8 +1,8 @@
-import { QuickAppointment } from "@/lib/Database/Appointment/Appointment";
+import { DB_AppointmentOverview } from "@/lib/Database/Types";
 import { goTo } from "@/lib/Navigation/Redirect";
 
 interface OverviewProps {
-    app: QuickAppointment
+    app: DB_AppointmentOverview
     close: () => any;
 }
 

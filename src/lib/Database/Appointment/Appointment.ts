@@ -1,58 +1,15 @@
 "use server";
 import sql from "mssql";
-import { fetchPool } from "../Pool";
 import { User } from "../User";
-import { Diagnosis } from "./Diagnosis/Select";
-import { Service } from "./Service/Select";
-import { Repair } from "./Repair/Select";
-import { Payment } from "./Payment/Select";
-import { Label } from "../Info/Info";
-import { Part } from "./Part/Select";
-import { Attachment, Note } from "./Note/Select";
-
-interface GetData {
-    SessionID: string;
-    AppointmentID: string;
-}
-
-export type Appointment  = {
-    AppointmentID:  number;
-    CustomerID:     number;
-    FName:          string;
-    LName:          string;
-    Email:          string;
-    Phone:          string;
-    CreationDate:   string;
-    UpdationDate:   string;
-    StartDate:      string;
-    EndDate:        string;
-    Cost:           string;
-    StatusID:       number;
-    Status:         string;
-    Make:           string;
-    Model:          string;
-    ModelYear:      number;
-    VIN:            string;
-    Mileage:        number;
-    LicensePlate:   string;
-    Services:       Array<Service>,
-    Diagnoses:      Array<Diagnosis>,
-    Repairs:        Array<Repair>
-    Parts:          Array<Part>
-    Payments:       Array<Payment>
-    Labels:         Array<Label>;
-    Notes:          Array<Note&{
-                        OwnerFName: string;
-                        OwnerLName: string;
-                        OwnerID: string;
-                    }>;
-    Attachments:    Array<Attachment>
-}
+import { fetchPool } from "../Pool";
+import { DB_Appointment, DB_Appointments, DB_AppointmentSummary, DB_EmployeeLabel, DB_EmployeeLabels } from "../Types";
+import { GetAllParameters, SessionAppParameters } from "../Parameters";
+import { sortLabels } from "./Label/Select";
 
 export async function Get(
-    data: GetData, 
+    data: SessionAppParameters, 
     user: User = User.Employee
-): Promise<Appointment | null> {
+): Promise<DB_Appointment | null> {
     try {
         const pool = await fetchPool(user, data);
         if (!pool)
@@ -83,41 +40,10 @@ export async function Get(
     }
 }
 
-interface GetSummaryData {
-    SessionID: string;
-    AppointmentID: string;
-}
-
-export type AppointmentSummary  = {
-    AppointmentID:  number;
-    CustomerID:     number;
-    FName:          string;
-    LName:          string;
-    Email:          string;
-    Phone:          string;
-    CreationDate:   string;
-    UpdationDate:   string;
-    StartDate:      string;
-    EndDate:        string;
-    Cost:           string;
-    StatusID:       number;
-    Status:         string;
-    Make:           string;
-    Model:          string;
-    ModelYear:      number;
-    VIN:            string;
-    Mileage:        number;
-    LicensePlate:   string;
-    Services:       Array<Service>;
-    Diagnoses:      Array<Diagnosis>;
-    Repairs:        Array<Repair>;
-    Notes:          Array<Note>;
-}
-
 export async function GetSummary(
-    data: GetSummaryData, 
+    data: SessionAppParameters, 
     user: User = User.Customer
-): Promise<AppointmentSummary | null> {
+): Promise<DB_AppointmentSummary| null> {
     try {
         const pool = await fetchPool(user, data);
         if (!pool)
@@ -143,55 +69,10 @@ export async function GetSummary(
     }
 }
 
-interface GetAllData {
-    SessionID:  string;
-    PageNumber?: number;
-    PageSize?:   number;
-    LookAhead?:  number;
-    Search?:     string;
-    Deleted?:    number;
-    LabelID?:    number;
-    StatusID?:   number;
-    FName?:      number;
-    LName?:      number;
-    Make?:       number;
-    Model?:      number;
-    ModelYear?:  number;
-    CreationDate?: number;
-    StartDate?:  number;
-    EndDate?:    number;
-    Cost?:       number
-}
-
-export type QuickAppointment  = {
-    AppointmentID:  string;
-    CustomerID:     number;
-    FName:          string;
-    LName:          string;
-    Email:          string;
-    Phone:          string;
-    CreationDate:   string;
-    UpdationDate:   string;
-    StartDate:      string;
-    EndDate:        string;
-    Cost:           string;
-    StatusID:       number;
-    Status:         string;
-    Make:           string;
-    Model:          string;
-    ModelYear:      number;
-    VIN:            string;
-    Mileage:        number;
-    LicensePlate:   string;
-}
-
 export async function GetAll(
-    data: GetAllData, 
+    data: GetAllParameters, 
     user: User = User.Employee
-): Promise<{
-    all: Array<QuickAppointment>;
-    count: number;
-} | null> {
+): Promise<DB_Appointments> {
     try {
         const pool = await fetchPool(user, data);
         if (!pool)
@@ -218,13 +99,18 @@ export async function GetAll(
             .execute('Appointment.GetAll');
 
         const recordsets = <sql.IRecordSet<any>> output.recordsets;
+
+        const labels: Array<DB_EmployeeLabel> = recordsets[2];
+        const sortedLabels: DB_EmployeeLabels = await sortLabels(labels);
+
         return {
             all: recordsets[0],
-            count: recordsets[1][0].COUNT
+            count: recordsets[1][0].Count,
+            labels: sortedLabels
         };
     }
     catch (err) {
         console.error(err);
-        return null;
+        return {all: [], count: 0, labels: {}};
     }
 }

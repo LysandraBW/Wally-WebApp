@@ -1,7 +1,7 @@
 import { Segment, Text } from "@/components/Input/Export";
-import { Appointment } from "@/lib/Database/Appointment/Appointment"
-import { Status, Statuses } from "@/lib/Database/Info/Info";
-import { Parts } from "@/lib/Form/Employee/Update/Form";
+import { DB_Statuses } from "@/lib/Database/Info/Info";
+import { DB_Status } from "@/lib/Database/Types";
+import { Parts } from "@/process/Employee/Update/Form";
 import { useEffect, useState } from "react";
 
 interface GeneralProps {
@@ -22,7 +22,7 @@ export default function General(props: GeneralProps) {
 
     useEffect(() => {
         const loadStatuses = async () => {
-            let statuses: Array<Status> = await Statuses();
+            let statuses: Array<DB_Status> = await DB_Statuses();
             setStatuses(statuses.map(status => [status.StatusID, status.Status]));
         }
         loadStatuses();

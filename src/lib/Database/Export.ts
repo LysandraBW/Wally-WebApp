@@ -42,10 +42,10 @@ export {
 } from "./Employee/Security";
 
 export { 
-    Statuses,
-    Services,
-    Labels,
-    Makes
+    DB_Statuses as Statuses,
+    DB_Services as Services,
+    DB_Labels as Labels,
+    DB_Makes as Makes
 } from "./Info/Info";
 
 export {
@@ -86,5 +86,5 @@ export {
 
 export {
     GetLabels,
-    GetEmployeeLabels
+    GetAllLabels as GetEmployeeLabels
 } from "./Appointment/Label/Select"

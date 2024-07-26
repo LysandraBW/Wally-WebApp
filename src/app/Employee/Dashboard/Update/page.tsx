@@ -1,37 +1,22 @@
 'use client';
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
-import { Appointment } from "@/lib/Database/Appointment/Appointment";
 import { GetAppointment } from "@/lib/Database/Export";
-import { getSessionID } from "@/lib/Authorize/Authorize";
-import { NoteSharee } from "@/lib/Database/Appointment/SharedNote/Select";
-import { appToForm, Form, Parts } from "@/lib/Form/Employee/Update/Form";
 import Tabbed from "@/components/Form/Tabbed/Tabbed";
 import General from "@/views/Employee/Dashboard/Update/GeneralForm";
 import Vehicle from "@/views/Employee/Dashboard/Update/VehicleForm";
 import Service from "@/views/Employee/Dashboard/Update/ServiceForm/ServiceForm";
 import Payment from "@/views/Employee/Dashboard/Update/PaymentForm/PaymentForm";
 import NoteForm from "@/views/Employee/Dashboard/Update/NoteForm/NoteForm";
-
-interface App {
-    ref: Form;
-    update: Form;
-}
+import { Controller, ControllerStructure, Handler, HandlerStructure, Parts } from "@/process/Employee/Update/Form";
+import { getSessionID } from "@/lib/Cookies/Cookies";
 
 let ran = false;
 
 export default function Update() {
-    // For Initializing
     const searchParams = useSearchParams();
-    const [appID, setAppID] = useState<{[k: string]: any}>({
-        appID: '',
-        searchAppID: '',
-        loading: false,
-        loaded: false
-    });
-
-    // After Initialization
-    const [app, setApp] = useState<App>();
+    const [handler, setHandler] = useState<HandlerStructure>(Handler);
+    const [controller, setController] = useState<ControllerStructure>();
     
     useEffect(() => {
         if (ran)
@@ -40,59 +25,55 @@ export default function Update() {
    
         const sAppID = searchParams.get('AppID');
         if (sAppID)
-            setAppID({...appID, appID: sAppID, loading: true});
+            setHandler({...handler, appID: sAppID, loading: true});
     }, []);
 
     useEffect(() => {
         const loadApp = async () => {
-            if (appID.appID) {
+            if (handler.appID) {
                 const app = await GetAppointment({
                     SessionID: await getSessionID(), 
-                    AppointmentID: appID.appID
+                    AppointmentID: handler.appID
                 });
 
                 if (!app) {
-                    setAppID({...appID, loading: false, loaded: true});
-                    setApp(undefined);
+                    setHandler({...handler, loading: false, loaded: true});
+                    setController(undefined);
                     throw 'App Error';
                 }
 
-                const form = await appToForm(app);
-                setApp({
-                    ref: form, 
-                    update: form
-                });
+                setController(await Controller(app));
             }
             else {
-                setAppID({...appID, loading: false, loaded: true});
-                setApp(undefined);
+                setHandler({...handler, loading: false, loaded: true});
+                setController(undefined);
             }
         }
-        if (appID.appID)
+        if (handler.appID)
             loadApp();
-    }, [appID.appID]);
+    }, [handler.appID]);
 
     useEffect(() => {
-        if (app)
-            setAppID({...appID, loading: false, loaded: true});
-    }, [app]);
+        if (controller)
+            setHandler({...handler, loading: false, loaded: true});
+    }, [controller]);
 
     useEffect(() => {
-        app && app.update && console.log(app.update);
-    }, [app?.update]);
+        controller && controller.cur && console.log(controller.cur);
+    }, [controller?.cur]);
 
     const changeHandler = (part: Parts, name: string, value: any) => {
-        if (!app)
+        if (!controller)
             return;
 
         console.log(value);
 
-        setApp({
-            ...app,
-            update: {
-                ...app.update,
+        setController({
+            ...controller,
+            cur: {
+                ...controller.cur,
                 [`${part}`]: {
-                    ...app.update[`${part}`],
+                    ...controller.cur[`${part}`],
                     [`${name}`]: value
                 }
             }
@@ -100,39 +81,39 @@ export default function Update() {
     }
 
     const resetHandler = (part: Parts) => {
-        if (!app)
+        if (!controller)
             return;
 
-        setApp({
-            ...app,
-            update: {
-                ...app.update,
-                [`${part}`]: app.ref[`${part}`]
+        setController({
+            ...controller,
+            cur: {
+                ...controller.cur,
+                [`${part}`]: controller.ref[`${part}`]
             }
         });
     }
 
     return (
         <div>
-            {appID.loaded && !app && 
+            {handler.loaded && !controller && 
                 <div>
                     <h1>Start by Finding an Appointment</h1>
                     <div>
-                        <input name='appID' onChange={(event) => setAppID({...appID, searchAppID: event.target.value})}/>
-                        <button onClick={() => setAppID({...appID, appID: appID.searchAppID})}>
+                        <input name='appID' onChange={(event) => setHandler({...handler, searchAppID: event.target.value})}/>
+                        <button onClick={() => setHandler({...handler, appID: handler.searchAppID})}>
                             Go
                         </button>
                     </div>
                 </div>
             }
-            {appID.loaded && app &&
+            {handler.loaded && controller &&
                 <div>
                     <Tabbed
                         parts={[
                             {
                                 part: (
                                     <General
-                                        form={app.update.General}
+                                        form={controller.cur.General}
                                         changeHandler={changeHandler}
                                     />
                                 ),
@@ -143,7 +124,7 @@ export default function Update() {
                             {
                                 part: (
                                     <Vehicle
-                                        form={app.update.Vehicle}
+                                        form={controller.cur.Vehicle}
                                         changeHandler={changeHandler}
                                     />
                                 ),
@@ -154,7 +135,7 @@ export default function Update() {
                             {
                                 part: (
                                     <Service
-                                        form={app.update.Services}
+                                        form={controller.cur.Services}
                                         changeHandler={changeHandler}
                                     />
                                 ),
@@ -165,7 +146,7 @@ export default function Update() {
                             {
                                 part: (
                                     <Payment
-                                        form={app.update.Cost}
+                                        form={controller.cur.Cost}
                                         changeHandler={changeHandler}
                                     />
                                 ),
@@ -176,7 +157,11 @@ export default function Update() {
                         ]}
                     />
                     <NoteForm
-                        form={app.update.Notes}
+                        form={{
+                            ...controller.cur.Notes,
+                            EmployeeID: '',
+                            Employees: []
+                        }}
                         changeHandler={changeHandler}
                     />
                 </div>

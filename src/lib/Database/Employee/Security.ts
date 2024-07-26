@@ -1,15 +1,12 @@
 'use server';
 import sql from 'mssql';
-import { fetchPool } from '../Pool';
 import { User } from '../User';
-
-interface AuthenticateLoginData {
-    Username: string;
-    Password: string;
-}
+import { fetchPool } from '../Pool';
+import { AuthenticateLoginParameters } from "../Parameters";
+import { SessionParameter } from "../Parameters";
 
 export async function AuthenticateLogin(
-    data: AuthenticateLoginData, 
+    data: AuthenticateLoginParameters, 
     user: User = User.Standard
 ): Promise<string> {
     try {
@@ -31,12 +28,8 @@ export async function AuthenticateLogin(
     }
 }
 
-interface AuthenticateSessionData {
-    SessionID: string;
-}
-
 export async function AuthenticateSession(
-    data: AuthenticateSessionData,
+    data: SessionParameter,
     user: User = User.Standard
 ): Promise<string> {
     try {
@@ -57,12 +50,8 @@ export async function AuthenticateSession(
     }
 }
 
-interface LogOutData {
-    SessionID: string;
-}
-
 export async function LogOut(
-    data: LogOutData,
+    data: SessionParameter,
     user: User = User.Employee
 ): Promise<boolean> {
     try {

@@ -1,22 +1,14 @@
 "use server";
 import sql from "mssql";
-import { fetchPool } from "../../Pool";
 import { User } from "../../User";
-
-interface GetRepairsData {
-    SessionID: string;
-    AppointmentID: string;
-}
-
-export interface Repair {
-    RepairID: number;
-    Repair: string;
-}
+import { DB_Repair } from "../../Types";
+import { fetchPool } from "../../Pool";
+import { SessionAppParameters } from "../../Parameters";
 
 export default async function GetRepairs(
-    data: GetRepairsData, 
+    data: SessionAppParameters, 
     user: User = User.Customer
-): Promise<Array<Repair> | null> {
+): Promise<Array<DB_Repair>> {
     try {
         const pool = await fetchPool(user, data);
         if (!pool)
@@ -31,6 +23,6 @@ export default async function GetRepairs(
     }
     catch (err) {
         console.error(err);
-        return null;
+        return [];
     }
 }

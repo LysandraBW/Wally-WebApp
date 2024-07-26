@@ -2,15 +2,12 @@
 import sql from "mssql";
 import { fetchPool } from "../Pool";
 import { User } from "../User";
+import { UpdateCustomerParameters } from "../Parameters";
 
-interface UpdateCustomerData {
-    SessionID: string;
-    SessionID: string;
-    AppointmentID: string;
-    Phone: string;
-}
-
-export default async function UpdateCustomer(data: UpdateCustomerData, user: User = User.Employee): Promise<boolean> {
+export default async function UpdateCustomer(
+    data: UpdateCustomerParameters, 
+    user: User = User.Employee
+): Promise<boolean> {
     try {
         const pool = await fetchPool(user, data);
         if (!pool)

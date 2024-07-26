@@ -1,11 +1,11 @@
-import { Filter } from "@/app/Employee/Dashboard/Dashboard/Meta";
-import { QuickAppointment } from "@/lib/Database/Appointment/Appointment";
+import { DB_AppointmentOverview } from "@/lib/Database/Types";
+import { FilterStructure } from "@/process/Employee/Dashboard/Form";
 
 interface HeadProps {
-    filter: Filter;
-    updateFilter: (filter: Filter) => any;   
+    filter: FilterStructure;
+    updateFilter: (filter: FilterStructure) => any;   
     checked: Array<string>;
-    current: Array<QuickAppointment>;
+    current: Array<DB_AppointmentOverview>;
     setChecked: (checked: Array<string>) => any;
 }
 

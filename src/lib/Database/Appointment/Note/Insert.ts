@@ -2,17 +2,10 @@
 import sql from "mssql";
 import { fetchPool } from "../../Pool";
 import { User } from "../../User";
+import { InsertNoteAttachmentParameters, InsertNoteParameters } from "../../Parameters";
 
-interface InsertNoteData {
-    SessionID: string;
-    AppointmentID: string;
-    Head: string;
-    Body: string;
-    ShowCustomer: number;
-}
-
-export default async function InsertNote(
-    data: InsertNoteData, 
+export async function InsertNote(
+    data: InsertNoteParameters, 
     user: User = User.Employee
 ): Promise<number> {
     try {
@@ -36,14 +29,8 @@ export default async function InsertNote(
     }
 }
 
-interface InsertNoteAttachmentData {
-    SessionID: string;
-    NoteID: number;
-    URL: string;
-}
-
 export async function InsertNoteAttachment(
-    data: InsertNoteAttachmentData,
+    data: InsertNoteAttachmentParameters,
     user: User = User.Employee
 ): Promise<number> {
     try {

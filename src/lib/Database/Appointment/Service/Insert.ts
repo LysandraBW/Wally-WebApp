@@ -2,14 +2,12 @@
 import sql from "mssql";
 import { fetchPool } from "../../Pool";
 import { User } from "../../User";
+import { InsertDefinedServiceParameters, InsertServiceParameters } from "../../Parameters";
 
-interface InsertDefinedServiceData {
-    SessionID: string | null;
-    AppointmentID: string;
-    ServiceID: number;
-}
-
-export async function InsertDefinedService(data: InsertDefinedServiceData, user: User = User.Standard): Promise<number> {
+export async function InsertDefinedService(
+    data: InsertDefinedServiceParameters, 
+    user: User = User.Standard
+): Promise<number> {
     try {
         const pool = await fetchPool(user, data);
         if (!pool)
@@ -29,16 +27,8 @@ export async function InsertDefinedService(data: InsertDefinedServiceData, user:
     }
 }
 
-interface InsertServiceData {
-    SessionID: string;
-    AppointmentID: string;
-    Service: string;
-    Division: string;
-    Class: string;
-}
-
 export async function InsertService(
-    data: InsertServiceData, 
+    data: InsertServiceParameters, 
     user: User = User.Employee
 ): Promise<number> {
     try {

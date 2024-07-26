@@ -1,22 +1,19 @@
-import { getSessionID } from "@/lib/Authorize/Authorize";
-import { QuickAppointment } from "@/lib/Database/Appointment/Appointment";
-import { UpdateLabel } from "@/lib/Database/Export";
-import { useState, useEffect } from "react";
-import { Label } from "@/lib/Database/Info/Info";
 import React from "react";
+import { DB_AppointmentOverview, DB_EmployeeLabel, DB_Label } from "@/lib/Database/Types";
+import { getLabel } from "@/lib/Database/Appointment/Label/Select";
 
 interface AppointmentProps {
-    app: QuickAppointment;
-    labelMeta: {[k: string]: Label};
-    labels: {[k: string]: number};
+    app: DB_AppointmentOverview;
+    labels: Array<DB_EmployeeLabel>;
+    labelMeta: {[k: string]: DB_Label};
     updateLabel: (appID: string, labelName: string) => any;
-    highlight: (entry: string) => React.ReactNode;
     checked: boolean;
     checkAppointment: (appID: string) => void;
+    highlight: (entry: string) => React.ReactNode;
     deleteAppointment: (appIDs: Array<string>) => void;
 }
 
-export default function Appointment(props: AppointmentProps) {
+export default async function Appointment(props: AppointmentProps) {
     const labelHandler = async (labelName: string) => {
         props.updateLabel(props.app.AppointmentID, labelName);
     }
@@ -36,14 +33,14 @@ export default function Appointment(props: AppointmentProps) {
                 <input 
                     type='checkbox'
                     onChange={() => labelHandler('Star')}
-                    checked={!!props.labels.Star && !!props.labels.Star}
+                    checked={!!(await getLabel(props.labels, 'Star'))}
                 />
             </td>
             <td>
                 <input 
                     type='checkbox'
                     onChange={() => labelHandler('Flag')}
-                    checked={!!props.labels.Flag && !!props.labels.Flag}
+                    checked={!!(await getLabel(props.labels, 'Flag'))}
                 />
             </td>
             <td>{props.highlight(props.app.FName)}</td>
@@ -59,13 +56,7 @@ export default function Appointment(props: AppointmentProps) {
             <td>{props.app.Mileage && props.highlight(props.app.Mileage.toString())}</td>
             <td>{props.highlight(props.app.LicensePlate)}</td>
             <td>{props.highlight(props.app.Status)}</td>
-            <td
-                onClick={async () => {
-                    await props.deleteAppointment([props.app.AppointmentID]);
-                }}
-            >
-                Delete
-            </td>
+            <td onClick={async () => await props.deleteAppointment([props.app.AppointmentID])}>Delete</td>
         </React.Fragment>
     )
 }

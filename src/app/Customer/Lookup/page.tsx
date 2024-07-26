@@ -1,11 +1,11 @@
 "use client";
-import { Form, FormStructure } from "@/lib/Form/Customer/Lookup/Form";
+import { Form, FormStructure } from "@/process/Customer/Lookup/Form";
 import { useState } from "react";
-import { submitForm } from "@/lib/Form/Customer/Lookup/Submit";
-import { AppointmentSummary } from "@/lib/Database/Appointment/Appointment";
+import { submitForm } from "@/process/Customer/Lookup/Submit";
 import Summary from "@/views/Customer/Lookup/Summary";
 import Error from "@/views/Customer/Lookup/Error";
 import LookupForm from "@/views/Customer/Lookup/Lookup";
+import { DB_AppointmentSummary } from "@/lib/Database/Types";
 
 export default function Lookup() {
     const [form, setForm] = useState<FormStructure>(Form);
@@ -17,7 +17,7 @@ export default function Lookup() {
     }
 
     const submitHandler = async (): Promise<void> => {
-        const output: AppointmentSummary | null = await submitForm(form);
+        const output: DB_AppointmentSummary | null = await submitForm(form);
         if (!output) {
             setErrorMessage(<Error close={() => setErrorMessage(null)}/>);
             setSummary(null);

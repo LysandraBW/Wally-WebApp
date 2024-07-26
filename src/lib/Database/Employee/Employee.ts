@@ -2,20 +2,13 @@
 import sql from 'mssql';
 import { fetchPool } from '../Pool';
 import { User } from '../User';
+import { DB_Employee, DB_GeneralEmployee } from '../Types';
+import { SessionParameter } from "../Parameters";
 
-interface GetData {
-    SessionID: string;
-}
-
-export type Employee = {
-    SessionID: string;
-    FName: string;
-    LName: string;
-    Email: string;
-    Phone: string;
-} | null;
-
-export async function Get(data: GetData, user: User = User.Employee): Promise<Employee> {
+export async function Get(
+    data: SessionParameter, 
+    user: User = User.Employee
+): Promise<DB_Employee|null> {
     try {
         const pool = await fetchPool(user, data);
         if (!pool)
@@ -33,13 +26,10 @@ export async function Get(data: GetData, user: User = User.Employee): Promise<Em
     }
 }
 
-export type GetAllReturnType = {
-    EmployeeID: number;
-    FName: string;
-    LName: string;
-}
-
-export async function GetAll(data: GetData, user = User.Employee): Promise<Array<GetAllReturnType>> {
+export async function GetAll(
+    data: SessionParameter,
+    user = User.Employee
+): Promise<Array<DB_GeneralEmployee>> {
     try {
         const pool = await fetchPool(user, data);
         if (!pool)

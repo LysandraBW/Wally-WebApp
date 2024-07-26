@@ -1,25 +1,14 @@
 "use server";
 import sql from "mssql";
-import { fetchPool } from "../../Pool";
 import { User } from "../../User";
-
-interface GetPartsData {
-    SessionID: string;
-    AppointmentID: string;
-}
-
-export interface Part {
-    PartID: number;
-    PartName: string;
-    PartNumber: string;
-    Quantity: string;
-    UnitCost: string;
-}
+import { DB_Part } from "../../Types";
+import { fetchPool } from "../../Pool";
+import { SessionAppParameters } from "../../Parameters";
 
 export default async function GetParts(
-    data: GetPartsData, 
+    data: SessionAppParameters, 
     user: User = User.Employee
-): Promise<Array<Part> | null> {
+): Promise<Array<DB_Part>> {
     try {
         const pool = await fetchPool(user, data);
         if (!pool)
@@ -34,6 +23,6 @@ export default async function GetParts(
     }
     catch (err) {
         console.error(err);
-        return null;
+        return [];
     }
 }

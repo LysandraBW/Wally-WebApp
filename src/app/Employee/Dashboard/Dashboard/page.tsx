@@ -1,53 +1,56 @@
 'use client';
-import { getSessionID } from "@/lib/Authorize/Authorize";
-import { Delete, GetAllAppointments, GetEmployee, GetEmployeeLabels, UpdateLabel } from "@/lib/Database/Export";
-import { Label, Labels, Statuses } from "@/lib/Database/Info/Info";
+import { getSessionID } from "@/lib/Cookies/Cookies";
+import { Delete, GetAllAppointments, GetEmployee } from "@/lib/Database/Export";
+import { DB_Labels, DB_Statuses } from "@/lib/Database/Info/Info";
 import { goTo } from "@/lib/Navigation/Redirect";
 import { useEffect, useState } from "react";
 import Message from "@/components/Pop-Up/Message/Message";
 import Confirm from "@/components/Pop-Up/Confirm/Confirm";
-import useInterval from "@/lib/Timer/Timer";
+import useInterval from "@/lib/Hook/Timer";
 import Tabs from "@/views/Employee/Dashboard/Dashboard/Tabs";
 import Search from "@/views/Employee/Dashboard/Dashboard/Search";
 import Navigation from "@/views/Employee/Dashboard/Dashboard/Navigation";
 import Head from "@/views/Employee/Dashboard/Dashboard/Head";
 import Body from "@/views/Employee/Dashboard/Dashboard/Body";
 import Overview from "@/views/Employee/Dashboard/Dashboard/Overview";
-import { Meta, defaultMeta, Apps, defaultApps, Filter } from "./Meta";
+import { formatLabels, LoadedValues, Values } from "@/process/Employee/Dashboard/Load";
+import { AppController, AppControllerStructure, Filter, FilterStructure } from "@/process/Employee/Dashboard/Form";
+import { DB_Employee, DB_Label } from "@/lib/Database/Types";
 
 let ran = false;
 
 export default function Dashboard() {
-    const [meta, setMeta] = useState<Meta>(defaultMeta);
-    const [apps, setApps] = useState<Apps>(defaultApps);
-    const [filter, setFilter] = useState<Filter>({
-        PageNumber: 1,
-        PageSize: 5
-    });
+    const [values, setValues] = useState<LoadedValues>(Values);
+    const [filter, setFilter] = useState<FilterStructure>(Filter);
+    const [appController, setAppController] = useState<AppControllerStructure>(AppController);
+
     const [messages, setMessages] = useState<Array<[React.ReactNode, number]>>([]);
     const [confirmation, setConfirmation] = useState<React.ReactNode>();
 
     useEffect(() => {
         const start = async () => {
-            const sessionID = await getSessionID();
-            if (!sessionID) {
+            const SessionID = await getSessionID();
+            if (!SessionID) {
                 goTo('/Employee/Login');
                 return;
             }
 
-            const labels = await Labels();
-            if (!labels)
+            const labels = await DB_Labels();
+            if (!labels.length)
                 throw 'Label Error';
 
-            const formattedLabels: {[labelName: string]: Label} = {};
-            for (const label of labels) {
-                formattedLabels[label.Label] = label;
-            }
+            const statuses = await DB_Statuses();
+            if (!statuses.length)
+                throw 'Status Error';
 
-            setMeta({
-                employee: await GetEmployee({SessionID: sessionID}),
-                statuses: await Statuses(),
-                labels: formattedLabels,
+            const employee: any = await GetEmployee({SessionID});
+            if (!employee)
+                throw 'Employee Error';
+
+            setValues({
+                employee: employee,
+                statuses: statuses,
+                labels: formatLabels(labels),
                 loaded: true
             });
 
@@ -60,62 +63,51 @@ export default function Dashboard() {
     }, []);
 
     useInterval(() => {
-        let updatedMessages = [...messages];
-        updatedMessages = updatedMessages.filter(msg => {
+        const msgs = [...messages].filter(msg => {
             const elapsedTime = Date.now() - msg[1];
             return elapsedTime < 10*1000;
         });
-        setMessages(updatedMessages);
+        setMessages(msgs);
     }, 1000*1);
 
     useEffect(() => {
-        if (!apps.loading && !apps.loaded)
+        if (!appController.loading && !appController.loaded)
             return;
 
-        const numberPages = Math.ceil(apps.allCount/filter.PageSize);
-        const currentPage = Math.min(apps.currentPage, numberPages);
+        const numberPages = Math.ceil(appController.allCount/filter.PageSize);
+        const currentPage = Math.min(appController.currentPage, numberPages);
 
         const offset = (currentPage - 1) * filter.PageSize;
-        const currentApps = apps.all.slice(offset, offset + filter.PageSize);
+        const currentApps = appController.all.slice(offset, offset + filter.PageSize);
 
         const currentAppIDs = currentApps.map(app => app.AppointmentID);
-        const checked = apps.checked.filter(appID => currentAppIDs.includes(appID));
+        const checked = appController.checked.filter(appID => currentAppIDs.includes(appID));
 
-        setApps({
-            ...apps,
+        setAppController({
+            ...appController,
             current: currentApps,
             currentPage: currentPage,
             checked: checked,
             loading: false,
             loaded: true
         });
-    }, [apps.all, apps.currentPage]);
+    }, [appController.all, appController.currentPage]);
 
-    const loadApps = async (filter: Filter) => {
-        const SessionID = await getSessionID();
-
-        const loadedApps = await GetAllAppointments({SessionID, ...filter});
+    const loadApps = async (filter: FilterStructure) => {
+        const loadedApps = await GetAllAppointments({
+            SessionID: await getSessionID(), 
+            ...filter
+        });
         if (!loadedApps)
             throw 'Apps Error';
-
-        const unsortedLabels = await GetEmployeeLabels({SessionID});
-        if (!unsortedLabels)
-            throw 'Labels Error';
-
-        const allLabels: {[appID: string]: {[label: string]: number}} = {};
-        for (const label of unsortedLabels) {
-            if (!allLabels[label.AppointmentID])
-                allLabels[label.AppointmentID] = {};
-            allLabels[label.AppointmentID][label.Label] = label.Value;
-        }
         
-        setApps({
-            ...apps,
+        setAppController({
+            ...appController,
             all: loadedApps.all,
-            allLabels: allLabels,
+            allLabels: loadedApps.labels,
             allCount: loadedApps.count,
             current: [],
-            currentPage: apps && apps.currentPage || 1,
+            currentPage: appController.currentPage,
             checked: [],
             loading: true,
             loaded: false
@@ -136,10 +128,10 @@ export default function Dashboard() {
             }
         }
 
-        setApps({
-            ...apps,
-            all: apps.all.filter(({AppointmentID}) => !deletedApps.includes(AppointmentID)),
-            allCount: apps.allCount - deletedApps.length,
+        setAppController({
+            ...appController,
+            all: appController.all.filter(({AppointmentID}) => !deletedApps.includes(AppointmentID)),
+            allCount: appController.allCount - deletedApps.length,
             loading: true,
             loaded: false
         });
@@ -188,21 +180,21 @@ export default function Dashboard() {
         <div>
             {confirmation && confirmation}
             {messages.map((msg, i) => <div key={i}>{msg[0]}</div>)}
-            {meta.loaded && 
+            {values.loaded && 
                 <>
                     <div>
-                        <h1>Hello {meta.employee && meta.employee.FName}</h1>
+                        <h1>Hello {values.employee && values.employee.FName}</h1>
                     </div>
                     <div>
                         <span onClick={async () => await loadApps(filter)}>Reload</span>
-                        <span onClick={async () => await deleteHandler(apps.checked)}>Delete</span>
+                        <span onClick={async () => await deleteHandler(appController.checked)}>Delete</span>
                     </div>
                     <Search
                         onChange={(value) => setFilter({...filter, 'Search': value})}
                         onSearch={async () => await loadApps(filter)}
                     />
                     <Tabs
-                        statuses={meta.statuses}
+                        statuses={values.statuses}
                         updateFilter={async (_filter) => {
                             const updatedFilter = {...filter, ..._filter};
                             setFilter(updatedFilter);
@@ -211,10 +203,10 @@ export default function Dashboard() {
                     />
                 </>
             }
-            {!apps.loaded &&
+            {!appController.loaded &&
                 'Loading Apps...'
             }
-            {apps.loaded &&
+            {appController.loaded &&
                 <div>
                     <table>
                         <Head
@@ -223,39 +215,39 @@ export default function Dashboard() {
                                 setFilter(filter);
                                 await loadApps(filter);
                             }}
-                            checked={apps.checked}
-                            current={apps.current}
-                            setChecked={(checked) => setApps({...apps, checked})}
+                            checked={appController.checked}
+                            current={appController.current}
+                            setChecked={(checked) => setAppController({...appController, checked})}
                         />
                         <Body
                             search={filter.Search}
-                            setOpen={(app) => setApps({...apps, open: app})}
-                            current={apps.current}
+                            setOpen={(app) => setAppController({...appController, open: app})}
+                            current={appController.current}
                             deleteHandler={deleteHandler}
-                            checked={apps.checked}
-                            setChecked={(checked) => setApps({...apps, checked})}
-                            metaLabel={meta.labels}
-                            allLabels={apps.allLabels}
-                            setLabels={(labels) => setApps({...apps, allLabels: labels})}
+                            checked={appController.checked}
+                            setChecked={(checked) => setAppController({...appController, checked})}
+                            labelMeta={values.labels}
+                            allLabels={appController.allLabels}
+                            setLabels={(labels) => setAppController({...appController, allLabels: labels})}
                         />
                     </table>
-                    {!apps.allCount && 'No Appointments Found'}
-                    {apps.allCount &&
+                    {!appController.allCount && 'No Appointments Found'}
+                    {appController.allCount &&
                         <Navigation
-                            currentPageIndex={apps.currentPage}
-                            currentPageLength={apps.current.length}
+                            currentPageIndex={appController.currentPage}
+                            currentPageLength={appController.current.length}
                             pageSize={filter.PageSize}
-                            allCount={apps.allCount}
-                            goForward={() => setApps({...apps, currentPage: Math.min(apps.currentPage + 1, Math.ceil(apps.allCount/filter.PageSize))})}
-                            goBackward={() => setApps({...apps, currentPage: Math.max(1, apps.currentPage - 1)})}
+                            allCount={appController.allCount}
+                            goForward={() => setAppController({...appController, currentPage: Math.min(appController.currentPage + 1, Math.ceil(appController.allCount/filter.PageSize))})}
+                            goBackward={() => setAppController({...appController, currentPage: Math.max(1, appController.currentPage - 1)})}
                         />
                     }
                 </div>
             }
-            {!!apps.open &&
+            {!!appController.open &&
                 <Overview
-                    app={apps.open}
-                    close={() => setApps({...apps, open: null})}
+                    app={appController.open}
+                    close={() => setAppController({...appController, open: null})}
                 />
             }
         </div>
