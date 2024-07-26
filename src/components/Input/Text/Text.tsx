@@ -1,14 +1,18 @@
 "use client";
 import { Input, WriteInputProps } from "../Input";
 
-export default function Text(props: WriteInputProps) {
+interface TextProps extends WriteInputProps {
+    type?: string;
+}
+
+export default function Text(props: TextProps) {
     return (
         <Input
             label={props.label}
             input={
                 <input
                     name={props.name}
-                    type="text"
+                    type={props.type || "text"}
                     value={props.value || ""}
                     onBlur={() => {
                         props.onBlur && props.onBlur();

@@ -9,10 +9,11 @@ interface GetServicesData {
 }
 
 export type Service = {
+    AppointmentServiceID: number;
     ServiceID: number;
     AppointmentID: string;
-    Type: string;
-    GroupName: string;
+    Class: string;
+    Division: string;
     Service: string;
 }
 

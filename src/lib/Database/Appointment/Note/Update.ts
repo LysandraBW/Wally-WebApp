@@ -9,7 +9,6 @@ interface UpdateNoteData {
     NoteID: number;
     Head: string;
     Body: string;
-    Attachment: string;
     ShowCustomer: number;
 }
 
@@ -28,7 +27,6 @@ export default async function UpdateNote(
             .input('NoteID', sql.Int, data.NoteID)
             .input('Head', sql.Int, data.Head)
             .input('Body', sql.Int, data.Body)
-            .input('Attachment', sql.Int, data.Attachment)
             .input('ShowCustomer', sql.Int, data.ShowCustomer)
             .execute('Appointment.UpdateNote');
 

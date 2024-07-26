@@ -25,7 +25,7 @@ export default function Search(props: SearchProps<any>) {
                 return label;
             }
         }
-        
+    
         return props.defaultLabel;
     }
 

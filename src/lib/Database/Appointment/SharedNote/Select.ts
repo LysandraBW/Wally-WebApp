@@ -8,7 +8,7 @@ interface GetNoteShareesData {
     NoteID: number;
 }
 
-type NoteSharee = {
+export interface NoteSharee {
     ShareeFName: string;
     ShareeLName: string;
     ShareeID: number;
@@ -17,7 +17,7 @@ type NoteSharee = {
 export default async function GetNoteSharees(
     data: GetNoteShareesData, 
     user: User = User.Employee
-): Promise<Array<NoteSharee> | null> {
+): Promise<Array<NoteSharee>> {
     try {
         const pool = await fetchPool(user, data);
         if (!pool)
@@ -32,6 +32,6 @@ export default async function GetNoteSharees(
     }
     catch (err) {
         console.error(err);
-        return null;
+        return [];
     }
 }

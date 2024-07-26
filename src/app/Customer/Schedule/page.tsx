@@ -10,6 +10,7 @@ import ContactForm from "@/views/Customer/Schedule/Contact";
 import VehicleForm from "@/views/Customer/Schedule/Vehicle";
 import Success from "@/views/Customer/Schedule/Success";
 import Error from "@/views/Customer/Schedule/Error";
+import NoteForm from "@/views/Employee/Dashboard/Update/NoteForm/NoteForm";
 
 export default function Schedule() {
     const [form, setForm] = useState<FormStructure>(Form);

@@ -8,7 +8,7 @@ import { Repair } from "./Repair/Select";
 import { Payment } from "./Payment/Select";
 import { Label } from "../Info/Info";
 import { Part } from "./Part/Select";
-import { Note } from "./Note/Select";
+import { Attachment, Note } from "./Note/Select";
 
 interface GetData {
     SessionID: string;
@@ -41,7 +41,12 @@ export type Appointment  = {
     Parts:          Array<Part>
     Payments:       Array<Payment>
     Labels:         Array<Label>;
-    Notes:          Array<Note>;
+    Notes:          Array<Note&{
+                        OwnerFName: string;
+                        OwnerLName: string;
+                        OwnerID: string;
+                    }>;
+    Attachments:    Array<Attachment>
 }
 
 export async function Get(
@@ -68,7 +73,8 @@ export async function Get(
             Parts:      recordsets[4],
             Payments:   recordsets[5],
             Labels:     recordsets[6],
-            Notes:      recordsets[7]
+            Notes:      recordsets[7],
+            Attachments: recordsets[8]
         }
     }
     catch (err) {

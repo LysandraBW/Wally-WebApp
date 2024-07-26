@@ -5,9 +5,9 @@ interface TabbedProps {
     parts: Array<{
         part: React.ReactNode;
         partHeader: string;
+        onSave: () => any;
+        onReset: () => any;
     }>;
-    save: (part: number) => any;
-    reset: (part: number) => any;
 }
 
 export default function Tabbed(props: TabbedProps) {
@@ -34,11 +34,11 @@ export default function Tabbed(props: TabbedProps) {
             {/* Button */}
             <Button
                 label={`Save ${props.parts[part].partHeader}`}
-                onClick={() => props.save(part)}
+                onClick={() => props.parts[part].onSave()}
             />
             <Button
                 label="Reset"
-                onClick={() => props.reset(part)}
+                onClick={() => props.parts[part].onReset()}
             />
         </>
     )

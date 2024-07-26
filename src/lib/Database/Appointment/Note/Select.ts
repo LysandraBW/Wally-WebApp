@@ -13,13 +13,19 @@ interface GetCustomerNotesData {
     AppointmentID: string;
 }
 
+export interface Attachment {
+    URL: string;
+    Name: string;
+    NoteID: number;
+    AttachmentID: number;
+}
+
 export interface Note {
     NoteID: number;
     EmployeeID: number;
     AppointmentID: string;
     Head: string;
     Body: string;
-    Attachment: string;
     ShowCustomer: number;
     CreationDate: string;
     UpdationDate: string;
@@ -28,7 +34,11 @@ export interface Note {
 export async function GetEmployeeNotes(
     data: GetEmployeeNotesData, 
     user: User = User.Employee
-): Promise<Array<Note> | null> {
+): Promise<Array<Note&{
+    OwnerFName: string;
+    OwnerLName: string;
+    OwnerID: string;
+}> | null> {
     try {
         const pool = await fetchPool(user, data);
         if (!pool)
@@ -39,7 +49,12 @@ export async function GetEmployeeNotes(
             .input('AppointmentID', sql.UniqueIdentifier, data.AppointmentID)
             .execute('Appointment.GetEmployeeNotes');
 
-        return output.recordset;   
+        const recordsets = <sql.IRecordSet<any>> output.recordsets;
+
+        return {
+            ...recordsets[0][0],
+            Attachments: recordsets[1]
+        };   
     }
     catch (err) {
         console.error(err);
@@ -61,7 +76,12 @@ export async function GetCustomerNotes(
             .input('AppointmentID', sql.UniqueIdentifier, data.AppointmentID)
             .execute('Appointment.GetCustomerNotes');
 
-        return output.recordset;   
+        const recordsets = <sql.IRecordSet<any>> output.recordsets;
+
+        return {
+            ...recordsets[0][0],
+            Attachments: recordsets[1]
+        };      
     }
     catch (err) {
         console.error(err);

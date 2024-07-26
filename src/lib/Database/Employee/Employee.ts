@@ -33,13 +33,13 @@ export async function Get(data: GetData, user: User = User.Employee): Promise<Em
     }
 }
 
-type GetAllReturnType = {
-    SessionID: string;
+export type GetAllReturnType = {
+    EmployeeID: number;
     FName: string;
     LName: string;
 }
 
-export async function GetAll(data: GetData, user = User.Employee): Promise<Array<GetAllReturnType> | null> {
+export async function GetAll(data: GetData, user = User.Employee): Promise<Array<GetAllReturnType>> {
     try {
         const pool = await fetchPool(user, data);
         if (!pool)
@@ -53,6 +53,6 @@ export async function GetAll(data: GetData, user = User.Employee): Promise<Array
     }
     catch (err) {
         console.error(err);
-        return null;
+        return [];
     }
 }

@@ -10,6 +10,7 @@ export interface DropdownFrameProps<T> extends WriteInputProps {
     disabled?: boolean;
     defaultLabel: string;
     getToggle: () => React.ReactNode;
+    lenient?: boolean;
 }
 
 export function DropdownFrame(props: DropdownFrameProps<any>) {
