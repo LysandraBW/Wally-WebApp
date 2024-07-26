@@ -23,7 +23,7 @@ export default function PaymentLine(props: PaymentLineProps) {
             {edit && 
                 <Multiple
                     onBlur={() => {
-                        setEdit(false)
+                        setEdit(false);
                         props.onUpdate(values);
                     }}
                     children={(

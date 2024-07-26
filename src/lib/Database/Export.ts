@@ -9,7 +9,6 @@ export {default as DeleteRepair} from "./Appointment/Repair/Delete";
 export {default as GetRepairs} from "./Appointment/Repair/Select";
 export {default as UpdateLabel} from "./Appointment/Label/Update";
 export {default as UpdateNote} from "./Appointment/Note/Update";
-export {default as InsertNote} from "./Appointment/Note/Insert";
 export {default as DeleteNote} from "./Appointment/Note/Delete";
 export {default as UpdatePart} from "./Appointment/Part/Update";
 export {default as InsertPart} from "./Appointment/Part/Insert";
@@ -28,10 +27,7 @@ export {default as UpdateStatus} from "./Appointment/Status/Update";
 export {default as UpdateVehicle} from "./Appointment/Vehicle/Update";
 export {default as InsertAppointment} from "./Appointment/Insert";
 export {default as UpdateCustomer} from "./Customer/Update";
-export {default as UpdateEvent} from "./Employee/Event/Update";
-export {default as InsertEvent} from "./Employee/Event/Insert";
 export {default as DeleteEvent} from "./Employee/Event/Delete";
-export {default as GetEvents} from "./Employee/Event/Select";
 export {default as GetEventSharees} from "./Employee/SharedEvent/Select";
 export {default as InsertEventSharee} from "./Employee/SharedEvent/Insert";
 export {default as DeleteEventSharees} from "./Employee/SharedEvent/Delete";
@@ -88,3 +84,24 @@ export {
     GetLabels,
     GetAllLabels as GetEmployeeLabels
 } from "./Appointment/Label/Select"
+
+export { 
+    InsertNote,
+    InsertNoteAttachment
+} from "./Appointment/Note/Insert";
+
+export { 
+    DeleteNoteAttachment
+} from "./Appointment/Note/Delete";
+
+export { 
+    UpdateEvent 
+} from "./Employee/Event/Update";
+
+export { 
+    InsertEvent 
+} from "./Employee/Event/Insert";
+
+export { 
+    GetEvents 
+} from "./Employee/Event/Select";

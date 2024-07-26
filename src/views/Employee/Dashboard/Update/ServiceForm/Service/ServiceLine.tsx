@@ -20,7 +20,7 @@ export default function ServiceLine(props: ServiceLineProps) {
             {edit && 
                 <Multiple
                     onBlur={() => {
-                        setEdit(false)
+                        setEdit(false);
                         props.onUpdate(values);
                     }}
                     children={(
