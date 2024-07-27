@@ -1,6 +1,6 @@
 import React from "react";
 import { DB_AppointmentOverview, DB_EmployeeLabel, DB_Label } from "@/lib/Database/Types";
-import { getLabel } from "@/lib/Database/Appointment/Label/Select";
+import { getLabel } from "@/lib/Database/Appointment/Label/Helper";
 
 interface AppointmentProps {
     app: DB_AppointmentOverview;
@@ -13,7 +13,7 @@ interface AppointmentProps {
     deleteAppointment: (appIDs: Array<string>) => void;
 }
 
-export default async function Appointment(props: AppointmentProps) {
+export default function Appointment(props: AppointmentProps) {
     const labelHandler = async (labelName: string) => {
         props.updateLabel(props.app.AppointmentID, labelName);
     }
@@ -33,14 +33,14 @@ export default async function Appointment(props: AppointmentProps) {
                 <input 
                     type='checkbox'
                     onChange={() => labelHandler('Star')}
-                    checked={!!(await getLabel(props.labels, 'Star'))}
+                    checked={!!getLabel(props.labels, 'Star')}
                 />
             </td>
             <td>
                 <input 
                     type='checkbox'
                     onChange={() => labelHandler('Flag')}
-                    checked={!!(await getLabel(props.labels, 'Flag'))}
+                    checked={!!getLabel(props.labels, 'Flag')}
                 />
             </td>
             <td>{props.highlight(props.app.FName)}</td>

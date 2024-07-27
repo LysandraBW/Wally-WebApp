@@ -1,11 +1,11 @@
 import { useState } from "react";
-import PaymentLine from "./PaymentLine";
-import PaymentInput from "./PaymentInput";
+import CostLine from "./PaymentLine";
+import CostInput from "./PaymentInput";
 import {Text} from "@/components/Input/Export";
 import { DB_Payment } from "@/lib/Database/Types";
 import { Parts } from "@/process/Employee/Update/Form";
 
-interface PaymentFormProps {
+interface CostFormProps {
     form: {
         Cost: string;
         Payments: {[paymentID: string]: DB_Payment};
@@ -13,7 +13,7 @@ interface PaymentFormProps {
     changeHandler: (part: Parts, name: string, value: any) => void;
 }
 
-export default function PaymentForm(props: PaymentFormProps) {
+export default function CostForm(props: CostFormProps) {
     const [counter, setCounter] = useState<number>(1);
 
     return (
@@ -28,7 +28,7 @@ export default function PaymentForm(props: PaymentFormProps) {
                 Current Parts
                 {Object.entries(props.form.Payments).map(([paymentID, payment], i) => (
                     <div key={i}>
-                        <PaymentLine
+                        <CostLine
                             payment={payment}
                             onDelete={() => {
                                 let modValue = props.form.Payments;
@@ -46,7 +46,7 @@ export default function PaymentForm(props: PaymentFormProps) {
             </div>
             <div>
                 Type in a Part Here
-                <PaymentInput
+                <CostInput
                     onChange={(name, value) => {
                         console.log('Stored Payments', props.form.Payments);
                         props.changeHandler('Cost', 'Payments', {...props.form.Payments, [`${-counter}`]: value});

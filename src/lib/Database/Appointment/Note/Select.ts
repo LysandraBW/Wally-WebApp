@@ -15,7 +15,7 @@ export async function sortNoteAttachments(notes: Array<DB_Note>, attachments: Ar
     }
 
     for (let i = 0; i < notes.length; i++) {
-        notes[i].Attachments = sortedAttachments[notes[i].NoteID];
+        notes[i].Attachments = sortedAttachments[notes[i].NoteID] || [];
     }
 }
 
@@ -34,10 +34,10 @@ export async function GetEmployeeNotes(
             .execute('Appointment.GetEmployeeNotes');
 
         const recordsets = <sql.IRecordSet<any>> output.recordsets;
-
+        
         const notes: Array<DB_EmployeeNote> = recordsets[0];
         const attachments: Array<DB_Attachment> = recordsets[1];
-        sortNoteAttachments(notes, attachments);
+        await sortNoteAttachments(notes, attachments);
     
         return notes;   
     }

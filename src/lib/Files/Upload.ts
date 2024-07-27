@@ -2,10 +2,14 @@
 import aws from "aws-sdk";
 import crypto from 'crypto';
 
+// Thanks to Sam Meech-Ward
+// https://www.youtube.com/watch?v=yGYeYJpRWPM&list=LL&index=1
+
 const region = process.env.REGION || '';
 const bucketName = process.env.BKT || '';
 const accessKeyId = process.env.AK || '';
 const secretAccessKey = process.env.SAK || '';
+const {}
 
 const s3 = new aws.S3({
     region,
@@ -14,7 +18,7 @@ const s3 = new aws.S3({
     signatureVersion: 'v4'
 });
 
-export async function uploadFile(file: File): Promise<string> {
+export async function generateURL(): Promise<string> {
     const rawBytes = crypto.randomBytes(16);
     const imageName = rawBytes.toString('hex');
 
@@ -24,15 +28,30 @@ export async function uploadFile(file: File): Promise<string> {
         Expires: 60
     });
 
-    const URL = await s3.getSignedUrlPromise('putObject', parameters);
-    
-    await fetch(URL, {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'multipart/form-data'
-        },
-        body: file
-    });
+    try {
+        const URL = await s3.getSignedUrlPromise('putObject', parameters);
+        return URL;
+    }
+    catch (err) {
+        console.error(err);
+        return '';
+    }
+}
+
+export async function uploadFile(URL: string, file: File): Promise<string> {
+    try {
+        await fetch(URL, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            },
+            body: file
+        });
+    }
+    catch (err) {
+        console.error(err);
+        return '';
+    }
 
     const imageURL = URL.split('?')[0];
     return imageURL;

@@ -62,7 +62,7 @@ export interface DB_EventSharee {
 export interface DB_Payment {
     AppointmentID:  string;
     PaymentID:      number;
-    Payment:        string;
+    Payment:        number;
     PaymentDate:    Date;
     Name:           string;
     Type:           string;
@@ -92,7 +92,7 @@ export interface DB_Diagnosis {
 export interface DB_NoteSharee {
     ShareeFName:    string;
     ShareeLName:    string;
-    ShareeID:       number;
+    ShareeID:       string;
 }
 
 export interface DB_Attachment {

@@ -2,13 +2,13 @@ import { Multiple } from "@/components/Input/Export";
 import { DB_Payment } from "@/lib/Database/Types";
 import { useState } from "react";
 
-interface PaymentLineProps {
+interface CostLineProps {
     payment: DB_Payment
     onDelete: () => any;
     onUpdate: (payment: DB_Payment) => any;   
 }
 
-export default function PaymentLine(props: PaymentLineProps) {
+export default function CostLine(props: CostLineProps) {
     const initialPayment = props.payment.Payment;
     const initialName = props.payment.Name;
     const initialType = props.payment.Type;

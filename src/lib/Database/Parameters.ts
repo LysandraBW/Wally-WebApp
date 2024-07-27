@@ -11,24 +11,24 @@ export interface SessionAppParameters {
 export interface UpdateVehicleParameters {
     SessionID: string;
     AppointmentID: string;
-    Make: string;
-    Model: string;
-    ModelYear: number;
-    VIN: string;
-    Mileage: number;
-    LicensePlate: string;
+    Make: string | null;
+    Model: string | null;
+    ModelYear: number | null;
+    VIN: string | null;
+    Mileage: number | null;
+    LicensePlate: string | null;
 }
 
 export interface UpdateStatusParameters {
     SessionID: string;
     AppointmentID: string;
-    StatusID: number;
+    StatusID: number | null;
 }
 
 export interface MutateNoteShareeParameters {
     SessionID: string;
     NoteID: number;
-    NoteShareeID: number;
+    NoteShareeID: string;
 }
 
 export interface GetNoteShareesParameters {
@@ -40,9 +40,9 @@ export interface UpdateServiceParameters {
     SessionID: string;
     AppointmentID: string;
     ServiceID: number;
-    Service: string;
-    Division: string;
-    Class: string;
+    Service: string | null;
+    Division: string | null;
+    Class: string | null;
 }
 
 export interface DeleteRepairParameters {
@@ -54,14 +54,14 @@ export interface DeleteRepairParameters {
 export interface InsertRepairParameters {
     SessionID: string;
     AppointmentID: string;
-    Repair: number;
+    Repair: string;
 }
 
 export interface UpdateRepairParameters {
     SessionID: string;
     AppointmentID: string;
     RepairID: number;
-    Repair: string;
+    Repair: string | null;
 }
 
 export interface DeletePaymentParameters {
@@ -73,7 +73,7 @@ export interface DeletePaymentParameters {
 export interface InsertPaymentParameters {
     SessionID: string;
     AppointmentID: string;
-    Payment: string;
+    Payment: number;
 }
 
 export interface InsertCreditCardParameters {
@@ -82,14 +82,14 @@ export interface InsertCreditCardParameters {
     PaymentID: number;
     Name: string;
     Type: string;
-    CNN: string;
+    CCN: string;
     EXP: string;
 }
 
 export interface UpdateCostParameters {
     SessionID: string;
     AppointmentID: string;
-    Cost: string;
+    Cost: number | null;
 }
 
 export interface DeletePartParameters {
@@ -104,23 +104,29 @@ export interface InsertPartParameters {
     PartName: string;
     PartNumber: string;
     Quantity: number;
-    UnitCost: string;
+    UnitCost: number;
 }
 
 export interface UpdatePartParameters {
     SessionID: string;
     AppointmentID: string;
     PartID: number;
-    PartName: string;
-    PartNumber: string;
-    Quantity: number;
-    UnitCost: string;
+    PartName: string | null;
+    PartNumber: string | null;
+    Quantity: number | null;
+    UnitCost: number | null;
 }
 
 export interface DeleteNoteParameters {
     SessionID: string;
     AppointmentID: string;
     NoteID: number;
+}
+
+export interface DeleteNoteAttachmentData {
+    SessionID: string;
+    NoteID: number;
+    AttachmentID: number;
 }
 
 export interface InsertNoteParameters {
@@ -141,9 +147,9 @@ export interface UpdateNoteParameters {
     SessionID: string;
     AppointmentID: string;
     NoteID: number;
-    Head: string;
-    Body: string;
-    ShowCustomer: number;
+    Head: string | null;
+    Body: string | null;
+    ShowCustomer: number | null;
 }
 
 export interface GetAllLabelsParameters {
@@ -173,15 +179,15 @@ export interface UpdateDiagnosisParameters {
     SessionID: string;
     AppointmentID: string;
     DiagnosisID: number;
-    Code: string;
-    Message: string;
+    Code: string | null;
+    Message: string | null;
 }
 
 export interface UpdateDateParameters {
     SessionID: string;
     AppointmentID: string;
-    StartDate: string;
-    EndDate: string;
+    StartDate: string | null;
+    EndDate: string | null;
 }
 
 export interface InsertAppointmentParameters {
@@ -224,10 +230,10 @@ export interface AuthenticateLookupParameters {
 export interface UpdateCustomerParameters {
     SessionID: string;
     AppointmentID: string;
-    FName: string;
-    LName: string;
-    Email: string;
-    Phone: string;
+    FName: string | null;
+    LName: string | null;
+    Email: string | null;
+    Phone: string | null;
 }
 
 export interface MutateEventShareeParameters {

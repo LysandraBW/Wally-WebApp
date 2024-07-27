@@ -35,6 +35,6 @@ export interface FilterStructure {
 }
 
 export const Filter: FilterStructure = {
-    PageNumber: 0,
-    PageSize: 0
+    PageNumber: 1,
+    PageSize: 5
 }

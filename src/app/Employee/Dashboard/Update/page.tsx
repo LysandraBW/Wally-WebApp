@@ -1,31 +1,51 @@
 'use client';
 import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
-import { GetAppointment } from "@/lib/Database/Export";
+import { GetAllEmployees, GetAppointment, GetEmployee } from "@/lib/Database/Export";
 import Tabbed from "@/components/Form/Tabbed/Tabbed";
 import General from "@/views/Employee/Dashboard/Update/GeneralForm";
 import Vehicle from "@/views/Employee/Dashboard/Update/VehicleForm";
 import Service from "@/views/Employee/Dashboard/Update/ServiceForm/ServiceForm";
 import Payment from "@/views/Employee/Dashboard/Update/PaymentForm/PaymentForm";
 import NoteForm from "@/views/Employee/Dashboard/Update/NoteForm/NoteForm";
-import { Controller, ControllerStructure, Handler, HandlerStructure, Parts } from "@/process/Employee/Update/Form";
+import { ControllerStructure, Handler, HandlerStructure, Parts } from "@/process/Employee/Update/Form";
+import { Controller } from "@/process/Employee/Update/Helper";
 import { getSessionID } from "@/lib/Cookies/Cookies";
+import { goTo } from "@/lib/Navigation/Redirect";
+import { DB_Employee, DB_GeneralEmployee } from "@/lib/Database/Types";
 
 let ran = false;
 
 export default function Update() {
     const searchParams = useSearchParams();
+    const [employee, setEmployee] = useState<DB_Employee>();
+    const [employees, setEmployees] = useState<Array<DB_GeneralEmployee>>([]);
     const [handler, setHandler] = useState<HandlerStructure>(Handler);
     const [controller, setController] = useState<ControllerStructure>();
     
     useEffect(() => {
+        const load = async () => {
+            const SessionID = await getSessionID();
+            if (!SessionID) {
+                goTo('/Employee/Login');
+                return;
+            }
+
+            const employee = await GetEmployee({SessionID});
+            const employees = await GetAllEmployees({SessionID});
+            if (employee && employees.length >= 1) {
+                setEmployee(employee);
+                setEmployees(employees);
+            }
+
+            const appID = searchParams.get('AppID');
+            if (appID)
+                setHandler({...handler, appID, loading: true});
+        }
         if (ran)
             return;
+        load();
         ran = true;
-   
-        const sAppID = searchParams.get('AppID');
-        if (sAppID)
-            setHandler({...handler, appID: sAppID, loading: true});
     }, []);
 
     useEffect(() => {
@@ -59,7 +79,7 @@ export default function Update() {
     }, [controller]);
 
     useEffect(() => {
-        controller && controller.cur && console.log(controller.cur);
+        controller && controller.cur && console.log(controller);
     }, [controller?.cur]);
 
     const changeHandler = (part: Parts, name: string, value: any) => {
@@ -156,14 +176,16 @@ export default function Update() {
                             }
                         ]}
                     />
-                    <NoteForm
-                        form={{
-                            ...controller.cur.Notes,
-                            EmployeeID: '',
-                            Employees: []
-                        }}
-                        changeHandler={changeHandler}
-                    />
+                    {controller && controller.cur && controller.cur.Notes && (
+                        <NoteForm
+                            form={{
+                                Notes: controller.cur.Notes.Notes,
+                                EmployeeID: employee && employee.EmployeeID || '',
+                                Employees: employees
+                            }}
+                            changeHandler={changeHandler}
+                        />
+                    )}
                 </div>
             }
         </div>

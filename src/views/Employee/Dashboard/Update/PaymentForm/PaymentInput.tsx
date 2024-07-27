@@ -2,11 +2,11 @@ import { useState } from "react";
 import { Text } from "@/components/Input/Export";
 import { DB_Payment } from "@/lib/Database/Types";
 
-interface PaymentInputProps {
+interface CostInputProps {
     onChange: (name: string, value: any) => any;
 }
 
-export default function PaymentInput(props: PaymentInputProps) {
+export default function CostInput(props: CostInputProps) {
     const [values, setValues] = useState<DB_Payment>({
         AppointmentID: '',
         PaymentID: 0,

@@ -4,48 +4,7 @@ import { fetchPool } from "../../Pool";
 import { User } from "../../User";
 import { DB_EmployeeLabel, DB_AppointmentLabel, DB_EmployeeLabels } from "../../Types";
 import { GetAllLabelsParameters, SessionAppParameters } from "../../Parameters";
-
-export async function sortLabels(labels: Array<DB_EmployeeLabel>)
-: Promise<DB_EmployeeLabels> {
-    const sortedLabels: DB_EmployeeLabels = {};
-    for (const label of labels) {
-        if (!sortedLabels[label.AppointmentID])
-            sortedLabels[label.AppointmentID] = [];
-        sortedLabels[label.AppointmentID].push(label);
-    }
-    return sortedLabels; 
-}
-
-export async function updateLabels(
-    labels: DB_EmployeeLabels, 
-    appointmentID: string, 
-    labelID: number
-): Promise<DB_EmployeeLabels> {
-    for (const label of labels[`${appointmentID}`]) {
-        if (label.AppointmentID === appointmentID && label.LabelID === labelID) {
-            label.Value = 1 - label.Value;
-            return labels;
-        }
-    }
-    labels[`${appointmentID}`].push({
-        AppointmentID: appointmentID,
-        LabelID: labelID,
-        Label: '',
-        Value: 1
-    });
-    return labels;
-}
-
-export async function getLabel(
-    labels: Array<DB_EmployeeLabel>,
-    labelName: string
-): Promise<number> {
-    for (const label of labels) {
-        if (label.Label === labelName)
-            return label.Value
-    }
-    return 0;
-}
+import { sortLabels } from "./Helper";
 
 export async function GetLabels(
     data: SessionAppParameters, 

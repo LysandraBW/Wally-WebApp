@@ -15,7 +15,6 @@ import Body from "@/views/Employee/Dashboard/Dashboard/Body";
 import Overview from "@/views/Employee/Dashboard/Dashboard/Overview";
 import { formatLabels, LoadedValues, Values } from "@/process/Employee/Dashboard/Load";
 import { AppController, AppControllerStructure, Filter, FilterStructure } from "@/process/Employee/Dashboard/Form";
-import { DB_Employee, DB_Label } from "@/lib/Database/Types";
 
 let ran = false;
 
@@ -107,7 +106,7 @@ export default function Dashboard() {
             allLabels: loadedApps.labels,
             allCount: loadedApps.count,
             current: [],
-            currentPage: appController.currentPage,
+            currentPage: 1,
             checked: [],
             loading: true,
             loaded: false

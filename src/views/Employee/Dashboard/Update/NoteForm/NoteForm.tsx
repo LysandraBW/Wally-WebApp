@@ -1,6 +1,6 @@
 import NoteLine from "./NoteLine";
 import NoteInput from "./NoteInput";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Parts, UpdateNote } from "@/process/Employee/Update/Form";
 import { DB_GeneralEmployee } from "@/lib/Database/Types";
 

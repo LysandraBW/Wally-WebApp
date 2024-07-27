@@ -2,7 +2,7 @@ import Appointment from "./Appointment";
 import { UpdateLabel } from "@/lib/Database/Export";
 import { getSessionID } from "@/lib/Cookies/Cookies";
 import { DB_AppointmentOverview, DB_EmployeeLabels, DB_Label } from "@/lib/Database/Types";
-import { updateLabels } from "@/lib/Database/Appointment/Label/Select";
+import { updateLabels } from "@/lib/Database/Appointment/Label/Helper";
 
 interface BodyProps {
     search: string;

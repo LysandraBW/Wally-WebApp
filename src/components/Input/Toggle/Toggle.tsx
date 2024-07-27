@@ -7,12 +7,9 @@ interface ToggleProps extends WriteInputProps {
 
 export default function Toggle(props: ToggleProps) {
     return (
-        <span
-            onClick={() => {
-                props.onChange && props.onChange(props.name, 1 - props.value);
-            }}
-        >
-            {props.value ? 'Y' : 'N'}
-        </span>
+        <div onClick={() => props.onChange && props.onChange(props.name, 1 - props.value)}>
+            <label>{props.label}</label>
+            <span>{props.value ? 'Y' : 'N'}</span>
+        </div>
     )
 }

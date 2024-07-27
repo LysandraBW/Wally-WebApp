@@ -2,7 +2,7 @@
 import sql from "mssql";
 import { fetchPool } from "../../Pool";
 import { User } from "../../User";
-import { DeleteNoteParameters } from "../../Parameters";
+import { DeleteNoteAttachmentData, DeleteNoteParameters } from "../../Parameters";
 
 export default async function DeleteNote(
     data: DeleteNoteParameters, 
@@ -25,12 +25,6 @@ export default async function DeleteNote(
         console.error(err);
         return false;
     }
-}
-
-interface DeleteNoteAttachmentData {
-    SessionID: string;
-    NoteID: number;
-    AttachmentID: number
 }
 
 export async function DeleteNoteAttachment (

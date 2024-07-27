@@ -1,8 +1,6 @@
-import { useEffect, useState } from "react";
-import { File, Text, TextArea, Toggle } from "@/components/Input/Export";
-import { GetAllEmployees } from "@/lib/Database/Export";
+import { useState } from "react";
+import { File, TextArea, Toggle } from "@/components/Input/Export";
 import { UpdateNote } from "@/process/Employee/Update/Form";
-import { getSessionID } from "@/lib/Cookies/Cookies";
 import { DB_GeneralEmployee } from "@/lib/Database/Types";
 import { toggleValue } from "@/components/Input/Checkbox/Checkbox";
 
@@ -45,6 +43,7 @@ export default function NoteInput(props: NoteInputProps) {
             <File
                 name={'Files'}
                 label={'Upload Files'}
+                multiple={true}
                 onChange={(name, value) => {
                     const files: Array<File> = Array.from(value);
                     setValues({...values, [`${name}`]: files})
@@ -57,18 +56,20 @@ export default function NoteInput(props: NoteInputProps) {
                 onChange={(name, value) => setValues({...values, [`${name}`]: value})}
             />
             <div>
-                {props.employees.map(employee => {
+                {props.employees.map((employee, i) => {
                     if (employee.EmployeeID === props.employeeID)
-                        return <></>;
+                        return <div key={i}></div>;
                     return (
-                        <Toggle
-                            name='Sharees'
-                            label={`Add ${employee.FName} ${employee.LName}`}
-                            value={values.Sharees.includes(employee.EmployeeID) ? 1 : 0}
-                            onChange={(name, value) => {
-                                setValues({...values, Sharees: toggleValue(values.Sharees, employee.EmployeeID)});
-                            }}
-                        />
+                        <div key={i}>
+                            <Toggle
+                                name='Sharees'
+                                label={`Add ${employee.FName} ${employee.LName}`}
+                                value={values.Sharees.includes(employee.EmployeeID) ? 1 : 0}
+                                onChange={(name, value) => {
+                                    setValues({...values, Sharees: toggleValue(values.Sharees, employee.EmployeeID)});
+                                }}
+                            />
+                        </div>
                     )
                 })}
             </div>

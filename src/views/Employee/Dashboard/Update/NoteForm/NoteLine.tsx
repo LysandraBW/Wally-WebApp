@@ -53,7 +53,7 @@ export default function NoteLine(props: NoteLineProps) {
                             ))}
                             {values.Files.map((file, i) => (
                                 <div key={i}>
-                                    {file.name}.{file.type} <span onClick={() => setValues({...values, Files: values.Files.filter(_file => file !== _file)})}>x</span>
+                                    {file.name} <span onClick={() => setValues({...values, Files: values.Files.filter(_file => file !== _file)})}>x</span>
                                 </div>
                             ))}
                             <Toggle
@@ -63,18 +63,21 @@ export default function NoteLine(props: NoteLineProps) {
                                 onChange={(name, value) => setValues({...values, [`${name}`]: value})}
                             />
                             <div>
-                                {props.employees.map(employee => {
+                                {/* Add Key */}
+                                {props.employees.map((employee, i) => {
                                     if (employee.EmployeeID === props.employeeID)
-                                        return <></>;
+                                        return <div key={i}></div>;
                                     return (
-                                        <Toggle
-                                            name='Sharees'
-                                            label={`Add ${employee.FName} ${employee.LName}`}
-                                            value={values.Sharees.includes(employee.EmployeeID) ? 1 : 0}
-                                            onChange={(name, value) => {
-                                                setValues({...values, Sharees: toggleValue(values.Sharees, employee.EmployeeID)});
-                                            }}
-                                        />
+                                        <div key={i}>
+                                            <Toggle
+                                                name='Sharees'
+                                                label={`Add ${employee.FName} ${employee.LName}`}
+                                                value={values.Sharees.includes(employee.EmployeeID) ? 1 : 0}
+                                                onChange={(name, value) => {
+                                                    setValues({...values, Sharees: toggleValue(values.Sharees, employee.EmployeeID)});
+                                                }}
+                                            />
+                                        </div>
                                     )
                                 })}
                             </div>

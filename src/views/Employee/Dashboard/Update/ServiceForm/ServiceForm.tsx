@@ -12,15 +12,6 @@ import PartLine from "./Part/PartLine";
 import { DB_AppointmentService, DB_Diagnosis, DB_Part, DB_Repair, DB_Service } from "@/lib/Database/Types";
 import { Parts } from "@/process/Employee/Update/Form";
 
-interface Service {
-    Class: string;
-    ClassID: number;
-    Division: string;
-    DivisionID: number;
-    Service: string;
-    ServiceID: number;
-}
-
 interface ServiceProps {
     form: {
         Services: {[serviceID: string]: DB_AppointmentService};
@@ -44,21 +35,20 @@ export default function ServiceForm(props: ServiceProps) {
 
             const dbServices = await Services();
             dbServices.forEach(service => {
-                if (service.ServiceID === 1)
-                    return;
-
-                if (!serviceValues[service.Class])
-                    serviceValues[service.Class] = {};
-
-                if (!serviceValues[service.Class][service.Division])
-                    serviceValues[service.Class][service.Division] = [];
-
-                serviceValues[service.Class][service.Division].push([service.ServiceID, service.Service]);
                 services[service.ServiceID] = {
                     ...service, 
                     AppointmentID: '', 
                     AppointmentServiceID: 0
                 };
+
+                if (service.ServiceID === 1)
+                    return;
+
+                if (!serviceValues[service.Class])
+                    serviceValues[service.Class] = {};
+                if (!serviceValues[service.Class][service.Division])
+                    serviceValues[service.Class][service.Division] = [];
+                serviceValues[service.Class][service.Division].push([service.ServiceID, service.Service]);
             });
             setServiceValues(serviceValues);
             setServices(services);
@@ -96,10 +86,27 @@ export default function ServiceForm(props: ServiceProps) {
                         values={serviceValues}
                         label={'Services'}
                         onChange={(name, value: Array<number>) => {
-                            const updatedValue: {[k: number]: DB_AppointmentService} = props.form.Services;
-                            for (const serviceID of value)
-                                updatedValue[`${serviceID}`] = services[serviceID];
-                            props.changeHandler('Services', name, updatedValue);
+                            const updatedValues = {...props.form.Services};
+                            const serviceKeys: Array<string> = Object.keys(props.form.Services);
+                            
+                            for (let i = 0; i < serviceKeys.length; i++) {
+                                const {ServiceID} = props.form.Services[`${serviceKeys[i]}`];
+                                if (!ServiceID || value.includes(ServiceID))
+                                    continue;
+                                delete updatedValues[`${serviceKeys[i]}`];
+                            }
+
+                            let currCounter = counter;
+                            const currServiceIDs = Object.values(props.form.Services).map(s => s.ServiceID);
+                            for (const serviceID of value)  {
+                                if (currServiceIDs.includes(serviceID))
+                                    continue;
+                                updatedValues[`${-currCounter}`] = services[serviceID];
+                                currCounter++;
+                            }
+                            
+                            setCounter(currCounter);
+                            props.changeHandler('Services', name, updatedValues);
                         }}
                     />
                 }

@@ -2,9 +2,10 @@
 import sql from "mssql";
 import { User } from "../User";
 import { fetchPool } from "../Pool";
-import { DB_Appointment, DB_Appointments, DB_AppointmentSummary, DB_EmployeeLabel, DB_EmployeeLabels } from "../Types";
+import { DB_Appointment, DB_Appointments, DB_AppointmentSummary, DB_Attachment, DB_EmployeeLabel, DB_EmployeeLabels, DB_EmployeeNote } from "../Types";
 import { GetAllParameters, SessionAppParameters } from "../Parameters";
-import { sortLabels } from "./Label/Select";
+import { sortLabels } from "./Label/Helper";
+import { sortNoteAttachments } from "./Note/Select";
 
 export async function Get(
     data: SessionAppParameters, 
@@ -22,6 +23,10 @@ export async function Get(
 
         const recordsets = <sql.IRecordSet<any>> output.recordsets;
 
+        const notes: Array<DB_EmployeeNote> = recordsets[7];
+        const attachments: Array<DB_Attachment> = recordsets[8];
+        await sortNoteAttachments(notes, attachments);
+
         return {
             ...recordsets[0][0],
             Services:   recordsets[1],
@@ -30,8 +35,7 @@ export async function Get(
             Parts:      recordsets[4],
             Payments:   recordsets[5],
             Labels:     recordsets[6],
-            Notes:      recordsets[7],
-            Attachments: recordsets[8]
+            Notes:      notes
         }
     }
     catch (err) {

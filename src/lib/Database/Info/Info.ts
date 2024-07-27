@@ -2,6 +2,7 @@
 import { fetchPool } from "../Pool";
 import { User } from "../User";
 import { DB_Status, DB_Service, DB_Label, DB_Make } from "../Types";
+import { SessionParameter } from "../Parameters";
 
 export async function DB_Statuses(user: User = User.Standard): Promise<Array<DB_Status>> {
     try {
@@ -57,5 +58,45 @@ export async function DB_Makes(user: User = User.Standard): Promise<Array<DB_Mak
     catch (err) {
         console.error(err);
         return [];
+    }
+}
+
+export async function BeginCommit(
+    user: User = User.Standard,
+    data?: SessionParameter
+): Promise<boolean> {
+    try {
+        const pool = await fetchPool(user);
+        if (!pool)
+            throw 'Info.BeginCommit: Undefined Pool';
+
+        await pool.request()
+            .execute('Info.BeginCommit');
+
+        return true;
+    }
+    catch (err) {
+        console.error(err);
+        return false;
+    }
+}
+
+export async function EndCommit(
+    user: User = User.Standard,
+    data?: SessionParameter
+): Promise<boolean> {
+    try {
+        const pool = await fetchPool(user, data);
+        if (!pool)
+            throw 'Info.EndCommit: Undefined Pool';
+
+        await pool.request()
+            .execute('Info.EndCommit');
+
+        return true;
+    }
+    catch (err) {
+        console.error(err);
+        return false;
     }
 }
