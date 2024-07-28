@@ -6,7 +6,7 @@ import { InsertCreditCardParameters, InsertPaymentParameters } from "../../Param
 
 export async function InsertPayment(
     data: InsertPaymentParameters, 
-    user: User = User.Standard
+    user: User = User.Employee
 ): Promise<number> {
     try {
         const pool = await fetchPool(user, data);
@@ -29,7 +29,7 @@ export async function InsertPayment(
 
 export async function InsertCreditCard(
     data: InsertCreditCardParameters, 
-    user: User = User.Standard
+    user: User = User.Employee
 ): Promise<boolean> {
     try {
         const pool = await fetchPool(user, data);
@@ -42,7 +42,7 @@ export async function InsertCreditCard(
             .input('PaymentID', sql.Int, data.PaymentID)
             .input('Name', sql.VarChar(100), data.Name)
             .input('Type', sql.VarChar(4), data.Type)
-            .input('CNN', sql.VarChar(3), data.CNN)
+            .input('CCN', sql.VarChar(4), data.CCN)
             .input('EXP', sql.VarChar(4), data.EXP)
             .execute('Appointment.InsertCreditCard');
 

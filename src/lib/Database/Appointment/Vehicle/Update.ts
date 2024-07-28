@@ -13,15 +13,17 @@ export default async function UpdateVehicle(
         if (!pool)
             throw 'Appointment.UpdateVehicle: Undefined Pool';
 
+        console.log('Data', data);
+
         await pool.request()
             .input('SessionID', sql.Char(36), data.SessionID)
             .input('AppointmentID', sql.UniqueIdentifier, data.AppointmentID)
-            .input('Make', sql.Int, data.Make)
-            .input('Model', sql.Int, data.Model)
+            .input('Make', sql.VarChar(50), data.Make)
+            .input('Model', sql.VarChar(50), data.Model)
             .input('ModelYear', sql.Int, data.ModelYear)
-            .input('VIN', sql.Int, data.VIN)
+            .input('VIN', sql.VarChar(17), data.VIN)
             .input('Mileage', sql.Int, data.Mileage)
-            .input('LicensePlate', sql.Int, data.LicensePlate)
+            .input('LicensePlate', sql.VarChar(8), data.LicensePlate)
             .execute('Appointment.UpdateVehicle');
 
         return true;

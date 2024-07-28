@@ -17,9 +17,9 @@ export default async function UpdateService(
             .input('SessionID', sql.Char(36), data.SessionID)
             .input('AppointmentID', sql.UniqueIdentifier, data.AppointmentID)
             .input('ServiceID', sql.Int, data.ServiceID)
-            .input('Service', sql.Int, data.Service)
-            .input('Division', sql.Int, data.Division)
-            .input('Class', sql.Int, data.Class)
+            .input('Service', sql.VarChar(50), data.Service)
+            .input('Division', sql.VarChar(50), data.Division)
+            .input('Class', sql.VarChar(50), data.Class)
             .execute('Appointment.UpdateService');
     
         return true;

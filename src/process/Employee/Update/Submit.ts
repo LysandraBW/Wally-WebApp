@@ -1,5 +1,5 @@
 'use server';
-import { uploadFile } from "@/lib/Files/Upload";
+import { generateURL, uploadFile } from "@/lib/Files/Upload";
 import { 
     ProcessedNotesFormStructure,
     ProcessedGeneralFormStructure,
@@ -7,7 +7,10 @@ import {
     ProcessedServicesFormStructure,
     ProcessedCostFormStructure,
     processNotesForm,
-    processGeneralForm
+    processGeneralForm,
+    processVehicleForm,
+    processServiceForm,
+    processCostForm
 } from "./Process";
 import { BeginCommit, EndCommit } from "@/lib/Database/Info/Info";
 import { getSessionID } from "@/lib/Cookies/Cookies";
@@ -15,17 +18,47 @@ import { User } from "@/lib/Database/User";
 import { DeleteDiagnosis, DeleteNote, DeleteNoteAttachment, DeletePayment, DeleteRepair, DeleteService, InsertCreditCard, InsertDiagnosis, InsertNote, InsertNoteAttachment, InsertNoteSharee, InsertPart, InsertPayment, InsertRepair, InsertService, UpdateCost, UpdateCustomer, UpdateDate, UpdateDiagnosis, UpdateNote, UpdatePart, UpdateRepair, UpdateService, UpdateStatus, UpdateVehicle } from "@/lib/Database/Export";
 import DeleteNoteSharee from "@/lib/Database/Appointment/SharedNote/Delete";
 import DeletePart from "@/lib/Database/Appointment/Part/Delete";
-import { GeneralFormStructure, NotesFormStructure } from "./Form";
+import { 
+    CostFormStructure, 
+    GeneralFormStructure, 
+    NotesFormStructure, 
+    ServicesFormStructure, 
+    VehicleFormStructure 
+} from "./Form";
+import util from 'util';
 
-export async function submitNotesForm(ref: NotesFormStructure, cur: NotesFormStructure): Promise<boolean> {
+async function uploadAttachments(data: {
+    SessionID: string,
+    NoteID: number,
+    fileList: unknown
+}): Promise<boolean> {
+    const fileList = <File> data.fileList;
+    console.log(fileList);
+    const URL = await uploadFile(await generateURL(), fileList);
+    console.log(URL, fileList, fileList.name);
+    if (!URL)
+        return false;
+
+    const output = await InsertNoteAttachment({
+        SessionID: data.SessionID,
+        NoteID: data.NoteID, 
+        Name: fileList.name,
+        Type: fileList.type,
+        URL
+    });
+    if (!output)
+        return false;
+    return false;
+}
+
+export async function submitNotesForm(
+    ref: NotesFormStructure, 
+    cur: NotesFormStructure
+): Promise<boolean> {
     const processedForm: ProcessedNotesFormStructure = await processNotesForm(ref, cur);
     const SessionID = await getSessionID();
     const AppointmentID = processedForm.AppointmentID;
-
-    await BeginCommit(
-        User.Employee, 
-        {SessionID}
-    );
+    console.log(util.inspect(processedForm, {showHidden: false, depth: null, colors: true}));
 
     for (const updateNote of processedForm.Update) {
         const output = await UpdateNote({
@@ -38,25 +71,58 @@ export async function submitNotesForm(ref: NotesFormStructure, cur: NotesFormStr
     }
 
     for (const insertAttachment of processedForm.Insert.Attachment) {
-        const URL = await uploadFile(insertAttachment.URL, insertAttachment.File);
-        const output = await InsertNoteAttachment({
-            URL,
-            NoteID: insertAttachment.NoteID,
-            SessionID
-        });
+        if (!insertAttachment.Files.has('Files'))
+            continue;
 
-        if (!output)
-            break;
+        const fileLists = insertAttachment.Files.getAll('Files');
+        console.log(fileLists);
+        console.log('HELP')
+        for (const fileList of fileLists) {
+            const output = await uploadAttachments({
+                NoteID: insertAttachment.NoteID,
+                SessionID,
+                fileList,
+            });
+            if (!output)
+                throw 'Error';
+        }
     }
 
     for (const insertNote of processedForm.Insert.Note) {
-        const output = await InsertNote({
+        const noteID = await InsertNote({
             SessionID,
-            ...insertNote,
+            Head: insertNote.Head,
+            Body: insertNote.Body,
+            ShowCustomer: insertNote.ShowCustomer,
             AppointmentID
         });
-        if (!output)
-            break;
+        if (!noteID)
+            throw 'Error';
+
+        if (insertNote.Files && insertNote.Files.has('Files')) {
+            const fileLists = insertNote.Files.getAll('Files');
+            console.log('gptta pee');
+            console.log(fileLists);
+            for (const fileList of fileLists) {
+                const output = await uploadAttachments({
+                    NoteID: noteID,
+                    SessionID,
+                    fileList,
+                });
+                if (!output)
+                    throw '';
+            }
+        }
+
+        insertNote.Sharees.forEach(async (sharee) => {
+            const output = await InsertNoteSharee({
+                SessionID,
+                NoteID: noteID,
+                NoteShareeID: sharee
+            });
+            if (!output)
+                throw '';
+        }); 
     }
 
     for (const insertSharee of processedForm.Insert.Sharee) {
@@ -96,23 +162,16 @@ export async function submitNotesForm(ref: NotesFormStructure, cur: NotesFormStr
             break;
     }
 
-    await EndCommit(
-        User.Employee, 
-        {SessionID}
-    );
-
-    return false;
+    return true;
 }
 
-export async function submitGeneralForm(ref: GeneralFormStructure, cur: GeneralFormStructure): Promise<boolean> {
+export async function submitGeneralForm(
+    ref: GeneralFormStructure, 
+    cur: GeneralFormStructure
+): Promise<boolean> {
     const processedForm: ProcessedGeneralFormStructure = await processGeneralForm(ref, cur);
     const SessionID = await getSessionID();
     const AppointmentID = processedForm.AppointmentID;
-
-    await BeginCommit(
-        User.Employee, 
-        {SessionID}
-    );
 
     const customerOutput = await UpdateCustomer({
         SessionID,
@@ -136,57 +195,49 @@ export async function submitGeneralForm(ref: GeneralFormStructure, cur: GeneralF
     if (!dateOutput)
         throw 'Error';
 
-    const statusOutput = await UpdateStatus({
-        SessionID,
-        AppointmentID,
-        StatusID: processedForm.StatusID
-    });
-
-    if (!statusOutput)
-        throw 'Error';
-
-    await EndCommit(
-        User.Employee, 
-        {SessionID}
-    );
+    if (processedForm.StatusID) {
+        const statusOutput = await UpdateStatus({
+            SessionID,
+            AppointmentID,
+            StatusID: processedForm.StatusID
+        });
+    
+        if (!statusOutput)
+            throw 'Error';
+    }
 
     return false;
 }
 
-export async function submitVehicleForm(form: ProcessedVehicleFormStructure): Promise<boolean> {
+export async function submitVehicleForm(
+    ref: VehicleFormStructure, 
+    cur: VehicleFormStructure
+): Promise<boolean> {
+    const processedForm: ProcessedVehicleFormStructure = await processVehicleForm(ref, cur);
     const SessionID = await getSessionID();
-
-    await BeginCommit(
-        User.Employee, 
-        {SessionID}
-    );
+    console.log(util.inspect(processedForm, {showHidden: false, depth: null, colors: true}));
 
     const output = await UpdateVehicle({
         SessionID,
-        ...form
+        ...processedForm
     })
 
     if (!output)
         throw 'Error';
 
-    await EndCommit(
-        User.Employee, 
-        {SessionID}
-    );
-
     return true;
 }
 
-export async function submitServicesForm(form: ProcessedServicesFormStructure): Promise<boolean> {
+export async function submitServicesForm(
+    ref: ServicesFormStructure, 
+    cur: ServicesFormStructure
+): Promise<boolean> {
+    const processedForm: ProcessedServicesFormStructure = await processServiceForm(ref, cur);
     const SessionID = await getSessionID();
-    const AppointmentID = form.AppointmentID;
+    const AppointmentID = processedForm.AppointmentID;
+    console.log(util.inspect(processedForm, {showHidden: false, depth: null, colors: true}));
 
-    await BeginCommit(
-        User.Employee, 
-        {SessionID}
-    );
-
-    for (const updateService of form.Update.Services) {
+    for (const updateService of processedForm.Update.Services) {
         const output = await UpdateService({
             SessionID,
             AppointmentID,
@@ -197,7 +248,7 @@ export async function submitServicesForm(form: ProcessedServicesFormStructure): 
             throw '';
     }
 
-    for (const updateDiagnosis of form.Update.Diagnoses) {
+    for (const updateDiagnosis of processedForm.Update.Diagnoses) {
         const output = await UpdateDiagnosis({
             SessionID,
             AppointmentID,
@@ -209,7 +260,7 @@ export async function submitServicesForm(form: ProcessedServicesFormStructure): 
         
     }
 
-    for (const updateRepairs of form.Update.Repairs) {
+    for (const updateRepairs of processedForm.Update.Repairs) {
         const output = await UpdateRepair({
             SessionID,
             AppointmentID,
@@ -221,7 +272,7 @@ export async function submitServicesForm(form: ProcessedServicesFormStructure): 
         
     }
 
-    for (const updateParts of form.Update.Parts) {
+    for (const updateParts of processedForm.Update.Parts) {
         const output = await UpdatePart({
             SessionID,
             AppointmentID,
@@ -233,7 +284,7 @@ export async function submitServicesForm(form: ProcessedServicesFormStructure): 
         
     }
 
-    for (const insertService of form.Insert.Services) {
+    for (const insertService of processedForm.Insert.Services) {
         const output = await InsertService({
             SessionID,
             AppointmentID,
@@ -243,7 +294,7 @@ export async function submitServicesForm(form: ProcessedServicesFormStructure): 
             throw '';
     }
 
-    for (const insertDiagnosis of form.Insert.Diagnoses) {
+    for (const insertDiagnosis of processedForm.Insert.Diagnoses) {
         const output = await InsertDiagnosis({
             SessionID,
             AppointmentID,
@@ -254,7 +305,7 @@ export async function submitServicesForm(form: ProcessedServicesFormStructure): 
         
     }
 
-    for (const insertRepairs of form.Insert.Repairs) {
+    for (const insertRepairs of processedForm.Insert.Repairs) {
         const output = await InsertRepair({
             SessionID,
             AppointmentID,
@@ -264,7 +315,7 @@ export async function submitServicesForm(form: ProcessedServicesFormStructure): 
             throw '';
     }
 
-    for (const insertParts of form.Insert.Parts) {
+    for (const insertParts of processedForm.Insert.Parts) {
         const output = await InsertPart({
             SessionID,
             AppointmentID,
@@ -274,7 +325,7 @@ export async function submitServicesForm(form: ProcessedServicesFormStructure): 
             throw ''; 
     }
 
-    for (const deleteService of form.Delete.Services) {
+    for (const deleteService of processedForm.Delete.Services) {
         const output = await DeleteService({
             SessionID,
             AppointmentID,
@@ -284,7 +335,7 @@ export async function submitServicesForm(form: ProcessedServicesFormStructure): 
             throw '';
     }
 
-    for (const deleteDiagnosis of form.Delete.Diagnoses) {
+    for (const deleteDiagnosis of processedForm.Delete.Diagnoses) {
         const output = await DeleteDiagnosis({
             SessionID,
             AppointmentID,
@@ -294,7 +345,7 @@ export async function submitServicesForm(form: ProcessedServicesFormStructure): 
             throw '';
     }
 
-    for (const deleteRepairs of form.Delete.Repairs) {
+    for (const deleteRepairs of processedForm.Delete.Repairs) {
         const output = await DeleteRepair({
             SessionID,
             AppointmentID,
@@ -304,7 +355,7 @@ export async function submitServicesForm(form: ProcessedServicesFormStructure): 
             throw '';  
     }
 
-    for (const deleteParts of form.Delete.Parts) {
+    for (const deleteParts of processedForm.Delete.Parts) {
         const output = await DeletePart({
             SessionID,
             AppointmentID,
@@ -314,33 +365,30 @@ export async function submitServicesForm(form: ProcessedServicesFormStructure): 
             throw '';   
     }
 
-    await EndCommit(
-        User.Employee, 
-        {SessionID}
-    );
-
     return true;
 }
 
-export async function submitCostForm(form: ProcessedCostFormStructure): Promise<boolean> {
+export async function submitCostForm(
+    ref: CostFormStructure,
+    cur: CostFormStructure
+): Promise<boolean> {
+    const processedForm: ProcessedCostFormStructure = await processCostForm(ref, cur);
     const SessionID = await getSessionID();
-    const AppointmentID = form.AppointmentID;
+    const AppointmentID = processedForm.AppointmentID;
+    console.log(processedForm)
 
-    await BeginCommit(
-        User.Employee, 
-        {SessionID}
-    );
+    if (processedForm.Update.Cost) {
+        const costOutput = await UpdateCost({
+            SessionID,
+            AppointmentID,
+            ...processedForm.Update
+        });
+        
+        if (!costOutput)
+            throw '';
+    }
 
-    const costOutput = await UpdateCost({
-        SessionID,
-        AppointmentID,
-        ...form.Update
-    });
-
-    if (!costOutput)
-        throw '';
-
-    for (const insert of form.Insert) {
+    for (const insert of processedForm.Insert) {
         const PaymentID = await InsertPayment({
             SessionID,
             AppointmentID,
@@ -366,7 +414,7 @@ export async function submitCostForm(form: ProcessedCostFormStructure): Promise<
         }
     }
 
-    for (const deletePayment of form.Delete) {
+    for (const deletePayment of processedForm.Delete) {
         const output = await DeletePayment({
             SessionID,
             AppointmentID,
@@ -375,11 +423,6 @@ export async function submitCostForm(form: ProcessedCostFormStructure): Promise<
         if (!output)
             throw '';
     }
-
-    await EndCommit(
-        User.Employee, 
-        {SessionID}
-    );
 
     return true;
 }

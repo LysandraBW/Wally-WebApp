@@ -13,7 +13,7 @@ interface VehicleProps {
         Mileage: number;
         LicensePlate: string;
     }
-    changeHandler: (part: Parts, name: string, value: any) => void;
+    changeHandler: (part: Parts, name: string, value: any, agg?: boolean) => void;
 }
 
 interface LoadedValues {
@@ -74,14 +74,21 @@ export default function Vehicle(props: VehicleProps) {
         const part: Parts = 'Vehicle';
         if (name === 'VIN') {
             props.changeHandler(part, name, value);
+            if (value.length < 17)
+                return;
+
             const data = await loadMakeModelModelYear(value);
             if (!data)
                 return;
-            props.changeHandler(part, 'Make', data.make);
-            props.changeHandler(part, 'Model', data.model);
-            props.changeHandler(part, 'ModelYear', data.modelYear);
+
+            props.changeHandler(part, '', {
+                VIN: value,
+                Make: data.make[0],
+                Model: data.model[0],
+                ModelYear: data.modelYear[0]
+            }, true);
         }
-        else {
+        else if (name === 'Make' || name === 'ModelYear' || name === 'Model') {
             if (name === 'Make') {
                 loadModels(props.form.ModelYear, value[0]);
                 props.changeHandler(part, 'Model', '');
@@ -91,6 +98,9 @@ export default function Vehicle(props: VehicleProps) {
                 props.changeHandler(part, 'Model', '');
             }
             props.changeHandler(part, name, value[0]);
+        }
+        else {
+            props.changeHandler(part, name, value);
         }
     }
 
@@ -129,6 +139,19 @@ export default function Vehicle(props: VehicleProps) {
                 onChange={(name, value) => changeHandler(name, value)}
                 disabled={!props.form.ModelYear || !props.form.Make}
                 size={10}
+            />
+            <Text
+                type="number"
+                name={"Mileage"}
+                value={props.form.Mileage}
+                label={"Mileage"}
+                onChange={(name, value) => changeHandler(name, value)}
+            />
+            <Text
+                name={"LicensePlate"}
+                value={props.form.LicensePlate}
+                label={"License Plate"}
+                onChange={(name, value) => changeHandler(name, value)}
             />
         </>
     )

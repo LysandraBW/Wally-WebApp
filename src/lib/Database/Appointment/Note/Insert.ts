@@ -38,9 +38,13 @@ export async function InsertNoteAttachment(
         if (!pool)
             throw 'Appointment.InsertNote: Undefined Pool';
 
+        console.log(data);
+
         const output = await pool.request()
             .input('SessionID', sql.Char(36), data.SessionID)
             .input('NoteID', sql.Int, data.NoteID)
+            .input('Name', sql.VarChar(100), data.Name)
+            .input('Type', sql.VarChar(100), data.Type)
             .input('URL', sql.VarChar(500), data.URL)
             .execute('Appointment.InsertNoteAttachment');
 

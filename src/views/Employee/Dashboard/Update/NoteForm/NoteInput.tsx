@@ -22,7 +22,7 @@ export default function NoteInput(props: NoteInputProps) {
         Attachments: [],
         Type: 'File',
         ShowCustomer: 0,
-        Files: [],
+        Files: null,
         Sharees: []
     });
 
@@ -45,8 +45,10 @@ export default function NoteInput(props: NoteInputProps) {
                 label={'Upload Files'}
                 multiple={true}
                 onChange={(name, value) => {
-                    const files: Array<File> = Array.from(value);
-                    setValues({...values, [`${name}`]: files})
+                    const formData = new FormData();
+                    for (let i = 0; i < value.length; i++)
+                        formData.append('Files', value[i]);
+                    setValues({...values, [`${name}`]: formData});
                 }}
             />
             <Toggle

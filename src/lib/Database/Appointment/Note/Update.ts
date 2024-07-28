@@ -13,12 +13,13 @@ export default async function UpdateNote(
         if (!pool)
             throw 'Appointment.UpdateNote: Undefined Pool';
         
+        console.log(data)
         await pool.request()
             .input('SessionID', sql.Char(36), data.SessionID)
             .input('AppointmentID', sql.UniqueIdentifier, data.AppointmentID)
             .input('NoteID', sql.Int, data.NoteID)
-            .input('Head', sql.Int, data.Head)
-            .input('Body', sql.Int, data.Body)
+            .input('Head', sql.VarChar(100), data.Head)
+            .input('Body', sql.VarChar(500), data.Body)
             .input('ShowCustomer', sql.Int, data.ShowCustomer)
             .execute('Appointment.UpdateNote');
 

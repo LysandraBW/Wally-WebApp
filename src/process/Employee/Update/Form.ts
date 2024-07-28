@@ -8,8 +8,8 @@ export interface GeneralFormStructure {
     LName: string;
     Email: string;
     Phone: string;
-    StartDate: Date;
-    EndDate: Date;
+    StartDate: string;
+    EndDate: string;
     StatusID: number;
 }
 
@@ -39,7 +39,7 @@ export interface CostFormStructure {
 
 export interface UpdateNote extends DB_Note {
     Type: 'Attachment' | 'File';
-    Files: Array<File>;
+    Files: FormData | null;
     Sharees: Array<string>
 }
 

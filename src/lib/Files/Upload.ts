@@ -9,7 +9,6 @@ const region = process.env.REGION || '';
 const bucketName = process.env.BKT || '';
 const accessKeyId = process.env.AK || '';
 const secretAccessKey = process.env.SAK || '';
-const {}
 
 const s3 = new aws.S3({
     region,
@@ -38,14 +37,14 @@ export async function generateURL(): Promise<string> {
     }
 }
 
-export async function uploadFile(URL: string, file: File): Promise<string> {
+export async function uploadFile(URL: string, data: File | FormData): Promise<string> {
     try {
         await fetch(URL, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'multipart/form-data'
             },
-            body: file
+            body: data
         });
     }
     catch (err) {

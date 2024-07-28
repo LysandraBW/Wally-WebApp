@@ -7,7 +7,7 @@ import { Parts } from "@/process/Employee/Update/Form";
 
 interface CostFormProps {
     form: {
-        Cost: string;
+        Cost: number;
         Payments: {[paymentID: string]: DB_Payment};
     };
     changeHandler: (part: Parts, name: string, value: any) => void;

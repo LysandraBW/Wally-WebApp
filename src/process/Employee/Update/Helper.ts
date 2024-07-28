@@ -4,6 +4,12 @@ import { FormStructure, UpdateNote } from "./Form";
 import { GetNoteSharees } from "@/lib/Database/Export";
 import { getSessionID } from "@/lib/Cookies/Cookies";
 
+const dateToString = (date: Date | null) => {
+    if (!date)
+        return '';
+    return date.toISOString().split('T').join(' ').split('Z').join('');
+}
+
 export async function appToForm(app: DB_Appointment): Promise<FormStructure> {
     let ref: { [k: string]: any; } = {};
     ref.General = {
@@ -12,8 +18,8 @@ export async function appToForm(app: DB_Appointment): Promise<FormStructure> {
         LName: app.LName,
         Email: app.Email,
         Phone: app.Phone,
-        StartDate: app.StartDate,
-        EndDate: app.EndDate,
+        StartDate: dateToString(app.StartDate),
+        EndDate: dateToString(app.EndDate),
         StatusID: app.StatusID
     };
     ref.Vehicle = {
@@ -65,7 +71,7 @@ export async function appToForm(app: DB_Appointment): Promise<FormStructure> {
             SessionID: await getSessionID(),
             NoteID: note.NoteID
         })).map(sharee => sharee.ShareeID);
-        notes[note.NoteID] =  { ...note, Type: 'Attachment', Files: [], Sharees: sharees};
+        notes[note.NoteID] =  { ...note, Type: 'Attachment', Files: null, Sharees: sharees};
     }
     ref.Notes = {
         AppointmentID: app.AppointmentID,

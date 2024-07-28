@@ -13,10 +13,12 @@ export default async function UpdateCost(
         if (!pool)
             throw 'Appointment.UpdateCost: Undefined Pool';
 
+        console.log(data);
+        
         await pool.request()
             .input('SessionID', sql.Char(36), data.SessionID)
             .input('AppointmentID', sql.UniqueIdentifier, data.AppointmentID)
-            .input('Cost', sql.Int, data.Cost)
+            .input('Cost', sql.Float, data.Cost)
             .execute('Appointment.UpdateCost');
 
         return true;

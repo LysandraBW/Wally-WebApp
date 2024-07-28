@@ -13,6 +13,7 @@ import { Controller } from "@/process/Employee/Update/Helper";
 import { getSessionID } from "@/lib/Cookies/Cookies";
 import { goTo } from "@/lib/Navigation/Redirect";
 import { DB_Employee, DB_GeneralEmployee } from "@/lib/Database/Types";
+import { submitCostForm, submitGeneralForm, submitNotesForm, submitServicesForm, submitVehicleForm } from "@/process/Employee/Update/Submit";
 
 let ran = false;
 
@@ -82,12 +83,25 @@ export default function Update() {
         controller && controller.cur && console.log(controller);
     }, [controller?.cur]);
 
-    const changeHandler = (part: Parts, name: string, value: any) => {
+    const changeHandler = (part: Parts, name: string, value: any, agg?: boolean) => {
         if (!controller)
             return;
 
-        console.log(value);
-
+        // Set Multiple Values at Once
+        if (agg) {
+            setController({
+                ...controller,
+                cur: {
+                    ...controller.cur,
+                    [`${part}`]: {
+                        ...controller.cur[`${part}`],
+                        ...value,
+                    }
+                }
+            });
+            return;
+        }
+        // Set a Single Value
         setController({
             ...controller,
             cur: {
@@ -138,7 +152,7 @@ export default function Update() {
                                     />
                                 ),
                                 partHeader: 'General',
-                                onSave: () => 1,
+                                onSave: () => submitGeneralForm(controller.ref.General, controller.cur.General),
                                 onReset: () => resetHandler('General')
                             },
                             {
@@ -149,7 +163,7 @@ export default function Update() {
                                     />
                                 ),
                                 partHeader: 'Vehicle',
-                                onSave: () => 1,
+                                onSave: () => submitVehicleForm(controller.ref.Vehicle, controller.cur.Vehicle),
                                 onReset: () => resetHandler('Vehicle')
                             },
                             {
@@ -160,7 +174,7 @@ export default function Update() {
                                     />
                                 ),
                                 partHeader: 'Service',
-                                onSave: () => 1,
+                                onSave: () => submitServicesForm(controller.ref.Services, controller.cur.Services),
                                 onReset: () => resetHandler('Services')
                             },
                             {
@@ -171,7 +185,9 @@ export default function Update() {
                                     />
                                 ),
                                 partHeader: 'Payment',
-                                onSave: () => 1,
+                                onSave: () => {
+                                    submitCostForm(controller.ref.Cost, controller.cur.Cost);
+                                },
                                 onReset: () => resetHandler('Cost')
                             }
                         ]}
@@ -184,6 +200,7 @@ export default function Update() {
                                 Employees: employees
                             }}
                             changeHandler={changeHandler}
+                            onSave={() => submitNotesForm(controller.ref.Notes, controller.cur.Notes)}
                         />
                     )}
                 </div>

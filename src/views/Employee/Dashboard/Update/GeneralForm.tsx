@@ -10,8 +10,8 @@ interface GeneralProps {
         LName: string;
         Email: string;
         Phone: string;
-        StartDate: Date;
-        EndDate: Date;
+        StartDate: string;
+        EndDate: string;
         StatusID: number;
     };
     changeHandler: (part: Parts, name: string, value: any) => void;

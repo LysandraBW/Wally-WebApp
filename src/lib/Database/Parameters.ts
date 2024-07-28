@@ -140,6 +140,8 @@ export interface InsertNoteParameters {
 export interface InsertNoteAttachmentParameters {
     SessionID: string;
     NoteID: number;
+    Name: string;
+    Type: string;
     URL: string;
 }
 

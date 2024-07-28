@@ -10,9 +10,9 @@ import useInterval from "@/lib/Hook/Timer";
 import Tabs from "@/views/Employee/Dashboard/Dashboard/Tabs";
 import Search from "@/views/Employee/Dashboard/Dashboard/Search";
 import Navigation from "@/views/Employee/Dashboard/Dashboard/Navigation";
-import Head from "@/views/Employee/Dashboard/Dashboard/Head";
-import Body from "@/views/Employee/Dashboard/Dashboard/Body";
-import Overview from "@/views/Employee/Dashboard/Dashboard/Overview";
+import Head from "@/views/Employee/Dashboard/Dashboard/Table/Head";
+import Body from "@/views/Employee/Dashboard/Dashboard/Table/Body";
+import Overview from "@/views/Employee/Dashboard/Dashboard/Overview/Overview";
 import { formatLabels, LoadedValues, Values } from "@/process/Employee/Dashboard/Load";
 import { AppController, AppControllerStructure, Filter, FilterStructure } from "@/process/Employee/Dashboard/Form";
 

@@ -16,7 +16,7 @@ export default async function InsertNoteSharee(
         await pool.request()
             .input('SessionID', sql.Char(36), data.SessionID)
             .input('NoteID', sql.Int, data.NoteID)
-            .input('NoteShareeID', sql.Int, data.NoteShareeID)
+            .input('NoteShareeID', sql.Char(36), data.NoteShareeID)
             .execute('Appointment.InsertNoteSharee')
 
         return true;

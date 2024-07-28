@@ -1,5 +1,5 @@
 import { toggleValue } from "@/components/Input/Checkbox/Checkbox";
-import { Multiple, Toggle } from "@/components/Input/Export";
+import { File, Multiple, Toggle } from "@/components/Input/Export";
 import { DB_GeneralEmployee } from "@/lib/Database/Types";
 import { UpdateNote } from "@/process/Employee/Update/Form";
 import { useState } from "react";
@@ -22,10 +22,7 @@ export default function NoteLine(props: NoteLineProps) {
         <>
             {edit && 
                 <Multiple
-                    onBlur={() => {
-                        setEdit(false);
-                        props.onUpdate(values);
-                    }}
+                    onBlur={() => 1}
                     children={(
                         <div>
                             <input 
@@ -51,11 +48,19 @@ export default function NoteLine(props: NoteLineProps) {
                                     {attachment.Name} <span onClick={() => setValues({...values, Attachments: values.Attachments.filter(_attachment => attachment !== _attachment)})}>x</span>
                                 </div>
                             ))}
-                            {values.Files.map((file, i) => (
-                                <div key={i}>
-                                    {file.name} <span onClick={() => setValues({...values, Files: values.Files.filter(_file => file !== _file)})}>x</span>
-                                </div>
-                            ))}
+                            <div>
+                            <File
+                                name={'Files'}
+                                label={'Reupload Files'}
+                                multiple={true}
+                                onChange={(name, value) => {
+                                    const formData = new FormData();
+                                    for (let i = 0; i < value.length; i++)
+                                        formData.append('Files', value[i]);
+                                    setValues({...values, [`${name}`]: formData});
+                                }}
+                            />
+                            </div>
                             <Toggle
                                 name='ShowCustomer'
                                 label='Show Customer'
@@ -81,6 +86,10 @@ export default function NoteLine(props: NoteLineProps) {
                                     )
                                 })}
                             </div>
+                            <button onClick={() => {
+                                setEdit(false);
+                                props.onUpdate(values);
+                            }}>Save Changes</button>
                         </div>
                     )}
                 />
@@ -93,11 +102,6 @@ export default function NoteLine(props: NoteLineProps) {
                         {values.Attachments.map((attachment, i) => (
                             <div key={i}>
                                 {attachment.Name}
-                            </div>
-                        ))}
-                        {values.Files.map((file, i) => (
-                            <div key={i}>
-                                {file.name}.{file.type}
                             </div>
                         ))}
                     </span>

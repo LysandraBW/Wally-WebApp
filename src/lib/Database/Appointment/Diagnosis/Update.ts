@@ -17,8 +17,8 @@ export default async function UpdateDiagnosis(
             .input('SessionID', sql.Char(36), data.SessionID)
             .input('AppointmentID', sql.UniqueIdentifier, data.AppointmentID)
             .input('DiagnosisID', sql.Int, data.DiagnosisID)
-            .input('Code', sql.Int, data.Code)
-            .input('Message', sql.Int, data.Message)
+            .input('Code', sql.VarChar(20), data.Code)
+            .input('Message', sql.VarChar(500), data.Message)
             .execute('Appointment.UpdateDiagnosis');
 
         return true;

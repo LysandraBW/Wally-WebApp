@@ -11,6 +11,7 @@ interface NoteFormProps {
         Notes: {[noteID: string]: UpdateNote};    
     }
     changeHandler: (part: Parts, name: string, value: any) => void;
+    onSave: () => any;
 }
 
 export default function NoteForm(props: NoteFormProps) {
@@ -52,6 +53,7 @@ export default function NoteForm(props: NoteFormProps) {
                     }}
                 />
             </div>
+            <button onClick={() => props.onSave()}>Save</button>
         </>
     )
 }

@@ -145,7 +145,7 @@ export interface DB_Appointment {
     UpdationDate:   Date;
     StartDate:      Date;
     EndDate:        Date;
-    Cost:           string;
+    Cost:           number;
     StatusID:       number;
     Status:         string;
     Make:           string;
@@ -174,7 +174,7 @@ export interface DB_AppointmentSummary {
     UpdationDate:   Date;
     StartDate:      Date;
     EndDate:        Date;
-    Cost:           string;
+    Cost:           number;
     StatusID:       number;
     Status:         string;
     Make:           string;
@@ -200,7 +200,7 @@ export interface DB_AppointmentOverview {
     UpdationDate:   Date;
     StartDate:      Date;
     EndDate:        Date;
-    Cost:           string;
+    Cost:           number;
     StatusID:       number;
     Status:         string;
     Make:           string;
