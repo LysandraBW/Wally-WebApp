@@ -10,21 +10,23 @@ interface NoteInputProps {
     onChange: (name: string, value: any) => any;
 }
 
+const blankNoteInput: UpdateNote = {
+    NoteID: -1,
+    EmployeeID: '',
+    AppointmentID: '',
+    CreationDate: new Date(),
+    UpdationDate: new Date(),
+    Head: '',
+    Body: '',
+    Attachments: [],
+    Type: 'File',
+    ShowCustomer: 0,
+    Files: null,
+    Sharees: []
+}
+
 export default function NoteInput(props: NoteInputProps) {
-    const [values, setValues] = useState<UpdateNote>({
-        NoteID: -1,
-        EmployeeID: '',
-        AppointmentID: '',
-        CreationDate: new Date(),
-        UpdationDate: new Date(),
-        Head: '',
-        Body: '',
-        Attachments: [],
-        Type: 'File',
-        ShowCustomer: 0,
-        Files: null,
-        Sharees: []
-    });
+    const [values, setValues] = useState<UpdateNote>(blankNoteInput);
 
     return (
         <div>
@@ -58,11 +60,10 @@ export default function NoteInput(props: NoteInputProps) {
                 onChange={(name, value) => setValues({...values, [`${name}`]: value})}
             />
             <div>
-                {props.employees.map((employee, i) => {
-                    if (employee.EmployeeID === props.employeeID)
-                        return <div key={i}></div>;
-                    return (
-                        <div key={i}>
+                {props.employees.map((employee, i) => (
+                    <div key={i}>
+                        {/* Cannot Add Yourself as Sharee */}
+                        {employee.EmployeeID !== props.employeeID && 
                             <Toggle
                                 name='Sharees'
                                 label={`Add ${employee.FName} ${employee.LName}`}
@@ -71,11 +72,18 @@ export default function NoteInput(props: NoteInputProps) {
                                     setValues({...values, Sharees: toggleValue(values.Sharees, employee.EmployeeID)});
                                 }}
                             />
-                        </div>
-                    )
-                })}
+                        }
+                    </div>
+                ))}
             </div>
-            <button onClick={() => props.onChange('Notes', values)}>Add</button>
+            <button 
+                onClick={() => {
+                    props.onChange('Notes', values);
+                    setValues(blankNoteInput);
+                }
+            }>
+                Add
+            </button>
         </div>
     )
 }

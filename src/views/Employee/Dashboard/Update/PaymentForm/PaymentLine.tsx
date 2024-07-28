@@ -9,18 +9,14 @@ interface CostLineProps {
 }
 
 export default function CostLine(props: CostLineProps) {
-    const initialPayment = props.payment.Payment;
-    const initialName = props.payment.Name;
-    const initialType = props.payment.Type;
-    const initialCCN = props.payment.CCN;
-    const initialEXP = props.payment.EXP;
-    
+    const ref = {...props.payment};
     const [edit, setEdit] = useState(false);
     const [values, setValues] = useState(props.payment);
 
     return (
         <>
-            {edit && 
+            {/* User can only edit new payments. */}
+            {edit &&
                 <Multiple
                     onBlur={() => {
                         setEdit(false);
@@ -31,27 +27,27 @@ export default function CostLine(props: CostLineProps) {
                             <input 
                                 value={values.Payment} 
                                 onChange={(event) => setValues({...values, Payment: event.target.value})}
-                                onBlur={() => !values.Payment && setValues({...values, Payment: initialPayment})}
+                                onBlur={() => !values.Payment && setValues({...values, Payment: ref.Payment})}
                             />
                             <input 
                                 value={values.Name} 
                                 onChange={(event) => setValues({...values, Name: event.target.value})}
-                                onBlur={() => !values.Name && setValues({...values, Name: initialName})}
+                                onBlur={() => !values.Name && setValues({...values, Name: ref.Name})}
                             />
                             <input 
                                 value={values.Type} 
                                 onChange={(event) => setValues({...values, Type: event.target.value})}
-                                onBlur={() => !values.Type && setValues({...values, Type: initialType})}
+                                onBlur={() => !values.Type && setValues({...values, Type: ref.Type})}
                             />
                             <input 
                                 value={values.CCN} 
                                 onChange={(event) => setValues({...values, CCN: event.target.value})}
-                                onBlur={() => !values.CCN && setValues({...values, CCN: initialCCN})}
+                                onBlur={() => !values.CCN && setValues({...values, CCN: ref.CCN})}
                             />
                             <input 
                                 value={values.EXP} 
                                 onChange={(event) => setValues({...values, EXP: event.target.value})}
-                                onBlur={() => !values.EXP && setValues({...values, EXP: initialEXP})}
+                                onBlur={() => !values.EXP && setValues({...values, EXP: ref.EXP})}
                             />
                         </div>
                     )}
@@ -59,7 +55,7 @@ export default function CostLine(props: CostLineProps) {
             }
             {!edit && 
                 <div>
-                    <span onClick={() => setEdit(true)}>
+                    <span onClick={() => setEdit(!!values.PaymentID)}>
                         <div>{props.payment.Payment} {props.payment.PaymentDate.toString()}</div>
                         <div>{props.payment.Type} {props.payment.Name} {props.payment.CCN} {props.payment.EXP}</div>
                     </span>

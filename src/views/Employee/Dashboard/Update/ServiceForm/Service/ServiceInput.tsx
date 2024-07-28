@@ -6,15 +6,17 @@ interface ServiceInputProps {
     onChange: (name: string, value: any) => any;
 }
 
+const blankInput: DB_AppointmentService = {
+    AppointmentID: '',
+    AppointmentServiceID: 0,
+    ServiceID: null,
+    Service: '',
+    Division: '',
+    Class: ''
+}
+
 export default function ServiceInput(props: ServiceInputProps) {
-    const [values, setValues] = useState<DB_AppointmentService>({
-        AppointmentID: '',
-        AppointmentServiceID: 0,
-        ServiceID: null,
-        Service: '',
-        Division: '',
-        Class: ''
-    });
+    const [values, setValues] = useState<DB_AppointmentService>(blankInput);
 
     return (
         <div>
@@ -36,7 +38,14 @@ export default function ServiceInput(props: ServiceInputProps) {
                 label={'Class'}
                 onChange={(name, value) => setValues({...values, [`${name}`]: value})}
             />
-            <button onClick={() => props.onChange('Services', values)}>Add</button>
+            <button 
+                onClick={() => {
+                    props.onChange('Services', values);
+                    setValues(values);
+                }}
+            >
+                Add
+            </button>
         </div>
     )
 }

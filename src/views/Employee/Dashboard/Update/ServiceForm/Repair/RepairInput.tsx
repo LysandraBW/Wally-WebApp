@@ -6,11 +6,13 @@ interface RepairInputProps {
     onChange: (name: string, value: any) => any;
 }
 
+const blankInput: DB_Repair = {
+    RepairID: 0,
+    Repair: ''
+}
+
 export default function RepairInput(props: RepairInputProps) {
-    const [values, setValues] = useState<DB_Repair>({
-        RepairID: 0,
-        Repair: ''
-    });
+    const [values, setValues] = useState<DB_Repair>(blankInput);
     
     return (
         <div>
@@ -20,7 +22,14 @@ export default function RepairInput(props: RepairInputProps) {
                 label={'Repair'}
                 onChange={(name, value) => setValues({...values, [`${name}`]: value})}
             />
-            <button onClick={() => props.onChange('Repairs', values)}>Add</button>
+            <button 
+                onClick={() => {
+                    props.onChange('Repairs', values);
+                    setValues(blankInput);
+                }}
+            >
+                Add
+            </button>
         </div>
     )
 }

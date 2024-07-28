@@ -6,12 +6,14 @@ interface DiagnosisInputProps {
     onChange: (name: string, value: any) => any;
 }
 
+const blankInput: DB_Diagnosis = {
+    DiagnosisID: 0,
+    Code: '',
+    Message: '',
+}
+
 export default function DiagnosisInput(props: DiagnosisInputProps) {
-    const [values, setValues] = useState<DB_Diagnosis>({
-        DiagnosisID: 0,
-        Code: '',
-        Message: '',
-    });
+    const [values, setValues] = useState<DB_Diagnosis>(blankInput);
     
     return (
         <div>
@@ -27,7 +29,14 @@ export default function DiagnosisInput(props: DiagnosisInputProps) {
                 label={'Message'}
                 onChange={(name, value) => setValues({...values, [`${name}`]: value})}
             />
-            <button onClick={() => props.onChange('Diagnoses', values)}>Add</button>
+            <button 
+                onClick={() => {
+                    props.onChange('Diagnoses', values);
+                    setValues(blankInput);
+                }}
+            >
+                Add
+            </button>
         </div>
     )
 }

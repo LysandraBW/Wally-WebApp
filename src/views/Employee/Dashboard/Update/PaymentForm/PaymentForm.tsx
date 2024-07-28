@@ -25,7 +25,7 @@ export default function CostForm(props: CostFormProps) {
                 onChange={(name, value) => props.changeHandler('Cost', name, value)}
             />
             <div>
-                Current Parts
+                Current Payments
                 {Object.entries(props.form.Payments).map(([paymentID, payment], i) => (
                     <div key={i}>
                         <CostLine
@@ -45,10 +45,9 @@ export default function CostForm(props: CostFormProps) {
                 ))}
             </div>
             <div>
-                Type in a Part Here
+                Type in a Payment Here
                 <CostInput
                     onChange={(name, value) => {
-                        console.log('Stored Payments', props.form.Payments);
                         props.changeHandler('Cost', 'Payments', {...props.form.Payments, [`${-counter}`]: value});
                         setCounter(counter+1);
                     }}

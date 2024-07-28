@@ -6,14 +6,16 @@ interface PartInputProps {
     onChange: (name: string, value: any) => any;
 }
 
+const blankInput: DB_Part = {
+    PartID: 0,
+    PartNumber: '',
+    PartName: '',
+    Quantity: 0,
+    UnitCost: 0
+}
+
 export default function PartInput(props: PartInputProps) {
-    const [values, setValues] = useState<DB_Part>({
-        PartID: 0,
-        PartNumber: '',
-        PartName: '',
-        Quantity: 0,
-        UnitCost: 0
-    });
+    const [values, setValues] = useState<DB_Part>(blankInput);
     
     return (
         <div>
@@ -43,7 +45,14 @@ export default function PartInput(props: PartInputProps) {
                 label={'Quantity'}
                 onChange={(name, value) => setValues({...values, [`${name}`]: value})}
             />
-            <button onClick={() => props.onChange('Parts', values)}>Add</button>
+            <button 
+                onClick={() => {
+                    props.onChange('Parts', values);
+                    setValues(blankInput);
+                }}
+            >
+                Add
+            </button>
         </div>
     )
 }

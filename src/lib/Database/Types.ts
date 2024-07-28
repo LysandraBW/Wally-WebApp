@@ -62,7 +62,7 @@ export interface DB_EventSharee {
 export interface DB_Payment {
     AppointmentID:  string;
     PaymentID:      number;
-    Payment:        number;
+    Payment:        number | string;
     PaymentDate:    Date;
     Name:           string;
     Type:           string;
@@ -124,6 +124,10 @@ export interface DB_AppointmentLabel {
     LabelID: number;
     Label: string;
     Value: number;
+}
+
+export interface DB_AppointmentLabels {
+    [Label: string]: DB_AppointmentLabel
 }
 
 export interface DB_EmployeeLabel extends DB_AppointmentLabel {

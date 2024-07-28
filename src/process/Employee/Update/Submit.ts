@@ -48,7 +48,7 @@ async function uploadAttachments(data: {
     });
     if (!output)
         return false;
-    return false;
+    return true;
 }
 
 export async function submitNotesForm(
@@ -206,7 +206,7 @@ export async function submitGeneralForm(
             throw 'Error';
     }
 
-    return false;
+    return true;
 }
 
 export async function submitVehicleForm(

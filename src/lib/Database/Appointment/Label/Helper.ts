@@ -1,4 +1,4 @@
-import { DB_EmployeeLabel, DB_EmployeeLabels } from "../../Types";
+import { DB_AppointmentLabel, DB_AppointmentLabels, DB_EmployeeLabel, DB_EmployeeLabels } from "../../Types";
 
 export function getLabel(labels: Array<DB_EmployeeLabel>, labelName: string): number {
     for (const label of labels) {
@@ -38,3 +38,10 @@ export function updateLabels(
     return labels;
 }
 
+export function sortAppointmentLabels(labels: Array<DB_AppointmentLabel>): DB_AppointmentLabels {
+    const sortedLabels: DB_AppointmentLabels = {};
+    for (const label of labels) {
+        sortedLabels[label.Label] = label;
+    }
+    return sortedLabels;   
+}

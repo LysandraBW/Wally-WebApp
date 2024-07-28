@@ -1,6 +1,7 @@
 import React from "react";
 import { DB_AppointmentOverview, DB_EmployeeLabel, DB_Label } from "@/lib/Database/Types";
 import { getLabel } from "@/lib/Database/Appointment/Label/Helper";
+import { toString } from "@/lib/Helper";
 
 interface AppointmentProps {
     app: DB_AppointmentOverview;
@@ -51,7 +52,7 @@ export default function Appointment(props: AppointmentProps) {
             <td>{props.highlight(props.app.CreationDate.toString())}</td>
             <td>{props.app.StartDate && props.highlight(props.app.StartDate.toString())}</td>
             <td>{props.app.EndDate && props.highlight(props.app.EndDate.toString())}</td>
-            <td>{props.highlight(props.app.Cost.toString())}</td>
+            <td>{props.highlight(toString(props.app.Cost))}</td>
             <td>{props.highlight(props.app.VIN)}</td>
             <td>{props.app.Mileage && props.highlight(props.app.Mileage.toString())}</td>
             <td>{props.highlight(props.app.LicensePlate)}</td>

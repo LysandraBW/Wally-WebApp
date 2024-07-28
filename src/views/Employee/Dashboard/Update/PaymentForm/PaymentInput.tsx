@@ -6,17 +6,19 @@ interface CostInputProps {
     onChange: (name: string, value: any) => any;
 }
 
+const blankInput: DB_Payment = {
+    AppointmentID: '',
+    PaymentID: 0,
+    Payment: '',
+    PaymentDate: new Date(),
+    Name: '',
+    Type: '',
+    CCN: '',
+    EXP: ''
+}
+
 export default function CostInput(props: CostInputProps) {
-    const [values, setValues] = useState<DB_Payment>({
-        AppointmentID: '',
-        PaymentID: 0,
-        Payment: '',
-        PaymentDate: new Date(),
-        Name: '', 
-        Type: '', 
-        CCN: '', 
-        EXP: '',
-    });
+    const [values, setValues] = useState<DB_Payment>(blankInput);
 
     return (
         <div>
@@ -50,7 +52,14 @@ export default function CostInput(props: CostInputProps) {
                 label={'Expiration Date'}
                 onChange={(name, value) => setValues({...values, [`${name}`]: value})}
             />            
-            <button onClick={() => props.onChange('Payments', {...values, PaymentDate: new Date()})}>Add</button>
+            <button 
+                onClick={() => {
+                    props.onChange('Payments', {...values, PaymentDate: new Date()});
+                    setValues(blankInput);
+                }
+            }>
+                Add
+            </button>
         </div>
     )
 }
