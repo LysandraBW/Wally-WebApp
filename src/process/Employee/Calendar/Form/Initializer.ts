@@ -1,7 +1,8 @@
 import { DB_Event } from "@/database/Types";
-import { UpdateStructure, UpdateEvent, UpdateFormStructure } from "./Form/Form";
 import { GetEventSharees } from "@/database/Export";
 import { getSessionID } from "@/lib/Cookies/Cookies";
+import { toJSDateTime } from "@/lib/Helper";
+import { UpdateEvent, UpdateFormStructure, UpdateStructure } from "./Form";
 
 export async function initializeUpdateForm(events: Array<DB_Event>): Promise<UpdateStructure> {
     let reference: {[k: string]: any} = {};
@@ -12,7 +13,7 @@ export async function initializeUpdateForm(events: Array<DB_Event>): Promise<Upd
     for (const event of events) {
         let ID = event.EventID || counter--;
         const sharees = (await GetEventSharees({SessionID: await getSessionID(), EventID: event.EventID})).map(sharee => sharee.ShareeID);
-        referenceEvents[`${ID}`] =  { ...event, Sharees: sharees, UpdatedEvent: ''};
+        referenceEvents[`${ID}`] =  { ...event, Sharees: sharees, UpdatedEvent: toJSDateTime(event.Date)};
     }
 
     reference.Events = {
@@ -25,7 +26,7 @@ export async function initializeUpdateForm(events: Array<DB_Event>): Promise<Upd
 export const UpdateForm = async (events: Array<DB_Event>): Promise<UpdateFormStructure> => {
     const form = await initializeUpdateForm(events);
     return {
+        current: form,
         reference: form,
-        current: form
     };
 }

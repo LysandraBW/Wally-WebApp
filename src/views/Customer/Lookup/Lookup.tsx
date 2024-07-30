@@ -5,8 +5,8 @@ interface LookupFormProps {
         appointmentID: string;
         email: string;
     }
-    changeHandler: (name: string, value: any) => void;
-    submitHandler: () => void;
+    onChange: (name: string, value: any) => void;
+    onSubmit: () => void;
 }
 
 export default function LookupForm(props: LookupFormProps) {
@@ -16,17 +16,17 @@ export default function LookupForm(props: LookupFormProps) {
                 name={"appointmentID"}
                 value={props.form.appointmentID}
                 label={"Appointment ID"}
-                onChange={(name, value) => props.changeHandler(name, value)}
+                onChange={(name, value) => props.onChange(name, value)}
             />
             <Text
                 name={"email"}
                 value={props.form.email}
                 label={"Email"}
-                onChange={(name, value) => props.changeHandler(name, value)}
+                onChange={(name, value) => props.onChange(name, value)}
             />
             <Button
                 label="Submit"
-                onClick={props.submitHandler}
+                onClick={props.onSubmit}
             />
         </div>
     )

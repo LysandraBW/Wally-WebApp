@@ -168,6 +168,7 @@ export interface DB_Appointment {
     Notes:          Array<DB_EmployeeNote>;
 }
 
+// Used in the Lookup
 export interface DB_AppointmentSummary {
     AppointmentID:  string;
     CustomerID:     number;

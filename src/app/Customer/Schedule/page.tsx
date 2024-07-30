@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import Tracker from "@/components/Form/Tracker/Tracker";
 import { Form, FormStructure } from "@/process/Customer/Schedule/Form";
-import { ModelYears, Models, DecodeVIN, LoadModels, LoadMakeModelModelYear } from "@/lib/Decoder/Decoder";
+import { ModelYears, LoadModels, LoadMakeModelModelYear } from "@/lib/Decoder/Decoder";
 import { Makes, Services } from "@/database/Export";
 import { LoadedValues, Values } from "@/process/Customer/Schedule/Load";
 import submitForm from "@/process/Customer/Schedule/Submit";
@@ -13,9 +13,7 @@ import Error from "@/views/Customer/Schedule/Error";
 
 export default function Schedule() {
     const [form, setForm] = useState<FormStructure>(Form);
-    // Loaded Values for Inputs (i.e. Dropdown, Checkbox)
     const [values, setValues] = useState<LoadedValues>(Values);
-    // Message after Submission
     const [message, setMessage] = useState<React.ReactNode>(null);
 
     useEffect(() => {
@@ -53,11 +51,13 @@ export default function Schedule() {
             return;
 
         const {make, model, models, modelYear} = await LoadMakeModelModelYear(vin, values.makes);
-        if (!modelYear)        
+        if (!make)        
             return;
 
-        setValues({...values, models});
-
+        setValues({
+            ...values,
+             models
+        });
         return {
             make: make, 
             model: model, 
@@ -92,7 +92,6 @@ export default function Schedule() {
         const appointmentID = await submitForm(form);
 
         if (appointmentID) {
-            alert("Success" + appointmentID);
             setMessage((
                 <Success
                     ID={appointmentID}
@@ -103,7 +102,6 @@ export default function Schedule() {
             return true;
         }
         else {
-            alert("Error");
             setMessage((
                 <Error
                     close={() => setMessage(null)}
@@ -123,7 +121,7 @@ export default function Schedule() {
                         part: (
                             <ContactForm
                                 form={form}
-                                changeHandler={changeHandler}
+                                onChange={changeHandler}
                             />
                         ),
                         onContinue: () => true
@@ -134,13 +132,13 @@ export default function Schedule() {
                             <VehicleForm
                                 form={form}
                                 values={{...values}}
-                                changeHandler={changeHandler}
+                                onChange={changeHandler}
                             />
                         ),
                         onContinue: () => true
                     }
                 ]}
-                submit={submitHandler}
+                onSubmit={submitHandler}
             />
         </>
     )   
