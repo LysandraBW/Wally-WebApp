@@ -2,7 +2,7 @@
 import { Button, Text } from "@/components/Input/Export";
 import { Form, FormStructure } from "@/process/Employee/Login/Form";
 import { submitForm } from "@/process/Employee/Login/Submit";
-import { goTo } from "@/lib/Navigation/Redirect";
+import { goTo, goToDashboard } from "@/lib/Navigation/Redirect";
 import Error from "@/views/Employee/Login/Error";
 import { useState } from "react";
 
@@ -17,7 +17,7 @@ export default function Login() {
     const submitHandler = async (): Promise<void> => {
         const employeeID = await submitForm(form);
         if (employeeID) {
-            await goTo('/Employee/Dashboard/Dashboard');
+            await goToDashboard();
             return;
         }
         setErrorMessage(<Error close={() => setErrorMessage(null)}/>);

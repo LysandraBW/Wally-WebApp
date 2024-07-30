@@ -1,4 +1,4 @@
-import { DB_AppointmentSummary } from "@/lib/Database/Types";
+import { DB_AppointmentSummary } from "@/database/Types";
 
 interface SummaryProps {
     info: DB_AppointmentSummary;

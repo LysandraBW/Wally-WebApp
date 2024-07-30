@@ -1,7 +1,7 @@
 "use server";
 import { FormStructure } from "./Form";
 import { processForm } from "./ProcessedForm";
-import { InsertAppointment, InsertDefinedService } from "@/lib/Database/Export";
+import { InsertAppointment, InsertDefinedService } from "@/database/Export";
 
 const submitForm = async (form: FormStructure): Promise<string> => {
     let processedForm = processForm(form);

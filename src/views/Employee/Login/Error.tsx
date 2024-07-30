@@ -1,4 +1,4 @@
-import Message from "@/components/Pop-Up/Message/Message";
+import Message from "@/components/Message/Message/Message";
 
 interface ErrorProps {
     close: () => void;
@@ -13,7 +13,7 @@ export default function Error(props: ErrorProps) {
                     <div>We couldn't find an appointment with your username or password.</div>
                 </>
             )}
-            close={() => props.close()}
+            onClose={() => props.close()}
         />
     )
 }

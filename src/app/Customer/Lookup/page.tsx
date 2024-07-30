@@ -5,7 +5,7 @@ import { submitForm } from "@/process/Customer/Lookup/Submit";
 import Summary from "@/views/Customer/Lookup/Summary";
 import Error from "@/views/Customer/Lookup/Error";
 import LookupForm from "@/views/Customer/Lookup/Lookup";
-import { DB_AppointmentSummary } from "@/lib/Database/Types";
+import { DB_AppointmentSummary } from "@/database/Types";
 
 export default function Lookup() {
     const [form, setForm] = useState<FormStructure>(Form);

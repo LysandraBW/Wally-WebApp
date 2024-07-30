@@ -1,12 +1,12 @@
-import { DB_AppointmentOverview } from "@/lib/Database/Types";
-import { FilterStructure } from "@/process/Employee/Dashboard/Form";
+import { DB_AppointmentOverview } from "@/database/Types";
+import { FilterStructure } from "@/process/Employee/Dashboard/Filter";
 
 interface HeadProps {
+    currentAppointments: Array<DB_AppointmentOverview>;
+    checkedAppointments: Array<string>;
+    setChecked: (checked: Array<string>) => any;
     filter: FilterStructure;
     updateFilter: (filter: FilterStructure) => any;   
-    checked: Array<string>;
-    current: Array<DB_AppointmentOverview>;
-    setChecked: (checked: Array<string>) => any;
 }
 
 export default function Head(props: HeadProps) {
@@ -39,10 +39,10 @@ export default function Head(props: HeadProps) {
                 <td>
                     <input 
                         type='checkbox'
-                        checked={!!props.current.length && !props.current.map(app => app.AppointmentID).filter(appID => !props.checked.includes(appID)).length}
+                        checked={!!props.currentAppointments.length && !props.currentAppointments.map(app => app.AppointmentID).filter(appID => !props.checkedAppointments.includes(appID)).length}
                         onChange={() => {
-                            if (!props.checked.length)
-                                props.setChecked(props.current.map(app => app.AppointmentID));
+                            if (!props.checkedAppointments.length)
+                                props.setChecked(props.currentAppointments.map(app => app.AppointmentID));
                             else
                                 props.setChecked([]);
                         }}

@@ -1,16 +1,12 @@
-import NoteLine from "./NoteLine";
-import NoteInput from "./NoteInput";
-import { useEffect, useState } from "react";
-import { Parts, UpdateNote } from "@/process/Employee/Update/Form";
-import { DB_GeneralEmployee } from "@/lib/Database/Types";
+import UpdateNote from "./UpdateNote";
+import CreateNote from "./CreateNote";
+import { NoteFormStructure } from "@/process/Employee/Update/Form/Form/Note/Note";
+import { FormPart } from "@/process/Employee/Update/Form/UpdateForm";
+import { useState } from "react";
 
 interface NoteFormProps {
-    form: {
-        EmployeeID: string;
-        Employees: Array<DB_GeneralEmployee>;
-        Notes: {[noteID: string]: UpdateNote};    
-    }
-    changeHandler: (part: Parts, name: string, value: any) => void;
+    form: NoteFormStructure;
+    changeHandler: (part: FormPart, name: string, value: any) => void;
     onSave: () => any;
 }
 
@@ -23,19 +19,17 @@ export default function NoteForm(props: NoteFormProps) {
                 Current Notes
                 {Object.entries(props.form.Notes).map(([noteID, note], i) => (
                     <div key={i}>
-                        <NoteLine
-                            employeeID={props.form.EmployeeID}
-                            employees={props.form.Employees}
+                        <UpdateNote
                             note={note}
                             onDelete={() => {
-                                let modValue = props.form.Notes;
+                                let modValue = {...props.form.Notes};
                                 delete modValue[`${noteID}`];
-                                props.changeHandler('Services', 'Parts', modValue);
+                                props.changeHandler('Service', 'Parts', modValue);
                             }}
                             onUpdate={(note) => {
-                                let modValue = props.form.Notes;
+                                let modValue = {...props.form.Notes}
                                 props.form.Notes[`${noteID}`] = note;
-                                props.changeHandler('Services', 'Parts', modValue);
+                                props.changeHandler('Service', 'Parts', modValue);
                             }}
                         />
                     </div>
@@ -43,12 +37,9 @@ export default function NoteForm(props: NoteFormProps) {
             </div>
             <div>
                 Type in a Note Here
-                <NoteInput
-                    employeeID={props.form.EmployeeID}
-                    employees={props.form.Employees}
+                <CreateNote
                     onChange={(name, value) => {
-                        console.log('Stored Notes', props.form.Notes);
-                        props.changeHandler('Notes', name, {...props.form.Notes, [`${-counter}`]: value});
+                        props.changeHandler('Note', name, {...props.form.Notes, [`${-counter}`]: value});
                         setCounter(counter+1);
                     }}
                 />

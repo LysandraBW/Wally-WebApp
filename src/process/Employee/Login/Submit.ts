@@ -1,6 +1,6 @@
 'use server';
 import { FormStructure } from "./Form";
-import { AuthenticateLogin } from "@/lib/Database/Export";
+import { AuthenticateLogin } from "@/database/Export";
 import { processForm } from "./Process";
 import { setSessionID } from "@/lib/Cookies/Cookies";
 
@@ -8,12 +8,9 @@ export const submitForm = async (form: FormStructure): Promise<string> => {
     const processedForm = processForm(form);
     
     const sessionID = await AuthenticateLogin(processedForm);
-
-    // Invalid Login
     if (!sessionID)
         return '';
 
-    // Set JWT Token
     setSessionID(sessionID);
     return sessionID;
 }

@@ -1,8 +1,8 @@
 'use server';
 import { processForm } from './Process';
 import { FormStructure } from './Form';
-import { AuthenticateAppointmentSession, AuthenticateLookup, GetAppointmentSummary } from '@/lib/Database/Export';
-import { DB_AppointmentSummary } from '@/lib/Database/Types';
+import { AuthenticateAppointmentSession, AuthenticateLookup, GetAppointmentSummary } from '@/database/Export';
+import { DB_AppointmentSummary } from '@/database/Types';
 
 export const submitForm = async (form: FormStructure)
 : Promise<DB_AppointmentSummary|null> => {

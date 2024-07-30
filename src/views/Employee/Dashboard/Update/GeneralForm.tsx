@@ -1,7 +1,7 @@
 import { Segment, Text } from "@/components/Input/Export";
-import { DB_Statuses } from "@/lib/Database/Info/Info";
-import { DB_Status } from "@/lib/Database/Types";
-import { Parts } from "@/process/Employee/Update/Form";
+import { DB_Statuses } from "@/database/Info/Info";
+import { DB_Status } from "@/database/Types";
+import { FormPart } from "@/process/Employee/Update/Form/UpdateForm";
 import { useEffect, useState } from "react";
 
 interface GeneralProps {
@@ -14,18 +14,18 @@ interface GeneralProps {
         EndDate: string;
         StatusID: number;
     };
-    changeHandler: (part: Parts, name: string, value: any) => void;
+    changeHandler: (part: FormPart, name: string, value: any) => void;
 }
 
 export default function General(props: GeneralProps) {
     const [statuses, setStatuses] = useState<Array<[any, string]>>([]);
 
     useEffect(() => {
-        const loadStatuses = async () => {
+        const load = async () => {
             let statuses: Array<DB_Status> = await DB_Statuses();
             setStatuses(statuses.map(status => [status.StatusID, status.Status]));
         }
-        loadStatuses();
+        load();
     }, []);
     
     const changeHandler = (name: string, value: any) => {

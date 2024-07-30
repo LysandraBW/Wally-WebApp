@@ -1,19 +1,19 @@
-import { Makes } from "@/lib/Database/Export";
-import { LoadMakeModelModelYear, LoadModels, ModelYears } from "@/lib/Decoder/Decoder";
+import { Makes } from "@/database/Export";
 import { useEffect, useState } from "react";
 import { Text, Search } from "@/components/Input/Export";
-import { Parts } from "@/process/Employee/Update/Form";
+import { FormPart } from "@/process/Employee/Update/Form/UpdateForm";
+import { LoadMakeModelModelYear, LoadModels, ModelYears } from "@/lib/Decoder/Decoder";
 
 interface VehicleProps {
     form: {
-        Make: string;
-        Model: string;
-        ModelYear: number;
-        VIN: string;
-        Mileage: number;
-        LicensePlate: string;
+        Make:           string;
+        Model:          string;
+        ModelYear:      number;
+        VIN:            string;
+        Mileage:        number;
+        LicensePlate:   string;
     }
-    changeHandler: (part: Parts, name: string, value: any, agg?: boolean) => void;
+    changeHandler: (part: FormPart, name: string, value: any) => void;
 }
 
 interface LoadedValues {
@@ -33,10 +33,9 @@ export default function Vehicle(props: VehicleProps) {
 
     useEffect(() => {
         const loadValues = async () => {
-            // I have to specify the type for the compiler not to throw an error.
-            const modelYears: Array<[number, string]> = (await ModelYears()).map(y => [y, y.toString()]);
             const makes: Array<[string, string]> = (await Makes()).map(m => [m.Make, m.Make]);
             const models = await LoadModels(props.form.ModelYear, props.form.Make);
+            const modelYears: Array<[number, string]> = (await ModelYears()).map(y => [y, y.toString()]);
 
             setValues({
                 ...values,
@@ -59,21 +58,22 @@ export default function Vehicle(props: VehicleProps) {
             return;
 
         const {make, model, models, modelYear} = await LoadMakeModelModelYear(vin, values.makes);
+        setValues({...values, models});
+
+        // No Matching Vehicle Found
         if (!make)        
             return;
 
-        setValues({...values, models});
         return {
-            make: make, 
-            model: model, 
+            make:       make, 
+            model:      model, 
             modelYear: modelYear
-        }
+        };
     }
 
     const changeHandler = async (name: string, value: any) => {
-        const part: Parts = 'Vehicle';
         if (name === 'VIN') {
-            props.changeHandler(part, name, value);
+            props.changeHandler('Vehicle', '', value);
             if (value.length < 17)
                 return;
 
@@ -81,26 +81,27 @@ export default function Vehicle(props: VehicleProps) {
             if (!data)
                 return;
 
-            props.changeHandler(part, '', {
-                VIN: value,
-                Make: data.make[0],
-                Model: data.model[0],
-                ModelYear: data.modelYear[0]
-            }, true);
+            props.changeHandler('Vehicle', '', {
+                VIN:        value,
+                Make:       data.make[0],
+                Model:      data.model[0],
+                ModelYear:  data.modelYear[0]
+            });
         }
-        else if (name === 'Make' || name === 'ModelYear' || name === 'Model') {
+        else if (['Make', 'Model', 'ModelYear'].includes(name)) {
             if (name === 'Make') {
                 loadModels(props.form.ModelYear, value[0]);
-                props.changeHandler(part, 'Model', '');
+                props.changeHandler('Vehicle', 'Model', '');
+                props.changeHandler('Vehicle', 'Make', value[0]);
             }
             else if (name === 'ModelYear') {
                 loadModels(value[0], props.form.Make);
-                props.changeHandler(part, 'Model', '');
+                props.changeHandler('Vehicle', 'Model', '');
+                props.changeHandler('Vehicle', 'ModelYear', value[0]);
             }
-            props.changeHandler(part, name, value[0]);
-        }
-        else {
-            props.changeHandler(part, name, value);
+            else {
+                props.changeHandler('Vehicle', 'Model', value[0]);
+            }
         }
     }
 

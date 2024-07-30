@@ -1,4 +1,4 @@
-import Message from "@/components/Pop-Up/Message/Message";
+import Message from "@/components/Message/Message/Message";
 
 interface SuccessProps {
     ID: string;
@@ -14,7 +14,7 @@ export default function Success(props: SuccessProps) {
                         <p>{`Success! Your appointment has been scheduled. Your appointment ID is ${props.ID}. Use this to look up the status of your appointment.`}</p>
                     </>
                 )} 
-                close={() => props.close()}
+                onClose={() => props.close()}
             />
     )
 }

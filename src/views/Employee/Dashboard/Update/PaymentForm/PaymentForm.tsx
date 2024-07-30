@@ -1,19 +1,19 @@
 import { useState } from "react";
-import CostLine from "./PaymentLine";
-import CostInput from "./PaymentInput";
+import UpdatePayment from "./UpdatePayment";
+import CreatePayment from "./CreatePayment";
 import {Text} from "@/components/Input/Export";
-import { DB_Payment } from "@/lib/Database/Types";
-import { Parts } from "@/process/Employee/Update/Form";
+import { DB_Payment } from "@/database/Types";
+import { FormPart } from "@/process/Employee/Update/Form/UpdateForm";
 
-interface CostFormProps {
+interface PaymentFormProps {
     form: {
         Cost: number;
         Payments: {[paymentID: string]: DB_Payment};
     };
-    changeHandler: (part: Parts, name: string, value: any) => void;
+    changeHandler: (formPart: FormPart, name: string, value: any) => void;
 }
 
-export default function CostForm(props: CostFormProps) {
+export default function PaymentForm(props: PaymentFormProps) {
     const [counter, setCounter] = useState<number>(1);
 
     return (
@@ -22,23 +22,23 @@ export default function CostForm(props: CostFormProps) {
                 name={"Cost"}
                 value={props.form.Cost}
                 label={"Cost"}
-                onChange={(name, value) => props.changeHandler('Cost', name, value)}
+                onChange={(name, value) => props.changeHandler('Payment', name, value)}
             />
             <div>
                 Current Payments
                 {Object.entries(props.form.Payments).map(([paymentID, payment], i) => (
                     <div key={i}>
-                        <CostLine
+                        <UpdatePayment
                             payment={payment}
                             onDelete={() => {
-                                let modValue = props.form.Payments;
+                                let modValue = {...props.form.Payments};
                                 delete modValue[`${paymentID}`];
-                                props.changeHandler('Cost', 'Payments', modValue);
+                                props.changeHandler('Payment', 'Payments', modValue);
                             }}
                             onUpdate={(part) => {
-                                let modValue = props.form.Payments;
+                                let modValue = {...props.form.Payments};
                                 props.form.Payments[`${paymentID}`] = part;
-                                props.changeHandler('Cost', 'Payments', modValue);
+                                props.changeHandler('Payment', 'Payments', modValue);
                             }}
                         />
                     </div>
@@ -46,9 +46,9 @@ export default function CostForm(props: CostFormProps) {
             </div>
             <div>
                 Type in a Payment Here
-                <CostInput
+                <CreatePayment
                     onChange={(name, value) => {
-                        props.changeHandler('Cost', 'Payments', {...props.form.Payments, [`${-counter}`]: value});
+                        props.changeHandler('Payment', 'Payments', {...props.form.Payments, [`${-counter}`]: value});
                         setCounter(counter+1);
                     }}
                 />
