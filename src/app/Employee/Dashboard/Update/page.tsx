@@ -27,10 +27,10 @@ let ran = false;
 export const PageContext = createContext(Context);
 
 export default function Update() {
-    const searchParams = useSearchParams();
     const [context, setContext] = useState<ContextStructure>(Context);
     const [updateForm, setUpdateForm] = useState<UpdateFormStructure>();
     const [alert, alertDispatch] = useReducer(AlertReducer, InitialAlert);
+    const searchParams = useSearchParams();
 
     useEffect(() => {
         const load = async () => {
@@ -116,6 +116,8 @@ export default function Update() {
         if (!updateForm)
             return;
 
+        console.log(updateForm);
+
         // I think we can remove the 'Loading' state.
         setContext({
             ...context, 
@@ -134,13 +136,18 @@ export default function Update() {
         if (!updateForm)
             return;
 
+        console.log(formPart, name, value);
+
         // Updating the Entire Form Part
         if (!name) {
             setUpdateForm({
                 ...updateForm,
                 current: {
                     ...updateForm.current,
-                    [`${formPart}`]: value
+                    [`${formPart}`]: {
+                        ...updateForm.current[`${formPart}`],
+                        ...value
+                    }
                 }
             });
 
@@ -153,9 +160,7 @@ export default function Update() {
                     ...updateForm.current,
                     [`${formPart}`]: {
                         ...updateForm.current[`${formPart}`],
-                        [`${name}`]: {
-                            value
-                        }
+                        [`${name}`]: value
                     }
                 }
             });

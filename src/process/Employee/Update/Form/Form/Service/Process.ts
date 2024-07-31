@@ -1,3 +1,6 @@
+import { MathSet, objectMatch } from "../../Helper";
+import { ServiceFormStructure } from "./Service";
+
 export interface ProcessedServiceFormStructure {
     AppointmentID: string;
     Update: {
@@ -61,10 +64,10 @@ export interface ProcessedServiceFormStructure {
 }
 
 export async function processServiceForm(
-    ref: ServicesFormStructure,
-    cur: ServicesFormStructure
-): Promise<ProcessedServicesFormStructure> {
-    const processedServicesForm: ProcessedServicesFormStructure = {
+    ref: ServiceFormStructure,
+    cur: ServiceFormStructure
+): Promise<ProcessedServiceFormStructure> {
+    const processedServicesForm: ProcessedServiceFormStructure = {
         AppointmentID: cur.AppointmentID,
         Update: {
             Services: [],
@@ -89,16 +92,9 @@ export async function processServiceForm(
     const refServiceIDs = new MathSet(Object.keys(ref.Services).map(s => parseInt(s)));
     const curServiceIDs = new MathSet(Object.keys(cur.Services).map(s => parseInt(s)));
 
-    console.log("Reference Service IDs", refServiceIDs);
-    console.log("Current Service IDs", curServiceIDs);
-
     const toUpdateServiceIDs = refServiceIDs.intersection(curServiceIDs);
     const toInsertServiceIDs = curServiceIDs.difference(refServiceIDs);
     const toDeleteServiceIDs = refServiceIDs.difference(curServiceIDs);
-
-    console.log(toUpdateServiceIDs);
-    console.log(toInsertServiceIDs);
-    console.log(toDeleteServiceIDs);
 
     toUpdateServiceIDs.forEach((serviceID) => {
         const refService = ref.Services[`${serviceID}`];

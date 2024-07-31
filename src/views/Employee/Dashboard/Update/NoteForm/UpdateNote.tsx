@@ -19,9 +19,15 @@ export default function UpdateNote(props: UpdateNoteProps) {
     const [values, setValues] = useState(props.note);
 
     const noteOwnerData = (): DB_GeneralEmployee => {
+        // New Note
+        if (props.note.NoteID === -1)
+            return context.Employee.Employee;
+
+        // Modified Note
         for (const employee of context.Employee.Employees)
             if (employee.EmployeeID === props.note.EmployeeID)
                 return employee;
+
         // Default Return
         return {
             EmployeeID: '',
@@ -31,7 +37,7 @@ export default function UpdateNote(props: UpdateNoteProps) {
     }
 
     const isOwner = (employeeID: string = context.Employee.Employee.EmployeeID): boolean => {
-        return employeeID !== props.note.EmployeeID;
+        return employeeID === props.note.EmployeeID || props.note.NoteID === -1;
     }
 
     const getOwnerTag = (): React.ReactNode => {
@@ -40,13 +46,13 @@ export default function UpdateNote(props: UpdateNoteProps) {
     }
 
     const getSharedWith = (): React.ReactNode => {
-        if (false)
+        if (!isOwner())
             return <></>;
         return (
             <ul>
                 Shared With:
-                {context.Employee.Employees.filter(e => values.Sharees.includes(e.EmployeeID)).map(employee => (
-                    <li>{employee.FName} {employee.LName}</li>
+                {context.Employee.Employees.filter(e => values.Sharees.includes(e.EmployeeID)).map((employee, i) => (
+                    <li key={i}>{employee.FName} {employee.LName}</li>
                 ))}
             </ul>
         );
@@ -95,28 +101,32 @@ export default function UpdateNote(props: UpdateNoteProps) {
                                 }}
                             />
                             </div>
-                            <Toggle
-                                name='ShowCustomer'
-                                label='Show Customer'
-                                value={values.ShowCustomer}
-                                onChange={(name, value) => setValues({...values, [`${name}`]: value})}
-                            />
+                            {isOwner() &&
+                                <Toggle
+                                    name='ShowCustomer'
+                                    label='Show Customer'
+                                    value={values.ShowCustomer}
+                                    onChange={(name, value) => setValues({...values, [`${name}`]: value})}
+                                />
+                            }
                             <div>
-                                {context.Employee.Employees.map((employee, i) => (
-                                    <div key={i}>
-                                        {/* Cannot Add Yourself as Sharee */}
-                                        {!isOwner(employee.EmployeeID) && 
-                                            <Toggle
-                                                name='Sharees'
-                                                label={`Add ${employee.FName} ${employee.LName}`}
-                                                value={values.Sharees.includes(employee.EmployeeID) ? 1 : 0}
-                                                onChange={(name, value) => {
-                                                    setValues({...values, Sharees: toggleValue(values.Sharees, employee.EmployeeID)});
-                                                }}
-                                            />
-                                        }
-                                    </div>
-                                ))}
+                                {isOwner() &&
+                                    context.Employee.Employees.map((employee, i) => (
+                                        <div key={i}>
+                                            {/* Cannot Add Yourself as Sharee */}
+                                            {employee.EmployeeID !== context.Employee.Employee.EmployeeID && 
+                                                <Toggle
+                                                    name='Sharees'
+                                                    label={`Add ${employee.FName} ${employee.LName}`}
+                                                    value={values.Sharees.includes(employee.EmployeeID) ? 1 : 0}
+                                                    onChange={(name, value) => {
+                                                        setValues({...values, Sharees: toggleValue(values.Sharees, employee.EmployeeID)});
+                                                    }}
+                                                />
+                                            }
+                                        </div>
+                                    ))
+                                }
                             </div>
                             <button 
                                 onClick={() => {

@@ -11,7 +11,7 @@ import Search from "@/views/Employee/Dashboard/Calendar/Search";
 import { Context, ContextStructure } from "@/process/Employee/Calendar/Context";
 import { Controller, ControllerStructure } from "@/process/Employee/Calendar/Controller";
 import DateEvents from "@/views/Employee/Dashboard/Calendar/DateEvents";
-import { UpdateForm } from "@/process/Employee/Calendar/Form/Initializer";
+import { UpdateForm } from "@/process/Employee/Calendar/Form/Initialize";
 import AlertReducer, { AlertActionType, InitialAlert } from "@/reducer/Alert/Reducer";
 import UpdateEvent from "@/views/Employee/Dashboard/Calendar/EventManager/UpdateEvent";
 

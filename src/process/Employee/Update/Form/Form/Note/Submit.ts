@@ -1,3 +1,4 @@
+'use server';
 import { getSessionID } from "@/lib/Cookies/Cookies";
 import { NoteFormStructure } from "./Note";
 import { DeleteNote, DeleteNoteAttachment, InsertNote, InsertNoteAttachment, InsertNoteSharee, UpdateNote } from "@/database/Export";

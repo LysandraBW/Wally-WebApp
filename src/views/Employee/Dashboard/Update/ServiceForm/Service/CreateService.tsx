@@ -41,7 +41,7 @@ export default function CreateService(props: CreateServiceProps) {
             <button 
                 onClick={() => {
                     props.onChange('Services', values);
-                    setValues(values);
+                    setValues(defaultInput);
                 }}
             >
                 Add

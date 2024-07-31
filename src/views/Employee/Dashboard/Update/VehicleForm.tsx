@@ -103,6 +103,9 @@ export default function Vehicle(props: VehicleProps) {
                 props.changeHandler('Vehicle', 'Model', value[0]);
             }
         }
+        else {
+            props.changeHandler('Vehicle', name, value);
+        }
     }
 
     return (

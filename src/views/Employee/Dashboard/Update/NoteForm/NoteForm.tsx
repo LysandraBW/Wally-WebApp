@@ -28,7 +28,7 @@ export default function NoteForm(props: NoteFormProps) {
                             }}
                             onUpdate={(note) => {
                                 let modValue = {...props.form.Notes}
-                                props.form.Notes[`${noteID}`] = note;
+                                modValue[`${noteID}`] = note;
                                 props.changeHandler('Service', 'Parts', modValue);
                             }}
                         />
