@@ -20,14 +20,14 @@ export default function DiagnosisManager(props: DiagnosisManagerProps) {
                         <UpdateDiagnosis
                             diagnosis={diagnosis}
                             onDelete={() => {
-                                let modValue = {...props.diagnoses};
-                                delete modValue[`${diagnosisID}`];
-                                props.onChange(modValue);
+                                let updatedValue = {...props.diagnoses};
+                                delete updatedValue[`${diagnosisID}`];
+                                props.onChange(updatedValue);
                             }}
                             onUpdate={(diagnosis) => {
-                                let modValue = {...props.diagnoses};
-                                modValue[`${diagnosisID}`] = diagnosis;
-                                props.onChange(modValue);
+                                let updatedValue = {...props.diagnoses};
+                                updatedValue[`${diagnosisID}`] = diagnosis;
+                                props.onChange(updatedValue);
                             }}
                         />
                     </div>

@@ -6,7 +6,8 @@ import { UpdateEvent } from "@/process/Employee/Calendar/Form/Form";
 import { PageContext } from "@/app/Employee/Dashboard/Calendar/page";
 
 interface CreateEventProps {
-    onChange: (name: string, value: any) => any;
+    onClose: () => void;
+    onCreate: (value: any) => void;
 }
 
 const defaultInput: UpdateEvent = {
@@ -26,6 +27,13 @@ export default function CreateEvent(props: CreateEventProps) {
 
     return (
         <div>
+            <span
+                onClick={() => {
+                    props.onClose();
+                }}
+            >
+                x
+            </span>
             <TextArea
                 name={'Name'}
                 value={values.Name}
@@ -64,7 +72,7 @@ export default function CreateEvent(props: CreateEventProps) {
             </div>
             <button 
                 onClick={() => {
-                    props.onChange('Events', values);
+                    props.onCreate(values);
                     setValues(defaultInput);
                 }
             }>

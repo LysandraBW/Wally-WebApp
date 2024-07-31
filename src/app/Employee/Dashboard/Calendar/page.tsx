@@ -3,9 +3,9 @@ import { getSessionID } from "@/lib/Cookies/Cookies";
 import { GetAllEmployees, GetEmployee, GetEvents } from "@/database/Export";
 import useInterval from "@/reducer/Alert/Timer";
 import { goToEmployeeLogin } from "@/lib/Navigation/Redirect";
-import { UpdateFormStructure, } from "@/process/Employee/Calendar/Form/Form";
+import { InitialUpdateForm, UpdateEvent as UpdateEventData, UpdateFormStructure, } from "@/process/Employee/Calendar/Form/Form";
 import { default as CalendarElement } from "@/views/Employee/Dashboard/Calendar/Calendar";
-import CreateEvent from "@/views/Employee/Dashboard/Calendar/EventManager/EventInput";
+import CreateEvent from "@/views/Employee/Dashboard/Calendar/EventManager/CreateEvent";
 import { createContext, useEffect, useReducer, useState } from "react";
 import Search from "@/views/Employee/Dashboard/Calendar/Search";
 import { Context, ContextStructure } from "@/process/Employee/Calendar/Context";
@@ -14,14 +14,15 @@ import DateEvents from "@/views/Employee/Dashboard/Calendar/DateEvents";
 import { UpdateForm } from "@/process/Employee/Calendar/Form/Initialize";
 import AlertReducer, { AlertActionType, InitialAlert } from "@/reducer/Alert/Reducer";
 import UpdateEvent from "@/views/Employee/Dashboard/Calendar/EventManager/UpdateEvent";
+import { submitEventsForm } from "@/process/Employee/Calendar/Form/Submit";
 
 export const PageContext = createContext(Context);
+let ran = false;
 
 export default function Calendar() {
     const [context, setContext] = useState<ContextStructure>(Context);
     const [controller, setController] = useState<ControllerStructure>(Controller);
-    const [updateForm, setUpdateForm] = useState<UpdateFormStructure>();
-
+    const [updateForm, setUpdateForm] = useState<UpdateFormStructure>(InitialUpdateForm);
     const [alert, alertDispatch] = useReducer(AlertReducer, InitialAlert);
 
     useEffect(() => {
@@ -47,54 +48,87 @@ export default function Calendar() {
                 Employees
             });
 
-            // Load Controller
-            const todayDate = new Date();
-            setController({
-                ...controller,
-                Month: todayDate.getMonth(),
-                Year: todayDate.getFullYear()
-            });
-
             // Load Update Form
             const events = await GetEvents({SessionID});
-            setUpdateForm(await UpdateForm(events));
+            
+            setUpdateForm(await UpdateForm(Employee.EmployeeID, events));
         }
+        if (ran)
+            return;
         load();
+        ran = true;
     }, []);
 
-    const changeHandler = (value: any) => {
+    const changeHandler = (value: any, updateDatabase: boolean = false) => {
         if (!updateForm)
             return;
 
-        setUpdateForm({
+        const updatedForm: UpdateFormStructure = {
             ...updateForm,
             current: {
                 ...updateForm.current,
                 Events: {
+                    ...updateForm.current.Events,
                     Events: value
                 }
             }
-        });
+        }
+
+        setUpdateForm(updatedForm);
+
+        if (updateDatabase) {
+            submitEventsForm(
+                updatedForm.reference.Events, 
+                updatedForm.current.Events
+            );
+        }
     }
 
-    const createHandler = (value: any) => {
+    const createHandler = async (value: any) => {
         if (!updateForm)
             return;
 
-        const pseudoID = -1 + (parseInt(Object.keys(updateForm.current.Events.Events).sort()[0]) || 0);
+        const eventIDs = Object.keys(updateForm.current.Events.Events).sort((a, b) => parseInt(a) - parseInt(b));
+        const createdEventID = (parseInt(eventIDs[0]) || 0) - 1;
 
-        setUpdateForm({
+        const updatedForm: UpdateFormStructure = {
             ...updateForm,
             current: {
                 ...updateForm.current,
                 Events: {
+                    ...updateForm.current.Events,
                     Events: {
                         ...updateForm.current.Events.Events,
-                        [`${pseudoID}`]: value
+                        [`${createdEventID}`]: value
                     }
                 }
             }
+        }
+
+        const output = await submitEventsForm(
+            updatedForm.reference.Events, 
+            updatedForm.current.Events
+        );
+
+        if (!output)
+            throw 'Could Not Create Event';
+
+        // Reload
+        const events = await GetEvents({...context});
+        setUpdateForm(await UpdateForm(context.Employee.EmployeeID, events));
+    }
+
+    const findMatchingEvent = (eventID: number, aptID: string | null) => {
+        if (!updateForm)
+            return null;
+
+        const matchingEvent = Object.values({...updateForm.current.Events.Events}).find(e => {
+            if (!eventID)
+                return e.AppointmentID === aptID;
+            return e.EventID === eventID;
         });
+
+        return matchingEvent;
     }
 
     useInterval(() => {
@@ -108,8 +142,8 @@ export default function Calendar() {
             <div>
                 <div>
                     <Search
-                        year={controller.Year}
-                        month={controller.Month}
+                        year={controller.Date.getFullYear()}
+                        month={controller.Date.getMonth()}
                         onYearChange={(year: number) => {
                             const updatedDate = new Date(controller.Date);
                             updatedDate.setFullYear(year);
@@ -127,53 +161,76 @@ export default function Calendar() {
                             });
                         }}
                     />
+                    <button
+                        onClick={() => {
+                            setController({
+                                ...controller,
+                                AddEvent: true
+                            });
+                        }}
+                    >
+                        Add Event
+                    </button>
                 </div>
                 {updateForm &&
                     <div>
                         <CalendarElement
-                            year={controller.Year}
-                            month={controller.Month}
+                            year={controller.Date.getFullYear()}
+                            month={controller.Date.getMonth()}
                             events={updateForm.current.Events}
                             onShowDate={(date) => {
+                                const updatedDate = new Date(controller.Date);
+                                updatedDate.setDate(date);
                                 setController({
                                     ...controller,
+                                    Date: updatedDate,
                                     OpenDay: date
-                                })
+                                });
                             }}
-                            onShowEvent={(eventID) => {
+                            onShowEvent={(eventID, aptID) => {
+                                const matchingEvent = findMatchingEvent(eventID, aptID);
+                                if (!matchingEvent)
+                                    return;
+
                                 setController({
                                     ...controller,
-                                    OpenEventID: eventID
-                                })
+                                    OpenEvent: matchingEvent
+                                });
                             }}
                         />
-                        {controller.OpenEventID &&
+                        {!!controller.OpenEvent &&
                             <UpdateEvent
-                                event={updateForm.current.Events.Events[`${controller.OpenEventID}`]}
+                                event={controller.OpenEvent}
                                 onClose={() => {
                                     setController({
                                         ...controller,
-                                        OpenEventID: 0
+                                        OpenEvent: null
                                     });
                                 }}
                                 onDelete={() => {
+                                    if (!controller.OpenEvent)
+                                        return;
+
                                     let updatedValue = {...updateForm.current.Events.Events};
-                                    delete updatedValue[`${controller.OpenEventID}`];
-                                    changeHandler(updatedValue);
+                                    delete updatedValue[`${controller.OpenEvent.EventID}`];
+                                    changeHandler(updatedValue, true);
                                     
                                     setController({
                                         ...controller,
-                                        OpenEventID: 0
+                                        OpenEvent: null
                                     });
                                 }}
-                                onUpdate={(value) => {
+                                onUpdate={(value: any, finalUpdate: boolean = false) => {
+                                    if (!controller.OpenEvent)
+                                        return;
+
                                     let updatedValue = {...updateForm.current.Events.Events};
-                                    updatedValue[`${controller.OpenEventID}`] = value;
-                                    changeHandler(updatedValue);
+                                    updatedValue[`${controller.OpenEvent.EventID}`] = value;
+                                    changeHandler(updatedValue, finalUpdate);
                                 }}
                             />
                         }
-                        {controller.OpenDay &&
+                        {!!controller.OpenDay &&
                             <DateEvents
                                 date={controller.Date}
                                 events={updateForm.current.Events}
@@ -189,10 +246,14 @@ export default function Calendar() {
                                         AddEvent: true
                                     });
                                 }}
-                                onShowEvent={(eventID) => {
+                                onShowEvent={(eventID, aptID) => {
+                                    const matchingEvent = findMatchingEvent(eventID, aptID);
+                                    if (!matchingEvent)
+                                        return;
+                                
                                     setController({
                                         ...controller,
-                                        OpenEventID: eventID
+                                        OpenEvent: matchingEvent
                                     })
                                 }}
                             />
@@ -201,7 +262,13 @@ export default function Calendar() {
                 }
                 {controller.AddEvent &&
                     <CreateEvent
-                        onChange={(value) => {
+                        onClose={() => {
+                            setController({
+                                ...controller,
+                                AddEvent: false
+                            });
+                        }}
+                        onCreate={(value) => {
                             createHandler(value);
                             setController({
                                 ...controller,

@@ -20,14 +20,14 @@ export default function PartManager(props: PartManagerProps) {
                         <UpdatePart
                             part={part}
                             onDelete={() => {
-                                let modValue = {...props.parts};
-                                delete modValue[`${partID}`];
-                                props.onChange(modValue);
+                                let updatedValue = {...props.parts};
+                                delete updatedValue[`${partID}`];
+                                props.onChange(updatedValue);
                             }}
                             onUpdate={(part) => {
-                                let modValue = {...props.parts};
+                                let updatedValue = {...props.parts};
                                 props.parts[`${partID}`] = part;
-                                props.onChange(modValue);
+                                props.onChange(updatedValue);
                             }}
                         />
                     </div>

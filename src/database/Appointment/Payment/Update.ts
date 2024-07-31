@@ -12,8 +12,6 @@ export default async function UpdateCost(
         const pool = await fetchPool(user, data);
         if (!pool)
             throw 'Appointment.UpdateCost: Undefined Pool';
-
-        console.log(data);
         
         await pool.request()
             .input('SessionID', sql.Char(36), data.SessionID)

@@ -1,5 +1,6 @@
-import { getTime } from "@/lib/Convert/Convert";
+import { getTime, getTimeFromWebDateTime } from "@/lib/Convert/Convert";
 import { UpdateEvent } from "@/process/Employee/Calendar/Form/Form";
+import { Console } from "console";
 
 interface CalendarDateProps {
     date: number;
@@ -21,11 +22,14 @@ export default function CalendarDate(props: CalendarDateProps) {
             <div>
                 {props.dateEvents.map((dateEvent, i) => (
                     <div key={i}
-                        onClick={() => props.onShowEvent(dateEvent.EventID, dateEvent.AppointmentID)}
+                        onClick={(event) => {
+                            event.stopPropagation();
+                            props.onShowEvent(dateEvent.EventID, dateEvent.AppointmentID);
+                        }}
                     >
-                        <h1>{dateEvent.Name}</h1>
+                        <h1>FART{dateEvent.Name}</h1>
                         <p>{dateEvent.Summary}</p>
-                        <p>{getTime(dateEvent.Date)}</p>
+                        <p>{getTimeFromWebDateTime(dateEvent.UpdatedEvent)}</p>
                     </div>
                 ))}
             </div>

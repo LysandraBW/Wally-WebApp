@@ -6,6 +6,7 @@ export interface UpdateEvent extends DB_Event {
 }
 
 export interface EventsFormStructure {
+    EmployeeID: string;
     Events: {[eventID: string]: UpdateEvent}
 }
 
@@ -16,4 +17,19 @@ export interface UpdateStructure {
 export interface UpdateFormStructure {
     current:    UpdateStructure;
     reference:  UpdateStructure;
+}
+
+export const InitialUpdateForm: UpdateFormStructure = {
+    current: {
+        Events: {
+            EmployeeID: '',
+            Events: {}
+        }
+    },
+    reference: {
+        Events: {
+            EmployeeID: '',
+            Events: {}
+        }
+    }
 }

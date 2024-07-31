@@ -1,4 +1,4 @@
-import { DB_AppointmentLabels, DB_Employee, DB_GeneralEmployee } from "@/database/Types";
+import { DB_Employee, DB_GeneralEmployee } from "@/database/Types";
 
 export interface ContextStructure {
     SessionID:  string;

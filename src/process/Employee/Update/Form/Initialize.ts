@@ -13,7 +13,7 @@ import { GetNoteSharees } from "@/database/Export";
 import { getSessionID } from "@/lib/Cookies/Cookies";
 import { toWebDateTime } from "@/lib/Convert/Convert";
 
-export async function initializeUpdateForm(apt: DB_Appointment): Promise<UpdateStructure> {
+export async function initializeUpdateForm(employeeID: string, apt: DB_Appointment): Promise<UpdateStructure> {
     let reference: {[k: string]: any} = {};
 
     // General
@@ -100,14 +100,15 @@ export async function initializeUpdateForm(apt: DB_Appointment): Promise<UpdateS
     // Notes
     reference.Note = {
         AppointmentID: apt.AppointmentID,
+        EmployeeID: employeeID,
         Notes: notes
     };
 
     return <UpdateStructure> reference;
 }
 
-export const UpdateForm = async (appointment: DB_Appointment): Promise<UpdateFormStructure> => {
-    const form: UpdateStructure = await initializeUpdateForm(appointment);
+export const UpdateForm = async (employeeID: string, appointment: DB_Appointment): Promise<UpdateFormStructure> => {
+    const form: UpdateStructure = await initializeUpdateForm(employeeID, appointment);
     return {
         current: form,
         reference: form

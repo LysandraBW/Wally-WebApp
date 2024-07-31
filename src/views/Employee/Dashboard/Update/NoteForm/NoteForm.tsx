@@ -22,14 +22,14 @@ export default function NoteForm(props: NoteFormProps) {
                         <UpdateNote
                             note={note}
                             onDelete={() => {
-                                let modValue = {...props.form.Notes};
-                                delete modValue[`${noteID}`];
-                                props.changeHandler('Service', 'Parts', modValue);
+                                let updatedValue = {...props.form.Notes};
+                                delete updatedValue[`${noteID}`];
+                                props.changeHandler('Note', 'Notes', updatedValue);
                             }}
                             onUpdate={(note) => {
-                                let modValue = {...props.form.Notes}
-                                modValue[`${noteID}`] = note;
-                                props.changeHandler('Service', 'Parts', modValue);
+                                let updatedValue = {...props.form.Notes}
+                                updatedValue[`${noteID}`] = note;
+                                props.changeHandler('Note', 'Notes', updatedValue);
                             }}
                         />
                     </div>

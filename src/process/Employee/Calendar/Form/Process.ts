@@ -1,36 +1,6 @@
-import { EventsFormStructure, UpdateStructure } from "./Form/Form";
-
-// need to put this in a helper file or something
-class MathSet extends Set {
-    intersection(B: MathSet) {
-        const common = new MathSet();
-        this.forEach(e => {
-            if (B.has(e)) {
-                common.add(e);
-            }
-        })
-        return common;
-    }
-
-    difference(B: MathSet) {
-        const notCommon = new MathSet();
-        this.forEach(e => {
-            if (!B.has(e)) {
-                notCommon.add(e);
-            }
-        })
-        return notCommon;
-    }
-}
-
-const objectMatch = (A: {[k: string]: any}, B: {[k: string]: any}, keys: Array<string>): boolean => {
-    for (const key of keys) {
-        if (A[`${key}`] !== B[`${key}`]) {
-            return false;
-        }
-    }
-    return true;
-}
+import { toDatabaseDateTime } from "@/lib/Convert/Convert";
+import { MathSet, objectMatch, updatedValue } from "../../Update/Form/Helper";
+import { EventsFormStructure } from "./Form";
 
 export interface ProcessedEventsFormStructure {
     Update: Array<{
@@ -62,7 +32,6 @@ export interface ProcessedEventsFormStructure {
     };
 }
 
-
 export async function processEventsForm(
     ref: EventsFormStructure, 
     cur: EventsFormStructure
@@ -70,13 +39,9 @@ export async function processEventsForm(
     const refEventIDs = new MathSet(Object.keys(ref.Events).map(n => parseInt(n)).sort());
     const curEventIDs = new MathSet(Object.keys(cur.Events).map(n => parseInt(n)).sort());
 
-    console.log(refEventIDs, curEventIDs);
-
     const toUpdateEventIDs = refEventIDs.intersection(curEventIDs);
     const toInsertEventIDs = curEventIDs.difference(refEventIDs);
     const toDeleteEventIDs = refEventIDs.difference(curEventIDs);
-
-    console.log(toUpdateEventIDs, toInsertEventIDs, toDeleteEventIDs);
 
     const processedEventsForm: ProcessedEventsFormStructure = {
         Update: [],
@@ -94,17 +59,12 @@ export async function processEventsForm(
         const refEvent = ref.Events[`${eventID}`];
         const curEvent = cur.Events[`${eventID}`]; 
 
-        console.log(refEvent, curEvent);
-
         if (!objectMatch(refEvent, curEvent, ['Name', 'Summary', 'Date'])) {
-            // can get a function that either returns null or the updated value, makes it look niceer
             processedEventsForm.Update.push({ 
                 EventID: refEvent.EventID,
-                Name: refEvent.Name !== curEvent.Name ? curEvent.Name : null, 
-                Summary: refEvent.Summary !== curEvent.Summary ? curEvent.Summary : null,
-                // this seems buggy, what if the reference event ok actually no they're both initialized to '' so it would be fine
-                // this is why we need comments
-                Date: refEvent.UpdatedEvent !== curEvent.UpdatedEvent ? curEvent.UpdatedEvent : null
+                Name: updatedValue(refEvent.Name, curEvent.Name), 
+                Summary: updatedValue(refEvent.Summary, curEvent.Summary),
+                Date: updatedValue(toDatabaseDateTime(refEvent.UpdatedEvent), toDatabaseDateTime(curEvent.UpdatedEvent))
             });
         }
 
@@ -134,15 +94,25 @@ export async function processEventsForm(
         processedEventsForm.Insert.Event.push({
             Name: curEvent.Name,
             Summary: curEvent.Summary,
-            Date: curEvent.UpdatedEvent.replace('T', ' '),
+            Date: toDatabaseDateTime(curEvent.UpdatedEvent),
             Sharees: curEvent.Sharees
         });
     });
 
     toDeleteEventIDs.forEach((eventID) => {
-        processedEventsForm.Delete.Event.push({
-            EventID: eventID
-        });
+        const refEvent = ref.Events[`${eventID}`];
+        // Deleting Employee From Event's Shared Members
+        if (refEvent.EmployeeID !== ref.EmployeeID) {
+            processedEventsForm.Delete.Sharee.push({
+                EventID: eventID,
+                EventShareeID: ref.EmployeeID
+            });
+        }
+        else {
+            processedEventsForm.Delete.Event.push({
+                EventID: eventID
+            });
+        }
     });
 
     return processedEventsForm;

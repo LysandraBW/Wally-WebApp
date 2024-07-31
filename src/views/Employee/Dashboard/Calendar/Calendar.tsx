@@ -13,8 +13,8 @@ export interface CalendarProps {
 
 export const getDateEvents = (date: Date, events: EventsFormStructure) => {
     const dateEvents: Array<UpdateEvent> = [];
-    for (const event of Object.values(events)) {
-        if (sameDay(date, event.Date))
+    for (const event of Object.values(events.Events)) {
+        if (sameDay(date, new Date(event.UpdatedEvent)))
             dateEvents.push(event);
     }
     return dateEvents;
@@ -33,7 +33,14 @@ export default function Calendar(props: CalendarProps) {
     }, [props.month, props.year]);
 
     return (
-        <div>
+        <div className='grid grid-cols-7 grid-rows-5'>
+            <div>Sunday</div>
+            <div>Monday</div>
+            <div>Tuesday</div>
+            <div>Wednesday</div>
+            <div>Thursday</div>
+            <div>Friday</div>
+            <div>Saturday</div>
             {monthFirstDayDate && Array.from(Array(35).keys()).map(i => {
                 const monthFirstDay = monthFirstDayDate.getDay();
                 
@@ -42,12 +49,14 @@ export default function Calendar(props: CalendarProps) {
                     calendarDate.setDate(i - monthFirstDay + 1);
 
                 return (
-                    <CalendarDate
-                        date={calendarDate.getDate()}
-                        dateEvents={getDateEvents(calendarDate, props.events)}
-                        onShowDate={props.onShowDate}
-                        onShowEvent={props.onShowEvent}
-                    />
+                    <div key={i}>
+                        <CalendarDate
+                            date={calendarDate.getDate()}
+                            dateEvents={getDateEvents(calendarDate, props.events)}
+                            onShowDate={props.onShowDate}
+                            onShowEvent={props.onShowEvent}
+                        />
+                    </div>
                 );
             })}
         </div>

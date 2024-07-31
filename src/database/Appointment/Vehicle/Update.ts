@@ -13,8 +13,6 @@ export default async function UpdateVehicle(
         if (!pool)
             throw 'Appointment.UpdateVehicle: Undefined Pool';
 
-        console.log('Data', data);
-
         await pool.request()
             .input('SessionID', sql.Char(36), data.SessionID)
             .input('AppointmentID', sql.UniqueIdentifier, data.AppointmentID)

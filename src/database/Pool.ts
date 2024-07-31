@@ -41,10 +41,17 @@ pools.set(User.Customer, CustomerConfig.connect());
 const EmployeeConfig: ConnectionPool = new sql.ConnectionPool(config(DB_E1, DB_E2));
 pools.set(User.Employee, EmployeeConfig.connect());
 
+// Prevents a lot of unneeded calls
+// that increase the wait time.
+let employeeAuthenticated = false;
+
 // Referring To
 // npmjs.com/package/mssql#connections-1
 export const fetchPool = async (user: User, data: {[k: string]: any} = {}) => {
     if (user === User.Employee) {
+        if (employeeAuthenticated)
+            return pools.get(User.Employee);
+        
         const authenticated = await AuthenticateEmployeeSession({
             SessionID: data.SessionID
         }, User.Standard);
@@ -53,6 +60,7 @@ export const fetchPool = async (user: User, data: {[k: string]: any} = {}) => {
         if (!authenticated)
             return pools.get(User.Standard);
 
+        employeeAuthenticated = true;
         return pools.get(User.Employee);
     }
     else if (user === User.Customer) {

@@ -8,5 +8,6 @@ export interface UpdateNote extends DB_Note {
 
 export interface NoteFormStructure {
     AppointmentID:  string;
+    EmployeeID:     string;
     Notes:          {[noteID: string]: UpdateNote};
 }

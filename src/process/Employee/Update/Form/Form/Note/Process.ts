@@ -141,9 +141,19 @@ export async function processNoteForm(reference: NoteFormStructure, current: Not
     const toDeleteNoteIDs = refNoteIDs.difference(curNoteIDs);
 
     toDeleteNoteIDs.forEach((noteID) => {
-        processedNotesForm.Delete.Note.push({
-            NoteID: noteID
-        });
+        const refNote = reference.Notes[`${noteID}`];
+        // Deleting Employee From Note's Shared Members
+        if (refNote.EmployeeID !== reference.EmployeeID) {
+            processedNotesForm.Delete.Sharee.push({
+                NoteID: noteID,
+                NoteShareeID: reference.EmployeeID
+            });
+        }
+        else {
+            processedNotesForm.Delete.Note.push({
+                NoteID: noteID
+            });
+        }
     });
 
     return processedNotesForm;

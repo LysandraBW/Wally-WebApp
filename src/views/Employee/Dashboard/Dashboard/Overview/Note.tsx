@@ -5,11 +5,7 @@ interface NoteProps {
     note: DB_EmployeeNote;
 }
 
-export default function Note(props: NoteProps) {
-    useEffect(() => {
-        console.log(props.note);
-    }, [])
-    
+export default function Note(props: NoteProps) {    
     return (
         <div>
             <h1>{props.note.Head}</h1>

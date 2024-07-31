@@ -41,7 +41,7 @@ export async function InsertCreditCard(
             .input('AppointmentID', sql.UniqueIdentifier, data.AppointmentID)
             .input('PaymentID', sql.Int, data.PaymentID)
             .input('Name', sql.VarChar(100), data.Name)
-            .input('Type', sql.VarChar(4), data.Type)
+            .input('Type', sql.VarChar(10), data.Type)
             .input('CCN', sql.VarChar(4), data.CCN)
             .input('EXP', sql.VarChar(4), data.EXP)
             .execute('Appointment.InsertCreditCard');

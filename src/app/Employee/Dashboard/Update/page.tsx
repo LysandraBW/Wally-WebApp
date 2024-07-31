@@ -22,6 +22,7 @@ import { submitPaymentForm } from "@/process/Employee/Update/Form/Form/Payment/S
 import { submitNoteForm } from "@/process/Employee/Update/Form/Form/Note/Submit";
 import { submitServiceForm } from "@/process/Employee/Update/Form/Form/Service/Submit";
 import { createContext } from "react";
+import { updateMessage } from "@/process/Employee/Update/Form/Helper";
 
 let ran = false;
 export const PageContext = createContext(Context);
@@ -80,11 +81,15 @@ export default function Update() {
         // We reload the appointment and the update form
         // when the contextual appointment ID has changed.
         const load = async () => {
-            // No Apt. ID or Loading Paused
-            if (!context.Appointment.AppointmentID || context.Paused) {
+            // No Apt. ID or Employee ID or Loading Paused
+            if (!context.Appointment.AppointmentID || !context.Employee.Employee.EmployeeID || context.Paused) {
                 setUpdateForm(undefined);
                 return;
             }
+
+            // Storing it in a variable less it becomes tampered
+            // in the subsequent operations.
+            const employeeID = context.Employee.Employee.EmployeeID;
 
             const appointment = await GetAppointment({
                 SessionID: context.Employee.SessionID, 
@@ -106,7 +111,7 @@ export default function Update() {
             });
 
             // Context Loading is Finished Here
-            setUpdateForm(await UpdateForm(appointment));
+            setUpdateForm(await UpdateForm(employeeID, appointment));
         }
         if (context.Appointment.AppointmentID)
             load();
@@ -116,12 +121,8 @@ export default function Update() {
         if (!updateForm)
             return;
 
-        console.log(updateForm);
-
-        // I think we can remove the 'Loading' state.
         setContext({
             ...context, 
-            Loading: false, 
             Loaded: true
         });
     }, [updateForm]);
@@ -132,11 +133,43 @@ export default function Update() {
         });
     }, 1000*1);
 
+    const loadUpdateForm = async () => {
+        // No Apt. ID or Employee ID or Loading Paused
+        if (!context.Appointment.AppointmentID || !context.Employee.Employee.EmployeeID || context.Paused) {
+            setUpdateForm(undefined);
+            return;
+        }
+
+        // Storing it in a variable less it becomes tampered
+        // in the subsequent operations.
+        const employeeID = context.Employee.Employee.EmployeeID;
+
+        const appointment = await GetAppointment({
+            SessionID: context.Employee.SessionID, 
+            AppointmentID: context.Appointment.AppointmentID
+        });
+
+        if (!appointment) {
+            setUpdateForm(undefined);
+            setContext({...context, Paused: true});
+            throw 'Appointment Not Found Error';
+        }
+        
+        setContext({
+            ...context,
+            Appointment: {
+                AppointmentID: appointment.AppointmentID,
+                Labels: appointment.Labels
+            }
+        });
+
+        // Context Loading is Finished Here
+        setUpdateForm(await UpdateForm(employeeID, appointment));
+    }
+
     const updateFormHandler = (formPart: FormPart, name: string, value: any) => {
         if (!updateForm)
             return;
-
-        console.log(formPart, name, value);
 
         // Updating the Entire Form Part
         if (!name) {
@@ -223,12 +256,17 @@ export default function Update() {
         const output = await submitGeneralForm(
             updateForm.reference.General, 
             updateForm.current.General
-        );                                    
+        );      
+        
+        // Not Required
+        if (output)
+            await loadUpdateForm();         
+
         alertDispatch({
             type: AlertActionType.AddMessage, 
             addMessage: {
-                message: '',
-                messageType: 'Default'
+                message: updateMessage('General', output),
+                messageType: output ? 'Default' : 'Error'
             }
         });
     }
@@ -239,12 +277,16 @@ export default function Update() {
         const output = await submitVehicleForm(
             updateForm.reference.Vehicle, 
             updateForm.current.Vehicle
-        );                                    
+        );       
+
+        if (output)
+            await loadUpdateForm();         
+
         alertDispatch({
             type: AlertActionType.AddMessage, 
             addMessage: {
-                message: '',
-                messageType: 'Default'
+                message: updateMessage('Vehicle', output),
+                messageType: output ? 'Default' : 'Error'
             }
         });
     }
@@ -255,12 +297,16 @@ export default function Update() {
         const output = await submitServiceForm(
             updateForm.reference.Service, 
             updateForm.current.Service
-        );                                    
+        );             
+
+        if (output)
+            await loadUpdateForm();         
+
         alertDispatch({
             type: AlertActionType.AddMessage, 
             addMessage: {
-                message: '',
-                messageType: 'Default'
+                message: updateMessage('Service', output),
+                messageType: output ? 'Default' : 'Error'
             }
         });
     }
@@ -271,14 +317,18 @@ export default function Update() {
         const output = await submitPaymentForm(
             updateForm.reference.Payment, 
             updateForm.current.Payment
-        );                                    
+        );          
+
+        if (output)
+            await loadUpdateForm();         
+
         alertDispatch({
             type: AlertActionType.AddMessage, 
             addMessage: {
-                message: '',
-                messageType: 'Default'
+                message: updateMessage('Payment', output),
+                messageType: output ? 'Default' : 'Error'
             }
-        })
+        });
     }
 
     const saveNoteForm = async () => {
@@ -287,12 +337,16 @@ export default function Update() {
         const output = await submitNoteForm(
             updateForm.reference.Note, 
             updateForm.current.Note
-        );                                    
+        );           
+
+        if (output)
+            await loadUpdateForm();         
+
         alertDispatch({
             type: AlertActionType.AddMessage, 
             addMessage: {
-                message: '',
-                messageType: 'Default'
+                message: updateMessage('Note', output),
+                messageType: output ? 'Default' : 'Error'
             }
         });
     }

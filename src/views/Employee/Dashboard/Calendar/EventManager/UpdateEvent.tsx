@@ -2,6 +2,7 @@ import { PageContext } from "@/app/Employee/Dashboard/Calendar/page";
 import { toggleValue } from "@/components/Input/Checkbox/Checkbox";
 import { Multiple, Toggle } from "@/components/Input/Export";
 import { DB_Employee, DB_GeneralEmployee } from "@/database/Types";
+import { getTimeFromWebDateTime } from "@/lib/Convert/Convert";
 import { goToUpdateApt } from "@/lib/Navigation/Redirect";
 import { UpdateEvent as UpdateEventData } from "@/process/Employee/Calendar/Form/Form";
 import { useContext, useEffect, useState } from "react";
@@ -10,7 +11,7 @@ interface UpdateEventProps {
     event: UpdateEventData;
     onClose:  () => void;
     onDelete: () => void;
-    onUpdate: (event: UpdateEventData) => void;
+    onUpdate: (event: UpdateEventData, updateDatabase?: boolean) => void;
 }
 
 export default function UpdateEvent(props: UpdateEventProps) {
@@ -20,7 +21,12 @@ export default function UpdateEvent(props: UpdateEventProps) {
     const [values, setValues] = useState(props.event);
 
     useEffect(() => {
-        props.onUpdate(values);
+        setValues(props.event);
+    }, [props.event]);
+
+    useEffect(() => {
+        if (isEvent())
+            props.onUpdate(values);
     }, [values]);
 
     const isEventOwner = (employeeID: string = context.Employee.EmployeeID): boolean => {
@@ -52,8 +58,8 @@ export default function UpdateEvent(props: UpdateEventProps) {
             <div>
                 <p>Shared With</p>
                 <ul>
-                    {context.Employees.filter(e => values.Sharees.includes(e.EmployeeID)).map(e => (
-                        <li>
+                    {context.Employees.filter(e => values.Sharees.includes(e.EmployeeID)).map((e, i) => (
+                        <li key={i}>
                             {e.FName} {e.LName}
                         </li>
                     ))}
@@ -67,7 +73,9 @@ export default function UpdateEvent(props: UpdateEventProps) {
             <span
                 onClick={() => {
                     setEdit(false);
-                    props.onUpdate(values);
+                    if (isEvent())
+                        props.onUpdate(values);
+                    props.onClose();
                 }}
             >
                 x
@@ -77,7 +85,6 @@ export default function UpdateEvent(props: UpdateEventProps) {
                     onBlur={() => 1}
                     children={(
                         <div>
-                            <span>x</span>
                             <input 
                                 value={values.Name} 
                                 onChange={(event) => setValues({...values, Name: event.target.value})}
@@ -107,10 +114,9 @@ export default function UpdateEvent(props: UpdateEventProps) {
                                 }}
                             />
                             <div>
-                                {/* Probably This (+ Others) Need Reworking */}
                                 {context.Employees.map((employee, i) => (
                                     <div key={i}>
-                                        {isEventOwner(employee.EmployeeID) && 
+                                        {context.Employee.EmployeeID !== employee.EmployeeID && 
                                             <Toggle
                                                 name='Sharees'
                                                 label={`Add ${employee.FName} ${employee.LName}`}
@@ -129,7 +135,7 @@ export default function UpdateEvent(props: UpdateEventProps) {
                             <button 
                                 onClick={() => {
                                     setEdit(false);
-                                    props.onUpdate(values);
+                                    props.onUpdate(values, true);
                                 }}
                             >
                                 Save Changes
@@ -142,9 +148,9 @@ export default function UpdateEvent(props: UpdateEventProps) {
                 <div>
                     {/* Cannot Update a Non-Owned Event or an Appointment */}
                     <div>
-                        <h4>{props.event.Name}</h4>
-                        <p>{props.event.Summary}</p>
-                        <p>{props.event.UpdatedEvent}</p>
+                        <h4>{values.Name}</h4>
+                        <p>{values.Summary}</p>
+                        <p>{getTimeFromWebDateTime(values.UpdatedEvent)}</p>
                         {isEvent() && 
                             <>        
                                 {getEventOwnerTag()}
@@ -153,20 +159,22 @@ export default function UpdateEvent(props: UpdateEventProps) {
                         }
                         {!isEvent() && 
                             <span
-                                onClick={() => goToUpdateApt(props.event.AppointmentID)}
+                                onClick={() => goToUpdateApt(values.AppointmentID)}
                             >
-                                Update Appoitnment
+                                Update Appointment
                             </span>
                         }
                         {isEvent() && isEventOwner() &&
                             <span onClick={() => setEdit(true)}>Edit Event</span>
                         }
                     </div>
-                    <span 
-                        onClick={() => props.onDelete()}
-                    >
-                        {isEventOwner() ? 'Delete Event' : 'Remove Event'}
-                    </span>
+                    {isEvent() &&
+                        <span 
+                            onClick={() => props.onDelete()}
+                        >
+                            {isEventOwner() ? 'Delete Event' : 'Remove Event'}
+                        </span>                    
+                    }
                 </div>
             }
         </div>

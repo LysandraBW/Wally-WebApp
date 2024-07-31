@@ -9,13 +9,8 @@ export async function submitEventsForm(
     ref: EventsFormStructure,
     cur: EventsFormStructure
 ): Promise<boolean> {
-    const processedForm: ProcessedEventsFormStructure = await processEventsForm(ref, cur);
-
-    console.log(util.inspect(processedForm, {showHidden: false, depth: null, colors: true}));
- 
-    // environment
-    // error protocols
     const SessionID = await getSessionID();
+    const processedForm: ProcessedEventsFormStructure = await processEventsForm(ref, cur);
 
     for (const updateEvent of processedForm.Update) {
         const output = await UpdateEvent({
@@ -36,7 +31,6 @@ export async function submitEventsForm(
         if (!eventID)
             throw 'Error';
 
-        console.log('BACK IN BLACK', insertEvent.Sharees);
         insertEvent.Sharees.forEach(async (sharee) => {
             const output = await InsertEventSharee({
                 SessionID,

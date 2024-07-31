@@ -11,7 +11,6 @@ export interface ContextStructure {
         Labels:         DB_AppointmentLabels;
     };
     Paused:         boolean;
-    Loading:        boolean;
     Loaded:         boolean;
 }
 
@@ -32,6 +31,5 @@ export const Context: ContextStructure = {
         Labels:         {}
     },
     Paused:         true,
-    Loading:        false,
     Loaded:         false,
 };

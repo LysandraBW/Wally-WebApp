@@ -16,8 +16,8 @@ export default async function DeleteNoteSharee(
         await pool.request()
             .input('SessionID', sql.Char(36), data.SessionID)
             .input('NoteID', sql.Int, data.NoteID)
-            .input('NoteShareeID', sql.Int, data.NoteShareeID)
-            .execute('DeleteNoteSharee');
+            .input('NoteShareeID', sql.UniqueIdentifier, data.NoteShareeID)
+            .execute('Appointment.DeleteNoteSharee');
 
         return true;
     }

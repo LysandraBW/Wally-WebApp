@@ -1,17 +1,15 @@
+import { UpdateEvent } from "./Form/Form";
+
 export interface ControllerStructure {
     Date:           Date;
-    Month:          number;
-    Year:           number;
-    OpenDay:        number | null;
-    OpenEventID:    number | null;
+    OpenDay:        number;
+    OpenEvent:      UpdateEvent | null;
     AddEvent:       boolean;
 }
 
 export const Controller: ControllerStructure = {
     Date:           new Date(),
-    Month:          0,
-    Year:           0,
-    OpenDay:        -1,
-    OpenEventID:    -1,
+    OpenDay:        0,
+    OpenEvent:      null,
     AddEvent:       false
 }

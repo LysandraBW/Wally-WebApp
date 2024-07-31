@@ -52,14 +52,14 @@ export default function ServiceManager(props: ServiceManagerProps) {
                         <UpdateService
                             service={service}
                             onDelete={() => {
-                                let modValue = props.services;
-                                delete modValue[`${serviceID}`];
-                                props.onChange(modValue);
+                                let updatedValue = props.services;
+                                delete updatedValue[`${serviceID}`];
+                                props.onChange(updatedValue);
                             }}
                             onUpdate={(service) => {
-                                let modValue = props.services;
+                                let updatedValue = props.services;
                                 props.services[`${serviceID}`] = service;
-                                props.onChange(modValue);
+                                props.onChange(updatedValue);
                             }}
                         />
                     </div>

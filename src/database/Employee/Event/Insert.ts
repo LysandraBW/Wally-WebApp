@@ -13,7 +13,6 @@ export async function InsertEvent(
         if (!pool)
             throw 'Employee.InsertEvent: Undefined Pool';
 
-        console.log(data)
         const output = await pool.request()
             .input('SessionID', sql.Char(36), data.SessionID)
             .input('Name', sql.VarChar(100), data.Name)

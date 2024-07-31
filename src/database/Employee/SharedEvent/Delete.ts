@@ -16,8 +16,8 @@ export default async function DeleteEventSharee(
         await pool.request()
             .input('SessionID', sql.Char(36), data.SessionID)
             .input('EventID', sql.Int, data.EventID)
-            .input('EventShareeID', sql.Int, data.EventShareeID)
-            .execute('Employee.DeleteEventShare');
+            .input('EventShareeID', sql.UniqueIdentifier, data.EventShareeID)
+            .execute('Employee.DeleteEventSharee');
 
         return true;
     }

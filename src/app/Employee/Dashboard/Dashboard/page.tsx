@@ -90,12 +90,10 @@ export default function Dashboard() {
     }, 1000*1);
 
     useEffect(() => {
-        console.log('A')
         // Prevents Loading 'Splotchiness'
         if (!controller.Loading && !controller.Loaded)
             return;
 
-        console.log('B')
         // Extracting Current Appointments
         const numberPages = Math.ceil(controller.All.Count/filter.PageSize);
         const currentPage = Math.max(Math.min(controller.Current.Page, numberPages), 1);

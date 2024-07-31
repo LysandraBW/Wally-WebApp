@@ -31,7 +31,6 @@ export default function Tabs(props: TabsProps) {
             </span>
             <span
                 onClick={async () => {
-                    console.log('New');
                     await props.updateFilter({StatusID: null, Deleted: 0, LabelID: -1});
                 }} 
             >

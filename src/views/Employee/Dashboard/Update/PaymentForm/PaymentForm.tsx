@@ -31,14 +31,14 @@ export default function PaymentForm(props: PaymentFormProps) {
                         <UpdatePayment
                             payment={payment}
                             onDelete={() => {
-                                let modValue = {...props.form.Payments};
-                                delete modValue[`${paymentID}`];
-                                props.changeHandler('Payment', 'Payments', modValue);
+                                let updatedValue = {...props.form.Payments};
+                                delete updatedValue[`${paymentID}`];
+                                props.changeHandler('Payment', 'Payments', updatedValue);
                             }}
                             onUpdate={(part) => {
-                                let modValue = {...props.form.Payments};
+                                let updatedValue = {...props.form.Payments};
                                 props.form.Payments[`${paymentID}`] = part;
-                                props.changeHandler('Payment', 'Payments', modValue);
+                                props.changeHandler('Payment', 'Payments', updatedValue);
                             }}
                         />
                     </div>

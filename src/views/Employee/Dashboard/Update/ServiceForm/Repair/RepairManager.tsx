@@ -20,14 +20,14 @@ export default function RepairManager(props: RepairManagerProps) {
                         <UpdateRepair
                             repair={repair}
                             onDelete={() => {
-                                let modValue = {...props.repairs};
-                                delete modValue[`${repairID}`];
-                                props.onChange(modValue);
+                                let updatedValue = {...props.repairs};
+                                delete updatedValue[`${repairID}`];
+                                props.onChange(updatedValue);
                             }}
                             onUpdate={repair => {
-                                let modValue = {...props.repairs};
-                                modValue[`${repairID}`] = repair;
-                                props.onChange(modValue);
+                                let updatedValue = {...props.repairs};
+                                updatedValue[`${repairID}`] = repair;
+                                props.onChange(updatedValue);
                             }}
                         />
                     </div>
