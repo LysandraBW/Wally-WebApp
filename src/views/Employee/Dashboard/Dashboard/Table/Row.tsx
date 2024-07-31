@@ -1,22 +1,18 @@
 import React from "react";
-import { toString } from "@/lib/Helper";
+import { toString } from "@/lib/Convert/Convert";
 import { DB_AppointmentLabels, DB_AppointmentOverview } from "@/database/Types";
 
-interface TupleProps {
+interface AptRowProps {
     appointment: DB_AppointmentOverview;
-
     labels: DB_AppointmentLabels;
     updateLabel: (appointmentID: string, labelName: string) => any;
-
-    checked: boolean;
+    isChecked: boolean;
     checkAppointment: (appointmentID: string) => void;
-
     deleteAppointment: (appointmentIDs: Array<string>) => void;
-    
     search: string;
 }
 
-export default function Tuple(props: TupleProps) {
+export default function AptRow(props: AptRowProps) {
     const updateLabel = async (labelName: string) => {
         props.updateLabel(props.appointment.AppointmentID, labelName);
     }
@@ -28,7 +24,7 @@ export default function Tuple(props: TupleProps) {
         const upperCasedEntry = entry.toUpperCase();
         const upperCasedSearch = props.search.toUpperCase();
 
-        if (upperCasedEntry.includes(upperCasedSearch))
+        if (!upperCasedEntry.includes(upperCasedSearch))
             return entry;
 
         const index = upperCasedEntry.indexOf(upperCasedSearch);
@@ -50,21 +46,24 @@ export default function Tuple(props: TupleProps) {
                 <input 
                     type='checkbox' 
                     onChange={() => props.checkAppointment(props.appointment.AppointmentID)}
-                    checked={props.checked}
+                    checked={props.isChecked}
+                    onClick={(event) => event.stopPropagation()}
                 />
             </td>
             <td>
                 <input 
                     type='checkbox'
                     onChange={() => updateLabel('Star')}
-                    checked={!!props.labels.Star}
+                    checked={!!props.labels.Star.Value}
+                    onClick={(event) => event.stopPropagation()}
                 />
             </td>
             <td>
                 <input 
                     type='checkbox'
                     onChange={() => updateLabel('Flag')}
-                    checked={!!props.labels.Flag}
+                    checked={!!props.labels.Flag.Value}
+                    onClick={(event) => event.stopPropagation()}
                 />
             </td>
             <td>{highlightEntry(props.appointment.FName)}</td>
@@ -80,7 +79,13 @@ export default function Tuple(props: TupleProps) {
             <td>{highlightEntry(toString(props.appointment.Mileage))}</td>
             <td>{highlightEntry(props.appointment.LicensePlate)}</td>
             <td>{highlightEntry(props.appointment.Status)}</td>
-            <td onClick={async () => await props.deleteAppointment([props.appointment.AppointmentID])}>Delete</td>
+            <td 
+                onClick={async () => {
+                    await props.deleteAppointment([props.appointment.AppointmentID]);
+                }}
+            >
+                Delete
+            </td>
         </React.Fragment>
     )
 }

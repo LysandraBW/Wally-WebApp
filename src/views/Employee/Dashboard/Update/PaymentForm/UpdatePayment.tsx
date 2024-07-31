@@ -1,6 +1,6 @@
 import { Multiple } from "@/components/Input/Export";
 import { DB_Payment } from "@/database/Types";
-import { toInteger } from "@/lib/Helper";
+import { toInteger } from "@/lib/Convert/Convert";
 import { useState } from "react";
 
 interface UpdatePaymentProps {

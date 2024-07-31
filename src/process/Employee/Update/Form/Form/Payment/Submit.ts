@@ -2,7 +2,7 @@ import { getSessionID } from "@/lib/Cookies/Cookies";
 import { PaymentFormStructure } from "./Payment";
 import { ProcessedPaymentFormStructure, processPaymentForm } from "./Process";
 import { DeletePayment, InsertCreditCard, InsertPayment, UpdateCost } from "@/database/Export";
-import { toFloat } from "@/lib/Helper";
+import { toFloat } from "@/lib/Convert/Convert";
 
 export async function submitPaymentForm(reference: PaymentFormStructure, current: PaymentFormStructure): Promise<boolean> {
     const processedForm: ProcessedPaymentFormStructure = await processPaymentForm(reference, current);

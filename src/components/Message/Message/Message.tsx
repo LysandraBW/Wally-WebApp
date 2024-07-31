@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 interface MessageProps {
     message: React.ReactNode;
     messageType: MessageType;
@@ -7,14 +9,23 @@ interface MessageProps {
 export type MessageType = 'Default' | 'Error';
 
 export default function Message(props: MessageProps) {
+    const [visible, setVisible] = useState(true);
+    
     return (
         <>
-            <div 
-                onClick={() => props.onClose()}
-            >
-                x
-            </div>
-            {props.message}
+            {visible &&
+                <div>
+                    <div 
+                        onClick={() => {
+                            setVisible(false);
+                            props.onClose();
+                        }}
+                    >
+                        x
+                    </div>
+                        {props.message}
+                </div>
+        }
         </>
     )
 }

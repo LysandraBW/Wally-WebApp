@@ -2,56 +2,54 @@ import { GetAppointment } from "@/database/Export";
 import { goToUpdateApt } from "@/lib/Navigation/Redirect";
 import { useContext, useEffect, useState } from "react";
 import { PageContext } from "@/app/Employee/Dashboard/Dashboard/page";
-import { toString } from "@/lib/Helper";
+import { toString } from "@/lib/Convert/Convert";
 import { DB_Appointment } from "@/database/Types";
-import { useSearchParams, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import Note from "./Note";
 
 interface OverviewProps {
-    appointmentID: string;
+    aptID: string;
     onClose: () => any;
 }
 
 export default function Overview(props: OverviewProps) {
     const context = useContext(PageContext);
     const [appointment, setAppointment] = useState<DB_Appointment>();
-
-    // For Maintaining Consistency Across Reloads
-    const searchParameters = useSearchParams();
     const { replace } = useRouter();
 
     useEffect(() => {
-        const load = async () => {
-            // Load Appointment
+        const load = async () => {   
+            if (!props.aptID) {
+                replace(`/Employee/Dashboard/Dashboard`);
+                return;
+            }
+
             const appointment = await GetAppointment({
                 SessionID: context.Employee.SessionID,
-                AppointmentID: props.appointmentID
+                AppointmentID: props.aptID
             });
 
             if (!appointment)
                 throw 'Appointment Error';
 
+            replace(`/Employee/Dashboard/Dashboard?AptID=${props.aptID}`);
             setAppointment(appointment);
         }
         load();
-    }, []);
-
-    useEffect(() => {
-        if (!props.appointmentID)
-            return;
-
-        // Updating the Appointment ID Parameter for Reloading
-        const parameters = new URLSearchParams(searchParameters);
-        parameters.set('AptID', props.appointmentID);
-
-        replace(`/Employee/Dashboard/Dashboard?${parameters.toString()}`);
-    }, [props.appointmentID]);
+    }, [props.aptID]);
 
     return (
         <div>
             {appointment && 
                 <div>
-                    <div onClick={() => props.onClose()}>x</div>
+                    <div 
+                        onClick={() => {
+                            props.onClose();
+                            replace(`/Employee/Dashboard/Dashboard`);
+                        }}
+                    >
+                        x
+                    </div>
                     <div>
                         <div>{appointment.FName} {appointment.LName}</div>
                         <div>{appointment.ModelYear} {appointment.Make} {appointment.Model}</div>

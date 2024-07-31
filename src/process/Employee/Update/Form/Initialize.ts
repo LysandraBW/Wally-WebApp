@@ -11,7 +11,7 @@ import { UpdateFormStructure, UpdateStructure } from "./UpdateForm";
 import { UpdateNote } from "./Form/Note/Note";
 import { GetNoteSharees } from "@/database/Export";
 import { getSessionID } from "@/lib/Cookies/Cookies";
-import { toString } from "@/lib/Helper";
+import { toString } from "@/lib/Convert/Convert";
 
 export async function initializeUpdateForm(apt: DB_Appointment): Promise<UpdateStructure> {
     let reference: {[k: string]: any} = {};

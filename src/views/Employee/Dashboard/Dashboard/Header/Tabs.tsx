@@ -12,7 +12,7 @@ export default function Tabs(props: TabsProps) {
     return (
         <div>
             <span
-                onClick={async () => await props.updateFilter({StatusID: null, Deleted: 0})}
+                onClick={async () => await props.updateFilter({StatusID: null, Deleted: 0, LabelID: null})}
             >
                 All
             </span>
@@ -30,7 +30,10 @@ export default function Tabs(props: TabsProps) {
                 Deleted
             </span>
             <span
-                onClick={async () => await props.updateFilter({StatusID: null, LabelID: -1})} 
+                onClick={async () => {
+                    console.log('New');
+                    await props.updateFilter({StatusID: null, Deleted: 0, LabelID: -1});
+                }} 
             >
                 New
             </span>

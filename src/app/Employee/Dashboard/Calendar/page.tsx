@@ -5,7 +5,7 @@ import useInterval from "@/reducer/Alert/Timer";
 import { goToEmployeeLogin } from "@/lib/Navigation/Redirect";
 import { UpdateFormStructure, } from "@/process/Employee/Calendar/Form/Form";
 import { default as CalendarElement } from "@/views/Employee/Dashboard/Calendar/Calendar";
-import CreateEvent from "@/views/Employee/Dashboard/Calendar/EventForm/EventInput";
+import CreateEvent from "@/views/Employee/Dashboard/Calendar/EventManager/EventInput";
 import { createContext, useEffect, useReducer, useState } from "react";
 import Search from "@/views/Employee/Dashboard/Calendar/Search";
 import { Context, ContextStructure } from "@/process/Employee/Calendar/Context";
@@ -13,7 +13,7 @@ import { Controller, ControllerStructure } from "@/process/Employee/Calendar/Con
 import DateEvents from "@/views/Employee/Dashboard/Calendar/DateEvents";
 import { UpdateForm } from "@/process/Employee/Calendar/Form/Initializer";
 import AlertReducer, { AlertActionType, InitialAlert } from "@/reducer/Alert/Reducer";
-import UpdateEvent from "@/views/Employee/Dashboard/Calendar/EventForm/UpdateEvent";
+import UpdateEvent from "@/views/Employee/Dashboard/Calendar/EventManager/UpdateEvent";
 
 export const PageContext = createContext(Context);
 

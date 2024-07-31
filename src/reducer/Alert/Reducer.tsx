@@ -53,10 +53,8 @@ export default function AlertReducer(state: AlertReducerState, action: AlertRedu
             <Message 
                 {...action.addMessage} 
                 onClose={() => {
-                    AlertReducer(state, {
-                        type: AlertActionType.CloseMessage, 
-                        closeMessage: {message: message}
-                    });
+                    // The chaining is needed for the TS compiler.
+                    action.addMessage && action.addMessage.onClose && action.addMessage.onClose();
                 }}
             />
         );
@@ -68,8 +66,13 @@ export default function AlertReducer(state: AlertReducerState, action: AlertRedu
 
     // Closing a Message
     else if (action.type === AlertActionType.CloseMessage && action.closeMessage) {
+        // This doesn't work because it needs the context of the actual
+        // reducer. Thus, it must be called from outside this function.
+        // However, I don't know how I can reliably access the added message
+        // considering that it's async. I could be wrong.
         const messageToClose = action.closeMessage.message;
         const messages = [...state.messages].filter(message => message[0] !== messageToClose);
+
         return {
             ...state,
             messages: messages

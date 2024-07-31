@@ -1,4 +1,4 @@
-import Tuple from "./Tuple";
+import AptRow from "./Row";
 import { UpdateLabel } from "@/database/Export";
 import { useContext } from "react";
 import { PageContext } from "@/app/Employee/Dashboard/Dashboard/page";
@@ -8,13 +8,13 @@ import { updateAppointmentLabel } from "@/database/Appointment/Label/Helper";
 
 interface BodyProps {
     current: Array<DB_AppointmentOverview>;
-    search: string;
     openAppointment: (appointmentID: string) => void;
     deleteAppointment: (IDs: Array<string>) => void;
-    checked: Array<string>;
-    setChecked: (checked: Array<string>) => any;
+    checkedAppointments: Array<string>;
+    updateChecked: (checked: Array<string>) => any;
     allLabels: DB_AllAppointmentLabels;
-    setLabels: (label: DB_AllAppointmentLabels) => void;
+    updateLabels: (label: DB_AllAppointmentLabels) => void;
+    search: string;
 }
 
 export default function Body(props: BodyProps) {
@@ -36,7 +36,7 @@ export default function Body(props: BodyProps) {
         if (!output)
             return;
 
-        props.setLabels(updatedLabels);
+        props.updateLabels(updatedLabels);
     }
 
     return (
@@ -49,12 +49,12 @@ export default function Body(props: BodyProps) {
                         updateLabel(appointment.AppointmentID, 'Seen');
                     }}
                 >
-                    <Tuple
+                    <AptRow
                         appointment={appointment}
                         labels={props.allLabels[`${appointment.AppointmentID}`]}
                         updateLabel={updateLabel}
-                        checked={props.checked.includes(appointment.AppointmentID)}
-                        checkAppointment={(appointmentID: string) => props.setChecked(toggleValue(props.checked, appointmentID))}
+                        isChecked={props.checkedAppointments.includes(appointment.AppointmentID)}
+                        checkAppointment={(appointmentID: string) => props.updateChecked(toggleValue(props.checkedAppointments, appointmentID))}
                         deleteAppointment={props.deleteAppointment}
                         search={props.search}
                     />  

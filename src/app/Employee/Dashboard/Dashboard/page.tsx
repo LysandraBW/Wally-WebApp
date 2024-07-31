@@ -1,6 +1,6 @@
 'use client';
 import { getSessionID } from "@/lib/Cookies/Cookies";
-import { Delete, GetAllAppointments, GetEmployee } from "@/database/Export";
+import { Delete, GetAllAppointments, GetEmployee, Restore } from "@/database/Export";
 import { goTo, goToEmployeeLogin } from "@/lib/Navigation/Redirect";
 import { useEffect, useReducer, useState, createContext } from "react";
 import useInterval from "@/reducer/Alert/Timer";
@@ -16,23 +16,23 @@ import Action from "@/views/Employee/Dashboard/Dashboard/Header/Action";
 import Search from "@/views/Employee/Dashboard/Dashboard/Header/Search";
 import Tabs from "@/views/Employee/Dashboard/Dashboard/Header/Tabs";
 import Navigation from "@/views/Employee/Dashboard/Dashboard/Table/Navigation";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import util from "util";
+import { deleteMessage, restoreMessage } from "@/process/Employee/Dashboard/Helper";
+import { DB_AppointmentOverview } from "@/database/Types";
 
 let ran = false;
 export const PageContext = createContext(Context);
 
 export default function Dashboard() {
-    // Context
     const [context, setContext] = useState<ContextStructure>(Context);
-
-    // Messages
-    const [alert, alertDispatch] = useReducer(AlertReducer, InitialAlert);
-
-    // Driving Force    
     const [controller, setController] = useState<ControllerStructure>(Controller);
     const [filter, setFilter] = useState<FilterStructure>(Filter);
+    const [alert, alertDispatch] = useReducer(AlertReducer, InitialAlert);
 
-    // Search Parameters
+    // Apart from the other variables is the currently
+    // opened appointment.
+    const [openAptID, setOpenAptID] = useState('');
     const searchParameters = useSearchParams();
 
     useEffect(() => {
@@ -67,16 +67,15 @@ export default function Dashboard() {
                 },
                 Loaded: true
             });
-            await loadAppointments(filter);    
 
-            // Loading the Searched Appointment
-            const searchedAppointmentID = searchParameters.get('AptID');
-            if (!searchedAppointmentID)
-                return;
-            setController({
-                ...controller, 
-                Open: searchedAppointmentID
-            });
+            
+        await loadAllAppointments(filter);
+
+        // Loading the Searched Appointment, if Any
+        let searchedAptID = searchParameters.get('AptID');
+        if (searchedAptID)
+            setOpenAptID(searchedAptID);
+        
         }
         if (ran) 
             return;
@@ -91,13 +90,15 @@ export default function Dashboard() {
     }, 1000*1);
 
     useEffect(() => {
+        console.log('A')
         // Prevents Loading 'Splotchiness'
         if (!controller.Loading && !controller.Loaded)
             return;
 
+        console.log('B')
         // Extracting Current Appointments
         const numberPages = Math.ceil(controller.All.Count/filter.PageSize);
-        const currentPage = Math.min(controller.Current.Page, numberPages);
+        const currentPage = Math.max(Math.min(controller.Current.Page, numberPages), 1);
 
         const offset = (currentPage - 1) * filter.PageSize;
         const appointments = controller.All.Appointments.slice(offset, offset + filter.PageSize);
@@ -117,9 +118,9 @@ export default function Dashboard() {
             Loading: false,
             Loaded: true
         });
-    }, [controller.All, controller.Current.Page]);
+    }, [controller.All.Appointments, controller.Current.Page]);
 
-    const loadAppointments = async (filter: FilterStructure) => {
+    const loadAllAppointments = async (filter: FilterStructure) => {
         const allAppointments = await GetAllAppointments({
             SessionID: await getSessionID(), 
             ...filter
@@ -140,7 +141,6 @@ export default function Dashboard() {
                 Page: 1,
                 Checked: []
             },
-            Open: '',
             Loading: true,
             Loaded: false
         });
@@ -187,13 +187,13 @@ export default function Dashboard() {
         alertDispatch({
             type: AlertActionType.AddMessage, 
             addMessage: {
-                message: deleteMessage(lengthA, lengthA),
-                messageType: lengthA === lengthA ? 'Default' : 'Error'
+                message: deleteMessage(lengthA, lengthD),
+                messageType: lengthA === lengthD ? 'Default' : 'Error'
             }
         });
     }
 
-    const deleteAppointmentHandler = async (appointmentIDs: Array<string>) => {
+    const deleteAppointmentsHandler = async (appointmentIDs: Array<string>) => {
         // Putting Appointment into Recycling Bin
         // No Confirmation Message
         if (!filter.Deleted) {
@@ -209,10 +209,64 @@ export default function Dashboard() {
                 message: 'This action permanently deletes the selected appointment(s). Are you sure you want to delete the selected appointment(s)?',
                 agreeLabel: 'Delete Appointments',
                 disagreeLabel: 'Cancel',
-                onAgree: async () => deleteAppointments(appointmentIDs),
-                onDisagree: () => alertDispatch({
-                    type: AlertActionType.CloseConfirmation
-                })
+                onAgree: async () => {
+                    alertDispatch({
+                        type: AlertActionType.CloseConfirmation
+                    });
+                    deleteAppointments(appointmentIDs);
+                },
+                onDisagree: () => {
+                    alertDispatch({
+                        type: AlertActionType.CloseConfirmation
+                    });
+                }
+            }
+        });
+    }
+
+    const restoreAppointmentsHandler = async (appointmentIds: Array<string>) => {
+        const restoredAppointmentIds: Array<string> = [];
+
+        // Delete Appointments
+        for (const appointmentId of appointmentIds) {
+            try {
+                const output = await Restore({
+                    SessionID: context.Employee.SessionID, 
+                    AppointmentID: appointmentId
+                });
+
+                if (!output)
+                    throw 'Failed to Restore Appointment';
+
+                restoredAppointmentIds.push(appointmentId);
+            }
+            catch (err) {
+                break;
+            }
+        }
+
+        // Lengths of Appointment IDs and Deleted Appointment IDs
+        const lengthA = appointmentIds.length;
+        const lengthD = restoredAppointmentIds.length;
+
+        // Update Controller
+        setController({
+            ...controller,
+            All: {
+                ...controller.All,
+                Appointments: controller.All.Appointments.filter(({AppointmentID}) => !restoredAppointmentIds.includes(AppointmentID)),
+                Count: controller.All.Count - lengthD,
+            },
+            Loading: true,
+            Loaded: false
+        });
+
+        // Show Message
+        alertDispatch({
+            type: AlertActionType.AddMessage, 
+            addMessage: {
+                message: restoreMessage(lengthA, lengthD),
+                messageType: lengthA === lengthD ? 'Default' : 'Error'
             }
         });
     }
@@ -229,18 +283,21 @@ export default function Dashboard() {
                 {context.Loaded && 
                     <>
                         <Action
-                            loadAppointments={async () => await loadAppointments(filter)}
-                            deleteCheckedAppointments={async () => await deleteAppointmentHandler(controller.Current.Checked)}
+                            showingDeleted={!!filter.Deleted}
+                            checkedAppointments={controller.Current.Checked}
+                            loadAppointments={async () => await loadAllAppointments(filter)}
+                            deleteAppointments={deleteAppointmentsHandler}
+                            restoreAppointments={restoreAppointmentsHandler}
                         />
                         <Search
                             onChange={value => setFilter({...filter, Search: value})}
-                            onSearch={async () => await loadAppointments(filter)}
+                            onSearch={async () => await loadAllAppointments(filter)}
                         />
                         <Tabs
                             updateFilter={async (_filter) => {
                                 const updatedFilter = {...filter, ..._filter};
                                 setFilter(updatedFilter);
-                                await loadAppointments(updatedFilter);
+                                await loadAllAppointments(updatedFilter);
                             }}
                         />
                     </>
@@ -252,11 +309,11 @@ export default function Dashboard() {
                                 filter={filter}
                                 updateFilter={async (filter) => {
                                     setFilter(filter);
-                                    await loadAppointments(filter);
+                                    await loadAllAppointments(filter);
                                 }}
-                                checkedAppointments={controller.Current.Checked}
                                 currentAppointments={controller.Current.Appointments}
-                                setChecked={(checked) => setController({
+                                checkedAppointments={controller.Current.Checked}
+                                updateChecked={(checked) => setController({
                                     ...controller, 
                                     Current: {
                                         ...controller.Current,
@@ -265,12 +322,9 @@ export default function Dashboard() {
                                 })}
                             />
                             <Body
-                                search={filter.Search}
-                                openAppointment={(appointmentID) => setController({...controller, Open: appointmentID})}
                                 current={controller.Current.Appointments}
-                                deleteAppointment={deleteAppointmentHandler}
-                                checked={controller.Current.Checked}
-                                setChecked={(checked) => setController({
+                                checkedAppointments={controller.Current.Checked}
+                                updateChecked={(checked) => setController({
                                     ...controller, 
                                     Current: {
                                         ...controller.Current,
@@ -278,64 +332,62 @@ export default function Dashboard() {
                                     }
                                 })}
                                 allLabels={controller.All.Labels}
-                                setLabels={(labels) => setController({
+                                updateLabels={(labels) => setController({
                                     ...controller, 
                                     All: {
                                         ...controller.All,
                                         Labels: labels
                                     }
                                 })}
+                                openAppointment={(appointmentID) => {
+                                    setOpenAptID(appointmentID);
+                                }}
+                                deleteAppointment={deleteAppointmentsHandler}
+                                search={filter.Search}
                             />
                         </table>
                         
                     </div>
                 }
-                {controller.All.Count &&
+                {controller.Loaded &&
                     <Navigation
                         currentPageIndex={controller.Current.Page}
                         currentPageLength={controller.Current.Appointments.length}
                         pageSize={filter.PageSize}
                         allCount={controller.All.Count}
-                        goForward={() => setController({
-                            ...controller, 
-                            Current: {
-                                ...controller.Current,
-                                Page: Math.min(controller.Current.Page + 1, Math.ceil(controller.All.Count/filter.PageSize))
-                            }
-                        })}
-                        goBackward={() => setController({
-                            ...controller, 
-                            Current: {
-                                ...Controller.Current,
-                                Page: Math.max(1, controller.Current.Page - 1)
-                            }
-                        })}
+                        goForward={() => {
+                            if (controller.Current.Page + 1 >= Math.ceil(controller.All.Count/filter.PageSize))
+                                return;
+
+                            setController({
+                                ...controller, 
+                                Current: {
+                                    ...controller.Current,
+                                    Page: controller.Current.Page + 1
+                                }
+                            });
+                        }}
+                        goBackward={() => {
+                            if (controller.Current.Page - 1 === 0)
+                                return;
+
+                            setController({
+                                ...controller, 
+                                Current: {
+                                    ...Controller.Current,
+                                    Page: controller.Current.Page - 1
+                                }
+                            });
+                        }}
                     />
                 }
-                {controller.Loaded && !!controller.Open &&
+                {!!openAptID &&
                     <Overview
-                        appointmentID={controller.Open}
-                        onClose={() => setController({...controller, Open: ''})}
+                        aptID={openAptID}
+                        onClose={() => setOpenAptID('')}
                     />
                 }
             </div>
         </PageContext.Provider>
     )
-}
-
-export function deleteMessage(aLength: number, dLength: number) {
-    // All appointments deleted.
-    if (aLength - dLength === 0) {
-        if (aLength === 1)
-            return 'Successfully Deleted Appointment';
-        else
-            return `Successfully Deleted Appointments`;
-    }
-    // An appointment was not deleted.
-    else {
-        if (aLength === 1)
-            return 'Unsuccessfully Deleted Appointment';
-        else
-            return 'Unsuccessfully Deleted Appointments';
-    }
 }

@@ -1,4 +1,4 @@
-import { toSQLDateTime } from "@/lib/Helper";
+import { toDatabaseDateTime } from "@/lib/Convert/Convert";
 import { updatedValue } from "../../Helper";
 import { GeneralFormStructure } from "./General";
 
@@ -20,8 +20,8 @@ export async function processGeneralForm(reference: GeneralFormStructure, curren
         LName:      updatedValue(reference.LName, current.LName),
         Email:      updatedValue(reference.Email, current.Email),
         Phone:      updatedValue(reference.Phone, current.Phone),
-        StartDate:  updatedValue(toSQLDateTime(reference.StartDate), toSQLDateTime(current.StartDate)),
-        EndDate:    updatedValue(toSQLDateTime(reference.EndDate), toSQLDateTime(current.EndDate)),
+        StartDate:  updatedValue(toDatabaseDateTime(reference.StartDate), toDatabaseDateTime(current.StartDate)),
+        EndDate:    updatedValue(toDatabaseDateTime(reference.EndDate), toDatabaseDateTime(current.EndDate)),
         StatusID:   updatedValue(reference.StatusID, current.StatusID)
     }
 }

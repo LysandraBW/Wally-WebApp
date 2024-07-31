@@ -1,5 +1,5 @@
 import { DB_AppointmentSummary } from "@/database/Types";
-import { toString } from "@/lib/Helper";
+import { toString } from "@/lib/Convert/Convert";
 
 interface AptSummaryProps {
     info: DB_AppointmentSummary;

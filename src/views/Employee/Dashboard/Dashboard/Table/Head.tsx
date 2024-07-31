@@ -4,22 +4,24 @@ import { FilterStructure } from "@/process/Employee/Dashboard/Filter";
 interface HeadProps {
     currentAppointments: Array<DB_AppointmentOverview>;
     checkedAppointments: Array<string>;
-    setChecked: (checked: Array<string>) => any;
+    updateChecked: (checked: Array<string>) => any;
     filter: FilterStructure;
     updateFilter: (filter: FilterStructure) => any;   
 }
 
 export default function Head(props: HeadProps) {
-    const updateColumnSort = async (columnName: string) => {
-        const map = (v: any) => {
-            if (v === 0) return null;
-            if (v === 1) return 0;
-            return 1;
-        }
+    const columnSortChange = (v: any) => {
+        if (v === 0) 
+            return null;
+        if (v === 1) 
+            return 0;
+        return 1;
+    }
 
+    const updateColumnSort = async (columnName: string) => {
         const updatedFilter = {
             ...props.filter,
-            [`${columnName}`]: map([props.filter[`${columnName}`]])
+            [`${columnName}`]: columnSortChange(props.filter[`${columnName}`])
         }
 
         await props.updateFilter(updatedFilter);
@@ -42,9 +44,9 @@ export default function Head(props: HeadProps) {
                         checked={!!props.currentAppointments.length && !props.currentAppointments.map(app => app.AppointmentID).filter(appID => !props.checkedAppointments.includes(appID)).length}
                         onChange={() => {
                             if (!props.checkedAppointments.length)
-                                props.setChecked(props.currentAppointments.map(app => app.AppointmentID));
+                                props.updateChecked(props.currentAppointments.map(app => app.AppointmentID));
                             else
-                                props.setChecked([]);
+                                props.updateChecked([]);
                         }}
                     />
                 </td>

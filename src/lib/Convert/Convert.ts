@@ -4,12 +4,12 @@ export function toString(v: any): string {
     return v.toString();
 }
 
-export function toSQLDateTime(date: string): string {
-    return date.replace('T', ' ');
+export function toWebDateTime(date: Date): string {
+    return date.toISOString().slice(0, -1);
 }
 
-export function toJSDateTime(date: Date): string {
-    return date.toISOString().slice(0, -1);
+export function toDatabaseDateTime(date: string): string {
+    return date.replace('T', ' ');
 }
 
 export function toFloat(v: any): number {

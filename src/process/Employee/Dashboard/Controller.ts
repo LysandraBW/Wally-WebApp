@@ -12,7 +12,6 @@ export interface ControllerStructure {
         Page: number;
         Checked: Array<string>;
     }
-    Open: string;
     Loading: boolean;
     Loaded: boolean;
 }
@@ -28,7 +27,6 @@ export const Controller: ControllerStructure = {
         Appointments:   [],
         Page:           1
     },
-    Open:       '',
     Loading:    false,
     Loaded:     false
 };

@@ -1,6 +1,6 @@
 import { EventsFormStructure } from "@/process/Employee/Calendar/Form/Form";
 import { getDateEvents } from "./Calendar";
-import { getTime } from "@/lib/Helper";
+import { getTime } from "@/lib/Convert/Convert";
 
 interface DateEventsProps {
     date: Date;
