@@ -1,0 +1,3 @@
+[submodule "src/lib/Inspector/Inspector"]
+	path = src/lib/Inspector/Inspector
+	url = https://github.com/LysandraBW/Inspector.git
