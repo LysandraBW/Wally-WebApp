@@ -4,13 +4,20 @@ import { Form, FormStructure } from "@/process/Employee/Login/Form";
 import { submitForm } from "@/process/Employee/Login/Submit";
 import { goTo, goToDashboard } from "@/lib/Navigation/Redirect";
 import Error from "@/views/Employee/Login/Error";
-import { useState } from "react";
+import { useReducer, useState } from "react";
+import FormErrorReducer, { InitialFormError } from "@/reducer/FormError/Reducer";
+import { hasValue } from "@/lib/Inspector/Inspector/Inspect/Inspectors";
 
 export default function Login() {
     const [form, setForm] = useState<FormStructure>(Form);
-    const [errorMessage, setErrorMessage] = useState<React.ReactNode>(null);
+    const [formError, formErrorDispatch] = useReducer(FormErrorReducer, InitialFormError);
+    const [errorMessage, setErrorMessage] = useState<boolean>(false);
 
-    const changeHandler = (name: string, value: any): void => {
+    const changeHandler = async (name: string, value: any) => {
+        formErrorDispatch({
+            name,
+            inspection: await hasValue().inspect(value)
+        });
         setForm({...form, [`${name}`]: value});
     }
     
@@ -20,24 +27,30 @@ export default function Login() {
             await goToDashboard();
             return;
         }
-        setErrorMessage(<Error close={() => setErrorMessage(null)}/>);
+        setErrorMessage(true);
     }
 
     return (
         <>
             <div>
-                {errorMessage && errorMessage}
+                {errorMessage && 
+                    <Error
+                        close={() => setErrorMessage(false)}
+                    />
+                }
             </div>
             <div>
                 <Text
                     name="username"
                     label="Username"
+                    error={formError.input.username}
                     value={form.username}
                     onChange={changeHandler}
                 />
                 <Text
                     name="password"
                     label="Password"
+                    error={formError.input.password}
                     value={form.password}
                     onChange={changeHandler}
                 />

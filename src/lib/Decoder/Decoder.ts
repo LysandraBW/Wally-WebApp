@@ -59,7 +59,7 @@ export async function LoadModels(modelYear: number, make: string): Promise<Array
     return models;
 }
 
-export async function LoadMakeModelModelYear(vin: string, makes: Array<[string, string]>): Promise<{
+export async function LoadVehicle(vin: string, makes: Array<[string, string]>): Promise<{
     make: [string];
     model: [string];
     models: Array<[string, string]>;

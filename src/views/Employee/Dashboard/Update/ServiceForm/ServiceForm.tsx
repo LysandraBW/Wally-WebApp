@@ -12,6 +12,7 @@ interface ServiceProps {
         Repairs:    {[repairID: string]:    DB_Repair};
         Parts:      {[partID: string]:      DB_Part};
     };
+    updateFormError: (state: boolean) => void;
     changeHandler: (formPart: FormPart, name: string, value: any) => void;
 }
 
@@ -21,24 +22,28 @@ export default function ServiceForm(props: ServiceProps) {
             <div>
                 <ServiceManager
                     services={props.form.Services}
+                    updateFormError={props.updateFormError}
                     onChange={(updatedValue) => props.changeHandler('Service', 'Services', updatedValue)}
                 />
             </div>
             <div>
                 <DiagnosisManager
                     diagnoses={props.form.Diagnoses}
+                    updateFormError={props.updateFormError}
                     onChange={(updatedValue) => props.changeHandler('Service', 'Diagnoses', updatedValue)}
                 />
             </div>
             <div>
                 <RepairManager
                     repairs={props.form.Repairs}
+                    updateFormError={props.updateFormError}
                     onChange={(updatedValue) => props.changeHandler('Service', 'Repairs', updatedValue)}
                 />
             </div>
             <div>
                 <PartManager
                     parts={props.form.Parts}
+                    updateFormError={props.updateFormError}
                     onChange={(updatedValue) => props.changeHandler('Service', 'Parts', updatedValue)}
                 />
             </div>

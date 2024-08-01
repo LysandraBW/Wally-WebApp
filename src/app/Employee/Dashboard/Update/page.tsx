@@ -30,6 +30,7 @@ export const PageContext = createContext(Context);
 export default function Update() {
     const [context, setContext] = useState<ContextStructure>(Context);
     const [updateForm, setUpdateForm] = useState<UpdateFormStructure>();
+    const [formError, setFormError] = useState<{[formPart: string]: boolean}>({});
     const [alert, alertDispatch] = useReducer(AlertReducer, InitialAlert);
     const searchParams = useSearchParams();
 
@@ -132,6 +133,11 @@ export default function Update() {
             type: AlertActionType.RefreshMessages
         });
     }, 1000*1);
+
+    useEffect(() => {
+        console.log(updateForm);
+        console.log(formError)
+    }, [formError]);
 
     const loadUpdateForm = async () => {
         // No Apt. ID or Employee ID or Loading Paused
@@ -251,8 +257,20 @@ export default function Update() {
     }
 
     const saveGeneralForm = async () => {
+        if (!formError.General) {
+            alertDispatch({
+                type: AlertActionType.AddMessage,
+                addMessage: {
+                    message: 'Could Not Save General',
+                    messageType: 'Error'
+                }
+            });
+            return;
+        }
+        
         if (!updateForm)
             return;
+
         const output = await submitGeneralForm(
             updateForm.reference.General, 
             updateForm.current.General
@@ -272,8 +290,20 @@ export default function Update() {
     }
 
     const saveVehicleForm = async () => {
+        if (!formError.Vehicle) {
+            alertDispatch({
+                type: AlertActionType.AddMessage,
+                addMessage: {
+                    message: 'Could Not Save Vehicles',
+                    messageType: 'Error'
+                }
+            });
+            return;
+        }
+
         if (!updateForm)
             return;
+
         const output = await submitVehicleForm(
             updateForm.reference.Vehicle, 
             updateForm.current.Vehicle
@@ -292,8 +322,20 @@ export default function Update() {
     }
 
     const saveServiceForm = async () => {
+        if (!formError.Service) {
+            alertDispatch({
+                type: AlertActionType.AddMessage,
+                addMessage: {
+                    message: 'Could Not Save Services',
+                    messageType: 'Error'
+                }
+            });
+            return;
+        }
+
         if (!updateForm)
             return;
+
         const output = await submitServiceForm(
             updateForm.reference.Service, 
             updateForm.current.Service
@@ -312,8 +354,20 @@ export default function Update() {
     }
 
     const savePaymentForm = async () => {
+        if (!formError.Payment) {
+            alertDispatch({
+                type: AlertActionType.AddMessage,
+                addMessage: {
+                    message: 'Could Not Save Payments',
+                    messageType: 'Error'
+                }
+            });
+            return;
+        }
+
         if (!updateForm)
             return;
+    
         const output = await submitPaymentForm(
             updateForm.reference.Payment, 
             updateForm.current.Payment
@@ -332,8 +386,20 @@ export default function Update() {
     }
 
     const saveNoteForm = async () => {
+        if (!formError.Note) {
+            alertDispatch({
+                type: AlertActionType.AddMessage,
+                addMessage: {
+                    message: 'Could Not Save Notes',
+                    messageType: 'Error'
+                }
+            });
+            return;
+        }
+
         if (!updateForm)
             return;
+
         const output = await submitNoteForm(
             updateForm.reference.Note, 
             updateForm.current.Note
@@ -387,6 +453,12 @@ export default function Update() {
                                         <GeneralForm
                                             form={updateForm.current.General}
                                             changeHandler={updateFormHandler}
+                                            updateFormError={(state) => {
+                                                setFormError({
+                                                    ...formError,
+                                                    'General': state
+                                                });
+                                            }}
                                         />
                                     ),
                                     partHeader: 'General',
@@ -399,6 +471,12 @@ export default function Update() {
                                         <VehicleForm
                                             form={updateForm.current.Vehicle}
                                             changeHandler={updateFormHandler}
+                                            updateFormError={(state) => {
+                                                setFormError({
+                                                    ...formError,
+                                                    'Vehicle': state
+                                                });
+                                            }}
                                         />
                                     ),
                                     partHeader: 'Vehicle',
@@ -411,6 +489,12 @@ export default function Update() {
                                         <ServiceForm
                                             form={updateForm.current.Service}
                                             changeHandler={updateFormHandler}
+                                            updateFormError={(state) => {
+                                                setFormError({
+                                                    ...formError,
+                                                    'Service': state
+                                                });
+                                            }}
                                         />
                                     ),
                                     partHeader: 'Service',
@@ -423,6 +507,12 @@ export default function Update() {
                                         <PaymentForm
                                             form={updateForm.current.Payment}
                                             changeHandler={updateFormHandler}
+                                            updateFormError={(state) => {
+                                                setFormError({
+                                                    ...formError,
+                                                    'Payment': state
+                                                });
+                                            }}
                                         />
                                     ),
                                     partHeader: 'Payment',
@@ -436,6 +526,12 @@ export default function Update() {
                                 form={updateForm.current.Note}
                                 changeHandler={updateFormHandler}
                                 onSave={async () => await saveNoteForm()}
+                                updateFormError={(state) => {
+                                    setFormError({
+                                        ...formError,
+                                        'Note': state
+                                    });
+                                }}
                             />
                         }
                     </div>

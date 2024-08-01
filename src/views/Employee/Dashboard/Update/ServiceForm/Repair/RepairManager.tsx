@@ -6,6 +6,7 @@ import CreateRepair from "./CreateRepair";
 interface RepairManagerProps {
     repairs: {[repairID: string]: DB_Repair};
     onChange: (updatedValue: {[repairID: string]: DB_Repair}) => void;
+    updateFormError: (state: boolean) => void;
 }
 
 export default function RepairManager(props: RepairManagerProps) {
@@ -29,6 +30,7 @@ export default function RepairManager(props: RepairManagerProps) {
                                 updatedValue[`${repairID}`] = repair;
                                 props.onChange(updatedValue);
                             }}
+                            updateFormError={props.updateFormError}
                         />
                     </div>
                 ))}

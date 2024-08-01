@@ -1,9 +1,11 @@
-import { useContext, useState } from "react";
+import { useContext, useReducer, useState } from "react";
 import { File, TextArea, Toggle } from "@/components/Input/Export";
-import { DB_GeneralEmployee } from "@/database/Types";
 import { toggleValue } from "@/components/Input/Checkbox/Checkbox";
 import { PageContext } from "@/app/Employee/Dashboard/Update/page";
 import { UpdateNote } from "@/process/Employee/Update/Form/Form/Note/Note";
+import { every, hasValue, inValues } from "@/lib/Inspector/Inspector/Inspect/Inspectors";
+import FormErrorReducer, { InitialFormError } from "@/reducer/FormError/Reducer";
+import { Regexes } from "@/lib/Inspector/Inspectors";
 
 interface NoteInputProps {
     onChange: (name: string, value: any) => any;
@@ -27,20 +29,78 @@ const defaultInput: UpdateNote = {
 export default function CreateNote(props: NoteInputProps) {
     const context = useContext(PageContext);
     const [values, setValues] = useState<UpdateNote>(defaultInput);
+    const [formError, formErrorDispatch] = useReducer(FormErrorReducer, InitialFormError);
+
+    const inspectHead = async (head: string = values.Head): Promise<boolean> => {
+        const [headState, headMessage] = await hasValue().inspect(head);
+        formErrorDispatch({
+            name: 'Head',
+            inspection: [headState, headMessage]
+        });
+        return headState;
+    }
+
+    const inspectBody = async (body: string = values.Body): Promise<boolean> => {
+        const [bodyState, bodyMessage] = await hasValue().inspect(body);
+        formErrorDispatch({
+            name: 'Body',
+            inspection: [bodyState, bodyMessage]
+        });
+        return bodyState;
+    }
+
+    const inspectShowCustomer = async (showCustomer: number = values.ShowCustomer): Promise<boolean> => {
+        const [showCustomerState, showCustomerMessage] = await inValues({
+            values: [0, 1]
+        }).inspect([showCustomer]);
+        formErrorDispatch({
+            name: 'ShowCustomer',
+            inspection: [showCustomerState, showCustomerMessage]
+        });
+        return showCustomerState;
+    }
+
+    const inspectSharees = async (sharees: Array<string> = values.Sharees): Promise<boolean> => {
+        const [shareesState, shareesMessage] = await every({
+            callback: (v: string) => !!v.match(Regexes.UniqueIdentifier)
+        }).inspect(sharees);
+        formErrorDispatch({
+            name: 'Sharees',
+            inspection: [shareesState, shareesMessage]
+        });
+        return shareesState;
+    }
+
+    const inspectNote = async (): Promise<boolean> => {
+        const head = await inspectHead();
+        const body = await inspectBody();
+        const showCustomer = await inspectShowCustomer();
+        const sharees = await inspectSharees();
+
+        return head && body && showCustomer && sharees;
+    }
 
     return (
         <div>
             <TextArea
                 name={'Head'}
                 value={values.Head}
+                error={formError.input.Head}
                 label={'Head'}
-                onChange={(name, value) => setValues({...values, [`${name}`]: value})}
+                onChange={async (name, value) => {
+                    setValues({...values, [`${name}`]: value});
+                    inspectHead(value);
+                }}
             />
             <TextArea
                 name={'Body'}
                 value={values.Body}
+                error={formError.input.Body}
                 label={'Body'}
-                onChange={(name, value) => setValues({...values, [`${name}`]: value})}
+                onChange={async (name, value) => {
+                    setValues({...values, [`${name}`]: value});
+                    inspectBody(value);
+                }}
             />
             <File
                 name={'Files'}
@@ -61,7 +121,11 @@ export default function CreateNote(props: NoteInputProps) {
                 name='ShowCustomer'
                 label='Show Customer'
                 value={values.ShowCustomer}
-                onChange={(name, value) => setValues({...values, [`${name}`]: value})}
+                error={formError.input.ShowCustomer}
+                onChange={async (name, value) => {
+                    setValues({...values, [`${name}`]: value});
+                    inspectShowCustomer(value);
+                }}
             />
             <div>
                 {context.Employee.Employees.map((employee, i) => (
@@ -72,8 +136,11 @@ export default function CreateNote(props: NoteInputProps) {
                                 name='Sharees'
                                 label={`Add ${employee.FName} ${employee.LName}`}
                                 value={values.Sharees.includes(employee.EmployeeID) ? 1 : 0}
-                                onChange={(name, value) => {
-                                    setValues({...values, Sharees: toggleValue(values.Sharees, employee.EmployeeID)});
+                                error={formError.input.Sharees}
+                                onChange={async (name, value) => {
+                                    const updatedValue = toggleValue(values.Sharees, employee.EmployeeID);
+                                    setValues({...values, Sharees: updatedValue});
+                                    inspectSharees(updatedValue)
                                 }}
                             />
                         }
@@ -81,7 +148,9 @@ export default function CreateNote(props: NoteInputProps) {
                 ))}
             </div>
             <button 
-                onClick={() => {
+                onClick={async () => {
+                    if (!(await inspectNote()))
+                        return;
                     props.onChange('Notes', values);
                     setValues(defaultInput);
                 }}

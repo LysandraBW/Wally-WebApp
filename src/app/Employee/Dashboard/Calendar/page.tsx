@@ -24,6 +24,7 @@ export default function Calendar() {
     const [controller, setController] = useState<ControllerStructure>(Controller);
     const [updateForm, setUpdateForm] = useState<UpdateFormStructure>(InitialUpdateForm);
     const [alert, alertDispatch] = useReducer(AlertReducer, InitialAlert);
+    const [formError, setFormError] = useState<{[formPart: string]: boolean}>({});
 
     useEffect(() => {
         const load = async () => {
@@ -76,7 +77,7 @@ export default function Calendar() {
 
         setUpdateForm(updatedForm);
 
-        if (updateDatabase) {
+        if (updateDatabase && formError.Event) {
             submitEventsForm(
                 updatedForm.reference.Events, 
                 updatedForm.current.Events
@@ -227,6 +228,12 @@ export default function Calendar() {
                                     let updatedValue = {...updateForm.current.Events.Events};
                                     updatedValue[`${controller.OpenEvent.EventID}`] = value;
                                     changeHandler(updatedValue, finalUpdate);
+                                }}
+                                updateFormError={(state) => {
+                                    setFormError({
+                                        ...formError,
+                                        'General': state
+                                    });
                                 }}
                             />
                         }

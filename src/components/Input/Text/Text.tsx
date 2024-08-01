@@ -23,6 +23,7 @@ export default function Text(props: TextProps) {
                     }}
                 />
             }
+            error={props.error || {state: false, message: ''}}
         />
     )
 }

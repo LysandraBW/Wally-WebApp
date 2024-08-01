@@ -49,6 +49,7 @@ export default function Dropdown(props: DropdownProps<any>) {
             onBlur={props.onBlur}
             onChange={props.onChange}
             getToggle={getToggle}
+            error={props.error}
         />
     )
 }

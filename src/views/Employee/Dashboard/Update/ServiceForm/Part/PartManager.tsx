@@ -6,6 +6,7 @@ import CreatePart from "./CreatePart";
 interface PartManagerProps {
     parts: {[partID: string]: DB_Part};
     onChange: (updatedValue: {[partID: string]: DB_Part}) => void;
+    updateFormError: (state: boolean) => void;
 }
 
 export default function PartManager(props: PartManagerProps) {
@@ -26,9 +27,10 @@ export default function PartManager(props: PartManagerProps) {
                             }}
                             onUpdate={(part) => {
                                 let updatedValue = {...props.parts};
-                                props.parts[`${partID}`] = part;
+                                updatedValue[`${partID}`] = part;
                                 props.onChange(updatedValue);
                             }}
+                            updateFormError={props.updateFormError}
                         />
                     </div>
                 ))}

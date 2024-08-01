@@ -9,10 +9,11 @@ export default function Error(props: ErrorProps) {
         <Message
             message={(
                 <>
-                    <div><b>Uh Oh</b></div>
-                    <div>We couldn't find an appointment with your username or password.</div>
+                    <div><b>No Matching Login</b></div>
+                    <div>We could not find a login with your username or password. Please try again.</div>
                 </>
             )}
+            messageType="Error"
             onClose={() => props.close()}
         />
     )

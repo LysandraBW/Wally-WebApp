@@ -1,17 +1,25 @@
 import { Multiple, Text } from "@/components/Input/Export";
 import { DB_Repair } from "@/database/Types";
-import { useState } from "react";
+import { hasValue } from "@/lib/Inspector/Inspector/Inspect/Inspectors";
+import FormErrorReducer, { InitialFormError } from "@/reducer/FormError/Reducer";
+import { useEffect, useReducer, useState } from "react";
 
 interface UpdateRepairProps {
     repair: DB_Repair;
     onDelete: () => any;
-    onUpdate: (repair: DB_Repair) => any;   
+    onUpdate: (repair: DB_Repair) => any;  
+    updateFormError: (state: boolean) => void; 
 }
 
 export default function UpdateRepair(props: UpdateRepairProps) {
     const initialRepair = props.repair.Repair;
     const [edit, setEdit] = useState(false);
     const [values, setValues] = useState(props.repair);
+    const [formError, formErrorDispatch] = useReducer(FormErrorReducer, InitialFormError);
+
+    useEffect(() => {
+        props.updateFormError(formError.state);
+    }, [formError.state]);
 
     return (
         <>
@@ -23,11 +31,23 @@ export default function UpdateRepair(props: UpdateRepairProps) {
                     }}
                     children={(
                         <div>
-                            <input 
-                                value={values.Repair} 
-                                onChange={(event) => setValues({...values, Repair: event.target.value})}
-                                onBlur={() => !values.Repair && setValues({...values, Repair: initialRepair})}
-                            />
+                            <div>
+                                <input 
+                                    value={values.Repair} 
+                                    onChange={async (event) => {
+                                        const value = event.target.value;
+                                        setValues({...values, Repair: value});
+                                        formErrorDispatch({
+                                            name: 'Repair',
+                                            inspection: await hasValue().inspect(value)
+                                        });
+                                    }}
+                                    onBlur={() => !values.Repair && setValues({...values, Repair: initialRepair})}
+                                />
+                                {formError.input.Repair.state &&
+                                    <span>{formError.input.Repair.message}</span>
+                                }
+                            </div>
                         </div>
                     )}
                 />

@@ -2,21 +2,71 @@ import { PageContext } from "@/app/Employee/Dashboard/Update/page";
 import { toggleValue } from "@/components/Input/Checkbox/Checkbox";
 import { File, Multiple, Toggle } from "@/components/Input/Export";
 import { DB_GeneralEmployee } from "@/database/Types";
+import { every, hasValue, inValues } from "@/lib/Inspector/Inspector/Inspect/Inspectors";
+import { ErrorStructure, Regexes } from "@/lib/Inspector/Inspectors";
 import { UpdateNote as UpdateNoteData } from "@/process/Employee/Update/Form/Form/Note/Note";
-import { useContext, useState } from "react";
+import FormErrorReducer, { InitialFormError } from "@/reducer/FormError/Reducer";
+import { useContext, useEffect, useReducer, useState } from "react";
 
 interface UpdateNoteProps {
     note: UpdateNoteData;
     onDelete: () => any;
     onUpdate: (note: UpdateNoteData) => any;   
+    updateFormError: (state: boolean) => void;
 }
 
 export default function UpdateNote(props: UpdateNoteProps) {
     const context = useContext(PageContext);
-    const initiailNoteData = {...props.note};
+    const initialNoteData = {...props.note};
 
     const [edit, setEdit] = useState(false);
     const [values, setValues] = useState(props.note);
+
+    const [formError, formErrorDispatch] = useReducer(FormErrorReducer, InitialFormError);
+
+    useEffect(() => {
+        props.updateFormError(formError.state);
+    }, [formError.state]);
+
+    const inspectHead = async (head: string = values.Head): Promise<boolean> => {
+        const [headState, headMessage] = await hasValue().inspect(head);
+        formErrorDispatch({
+            name: 'Head',
+            inspection: [headState, headMessage]
+        });
+        return headState;
+    }
+
+    const inspectBody = async (body: string = values.Body): Promise<boolean> => {
+        const [bodyState, bodyMessage] = await hasValue().inspect(body);
+        formErrorDispatch({
+            name: 'Body',
+            inspection: [bodyState, bodyMessage]
+        });
+        return bodyState;
+    }
+
+    const inspectShowCustomer = async (showCustomer: number = values.ShowCustomer): Promise<boolean> => {
+        const [showCustomerState, showCustomerMessage] = await inValues({
+            values: [0, 1]
+        }).inspect([showCustomer]);
+        formErrorDispatch({
+            name: 'ShowCustomer',
+            inspection: [showCustomerState, showCustomerMessage]
+        });
+        return showCustomerState;
+    }
+
+    const inspectSharees = async (sharees: Array<string> = values.Sharees): Promise<boolean> => {
+        const [shareesState, shareesMessage] = await every({
+            callback: (v: string) => !!v.match(Regexes.UniqueIdentifier)
+        }).inspect(sharees);
+        formErrorDispatch({
+            name: 'Sharees',
+            inspection: [shareesState, shareesMessage]
+        });
+        return shareesState;
+    }
 
     const noteOwnerData = (): DB_GeneralEmployee => {
         // New Note
@@ -45,6 +95,8 @@ export default function UpdateNote(props: UpdateNoteProps) {
         return (<p>Owned By: {employeeData.FName} {employeeData.LName}</p>);
     }
 
+    // Take the filter function out and put it in its own function,
+    // I don't like elements being up here anymore
     const getSharedWith = (): React.ReactNode => {
         if (!isOwner())
             return <></>;
@@ -65,50 +117,93 @@ export default function UpdateNote(props: UpdateNoteProps) {
                     onBlur={() => 1}
                     children={(
                         <div>
-                            <input 
-                                value={values.Head} 
-                                onChange={(event) => setValues({...values, Head: event.target.value})}
-                                onBlur={() => {
-                                    if (!values.Head) {
-                                        setValues({...values, Head: initiailNoteData.Head});
-                                    }
-                                }}
-                            />
-                            <input 
-                                value={values.Body} 
-                                onChange={(event) => setValues({...values, Body: event.target.value})}
-                                onBlur={() => {
-                                    if (!values.Body) {
-                                        setValues({...values, Body: initiailNoteData.Body});
-                                    }
-                                }}
-                            />
+                            <div>
+                                <input 
+                                    value={values.Head} 
+                                    onChange={async (event) => {
+                                        const value = event.target.value;
+                                        setValues({...values, Head: value});
+                                        inspectHead(value);
+                                    }}
+                                    onBlur={async () => {
+                                        if (values.Head)
+                                            return;
+
+                                        setValues({...values, Head: initialNoteData.Head});
+                                        inspectHead(initialNoteData.Head);
+                                    }}
+                                />
+                                {formError.input.Head && !formError.input.Head.state &&
+                                    <span>{formError.input.Head.message}</span>
+                                }
+                            </div>
+                            <div>
+                                <input 
+                                    value={values.Body} 
+                                    onChange={async (event) => {
+                                        const value = event.target.value;
+                                        setValues({...values, Body: value});
+                                        inspectBody(value);
+                                    }}
+                                    onBlur={async () => {
+                                        if (values.Body)
+                                            return;
+                                    
+                                        setValues({...values, Body: initialNoteData.Body});
+                                        inspectBody(initialNoteData.Body);
+                                    }}
+                                />
+                                {formError.input.Body && !formError.input.Body.state &&
+                                    <span>{formError.input.Body.message}</span>
+                                }
+                            </div>
+                            {/* Deleting Existing Attachments */}
                             {values.Attachments.map((attachment, i) => (
                                 <div key={i}>
-                                    {attachment.Name} <span onClick={() => setValues({...values, Attachments: values.Attachments.filter(_attachment => attachment !== _attachment)})}>x</span>
+                                    {attachment.Name} 
+                                    <span 
+                                        onClick={() => {
+                                            setValues({
+                                                ...values, 
+                                                Attachments: values.Attachments.filter(_attachment => attachment !== _attachment)
+                                            });
+                                        }}
+                                    >
+                                        x
+                                    </span>
                                 </div>
                             ))}
+                            {/* Reuploading New Attachments */}
                             <div>
-                            <File
-                                name={'Files'}
-                                label={'Reupload Files'}
-                                multiple={true}
-                                onChange={(name, value) => {
-                                    const formData = new FormData();
-                                    for (let i = 0; i < value.length; i++)
-                                        formData.append('Files', value[i]);
-                                    setValues({...values, [`${name}`]: formData});
-                                }}
-                            />
-                            </div>
-                            {isOwner() &&
-                                <Toggle
-                                    name='ShowCustomer'
-                                    label='Show Customer'
-                                    value={values.ShowCustomer}
-                                    onChange={(name, value) => setValues({...values, [`${name}`]: value})}
+                                <File
+                                    name={'Files'}
+                                    label={'Reupload Files'}
+                                    multiple={true}
+                                    onChange={(name, value) => {
+                                        const formData = new FormData();
+                                        for (let i = 0; i < value.length; i++)
+                                            formData.append('Files', value[i]);
+                                        setValues({...values, [`${name}`]: formData});
+                                    }}
                                 />
-                            }
+                            </div>
+                            <div>
+                                {isOwner() &&
+                                    <Toggle
+                                        name='ShowCustomer'
+                                        label='Show Customer'
+                                        value={values.ShowCustomer}
+                                        error={formError.input.ShowCustomer}
+                                        onChange={async (name, value) => {
+                                            setValues({...values, [`${name}`]: value});
+                                            inspectShowCustomer(value);
+                                        }}
+                                    />   
+                                }
+                                {formError.input.ShowCustomer && !formError.input.ShowCustomer.state &&
+                                    <span>{formError.input.ShowCustomer.message}</span>
+                                }
+                            </div>
                             <div>
                                 {isOwner() &&
                                     context.Employee.Employees.map((employee, i) => (
@@ -119,10 +214,16 @@ export default function UpdateNote(props: UpdateNoteProps) {
                                                     name='Sharees'
                                                     label={`Add ${employee.FName} ${employee.LName}`}
                                                     value={values.Sharees.includes(employee.EmployeeID) ? 1 : 0}
-                                                    onChange={(name, value) => {
-                                                        setValues({...values, Sharees: toggleValue(values.Sharees, employee.EmployeeID)});
+                                                    error={formError.input.Sharees}
+                                                    onChange={async (name, value) => {
+                                                        const updatedValue = toggleValue(values.Sharees, employee.EmployeeID);
+                                                        inspectSharees(updatedValue);
+                                                        setValues({...values, Sharees: updatedValue});
                                                     }}
                                                 />
+                                            }
+                                            {formError.input.Sharees && !formError.input.Sharees.state &&
+                                                <span>{formError.input.Sharees.message}</span>
                                             }
                                         </div>
                                     ))
@@ -130,6 +231,8 @@ export default function UpdateNote(props: UpdateNoteProps) {
                             </div>
                             <button 
                                 onClick={() => {
+                                    if (!formError.state)
+                                        return;
                                     setEdit(false);
                                     props.onUpdate(values);
                                 }}

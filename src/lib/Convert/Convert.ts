@@ -5,10 +5,14 @@ export function toString(v: any): string {
 }
 
 export function toWebDateTime(date: Date): string {
+    if (!date)
+        return '';
     return date.toISOString().slice(0, -1);
 }
 
 export function toDatabaseDateTime(date: string): string {
+    if (!date)
+        return '';
     return date.replace('T', ' ');
 }
 

@@ -79,6 +79,7 @@ export function DropdownFrame(props: DropdownFrameProps<any>) {
                     {getList()}
                 </div>
             }
+            error={props.error || {state: false, message: ''}}
         />
     )
 }

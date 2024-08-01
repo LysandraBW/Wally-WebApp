@@ -1,4 +1,5 @@
 import { Text, Search, Checkbox } from "@/components/Input/Export";
+import { ErrorStructure } from "@/lib/Inspector/Inspectors";
 
 interface VehicleFormProps {
     form: {
@@ -14,6 +15,7 @@ interface VehicleFormProps {
         modelYears: Array<[number, string]>;
         services:   {[k: string]: Array<[number, string]>};
     }
+    error: ErrorStructure;
     onChange: (name: string, value: any) => void;
 }
 
@@ -24,6 +26,7 @@ export default function VehicleForm(props: VehicleFormProps) {
                 name={"vin"}
                 value={props.form.vin}
                 label={"VIN"}
+                error={props.error.vin}
                 onChange={(name, value) => props.onChange(name, value)}
             />
             <Search
@@ -31,6 +34,7 @@ export default function VehicleForm(props: VehicleFormProps) {
                 value={props.form.modelYear}
                 values={props.values.modelYears}
                 label={"Model Year"}
+                error={props.error.modelYear}
                 defaultLabel="Select a Year"
                 onChange={(name, value) => props.onChange(name, value)}
                 size={10}
@@ -39,6 +43,7 @@ export default function VehicleForm(props: VehicleFormProps) {
                 name={"make"}
                 value={props.form.make}
                 values={props.values.makes}
+                error={props.error.make}
                 label={"Make"}
                 defaultLabel="Select a Make"
                 onChange={(name, value) => props.onChange(name, value)}
@@ -48,6 +53,7 @@ export default function VehicleForm(props: VehicleFormProps) {
                 name={"model"}
                 value={props.form.model}
                 values={props.values.models}
+                error={props.error.model}
                 label={"Model"}
                 defaultLabel="Select a Model"
                 onChange={(name, value) => props.onChange(name, value)}
@@ -58,6 +64,7 @@ export default function VehicleForm(props: VehicleFormProps) {
                 name="services"
                 value={props.form.services}
                 values={props.values.services}
+                error={props.error.services}
                 label={"Service"}
                 onChange={(name, value) => props.onChange(name, value)}
             />

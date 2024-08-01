@@ -146,6 +146,7 @@ export default function Checkbox(props: CheckboxProps<any>) {
                     {getCheckboxes()}
                 </>
             }
+            error={props.error || {state: false, message: ''}}
         />
     )
 }

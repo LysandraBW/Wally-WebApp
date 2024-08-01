@@ -7,18 +7,25 @@ import CreateService from "./CreateService";
 
 interface ServiceManagerProps {
     services: {[serviceID: string]: DB_AppointmentService};
+    updateFormError: (state: boolean) => void;
     onChange: (updatedValue: {[serviceID: string]: DB_AppointmentService}) => void;
 }
 
+// Stores the Class, Division, and Service of a Defined Service
+type ServiceType = {[k: string]: DB_AppointmentService};
+
+// Stores all the Defined Services, Ordered by Class (k) and Division (j)
+type ServiceValuesType = {[k: string]: {[j: string]: Array<[number, string]>}};
+
 export default function ServiceManager(props: ServiceManagerProps) {
-    const [services, setServices] = useState<{[k: string]: DB_AppointmentService}>();
-    const [serviceValues, setServiceValues] = useState<{[k: string]: {[j: string]: Array<[number, string]>}}>();
+    const [services, setServices] = useState<ServiceType>();
+    const [serviceValues, setServiceValues] = useState<ServiceValuesType>();
     const [counter, setCounter] = useState<number>(1);
 
     useEffect(() => {
         const load = async () => {
-            const serviceValues: {[k: string]: {[j: string]: Array<[number, string]>}} = {};
-            const services: {[k: string]: DB_AppointmentService} = {};
+            const serviceValues: ServiceValuesType = {};
+            const services: ServiceType = {};
 
             const dbServices = await Services();
             dbServices.forEach(service => {
@@ -58,9 +65,10 @@ export default function ServiceManager(props: ServiceManagerProps) {
                             }}
                             onUpdate={(service) => {
                                 let updatedValue = props.services;
-                                props.services[`${serviceID}`] = service;
+                                updatedValue[`${serviceID}`] = service;
                                 props.onChange(updatedValue);
                             }}
+                            updateFormError={props.updateFormError}
                         />
                     </div>
                 ))}

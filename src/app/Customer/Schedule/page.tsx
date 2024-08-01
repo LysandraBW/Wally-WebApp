@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import Tracker from "@/components/Form/Tracker/Tracker";
 import { Form, FormStructure } from "@/process/Customer/Schedule/Form";
-import { ModelYears, LoadModels, LoadMakeModelModelYear } from "@/lib/Decoder/Decoder";
+import { ModelYears, LoadModels, LoadVehicle } from "@/lib/Decoder/Decoder";
 import { Makes, Services } from "@/database/Export";
 import { LoadedValues, Values } from "@/process/Customer/Schedule/Load";
 import submitForm from "@/process/Customer/Schedule/Submit";
@@ -10,11 +10,14 @@ import ContactForm from "@/views/Customer/Schedule/Contact";
 import VehicleForm from "@/views/Customer/Schedule/Vehicle";
 import Success from "@/views/Customer/Schedule/Success";
 import Error from "@/views/Customer/Schedule/Error";
+import { inValues, isEmailAddress, isName, isPhoneNumber, isVIN } from "@/lib/Inspector/Inspector/Inspect/Inspectors";
+import { ErrorStructure } from "@/lib/Inspector/Inspectors";
 
 export default function Schedule() {
     const [form, setForm] = useState<FormStructure>(Form);
+    const [error, setError] = useState<ErrorStructure>({});
     const [values, setValues] = useState<LoadedValues>(Values);
-    const [message, setMessage] = useState<React.ReactNode>(null);
+    const [message, setMessage] = useState<string>('');
 
     useEffect(() => {
         const load = async () => {
@@ -46,23 +49,94 @@ export default function Schedule() {
         setValues({...values, models});
     }
 
-    const loadMakeModelModelYear = async (vin: string) => {
+    const loadVehicle = async (vin: string) => {
         if (!vin)
             return;
 
-        const {make, model, models, modelYear} = await LoadMakeModelModelYear(vin, values.makes);
-        if (!make)        
+        const data = await LoadVehicle(vin, values.makes);
+        if (!data.make)        
             return;
 
         setValues({
             ...values,
-             models
+            models: data.models
         });
-        return {
-            make: make, 
-            model: model, 
-            modelYear: modelYear
-        }
+        return data;
+    }
+
+    const inspectContactInput = async (): Promise<boolean> => {
+        const [fNameState, fNameMessage] = await isName().inspect(form.fName);
+        const [lNameState, lNameMessage] = await isName().inspect(form.lName);
+        const [emailState, emailMessage] = await isEmailAddress().inspect(form.email);
+        const [phoneState, phoneMessage] = await isPhoneNumber().inspect(form.phone);
+
+        setError({
+            fName: {
+                state: fNameState,
+                message: fNameMessage
+            },
+            lName: {
+                state: lNameState,
+                message: lNameMessage
+            },
+            email: {
+                state: emailState,
+                message: emailMessage
+            },
+            phone: {
+                state: phoneState,
+                message: phoneMessage
+            }
+        });
+
+        return fNameState && lNameState && emailState && phoneState;
+    }
+
+    const inspectVehicleInput = async (): Promise<boolean> => {
+        const [makeState, makeMessage] = await inValues({
+            values: values.makes.map(m => m[0])
+        }).inspect(form.make);
+
+        const [modelState, modelMessage] = await inValues({
+            values: values.models.map(m => m[0])
+        }).inspect(form.model);
+
+        const [modelYearState, modelYearMessage] = await inValues({
+            values: values.modelYears.map(m => m[0])
+        }).inspect(form.modelYear);
+
+        const [vinState, vinMessage] = await isVIN({
+            optional: true
+        }).inspect(form.vin);
+
+        const [servicesState, servicesMessage] = await inValues({
+            values: Object.values(values.services).flat().map(s => s[0])
+        }).inspect(form.services);
+
+        setError({
+            make: {
+                state: makeState,
+                message: makeMessage
+            },
+            model: {
+                state: modelState,
+                message: modelMessage
+            },
+            modelYear: {
+                state: modelYearState,
+                message: modelYearMessage
+            },
+            vin: {
+                state: vinState,
+                message: vinMessage
+            },
+            services: {
+                state: servicesState,
+                message: servicesMessage
+            }
+        });
+
+        return makeState && modelState && modelYearState && vinState && servicesState;
     }
 
     const changeHandler = async (name: string, value: any) => {
@@ -70,10 +144,16 @@ export default function Schedule() {
             return;
 
         if (name === "vin") {
-            const data = await loadMakeModelModelYear(value);
-            if (!data)
-                return;
-            setForm({...form, ...data, [`${name}`]: value});
+            const validVIN = (await isVIN().inspect(value))[0];
+            if (validVIN) {
+                const data = await loadVehicle(value);
+                if (!data)
+                    return;
+                setForm({...form, ...data, [`${name}`]: value});
+            }
+            else {
+                setForm({...form, [`${name}`]: value});
+            }
         }
         else if (name === "make") {
             loadModels(form.modelYear[0], value[0]);
@@ -92,21 +172,12 @@ export default function Schedule() {
         const appointmentID = await submitForm(form);
 
         if (appointmentID) {
-            setMessage((
-                <Success
-                    ID={appointmentID}
-                    close={() => setMessage(null)}
-                />
-            ));
+            setMessage(appointmentID);
             setForm(Form);
             return true;
         }
         else {
-            setMessage((
-                <Error
-                    close={() => setMessage(null)}
-                />
-            ));
+            setMessage('Error');
             return false;
         }
     }
@@ -114,6 +185,18 @@ export default function Schedule() {
     return (
         <>
             {message && message}
+            {message.length === 36 &&
+                <Success
+                    ID={message}
+                    close={() => setMessage(' ')}
+                />
+            }
+            {message === 'Error' &&
+                <Error
+                    close={() => setMessage(' ')}
+                />
+            }
+
             <Tracker
                 parts={[
                     {
@@ -122,9 +205,10 @@ export default function Schedule() {
                             <ContactForm
                                 form={form}
                                 onChange={changeHandler}
+                                error={error}
                             />
                         ),
-                        onContinue: () => true
+                        onContinue: async () => await inspectContactInput()
                     },
                     {
                         partHeader: "Vehicle",
@@ -133,9 +217,10 @@ export default function Schedule() {
                                 form={form}
                                 values={{...values}}
                                 onChange={changeHandler}
+                                error={error}
                             />
                         ),
-                        onContinue: () => true
+                        onContinue: async () => await inspectVehicleInput() 
                     }
                 ]}
                 onSubmit={submitHandler}

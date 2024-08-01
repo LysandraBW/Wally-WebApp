@@ -5,7 +5,7 @@ interface TrackerProps {
     parts: Array<{
         part: React.ReactNode;
         partHeader: string;
-        onContinue: () => boolean;
+        onContinue: () => Promise<boolean>;
     }>;
     onSubmit: () => Promise<boolean>;
 }
@@ -29,12 +29,12 @@ export default function Tracker(props: TrackerProps) {
                     const lastPart = props.parts.length - 1;
                     
                     if (nextPart > lastPart) {
-                        if (props.parts[part].onContinue() && await props.onSubmit()) {
+                        if (await props.parts[part].onContinue() && await props.onSubmit()) {
                             setPart(0);
                             return;
                         }
                     }
-                    else if (props.parts[part].onContinue()) {
+                    else if (await props.parts[part].onContinue()) {
                         setPart(Math.min(nextPart, lastPart));
                     }
                 }}

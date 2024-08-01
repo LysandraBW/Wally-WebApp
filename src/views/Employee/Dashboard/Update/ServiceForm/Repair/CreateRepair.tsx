@@ -1,6 +1,8 @@
-import { useState } from "react";
+import { useReducer, useState } from "react";
 import { Text } from "@/components/Input/Export";
 import { DB_Repair } from "@/database/Types";
+import FormErrorReducer, { InitialFormError } from "@/reducer/FormError/Reducer";
+import { hasValue } from "@/lib/Inspector/Inspector/Inspect/Inspectors";
 
 interface CreateRepairProps {
     onChange: (name: string, value: any) => any;
@@ -13,17 +15,33 @@ const defaultInput: DB_Repair = {
 
 export default function CreateRepair(props: CreateRepairProps) {
     const [values, setValues] = useState<DB_Repair>(defaultInput);
+    const [formError, formErrorDispatch] = useReducer(FormErrorReducer, InitialFormError);
+
+    const inspectRepair = async (repair: string = values.Repair): Promise<boolean> => {
+        const [repairState, repairMessage] = await hasValue().inspect(repair);
+        formErrorDispatch({
+            name: 'Repair',
+            inspection: [repairState, repairMessage]
+        });
+        return repairState;
+    }
     
     return (
         <div>
             <Text
                 name={'Repair'}
                 value={values.Repair}
+                error={formError.input.Repair}
                 label={'Repair'}
-                onChange={(name, value) => setValues({...values, [`${name}`]: value})}
+                onChange={async (name, value) => {
+                    inspectRepair(value);
+                    setValues({...values, [`${name}`]: value});
+                }}
             />
             <button 
-                onClick={() => {
+                onClick={async () => {
+                    if (!(await inspectRepair()))
+                        return;
                     props.onChange('Repairs', values);
                     setValues(defaultInput);
                 }}
