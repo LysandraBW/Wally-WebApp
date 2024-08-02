@@ -1,39 +1,43 @@
 "use client";
-import { Form, FormStructure } from "@/process/Customer/Lookup/Form";
-import { useState } from "react";
+import { Form } from "@/process/Customer/Lookup/Form";
+import { useReducer, useState } from "react";
 import { submitForm } from "@/process/Customer/Lookup/Submit";
 import { DB_AppointmentSummary } from "@/database/Types";
 import Error from "@/views/Customer/Lookup/Output/Error";
 import LookupForm from "@/views/Customer/Lookup/Lookup";
 import AppointmentSummary from "@/views/Customer/Lookup/Output/Summary";
+import FormStateReducer from "@/hook/FormState/Reducer";
+import { InitialLookupFormState } from "@/validation/State/Lookup";
+import { validEmail, validUniqueIdentifier } from "@/validation/Validation";
 
 export default function Lookup() {
-    const [form, setForm] = useState<FormStructure>(Form);
-    const [formState, setFormState] = useState<{[k: string]: boolean}>({});
-    const [error, setError] = useState(false);
+    const [form, setForm] = useState(Form);
+    const [formState, formStateDispatch] = useReducer(FormStateReducer, InitialLookupFormState);
+
+    const [outputError, setOutputError] = useState(false);
     const [output, setOutput] = useState<DB_AppointmentSummary>();
 
-    const submitHandler = async (): Promise<void> => {
-        // Last-Minute Check
-        const changeEvent = new Event('change');
-        const inputNames = ['appointmentID', 'email'];
-        inputNames.forEach(inputName => {
-            const input = document.getElementsByName(inputName)[0];
-            input.dispatchEvent(changeEvent);
+    const submitHandler = async () => {
+        const [emailState, emailMessage] = await validEmail(form.email);
+        const [aptIDState, aptIDMessage] = await validUniqueIdentifier(form.appointmentID);
+
+        formStateDispatch({
+            states: {
+                email: [emailState, emailMessage],
+                appointmentID: [aptIDState, aptIDMessage]
+            }
         });
 
-        // Error Previously Detected
-        if (!formState.Lookup)
+        if (!aptIDState || !emailState)
             return;
         
-        // Form Submission
         const output = await submitForm(form);
         if (!output) {
-            setError(true);
+            setOutputError(true);
             setOutput(undefined);
         }
         else {
-            setError(false);
+            setOutputError(false);
             setOutput(output);
         }
     }
@@ -41,19 +45,20 @@ export default function Lookup() {
     return (
         <>
             <div>
-                {error && 
+                {outputError && 
                     <Error
-                        close={() => setError(false)}
+                        close={() => setOutputError(false)}
                     />
                 }
                 <LookupForm
                     form={form}
+                    formState={formState}
                     onChange={(name, value) => {
                         setForm({...form, [`${name}`]: value});
                     }}
                     onSubmit={submitHandler}
-                    updateFormState={(state) => {
-                        setFormState({Lookup: state});
+                    updateFormState={(action) => {
+                        formStateDispatch(action);
                     }}
                 />
             </div>

@@ -1,39 +1,27 @@
 import { Text, Button } from '@/components/Input/Export';
-import FormStateReducer, { InitialFormState, ReducerState } from '@/hook/FormState/Reducer';
-import { InitialLookupFormState } from '@/validation/State/Lookup';
+import { ReducerAction, ReducerState } from '@/hook/FormState/Reducer';
 import { validUniqueIdentifier, validEmail } from '@/validation/Validation';
-import { useEffect, useReducer } from 'react';
 
 interface LookupFormProps {
     form: {
         appointmentID: string;
         email: string;
     }
+    formState: ReducerState;
+    updateFormState: (action: ReducerAction) => void;
     onChange: (name: string, value: any) => void;
     onSubmit: () => void;
-    updateFormState: (state: boolean) => void;
 }
 
 export default function LookupForm(props: LookupFormProps) {
-    const [formState, formStateDispatch] = useReducer(FormStateReducer, InitialLookupFormState);
-
-    useEffect(() => {
-        props.updateFormState(formState.state);
-    }, [formState.state]);
-
-    const inspectAppointmentID = async (aptID: string = props.form.appointmentID): Promise<boolean> => {
-        const [errState, errMessage] = await validUniqueIdentifier(aptID);
-        formStateDispatch({
-            name: 'appointmentID',
-            state: [errState, errMessage]
-        });
-        return errState;
-    }
-
-    const inspectEmail = async (email: string = props.form.email): Promise<boolean> => {
-        const [errState, errMessage] = await validEmail(email)
-        formStateDispatch({
-            name: 'email',
+    const inspectInput = async <T,> (
+        name: string, 
+        value: T, 
+        callback: (v: T) => Promise<[boolean, string?]>
+    ): Promise<boolean> => {
+        const [errState, errMessage] = await callback(value);
+        props.updateFormState({
+            name: name,
             state: [errState, errMessage]
         });
         return errState;
@@ -45,9 +33,9 @@ export default function LookupForm(props: LookupFormProps) {
                 name={'appointmentID'}
                 label={'Appointment ID'}
                 value={props.form.appointmentID}
-                error={formState.input.appointmentID}
+                error={props.formState.input.appointmentID}
                 onChange={(name, value) => {
-                    inspectAppointmentID(value);
+                    inspectInput(name, value, validUniqueIdentifier);
                     props.onChange(name, value);
                 }}
             />
@@ -55,9 +43,9 @@ export default function LookupForm(props: LookupFormProps) {
                 name={'email'}
                 label={'Email'}
                 value={props.form.email}
-                error={formState.input.email}
+                error={props.formState.input.email}
                 onChange={(name, value) => {
-                    inspectEmail(value);
+                    inspectInput(name, value, validEmail);
                     props.onChange(name, value);
                 }}
             />
