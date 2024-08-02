@@ -1,7 +1,7 @@
 import { useReducer, useState } from "react";
 import { Text } from "@/components/Input/Export";
 import { DB_Payment } from "@/database/Types";
-import FormErrorReducer, { InitialFormError } from "@/reducer/FormError/Reducer";
+import FormStateReducer, { InitialFormState } from "@/reducer/FormState/Reducer";
 import { hasValue } from "@/lib/Inspector/Inspector/Inspect/Inspectors";
 
 interface CreatePaymentProps {
@@ -21,13 +21,13 @@ const defaultInput: DB_Payment = {
 
 export default function CreatePayment(props: CreatePaymentProps) {
     const [values, setValues] = useState<DB_Payment>(defaultInput);
-    const [formError, formErrorDispatch] = useReducer(FormErrorReducer, InitialFormError);
+    const [formError, formErrorDispatch] = useReducer(FormStateReducer, InitialFormState);
 
     const inspectPayment = async (payment: number = values.Payment): Promise<boolean> => {
         const [errState, errMessage] = await hasValue().inspect(payment);
         formErrorDispatch({
             name: 'Payment',
-            inspection: [errState, errMessage]
+            state: [errState, errMessage]
         });
         return errState;
     }
@@ -36,7 +36,7 @@ export default function CreatePayment(props: CreatePaymentProps) {
         const [errState, errMessage] = await hasValue().inspect(name);
         formErrorDispatch({
             name: 'Name',
-            inspection: [errState, errMessage]
+            state: [errState, errMessage]
         });
         return errState;
     }
@@ -45,7 +45,7 @@ export default function CreatePayment(props: CreatePaymentProps) {
         const [errState, errMessage] = await hasValue().inspect(type);
         formErrorDispatch({
             name: 'Type',
-            inspection: [errState, errMessage]
+            state: [errState, errMessage]
         });
         return errState;
     }
@@ -54,7 +54,7 @@ export default function CreatePayment(props: CreatePaymentProps) {
         const [errState, errMessage] = await hasValue().inspect(ccn);
         formErrorDispatch({
             name: 'CCN',
-            inspection: [errState, errMessage]
+            state: [errState, errMessage]
         });
         return errState;
     }
@@ -63,7 +63,7 @@ export default function CreatePayment(props: CreatePaymentProps) {
         const [errState, errMessage] = await hasValue().inspect(exp);
         formErrorDispatch({
             name: 'EXP',
-            inspection: [errState, errMessage]
+            state: [errState, errMessage]
         });
         return errState;
     }

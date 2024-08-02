@@ -1,7 +1,7 @@
 import { useReducer, useState } from "react";
 import { Text } from "@/components/Input/Export";
 import { DB_Part } from "@/database/Types";
-import FormErrorReducer, { InitialFormError } from "@/reducer/FormError/Reducer";
+import FormStateReducer, { InitialFormState } from "@/reducer/FormState/Reducer";
 import { hasValue, isNumber } from "@/lib/Inspector/Inspector/Inspect/Inspectors";
 
 interface CreatePartProps {
@@ -18,13 +18,13 @@ const defaultInput: DB_Part = {
 
 export default function CreatePart(props: CreatePartProps) {
     const [values, setValues] = useState<DB_Part>(defaultInput);
-    const [formError, formErrorDispatch] = useReducer(FormErrorReducer, InitialFormError);
+    const [formError, formErrorDispatch] = useReducer(FormStateReducer, InitialFormState);
 
     const inspectPartNumber = async (partNumber: string = values.PartNumber): Promise<boolean> => {
         const [partNumberState, partNumberMessage] = await hasValue().inspect(partNumber);
         formErrorDispatch({
             name: 'PartNumber',
-            inspection: [partNumberState, partNumberMessage]
+            state: [partNumberState, partNumberMessage]
         });
         return partNumberState;
     }
@@ -33,7 +33,7 @@ export default function CreatePart(props: CreatePartProps) {
         const [partNameState, partNameMessage] = await hasValue().inspect(partName);
         formErrorDispatch({
             name: 'PartName',
-            inspection: [partNameState, partNameMessage]
+            state: [partNameState, partNameMessage]
         });
         return partNameState;
     }
@@ -42,7 +42,7 @@ export default function CreatePart(props: CreatePartProps) {
         const [quantityState, quantityMessage] = await isNumber().inspect(quantity);
         formErrorDispatch({
             name: 'Quantity',
-            inspection: [quantityState, quantityMessage]
+            state: [quantityState, quantityMessage]
         });
         return quantityState;
     }
@@ -51,7 +51,7 @@ export default function CreatePart(props: CreatePartProps) {
         const [unitCostState, unitCostMessage] = await isNumber().inspect(unitCost);
         formErrorDispatch({
             name: 'UnitCost',
-            inspection: [unitCostState, unitCostMessage]
+            state: [unitCostState, unitCostMessage]
         });
         return unitCostState;
     }

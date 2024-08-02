@@ -8,7 +8,7 @@ import { Regexes } from "@/lib/Inspector/Inspectors";
 import { goToUpdateApt } from "@/lib/Navigation/Redirect";
 import { UpdateEvent as UpdateEventData } from "@/process/Employee/Calendar/Form/Form";
 import { updatedValue } from "@/process/Employee/Update/Form/Helper";
-import FormErrorReducer, { InitialFormError } from "@/reducer/FormError/Reducer";
+import FormStateReducer, { InitialFormState } from "@/reducer/FormState/Reducer";
 import { useContext, useEffect, useReducer, useState } from "react";
 
 interface UpdateEventProps {
@@ -24,7 +24,7 @@ export default function UpdateEvent(props: UpdateEventProps) {
     const initialEventData = {...props.event};
     const [edit, setEdit] = useState(false);
     const [values, setValues] = useState(props.event);
-    const [formError, formErrorDispatch] = useReducer(FormErrorReducer, InitialFormError);
+    const [formError, formErrorDispatch] = useReducer(FormStateReducer, InitialFormState);
 
     useEffect(() => {
         props.updateFormError(formError.state);
@@ -44,7 +44,7 @@ export default function UpdateEvent(props: UpdateEventProps) {
         const [errState, errMessage] = await hasValue().inspect(name);
         formErrorDispatch({
             name: 'Name',
-            inspection: [errState, errMessage]
+            state: [errState, errMessage]
         });
         return errState;
     }
@@ -53,7 +53,7 @@ export default function UpdateEvent(props: UpdateEventProps) {
         const [errState, errMessage] = await hasValue().inspect(summary);
         formErrorDispatch({
             name: 'Summary',
-            inspection: [errState, errMessage]
+            state: [errState, errMessage]
         });
         return errState;
     }
@@ -62,7 +62,7 @@ export default function UpdateEvent(props: UpdateEventProps) {
         const [errState, errMessage] = await hasValue().inspect(sharees);
         formErrorDispatch({
             name: 'Sharees',
-            inspection: [errState, errMessage]
+            state: [errState, errMessage]
         });
         return errState;
     }
@@ -71,7 +71,7 @@ export default function UpdateEvent(props: UpdateEventProps) {
         const [errState, errMessage] = await hasValue().inspect(date);
         formErrorDispatch({
             name: 'UpdatedEvent',
-            inspection: [errState, errMessage]
+            state: [errState, errMessage]
         });
         return errState;
     }

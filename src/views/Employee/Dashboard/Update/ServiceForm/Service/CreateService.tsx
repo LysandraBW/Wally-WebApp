@@ -1,7 +1,7 @@
 import { Text } from "@/components/Input/Export";
 import { DB_AppointmentService, DB_Service } from "@/database/Types";
 import { hasValue } from "@/lib/Inspector/Inspector/Inspect/Inspectors";
-import FormErrorReducer, { InitialFormError } from "@/reducer/FormError/Reducer";
+import FormStateReducer, { InitialFormState } from "@/reducer/FormState/Reducer";
 import { useEffect, useReducer, useState } from "react";
 
 interface CreateServiceProps {
@@ -19,25 +19,25 @@ const defaultInput: DB_AppointmentService = {
 
 export default function CreateService(props: CreateServiceProps) {
     const [values, setValues] = useState<DB_AppointmentService>(defaultInput);
-    const [formError, formErrorDispatch] = useReducer(FormErrorReducer, InitialFormError);
+    const [formError, formErrorDispatch] = useReducer(FormStateReducer, InitialFormState);
 
     const inspectServiceInput = async (): Promise<boolean> => {
         const [serviceState, serviceMessage] = await hasValue().inspect(values.Service);
         formErrorDispatch({
             name: 'Service',
-            inspection: [serviceState, serviceMessage]
+            state: [serviceState, serviceMessage]
         });
 
         const [divisionState, divisionMessage] = await hasValue().inspect(values.Division);
         formErrorDispatch({
             name: 'Division',
-            inspection: [divisionState, divisionMessage]
+            state: [divisionState, divisionMessage]
         });
 
         const [classState, classMessage] = await hasValue().inspect(values.Class);
         formErrorDispatch({
             name: 'Class',
-            inspection: [classState, classMessage]
+            state: [classState, classMessage]
         });
 
         return serviceState && divisionState && classState;
@@ -54,7 +54,7 @@ export default function CreateService(props: CreateServiceProps) {
                     setValues({...values, [`${name}`]: value});
                     formErrorDispatch({
                         name: 'Service',
-                        inspection: await hasValue().inspect(value)
+                        state: await hasValue().inspect(value)
                     });
                 }}
             />
@@ -67,7 +67,7 @@ export default function CreateService(props: CreateServiceProps) {
                     setValues({...values, [`${name}`]: value});
                     formErrorDispatch({
                         name: 'Division',
-                        inspection: await hasValue().inspect(value)
+                        state: await hasValue().inspect(value)
                     });
                 }}
             />
@@ -80,7 +80,7 @@ export default function CreateService(props: CreateServiceProps) {
                     setValues({...values, [`${name}`]: value});
                     formErrorDispatch({
                         name: 'Class',
-                        inspection: await hasValue().inspect(value)
+                        state: await hasValue().inspect(value)
                     });
                 }}
             />

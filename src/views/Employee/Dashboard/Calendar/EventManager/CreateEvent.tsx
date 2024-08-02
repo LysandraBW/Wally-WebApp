@@ -3,7 +3,7 @@ import { Text, TextArea, Toggle } from "@/components/Input/Export";
 import { toggleValue } from "@/components/Input/Checkbox/Checkbox";
 import { UpdateEvent } from "@/process/Employee/Calendar/Form/Form";
 import { PageContext } from "@/app/Employee/Dashboard/Calendar/page";
-import FormErrorReducer, { InitialFormError } from "@/reducer/FormError/Reducer";
+import FormStateReducer, { InitialFormState } from "@/reducer/FormState/Reducer";
 import { hasValue } from "@/lib/Inspector/Inspector/Inspect/Inspectors";
 
 interface CreateEventProps {
@@ -25,13 +25,13 @@ const defaultInput: UpdateEvent = {
 export default function CreateEvent(props: CreateEventProps) {
     const context = useContext(PageContext);
     const [values, setValues] = useState<UpdateEvent>(defaultInput);
-    const [formError, formErrorDispatch] = useReducer(FormErrorReducer, InitialFormError);
+    const [formError, formErrorDispatch] = useReducer(FormStateReducer, InitialFormState);
 
     const inspectName = async (name: string = values.Name): Promise<boolean> => {
         const [errState, errMessage] = await hasValue().inspect(name);
         formErrorDispatch({
             name: 'Name',
-            inspection: [errState, errMessage]
+            state: [errState, errMessage]
         });
         return errState;
     }
@@ -40,7 +40,7 @@ export default function CreateEvent(props: CreateEventProps) {
         const [errState, errMessage] = await hasValue().inspect(summary);
         formErrorDispatch({
             name: 'Summary',
-            inspection: [errState, errMessage]
+            state: [errState, errMessage]
         });
         return errState;
     }
@@ -49,7 +49,7 @@ export default function CreateEvent(props: CreateEventProps) {
         const [errState, errMessage] = await hasValue().inspect(sharees);
         formErrorDispatch({
             name: 'Sharees',
-            inspection: [errState, errMessage]
+            state: [errState, errMessage]
         });
         return errState;
     }
@@ -58,7 +58,7 @@ export default function CreateEvent(props: CreateEventProps) {
         const [errState, errMessage] = await hasValue().inspect(date);
         formErrorDispatch({
             name: 'UpdatedEvent',
-            inspection: [errState, errMessage]
+            state: [errState, errMessage]
         });
         return errState;
     }

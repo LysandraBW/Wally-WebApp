@@ -4,7 +4,7 @@ import CreatePayment from "./CreatePayment";
 import {Text} from "@/components/Input/Export";
 import { DB_Payment } from "@/database/Types";
 import { FormPart } from "@/process/Employee/Update/Form/UpdateForm";
-import FormErrorReducer, { InitialFormError } from "@/reducer/FormError/Reducer";
+import FormStateReducer, { InitialFormState } from "@/reducer/FormState/Reducer";
 import { hasValue } from "@/lib/Inspector/Inspector/Inspect/Inspectors";
 
 interface PaymentFormProps {
@@ -18,7 +18,7 @@ interface PaymentFormProps {
 
 export default function PaymentForm(props: PaymentFormProps) {
     const initialCost = props.form.Cost;
-    const [costError, costErrorDispatch] = useReducer(FormErrorReducer, InitialFormError);
+    const [costError, costErrorDispatch] = useReducer(FormStateReducer, InitialFormState);
     const [counter, setCounter] = useState<number>(1);
 
     useEffect(() => {
@@ -30,7 +30,7 @@ export default function PaymentForm(props: PaymentFormProps) {
         const [errState, errMessage] = await hasValue().inspect(cost);
         costErrorDispatch({
             name: 'Cost',
-            inspection: [errState, errMessage]
+            state: [errState, errMessage]
         });
         return errState;
     }
@@ -73,7 +73,7 @@ export default function PaymentForm(props: PaymentFormProps) {
                             updateFormError={(state: boolean) => {
                                 costErrorDispatch({
                                     name: 'Other',
-                                    inspection: [state, '']
+                                    state: [state, '']
                                 });
                                 props.updateFormError(state);
                             }}

@@ -5,7 +5,7 @@ import { DB_GeneralEmployee } from "@/database/Types";
 import { every, hasValue, inValues } from "@/lib/Inspector/Inspector/Inspect/Inspectors";
 import { ErrorStructure, Regexes } from "@/lib/Inspector/Inspectors";
 import { UpdateNote as UpdateNoteData } from "@/process/Employee/Update/Form/Form/Note/Note";
-import FormErrorReducer, { InitialFormError } from "@/reducer/FormError/Reducer";
+import FormStateReducer, { InitialFormState } from "@/reducer/FormState/Reducer";
 import { useContext, useEffect, useReducer, useState } from "react";
 
 interface UpdateNoteProps {
@@ -22,7 +22,7 @@ export default function UpdateNote(props: UpdateNoteProps) {
     const [edit, setEdit] = useState(false);
     const [values, setValues] = useState(props.note);
 
-    const [formError, formErrorDispatch] = useReducer(FormErrorReducer, InitialFormError);
+    const [formError, formErrorDispatch] = useReducer(FormStateReducer, InitialFormState);
 
     useEffect(() => {
         props.updateFormError(formError.state);
@@ -32,7 +32,7 @@ export default function UpdateNote(props: UpdateNoteProps) {
         const [headState, headMessage] = await hasValue().inspect(head);
         formErrorDispatch({
             name: 'Head',
-            inspection: [headState, headMessage]
+            state: [headState, headMessage]
         });
         return headState;
     }
@@ -41,7 +41,7 @@ export default function UpdateNote(props: UpdateNoteProps) {
         const [bodyState, bodyMessage] = await hasValue().inspect(body);
         formErrorDispatch({
             name: 'Body',
-            inspection: [bodyState, bodyMessage]
+            state: [bodyState, bodyMessage]
         });
         return bodyState;
     }
@@ -52,7 +52,7 @@ export default function UpdateNote(props: UpdateNoteProps) {
         }).inspect([showCustomer]);
         formErrorDispatch({
             name: 'ShowCustomer',
-            inspection: [showCustomerState, showCustomerMessage]
+            state: [showCustomerState, showCustomerMessage]
         });
         return showCustomerState;
     }
@@ -63,7 +63,7 @@ export default function UpdateNote(props: UpdateNoteProps) {
         }).inspect(sharees);
         formErrorDispatch({
             name: 'Sharees',
-            inspection: [shareesState, shareesMessage]
+            state: [shareesState, shareesMessage]
         });
         return shareesState;
     }

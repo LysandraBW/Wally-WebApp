@@ -1,7 +1,7 @@
 import { Multiple, Text } from "@/components/Input/Export";
 import { DB_Repair } from "@/database/Types";
 import { hasValue } from "@/lib/Inspector/Inspector/Inspect/Inspectors";
-import FormErrorReducer, { InitialFormError } from "@/reducer/FormError/Reducer";
+import FormStateReducer, { InitialFormState } from "@/reducer/FormState/Reducer";
 import { useEffect, useReducer, useState } from "react";
 
 interface UpdateRepairProps {
@@ -15,7 +15,7 @@ export default function UpdateRepair(props: UpdateRepairProps) {
     const initialRepair = props.repair.Repair;
     const [edit, setEdit] = useState(false);
     const [values, setValues] = useState(props.repair);
-    const [formError, formErrorDispatch] = useReducer(FormErrorReducer, InitialFormError);
+    const [formError, formErrorDispatch] = useReducer(FormStateReducer, InitialFormState);
 
     useEffect(() => {
         props.updateFormError(formError.state);
@@ -39,7 +39,7 @@ export default function UpdateRepair(props: UpdateRepairProps) {
                                         setValues({...values, Repair: value});
                                         formErrorDispatch({
                                             name: 'Repair',
-                                            inspection: await hasValue().inspect(value)
+                                            state: await hasValue().inspect(value)
                                         });
                                     }}
                                     onBlur={() => !values.Repair && setValues({...values, Repair: initialRepair})}

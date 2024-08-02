@@ -3,9 +3,9 @@ import { useEffect, useReducer, useState } from "react";
 import { Text, Search } from "@/components/Input/Export";
 import { FormPart } from "@/process/Employee/Update/Form/UpdateForm";
 import { LoadVehicle, LoadModels, ModelYears } from "@/lib/Decoder/Decoder";
-import { ErrorStructure } from "@/lib/Inspector/Inspectors";
-import { inValues, isLicensePlate, isNumber, isVIN } from "@/lib/Inspector/Inspector/Inspect/Inspectors";
-import FormErrorReducer, { InitialFormError } from "@/reducer/FormError/Reducer";
+import FormStateReducer, { InitialFormState } from "@/reducer/FormState/Reducer";
+import { LoadedValues, Values } from "@/process/Employee/Update/Structure/Vehicle";
+import { validLicensePlate, validMake, validModel, validModelYear, validNumber, validVIN } from "@/validation/Validation";
 
 interface VehicleProps {
     form: {
@@ -20,41 +20,48 @@ interface VehicleProps {
     changeHandler: (part: FormPart, name: string, value: any) => void;
 }
 
-interface LoadedValues {
-    makes: Array<[string, string]>;
-    models: Array<[string, string]>;
-    modelYears: Array<[number, string]>;
-}
-
-const Values: LoadedValues = {
-    makes: [],
-    models: [],
-    modelYears: []
-}
-
 export default function Vehicle(props: VehicleProps) {
     const [values, setValues] = useState<LoadedValues>(Values);
-    const [formError, formErrorDispatch] = useReducer(FormErrorReducer, InitialFormError);
+    const [formState, formStateDispatch] = useReducer(FormStateReducer, InitialFormState);
 
     useEffect(() => {
-        const loadValues = async () => {
+        const load = async () => {
             const makes: Array<[string, string]> = (await Makes()).map(m => [m.Make, m.Make]);
             const models = await LoadModels(props.form.ModelYear, props.form.Make);
             const modelYears: Array<[number, string]> = (await ModelYears()).map(y => [y, y.toString()]);
 
-            setValues({
-                ...values,
-                makes,
-                models,
-                modelYears
-            });
+            // Initializing Form State
+            setValues({...values, makes, models, modelYears});
+            formStateDispatch({
+                states: {
+                    Make: await validMake([props.form.Make], values.makes.map(m => m[0])),
+                    Model: await validModel([props.form.Model], values.models.map(m => m[0])),
+                    ModelYear: await validModelYear([props.form.ModelYear], values.modelYears.map(m => m[0])),
+                    VIN: await validVIN(props.form.VIN),
+                    Mileage: await validNumber(props.form.Mileage),
+                    LicensePlate: await validLicensePlate(props.form.LicensePlate),
+                }
+            })
         }
-        loadValues();
+        load();
     }, []);
 
     useEffect(() => {
-        props.updateFormError(formError.state);
-    }, [formError.state]);
+        props.updateFormError(formState.state);
+    }, [formState.state]);
+
+    const inspectInput = async <T,>(
+        inputName: string, 
+        input: T, 
+        callback: (value: T) => Promise<[boolean, string?]>
+    ): Promise<boolean> => {
+        const [errState, errMessage] = await callback(input);
+        formStateDispatch({
+            name: inputName,
+            state: [errState, errMessage]
+        });
+        return errState;
+    }
 
     const loadModels = async (modelYear: number, make: string) => {
         const models = await LoadModels(modelYear, make);
@@ -71,33 +78,16 @@ export default function Vehicle(props: VehicleProps) {
             models: vehicle.models
         });
 
-        // No Matching Vehicle Found
-        if (!vehicle.make)        
+        if (!vehicle.decoded)        
             return;
-
-        return {
-            make:       vehicle.make, 
-            model:      vehicle.model, 
-            modelYear:  vehicle.modelYear
-        };
+        return {...vehicle};
     }
 
     const changeHandler = async (name: string, value: any) => {
         if (name === 'VIN') {
             props.changeHandler('Vehicle', name, value);
 
-            // Inspect
-            const [
-                vinState, 
-                vinMessage
-            ] = await isVIN({
-                optional: true
-            }).inspect(value);
-
-            formErrorDispatch({
-                name: 'VIN',
-                inspection: [vinState, vinMessage]
-            });
+            const vinState = await inspectInput('VIN', value, validVIN);
 
             // No Decoding for an Invalid VIN
             if (!vinState || !value)
@@ -109,94 +99,45 @@ export default function Vehicle(props: VehicleProps) {
                 return;
 
             props.changeHandler('Vehicle', '', {
-                VIN:        value,
-                Make:       vehicle.make[0],
-                Model:      vehicle.model[0],
-                ModelYear:  vehicle.modelYear[0]
+                VIN: value,
+                Make: vehicle.make[0],
+                Model: vehicle.model[0],
+                ModelYear: vehicle.modelYear[0]
             });
         }
         else if (['Make', 'Model', 'ModelYear'].includes(name)) {
             if (name === 'Make') {
-                // Clear Model Input
-                // As updated models will be loaded,
-                // or as an invalid make will be entered,
-                // we can clear out the model.
                 props.changeHandler('Vehicle', 'Model', '');
-
-                // Update Make Input
                 props.changeHandler('Vehicle', 'Make', value[0]);
 
-                // Inspect Make
-                const [makeState, makeMessage] = await inValues({
-                    values: values.makes.map(m => m[0])
-                }).inspect(value);
-
-                formErrorDispatch({
-                    name,
-                    inspection: [makeState, makeMessage]
-                });
-
-                // Clear Loaded Models on Error
-                if (!makeState) {
-                    setValues({
-                        ...values,
-                        models: []
-                    });
-
-                    return;
-                }
-
-                loadModels(props.form.ModelYear, value[0]);
+                const makeState = await inspectInput('Make', value, v => validMake(v, values.makes.map(m => m[0])));
+                if (!makeState)
+                    setValues({...values, models: []});
+                else
+                    loadModels(props.form.ModelYear, value[0]);
             }
             else if (name === 'ModelYear') {
                 props.changeHandler('Vehicle', 'Model', '');
                 props.changeHandler('Vehicle', 'ModelYear', value[0]);
 
-                const [modelYearState, modelYearMessage] = await inValues({
-                    values: values.modelYears.map(m => m[0])
-                }).inspect(value);
-
-                formErrorDispatch({
-                    name,
-                    inspection: [modelYearState, modelYearMessage]
-                });
-
-                if (!modelYearState) {
-                    // Clear Models
-                    setValues({
-                        ...values,
-                        models: []
-                    });
-
-                    return;
-                }
-
-                loadModels(value[0], props.form.Make);
+                const modelYearState = await inspectInput('ModelYear', value, v => validModelYear(v, values.modelYears.map(m => m[0])));
+                if (!modelYearState)
+                    setValues({...values, models: []});
+                else
+                    loadModels(value[0], props.form.Make);
             }
             else {
-                formErrorDispatch({
-                    name,
-                    inspection: await inValues({
-                        values: values.models.map(m => m[0])
-                    }).inspect(value)
-                });
-
                 props.changeHandler('Vehicle', 'Model', value[0]);
+                await inspectInput('Model', value, v => validModel(v, values.models.map(m => m[0])));
             }
         }
         else if (name === 'Mileage') {
             props.changeHandler('Vehicle', name, value);
-            formErrorDispatch({
-                name,
-                inspection: await isNumber().inspect(value)
-            });
+            await inspectInput('Mileage', value, validNumber);
         }
         else if (name === 'LicensePlate') {
             props.changeHandler('Vehicle', name, value);
-            formErrorDispatch({
-                name,
-                inspection: await isLicensePlate().inspect(value)
-            });
+            await inspectInput('LicensePlate', value, validLicensePlate);
         }
     }
 
@@ -205,14 +146,14 @@ export default function Vehicle(props: VehicleProps) {
             <Text
                 name={"VIN"}
                 value={props.form.VIN}
-                error={formError.input.VIN}
+                error={formState.input.VIN}
                 label={"VIN"}
                 onChange={(name, value) => changeHandler(name, value)}
             />
             <Search
                 name={"ModelYear"}
                 value={[props.form.ModelYear]}
-                error={formError.input.ModelYear}
+                error={formState.input.ModelYear}
                 values={values.modelYears}
                 label={"Model Year"}
                 defaultLabel="Select a Year"
@@ -222,7 +163,7 @@ export default function Vehicle(props: VehicleProps) {
             <Search
                 name={"Make"}
                 value={[props.form.Make]}
-                error={formError.input.Make}
+                error={formState.input.Make}
                 values={values.makes}
                 label={"Make"}
                 defaultLabel="Select a Make"
@@ -232,7 +173,7 @@ export default function Vehicle(props: VehicleProps) {
             <Search
                 name={"Model"}
                 value={[props.form.Model]}
-                error={formError.input.Model}
+                error={formState.input.Model}
                 values={values.models}
                 label={"Model"}
                 defaultLabel="Select a Model"
@@ -244,14 +185,14 @@ export default function Vehicle(props: VehicleProps) {
                 type="number"
                 name={"Mileage"}
                 value={props.form.Mileage}
-                error={formError.input.Mileage}
+                error={formState.input.Mileage}
                 label={"Mileage"}
                 onChange={(name, value) => changeHandler(name, value)}
             />
             <Text
                 name={"LicensePlate"}
                 value={props.form.LicensePlate}
-                error={formError.input.LicensePlate}
+                error={formState.input.LicensePlate}
                 label={"License Plate"}
                 onChange={(name, value) => changeHandler(name, value)}
             />

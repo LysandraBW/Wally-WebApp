@@ -1,7 +1,7 @@
 import { useReducer, useState } from "react";
 import { Text } from "@/components/Input/Export";
 import { DB_Repair } from "@/database/Types";
-import FormErrorReducer, { InitialFormError } from "@/reducer/FormError/Reducer";
+import FormStateReducer, { InitialFormState } from "@/reducer/FormState/Reducer";
 import { hasValue } from "@/lib/Inspector/Inspector/Inspect/Inspectors";
 
 interface CreateRepairProps {
@@ -15,13 +15,13 @@ const defaultInput: DB_Repair = {
 
 export default function CreateRepair(props: CreateRepairProps) {
     const [values, setValues] = useState<DB_Repair>(defaultInput);
-    const [formError, formErrorDispatch] = useReducer(FormErrorReducer, InitialFormError);
+    const [formError, formErrorDispatch] = useReducer(FormStateReducer, InitialFormState);
 
     const inspectRepair = async (repair: string = values.Repair): Promise<boolean> => {
         const [repairState, repairMessage] = await hasValue().inspect(repair);
         formErrorDispatch({
             name: 'Repair',
-            inspection: [repairState, repairMessage]
+            state: [repairState, repairMessage]
         });
         return repairState;
     }

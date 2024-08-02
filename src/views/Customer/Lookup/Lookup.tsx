@@ -1,35 +1,68 @@
-import { Text, Button } from "@/components/Input/Export";
-import { ErrorStructure } from "@/lib/Inspector/Inspectors";
+import { Text, Button } from '@/components/Input/Export';
+import FormStateReducer, { InitialFormState, ReducerState } from '@/reducer/FormState/Reducer';
+import { InitialLookupFormState } from '@/validation/State/Lookup';
+import { validUniqueIdentifier, validEmail } from '@/validation/Validation';
+import { useEffect, useReducer } from 'react';
 
 interface LookupFormProps {
     form: {
         appointmentID: string;
         email: string;
     }
-    formError: ErrorStructure;
     onChange: (name: string, value: any) => void;
     onSubmit: () => void;
+    updateFormState: (state: boolean) => void;
 }
 
 export default function LookupForm(props: LookupFormProps) {
+    const [formState, formStateDispatch] = useReducer(FormStateReducer, InitialLookupFormState);
+
+    useEffect(() => {
+        props.updateFormState(formState.state);
+    }, [formState.state]);
+
+    const inspectAppointmentID = async (aptID: string = props.form.appointmentID): Promise<boolean> => {
+        const [errState, errMessage] = await validUniqueIdentifier(aptID);
+        formStateDispatch({
+            name: 'appointmentID',
+            state: [errState, errMessage]
+        });
+        return errState;
+    }
+
+    const inspectEmail = async (email: string = props.form.email): Promise<boolean> => {
+        const [errState, errMessage] = await validEmail(email)
+        formStateDispatch({
+            name: 'email',
+            state: [errState, errMessage]
+        });
+        return errState;
+    }
+
     return (
         <div>
             <Text
-                name={"appointmentID"}
+                name={'appointmentID'}
+                label={'Appointment ID'}
                 value={props.form.appointmentID}
-                error={props.formError.appointmentID}
-                label={"Appointment ID"}
-                onChange={(name, value) => props.onChange(name, value)}
+                error={formState.input.appointmentID}
+                onChange={(name, value) => {
+                    inspectAppointmentID(value);
+                    props.onChange(name, value);
+                }}
             />
             <Text
-                name={"email"}
+                name={'email'}
+                label={'Email'}
                 value={props.form.email}
-                error={props.formError.email}
-                label={"Email"}
-                onChange={(name, value) => props.onChange(name, value)}
+                error={formState.input.email}
+                onChange={(name, value) => {
+                    inspectEmail(value);
+                    props.onChange(name, value);
+                }}
             />
             <Button
-                label="Submit"
+                label='Submit'
                 onClick={props.onSubmit}
             />
         </div>

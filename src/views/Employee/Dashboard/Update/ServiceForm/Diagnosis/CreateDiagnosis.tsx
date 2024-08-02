@@ -1,7 +1,7 @@
 import { useReducer, useState } from "react";
 import { Text } from "@/components/Input/Export";
 import { DB_Diagnosis } from "@/database/Types";
-import FormErrorReducer, { InitialFormError } from "@/reducer/FormError/Reducer";
+import FormStateReducer, { InitialFormState } from "@/reducer/FormState/Reducer";
 import { hasValue } from "@/lib/Inspector/Inspector/Inspect/Inspectors";
 
 interface CreateDiagnosisProps {
@@ -16,13 +16,13 @@ const defaultInput: DB_Diagnosis = {
 
 export default function CreateDiagnosis(props: CreateDiagnosisProps) {
     const [values, setValues] = useState<DB_Diagnosis>(defaultInput);
-    const [formError, formErrorDispatch] = useReducer(FormErrorReducer, InitialFormError);
+    const [formError, formErrorDispatch] = useReducer(FormStateReducer, InitialFormState);
 
     const inspectCode = async (code: string = values.Code): Promise<boolean> => {
         const [codeState, codeMessage] = await hasValue().inspect(code);
         formErrorDispatch({
             name: 'Code',
-            inspection: [codeState, codeMessage]
+            state: [codeState, codeMessage]
         });
         return codeState;
     }
@@ -31,7 +31,7 @@ export default function CreateDiagnosis(props: CreateDiagnosisProps) {
         const [messageState, messageMessage] = await hasValue().inspect(message);
         formErrorDispatch({
             name: 'Message',
-            inspection: [messageState, messageMessage]
+            state: [messageState, messageMessage]
         });
         return messageState;
     }

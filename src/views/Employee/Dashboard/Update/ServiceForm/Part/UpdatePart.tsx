@@ -1,7 +1,7 @@
 import { Multiple } from "@/components/Input/Export";
 import { DB_Part } from "@/database/Types";
 import { hasValue, isNumber } from "@/lib/Inspector/Inspector/Inspect/Inspectors";
-import FormErrorReducer, { InitialFormError } from "@/reducer/FormError/Reducer";
+import FormStateReducer, { InitialFormState } from "@/reducer/FormState/Reducer";
 import { useEffect, useReducer, useState } from "react";
 
 interface UpdatePartProps {
@@ -15,7 +15,7 @@ export default function UpdatePart(props: UpdatePartProps) {
     const initialPartData = {...props.part};
     const [edit, setEdit] = useState(false);
     const [values, setValues] = useState(props.part);
-    const [formError, formErrorDispatch] = useReducer(FormErrorReducer, InitialFormError);
+    const [formError, formErrorDispatch] = useReducer(FormStateReducer, InitialFormState);
 
     useEffect(() => {
         props.updateFormError(formError.state);
@@ -25,7 +25,7 @@ export default function UpdatePart(props: UpdatePartProps) {
         const [partNumberState, partNumberMessage] = await hasValue().inspect(partNumber);
         formErrorDispatch({
             name: 'PartNumber',
-            inspection: [partNumberState, partNumberMessage]
+            state: [partNumberState, partNumberMessage]
         });
         return partNumberState;
     }
@@ -34,7 +34,7 @@ export default function UpdatePart(props: UpdatePartProps) {
         const [partNameState, partNameMessage] = await hasValue().inspect(partName);
         formErrorDispatch({
             name: 'PartName',
-            inspection: [partNameState, partNameMessage]
+            state: [partNameState, partNameMessage]
         });
         return partNameState;
     }
@@ -43,7 +43,7 @@ export default function UpdatePart(props: UpdatePartProps) {
         const [quantityState, quantityMessage] = await isNumber().inspect(quantity);
         formErrorDispatch({
             name: 'Quantity',
-            inspection: [quantityState, quantityMessage]
+            state: [quantityState, quantityMessage]
         });
         return quantityState;
     }
@@ -52,7 +52,7 @@ export default function UpdatePart(props: UpdatePartProps) {
         const [unitCostState, unitCostMessage] = await isNumber().inspect(unitCost);
         formErrorDispatch({
             name: 'UnitCost',
-            inspection: [unitCostState, unitCostMessage]
+            state: [unitCostState, unitCostMessage]
         });
         return unitCostState;
     }

@@ -14,6 +14,7 @@ export default function Success(props: SuccessProps) {
                         <p>{`Success! Your appointment has been scheduled. Your appointment ID is ${props.ID}. Use this to look up the status of your appointment.`}</p>
                     </>
                 )} 
+                messageType="Default"
                 onClose={() => props.close()}
             />
     )

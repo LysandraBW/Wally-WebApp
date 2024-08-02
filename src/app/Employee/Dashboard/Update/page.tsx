@@ -30,7 +30,7 @@ export const PageContext = createContext(Context);
 export default function Update() {
     const [context, setContext] = useState<ContextStructure>(Context);
     const [updateForm, setUpdateForm] = useState<UpdateFormStructure>();
-    const [formError, setFormError] = useState<{[formPart: string]: boolean}>({});
+    const [formStates, setFormStates] = useState<{[formPart: string]: boolean}>({});
     const [alert, alertDispatch] = useReducer(AlertReducer, InitialAlert);
     const searchParams = useSearchParams();
 
@@ -80,7 +80,7 @@ export default function Update() {
 
     useEffect(() => {
         // We reload the appointment and the update form
-        // when the contextual appointment ID has changed.
+        // when the (contextual) appointment ID has changed.
         const load = async () => {
             // No Apt. ID or Employee ID or Loading Paused
             if (!context.Appointment.AppointmentID || !context.Employee.Employee.EmployeeID || context.Paused) {
@@ -88,8 +88,6 @@ export default function Update() {
                 return;
             }
 
-            // Storing it in a variable less it becomes tampered
-            // in the subsequent operations.
             const employeeID = context.Employee.Employee.EmployeeID;
 
             const appointment = await GetAppointment({
@@ -111,7 +109,6 @@ export default function Update() {
                 }
             });
 
-            // Context Loading is Finished Here
             setUpdateForm(await UpdateForm(employeeID, appointment));
         }
         if (context.Appointment.AppointmentID)
@@ -121,7 +118,6 @@ export default function Update() {
     useEffect(() => {
         if (!updateForm)
             return;
-
         setContext({
             ...context, 
             Loaded: true
@@ -133,11 +129,6 @@ export default function Update() {
             type: AlertActionType.RefreshMessages
         });
     }, 1000*1);
-
-    useEffect(() => {
-        console.log(updateForm);
-        console.log(formError)
-    }, [formError]);
 
     const loadUpdateForm = async () => {
         // No Apt. ID or Employee ID or Loading Paused
@@ -257,7 +248,7 @@ export default function Update() {
     }
 
     const saveGeneralForm = async () => {
-        if (!formError.General) {
+        if (!formStates.General) {
             alertDispatch({
                 type: AlertActionType.AddMessage,
                 addMessage: {
@@ -290,7 +281,7 @@ export default function Update() {
     }
 
     const saveVehicleForm = async () => {
-        if (!formError.Vehicle) {
+        if (!formStates.Vehicle) {
             alertDispatch({
                 type: AlertActionType.AddMessage,
                 addMessage: {
@@ -322,7 +313,7 @@ export default function Update() {
     }
 
     const saveServiceForm = async () => {
-        if (!formError.Service) {
+        if (!formStates.Service) {
             alertDispatch({
                 type: AlertActionType.AddMessage,
                 addMessage: {
@@ -354,7 +345,7 @@ export default function Update() {
     }
 
     const savePaymentForm = async () => {
-        if (!formError.Payment) {
+        if (!formStates.Payment) {
             alertDispatch({
                 type: AlertActionType.AddMessage,
                 addMessage: {
@@ -386,7 +377,7 @@ export default function Update() {
     }
 
     const saveNoteForm = async () => {
-        if (!formError.Note) {
+        if (!formStates.Note) {
             alertDispatch({
                 type: AlertActionType.AddMessage,
                 addMessage: {
@@ -422,10 +413,8 @@ export default function Update() {
             <div>
                 {/* Displaying Confirmation */}
                 {alert.confirmation && alert.confirmation}
-
                 {/* Displaying Messages */}
                 {alert.messages.map(([message], i) => <div key={i}>{message}</div>)}
-
                 {context.Paused && 
                     <Search
                         onSearch={() => {}}
@@ -454,8 +443,8 @@ export default function Update() {
                                             form={updateForm.current.General}
                                             changeHandler={updateFormHandler}
                                             updateFormError={(state) => {
-                                                setFormError({
-                                                    ...formError,
+                                                setFormStates({
+                                                    ...formStates,
                                                     'General': state
                                                 });
                                             }}
@@ -472,8 +461,8 @@ export default function Update() {
                                             form={updateForm.current.Vehicle}
                                             changeHandler={updateFormHandler}
                                             updateFormError={(state) => {
-                                                setFormError({
-                                                    ...formError,
+                                                setFormStates({
+                                                    ...formStates,
                                                     'Vehicle': state
                                                 });
                                             }}
@@ -490,8 +479,8 @@ export default function Update() {
                                             form={updateForm.current.Service}
                                             changeHandler={updateFormHandler}
                                             updateFormError={(state) => {
-                                                setFormError({
-                                                    ...formError,
+                                                setFormStates({
+                                                    ...formStates,
                                                     'Service': state
                                                 });
                                             }}
@@ -508,8 +497,8 @@ export default function Update() {
                                             form={updateForm.current.Payment}
                                             changeHandler={updateFormHandler}
                                             updateFormError={(state) => {
-                                                setFormError({
-                                                    ...formError,
+                                                setFormStates({
+                                                    ...formStates,
                                                     'Payment': state
                                                 });
                                             }}
@@ -527,8 +516,8 @@ export default function Update() {
                                 changeHandler={updateFormHandler}
                                 onSave={async () => await saveNoteForm()}
                                 updateFormError={(state) => {
-                                    setFormError({
-                                        ...formError,
+                                    setFormStates({
+                                        ...formStates,
                                         'Note': state
                                     });
                                 }}

@@ -13,6 +13,7 @@ export default function Error(props: ErrorProps) {
                         <p>Unfortunately, something has gone awry. Please try again.</p>
                     </>
                 )} 
+                messageType="Error"
                 onClose={() => props.close()}
             />
     )

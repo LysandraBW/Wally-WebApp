@@ -1,17 +1,17 @@
-import { DB_AppointmentSummary } from "@/database/Types";
 import { toString } from "@/lib/Convert/Convert";
+import { DB_AppointmentSummary } from "@/database/Types";
 
-interface AptSummaryProps {
+interface AppointmentSummaryProps {
     info: DB_AppointmentSummary;
 }
 
-export default function AptSummary(props: AptSummaryProps) {
+export default function AppointmentSummary(props: AppointmentSummaryProps) {
     return (
         <div>
-            <b><i>Summary</i></b>
+            <b>Summary</b>
             <div>{props.info.AppointmentID}</div>
-            <div>{props.info.CreationDate.toString()}</div>
-            <div>{props.info.UpdationDate.toString()}</div>
+            <div>{toString(props.info.CreationDate)}</div>
+            <div>{toString(props.info.UpdationDate)}</div>
             <div>{props.info.CustomerID}</div>
             <div>{props.info.FName}</div>
             <div>{props.info.LName}</div>

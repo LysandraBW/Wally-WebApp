@@ -1,7 +1,7 @@
 import { Multiple, Text } from "@/components/Input/Export";
 import { DB_Diagnosis } from "@/database/Types";
 import { hasValue } from "@/lib/Inspector/Inspector/Inspect/Inspectors";
-import FormErrorReducer, { InitialFormError } from "@/reducer/FormError/Reducer";
+import FormStateReducer, { InitialFormState } from "@/reducer/FormState/Reducer";
 import { useEffect, useReducer, useState } from "react";
 
 interface UpdateDiagnosisProps {
@@ -15,7 +15,7 @@ export default function UpdateDiagnosis(props: UpdateDiagnosisProps) {
     const initialData = {...props.diagnosis};
     const [edit, setEdit] = useState(false);
     const [values, setValues] = useState(props.diagnosis);
-    const [formError, formErrorDispatch] = useReducer(FormErrorReducer, InitialFormError);
+    const [formError, formErrorDispatch] = useReducer(FormStateReducer, InitialFormState);
 
     useEffect(() => {
         props.updateFormError(formError.state);
@@ -25,7 +25,7 @@ export default function UpdateDiagnosis(props: UpdateDiagnosisProps) {
         const [codeState, codeMessage] = await hasValue().inspect(code);
         formErrorDispatch({
             name: 'Code',
-            inspection: [codeState, codeMessage]
+            state: [codeState, codeMessage]
         });
         return codeState;
     }
@@ -34,7 +34,7 @@ export default function UpdateDiagnosis(props: UpdateDiagnosisProps) {
         const [messageState, messageMessage] = await hasValue().inspect(message);
         formErrorDispatch({
             name: 'Message',
-            inspection: [messageState, messageMessage]
+            state: [messageState, messageMessage]
         });
         return messageState;
     }

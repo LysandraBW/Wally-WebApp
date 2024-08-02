@@ -1,7 +1,7 @@
 import { Multiple } from "@/components/Input/Export";
 import { DB_AppointmentService } from "@/database/Types";
 import { hasValue } from "@/lib/Inspector/Inspector/Inspect/Inspectors";
-import FormErrorReducer, { InitialFormError } from "@/reducer/FormError/Reducer";
+import FormStateReducer, { InitialFormState } from "@/reducer/FormState/Reducer";
 import { useEffect, useReducer, useState } from "react";
 
 interface UpdateServiceProps {
@@ -15,7 +15,7 @@ export default function UpdateService(props: UpdateServiceProps) {
     const initialServiceData = {...props.service};
     const [edit, setEdit] = useState(false);
     const [values, setValues] = useState(props.service);
-    const [formError, formErrorDispatch] = useReducer(FormErrorReducer, InitialFormError);
+    const [formError, formErrorDispatch] = useReducer(FormStateReducer, InitialFormState);
 
     useEffect(() => {
         props.updateFormError(formError.state);
@@ -39,7 +39,7 @@ export default function UpdateService(props: UpdateServiceProps) {
                                         setValues({...values, Class: value});
                                         formErrorDispatch({
                                             name: 'Class',
-                                            inspection: await hasValue().inspect(value)
+                                            state: await hasValue().inspect(value)
                                         });
                                     }}
                                     onBlur={async () => {
@@ -48,7 +48,7 @@ export default function UpdateService(props: UpdateServiceProps) {
 
                                         formErrorDispatch({
                                             name: 'Class',
-                                            inspection: await hasValue().inspect(initialServiceData.Class)
+                                            state: await hasValue().inspect(initialServiceData.Class)
                                         });
                                         setValues({...values, Class: initialServiceData.Class});
                                     }}
@@ -65,7 +65,7 @@ export default function UpdateService(props: UpdateServiceProps) {
                                         setValues({...values, Division: value});
                                         formErrorDispatch({
                                             name: 'Division',
-                                            inspection: await hasValue().inspect(value)
+                                            state: await hasValue().inspect(value)
                                         });
                                     }}
                                     onBlur={async () => {
@@ -73,7 +73,7 @@ export default function UpdateService(props: UpdateServiceProps) {
                                             return;
                                         formErrorDispatch({
                                             name: 'Division',
-                                            inspection: await hasValue().inspect(initialServiceData.Division)
+                                            state: await hasValue().inspect(initialServiceData.Division)
                                         });
                                         setValues({...values, Division: initialServiceData.Division})}}
                                 />
@@ -89,7 +89,7 @@ export default function UpdateService(props: UpdateServiceProps) {
                                         setValues({...values, Service: value});
                                         formErrorDispatch({
                                             name: 'Service',
-                                            inspection: await hasValue().inspect(value)
+                                            state: await hasValue().inspect(value)
                                         });
                                     }}
                                     onBlur={async () => {
@@ -97,7 +97,7 @@ export default function UpdateService(props: UpdateServiceProps) {
                                             return;
                                         formErrorDispatch({
                                             name: 'Service',
-                                            inspection: await hasValue().inspect(initialServiceData.Service)
+                                            state: await hasValue().inspect(initialServiceData.Service)
                                         });
                                         setValues({...values, Service: initialServiceData.Service});
                                     }}

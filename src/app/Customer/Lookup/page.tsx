@@ -2,53 +2,39 @@
 import { Form, FormStructure } from "@/process/Customer/Lookup/Form";
 import { useState } from "react";
 import { submitForm } from "@/process/Customer/Lookup/Submit";
-import AptSummary from "@/views/Customer/Lookup/Summary";
-import Error from "@/views/Customer/Lookup/Error";
-import LookupForm from "@/views/Customer/Lookup/Lookup";
 import { DB_AppointmentSummary } from "@/database/Types";
-import { ErrorStructure } from "@/lib/Inspector/Inspectors";
-import { isEmailAddress, isUniqueIdentifier } from "@/lib/Inspector/Inspector/Inspect/Inspectors";
+import Error from "@/views/Customer/Lookup/Output/Error";
+import LookupForm from "@/views/Customer/Lookup/Lookup";
+import AppointmentSummary from "@/views/Customer/Lookup/Output/Summary";
 
 export default function Lookup() {
     const [form, setForm] = useState<FormStructure>(Form);
-    const [formError, setFormError] = useState<ErrorStructure>({});
+    const [formState, setFormState] = useState<{[k: string]: boolean}>({});
     const [error, setError] = useState(false);
     const [output, setOutput] = useState<DB_AppointmentSummary>();
 
-    const changeHandler = async (name: string, value: any) => {
-        setForm({...form, [`${name}`]: value});
-    }
-
-    const inspectLookupInput = async (): Promise<boolean> => {
-        const [aptIDState, aptIDMessage] = await isUniqueIdentifier().inspect(form.appointmentID);
-        const [emailState, emailMessage] = await isEmailAddress().inspect(form.email);
-
-        setFormError({
-            appointmentID: {
-                state: aptIDState,
-                message: aptIDMessage
-            },
-            email: {
-                state: emailState,
-                message: emailMessage
-            }
+    const submitHandler = async (): Promise<void> => {
+        // Last-Minute Check
+        const changeEvent = new Event('change');
+        const inputNames = ['appointmentID', 'email'];
+        inputNames.forEach(inputName => {
+            const input = document.getElementsByName(inputName)[0];
+            input.dispatchEvent(changeEvent);
         });
 
-        return aptIDState && emailState;
-    }
-
-    const submitHandler = async (): Promise<void> => {
-        if (!(await inspectLookupInput()))
+        // Error Previously Detected
+        if (!formState.Lookup)
             return;
         
-        const output: DB_AppointmentSummary | null = await submitForm(form);
+        // Form Submission
+        const output = await submitForm(form);
         if (!output) {
             setError(true);
             setOutput(undefined);
         }
         else {
-            setOutput(output);
             setError(false);
+            setOutput(output);
         }
     }
 
@@ -62,14 +48,18 @@ export default function Lookup() {
                 }
                 <LookupForm
                     form={form}
-                    onChange={changeHandler}
+                    onChange={(name, value) => {
+                        setForm({...form, [`${name}`]: value});
+                    }}
                     onSubmit={submitHandler}
-                    formError={formError}
+                    updateFormState={(state) => {
+                        setFormState({Lookup: state});
+                    }}
                 />
             </div>
             <div>
                 {output && 
-                    <AptSummary
+                    <AppointmentSummary
                         info={output}
                     />
                 }

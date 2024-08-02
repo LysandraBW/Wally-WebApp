@@ -1,33 +1,35 @@
-"use client";
-import { Button, Text } from "@/components/Input/Export";
-import { Form, FormStructure } from "@/process/Employee/Login/Form";
-import { submitForm } from "@/process/Employee/Login/Submit";
-import { goTo, goToDashboard } from "@/lib/Navigation/Redirect";
-import Error from "@/views/Employee/Login/Error";
-import { useReducer, useState } from "react";
-import FormErrorReducer, { InitialFormError } from "@/reducer/FormError/Reducer";
-import { hasValue } from "@/lib/Inspector/Inspector/Inspect/Inspectors";
+'use client';
+import { Button, Text } from '@/components/Input/Export';
+import { Form, FormStructure } from '@/process/Employee/Login/Form';
+import { submitForm } from '@/process/Employee/Login/Submit';
+import { goToDashboard } from '@/lib/Navigation/Redirect';
+import Error from '@/views/Employee/Login/Error';
+import { useReducer, useState } from 'react';
+import FormStateReducer, { InitialFormState } from '@/reducer/FormState/Reducer';
+import { hasValue } from '@/lib/Inspector/Inspector/Inspect/Inspectors';
 
 export default function Login() {
     const [form, setForm] = useState<FormStructure>(Form);
-    const [formError, formErrorDispatch] = useReducer(FormErrorReducer, InitialFormError);
+    const [formState, formStateDispatch] = useReducer(FormStateReducer, InitialFormState);
     const [errorMessage, setErrorMessage] = useState<boolean>(false);
 
     const changeHandler = async (name: string, value: any) => {
-        formErrorDispatch({
-            name,
-            inspection: await hasValue().inspect(value)
+        formStateDispatch({
+            name: name,
+            state: await hasValue().inspect(value)
         });
         setForm({...form, [`${name}`]: value});
     }
     
     const submitHandler = async (): Promise<void> => {
-        const employeeID = await submitForm(form);
-        if (employeeID) {
-            await goToDashboard();
+        if (!formState.state)
             return;
-        }
-        setErrorMessage(true);
+
+        const employeeID = await submitForm(form);
+        if (employeeID)
+            await goToDashboard();
+        else   
+            setErrorMessage(true);
     }
 
     return (
@@ -41,21 +43,21 @@ export default function Login() {
             </div>
             <div>
                 <Text
-                    name="username"
-                    label="Username"
-                    error={formError.input.username}
+                    name='username'
+                    label='Username'
                     value={form.username}
+                    error={formState.input.username}
                     onChange={changeHandler}
                 />
                 <Text
-                    name="password"
-                    label="Password"
-                    error={formError.input.password}
+                    name='password'
+                    label='Password'
                     value={form.password}
+                    error={formState.input.password}
                     onChange={changeHandler}
                 />
                 <Button
-                    label="Login"
+                    label='Login'
                     onClick={submitHandler}
                 />
             </div>

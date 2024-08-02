@@ -60,23 +60,27 @@ export async function LoadModels(modelYear: number, make: string): Promise<Array
 }
 
 export async function LoadVehicle(vin: string, makes: Array<[string, string]>): Promise<{
+    decoded: boolean;
     make: [string];
     model: [string];
     models: Array<[string, string]>;
     modelYear: [number]
 }> {
-    // Getting Make, Model, ModelYear (MMMY)
-    const MMMY = await DecodeVIN(vin);
-    const Make = makes.find(m => m[0].toUpperCase() === MMMY.Make.toUpperCase());
-    const Model = MMMY.Model;
-    const ModelYear = MMMY.ModelYear;
+    // Getting Make, Model, ModelYear
+    const vehicle = await DecodeVIN(vin);
 
-    if (!Make)
-        return {make: [''], model: [''], models: [], modelYear: [0]};
+    const Make = makes.find(m => m[0].toUpperCase() === vehicle.Make.toUpperCase());
+    const Model = vehicle.Model;
+    const ModelYear = vehicle.ModelYear;
 
-    const Models: Array<[string, string]> = await LoadModels(ModelYear, Make[0]);
+    if (!Make || !Model || !ModelYear)
+        return {decoded: false, make: [''], model: [''], models: [], modelYear: [0]};
+
+    // Load Models for Make and Model Year
+    const Models = await LoadModels(ModelYear, Make[0]);
     
     return {
+        decoded: true,
         make: [Make[0]], 
         model: [Model], 
         models: Models,
