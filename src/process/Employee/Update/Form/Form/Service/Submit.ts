@@ -1,4 +1,4 @@
-import { getSessionID } from "@/lib/Storage/Cookies";
+import { getSessionID } from "@/lib/Storage/Storage";
 import { ServiceFormStructure } from "./Service";
 import { ProcessedServiceFormStructure, processServiceForm } from "./Process";
 import { DeletePart, DeleteDiagnosis, DeleteRepair, DeleteService, InsertDiagnosis, InsertPart, InsertRepair, InsertService, UpdateDiagnosis, UpdatePart, UpdateRepair, UpdateService } from "@/database/Export";

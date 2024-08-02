@@ -1,5 +1,6 @@
 import { toDatabaseDateTime } from "@/lib/Convert/Convert";
-import { MathSet, objectMatch, updatedValue } from "../../Update/Form/Helper";
+import { objectMatch, updatedValue } from "@/lib/Process/Difference";
+import { MathSet } from "@/lib/Process/MathSet";
 import { EventsFormStructure } from "./Form";
 
 export interface ProcessedEventsFormStructure {

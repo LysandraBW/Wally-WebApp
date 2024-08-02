@@ -12,7 +12,7 @@ interface PaymentFormProps {
         Cost: number;
         Payments: {[paymentID: string]: DB_Payment};
     };
-    updateFormError: (state: boolean) => void;
+    updateFormState: (state: boolean) => void;
     changeHandler: (formPart: FormPart, name: string, value: any) => void;
 }
 
@@ -23,7 +23,7 @@ export default function PaymentForm(props: PaymentFormProps) {
 
     useEffect(() => {
         // This is called by the Cost input.
-        props.updateFormError(costError.state);
+        props.updateFormState(costError.state);
     }, [costError.state]);
 
     const inspectCost = async (cost: string): Promise<boolean> => {
@@ -75,7 +75,7 @@ export default function PaymentForm(props: PaymentFormProps) {
                                     name: 'Other',
                                     state: [state, '']
                                 });
-                                props.updateFormError(state);
+                                props.updateFormState(state);
                             }}
                         />
                     </div>

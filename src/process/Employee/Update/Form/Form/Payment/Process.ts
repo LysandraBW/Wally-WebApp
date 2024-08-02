@@ -1,4 +1,5 @@
-import { MathSet, updatedValue } from "../../Helper";
+import { updatedValue } from "@/lib/Process/Difference";
+import { MathSet } from "@/lib/Process/MathSet";
 import { PaymentFormStructure } from "./Payment";
 
 export interface ProcessedPaymentFormStructure {

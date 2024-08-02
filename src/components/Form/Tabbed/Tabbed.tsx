@@ -4,7 +4,7 @@ import { useState } from "react";
 interface TabbedProps {
     parts: Array<{
         part: React.ReactNode;
-        partHeader: string;
+        header: string;
         onSave: () => any;
         onReset: () => any;
     }>;
@@ -23,7 +23,7 @@ export default function Tabbed(props: TabbedProps) {
                         onClick={() => {
                             setPart(i)
                         }}>
-                            {part.partHeader}
+                            {part.header}
                     </span>
                 ))}
             </div>
@@ -33,7 +33,7 @@ export default function Tabbed(props: TabbedProps) {
 
             {/* Button */}
             <Button
-                label={`Save ${props.parts[part].partHeader}`}
+                label={`Save ${props.parts[part].header}`}
                 onClick={() => props.parts[part].onSave()}
             />
             <Button

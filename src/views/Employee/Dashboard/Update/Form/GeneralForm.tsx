@@ -19,7 +19,7 @@ interface GeneralProps {
         StatusID: number;
     };
     changeHandler: (part: FormPart, name: string, value: any) => void;
-    updateFormError: (state: boolean) => void;
+    updateFormState: (state: boolean) => void;
 }
 
 export default function General(props: GeneralProps) {
@@ -50,7 +50,7 @@ export default function General(props: GeneralProps) {
     }, []);
 
     useEffect(() => {
-        props.updateFormError(formState.state);
+        props.updateFormState(formState.state);
     }, [formState.state]);
 
     const inspectInput = async <T,>(

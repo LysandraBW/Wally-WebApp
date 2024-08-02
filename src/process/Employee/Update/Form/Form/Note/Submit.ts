@@ -1,5 +1,5 @@
 'use server';
-import { getSessionID } from "@/lib/Storage/Cookies";
+import { getSessionID } from "@/lib/Storage/Storage";
 import { NoteFormStructure } from "./Note";
 import { DeleteNote, DeleteNoteAttachment, InsertNote, InsertNoteAttachment, InsertNoteSharee, UpdateNote } from "@/database/Export";
 import DeleteNoteSharee from "@/database/Appointment/SharedNote/Delete";

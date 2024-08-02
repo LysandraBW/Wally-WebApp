@@ -1,5 +1,5 @@
 'use client';
-import { getSessionID } from "@/lib/Storage/Cookies";
+import { getSessionID } from "@/lib/Storage/Storage";
 import { GetAllEmployees, GetEmployee, GetEvents } from "@/database/Export";
 import useInterval from "@/hook/Alert/Timer";
 import { goToEmployeeLogin } from "@/lib/Navigation/Redirect";

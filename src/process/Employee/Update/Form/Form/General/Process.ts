@@ -1,5 +1,5 @@
 import { toDatabaseDateTime } from "@/lib/Convert/Convert";
-import { updatedValue } from "../../Helper";
+import { updatedValue } from "@/lib/Process/Difference";
 import { GeneralFormStructure } from "./General";
 
 export interface ProcessedGeneralFormStructure {

@@ -16,7 +16,7 @@ interface VehicleProps {
         Mileage:        number;
         LicensePlate:   string;
     }
-    updateFormError: (state: boolean) => void;
+    updateFormState: (state: boolean) => void;
     changeHandler: (part: FormPart, name: string, value: any) => void;
 }
 
@@ -47,7 +47,7 @@ export default function Vehicle(props: VehicleProps) {
     }, []);
 
     useEffect(() => {
-        props.updateFormError(formState.state);
+        props.updateFormState(formState.state);
     }, [formState.state]);
 
     const inspectInput = async <T,>(

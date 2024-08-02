@@ -1,10 +1,10 @@
 import { useState } from "react";
 
-interface SearchProps {
+interface SearchAppointmentProps {
     onSearch: (appointmentID: string) => void;
 }
 
-export default function Search(props: SearchProps) {
+export default function SearchAppointment(props: SearchAppointmentProps) {
     const [search, setSearch] = useState('');
     
     return (

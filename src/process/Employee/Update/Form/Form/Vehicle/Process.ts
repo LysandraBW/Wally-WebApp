@@ -1,4 +1,4 @@
-import { updatedValue } from "../../Helper";
+import { updatedValue } from "@/lib/Process/Difference";
 import { VehicleFormStructure } from "./Vehicle";
 
 export interface ProcessedVehicleFormStructure {

@@ -1,5 +1,5 @@
 'use client';
-import { getSessionID } from "@/lib/Storage/Cookies";
+import { getSessionID } from "@/lib/Storage/Storage";
 import { Delete, GetAllAppointments, GetEmployee, Restore } from "@/database/Export";
 import { goTo, goToEmployeeLogin } from "@/lib/Navigation/Redirect";
 import { useEffect, useReducer, useState, createContext } from "react";

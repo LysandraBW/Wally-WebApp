@@ -1,4 +1,5 @@
-import { MathSet, objectMatch, updatedValue } from "../../Helper";
+import { objectMatch, updatedValue } from "@/lib/Process/Difference";
+import { MathSet } from "@/lib/Process/MathSet";
 import { NoteFormStructure } from "./Note";
 
 export interface ProcessedNoteFormStructure {
