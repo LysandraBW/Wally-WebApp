@@ -7,7 +7,7 @@ import { InitialUpdateForm, UpdateEvent as UpdateEventData, UpdateFormStructure,
 import { default as CalendarElement } from "@/views/Employee/Dashboard/Calendar/Calendar";
 import CreateEvent from "@/views/Employee/Dashboard/Calendar/EventManager/CreateEvent";
 import { createContext, useEffect, useReducer, useState } from "react";
-import Search from "@/views/Employee/Dashboard/Calendar/Search";
+import Search from "@/views/Employee/Dashboard/Calendar/Gadgets/Search";
 import { Context, ContextStructure } from "@/process/Employee/Calendar/Context";
 import { Controller, ControllerStructure } from "@/process/Employee/Calendar/Controller";
 import DateEvents from "@/views/Employee/Dashboard/Calendar/DateEvents";
