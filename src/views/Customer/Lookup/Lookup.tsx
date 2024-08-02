@@ -1,5 +1,5 @@
 import { Text, Button } from '@/components/Input/Export';
-import FormStateReducer, { InitialFormState, ReducerState } from '@/reducer/FormState/Reducer';
+import FormStateReducer, { InitialFormState, ReducerState } from '@/hook/FormState/Reducer';
 import { InitialLookupFormState } from '@/validation/State/Lookup';
 import { validUniqueIdentifier, validEmail } from '@/validation/Validation';
 import { useEffect, useReducer } from 'react';

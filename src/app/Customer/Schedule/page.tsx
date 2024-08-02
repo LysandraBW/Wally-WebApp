@@ -1,106 +1,110 @@
- "use client";
-import { useEffect, useState } from "react";
-import Tracker from "@/components/Form/Tracker/Tracker";
-import { Form, FormStructure } from "@/process/Customer/Schedule/Form";
-import { ModelYears, LoadModels, LoadVehicle } from "@/lib/Decoder/Decoder";
-import { Makes, Services } from "@/database/Export";
-import { LoadedValuesStructure, LoadedValues } from "@/process/Customer/Schedule/Load";
-import submitForm from "@/process/Customer/Schedule/Submit";
-import ContactForm from "@/views/Customer/Schedule/Contact";
-import VehicleForm from "@/views/Customer/Schedule/Vehicle";
-import Success from "@/views/Customer/Schedule/Output/Success";
-import Error from "@/views/Customer/Schedule/Output/Error";
-import { validVIN } from "@/validation/Validation";
+'use client';
+import { useEffect, useReducer, useState } from 'react';
+import Tracker from '@/components/Form/Tracker/Tracker';
+import { Form } from '@/process/Customer/Schedule/Form';
+import { LoadedServices } from '@/process/Customer/Schedule/Load';
+import submitForm from '@/process/Customer/Schedule/Submit';
+import ContactForm from '@/views/Customer/Schedule/Contact';
+import VehicleForm from '@/views/Customer/Schedule/Vehicle';
+import Success from '@/views/Customer/Schedule/Output/Success';
+import Error from '@/views/Customer/Schedule/Output/Error';
+import FormStateReducer from '@/hook/FormState/Reducer';
+import { InitialContactFormState } from '@/validation/State/Contact';
+import { InitialVehicleFormState } from '@/validation/State/Vehicle';
+import { validEmail, validMake, validModel, validModelYear, validName, validPhone, validServices, validValue, validVIN } from '@/validation/Validation';
+import useVehicle from '@/hook/Vehicle/Vehicle';
+import { getServiceValues, getValues, loadMakes, loadModelYears, loadServices } from '@/lib/Vehicle/Load';
 
 export default function Schedule() {
-    const [form, setForm] = useState<FormStructure>(Form);
-    const [formStates, setFormStates] = useState<{[formName: string]: boolean}>({});
+    const [form, setForm] = useState(Form);
+    const [contactFormState, contactFormStateDispatch] = useReducer(FormStateReducer, InitialContactFormState);
+    const [vehicleFormState, vehicleFormStateDispatch] = useReducer(FormStateReducer, InitialVehicleFormState);
+    const vehicle = useVehicle();
 
-    const [loadedValues, setLoadedValues] = useState<LoadedValuesStructure>(LoadedValues);
-    const [createdAptID, setCreatedAptID] = useState<string>(' ');
+    const [loadedServices, setLoadedServices] = useState(LoadedServices);
+    const [createdAptID, setCreatedAptID] = useState(' ');
 
     useEffect(() => {
         const load = async () => {
-            // Load Makes and Model Years
-            const makes:        Array<[string, string]> = (await Makes()).map(m => [m.Make, m.Make]);
-            const modelYears:   Array<[number, string]> = (await ModelYears()).map(y => [y, y.toString()]);
-            
-            // Load Services
-            const services: {[k: string]: Array<[number, string]>} = {};
-            (await Services()).forEach(service => {
-                // 'Unknown' Option is Hard-Coded
-                if (service.ServiceID === 1)
-                    return;
-                
-                if (!services[service.Class])
-                    services[service.Class] = [];
-                services[service.Class].push([service.ServiceID, service.Service]);
-            });
-            
-            setLoadedValues({...loadedValues, makes, modelYears, services});
+            vehicle.setLoadedVals(
+                await loadMakes(), 
+                await loadModelYears()
+            );
+            const services = await loadServices();
+            setLoadedServices({services});
         }
         load();
     }, []);
 
-    const loadModels = async (modelYear: number, make: string) => {
-        const models = await LoadModels(modelYear, make);
-        setLoadedValues({
-            ...loadedValues, 
-            models
-        });
-    }
-
-    const loadVehicle = async (vin: string) => {
-        if (!vin)
-            return;
-
-        const data = await LoadVehicle(vin, loadedValues.makes);
-        if (!data.decoded)        
-            return;
-
-        setLoadedValues({
-            ...loadedValues,
-            models: data.models
-        });
-        
-        return data;
-    }
-
     const changeHandler = async (name: string, value: any) => {
-        if (form[name] === value)
-            return;
+        switch (name) {
+            case 'make':
+                vehicle.setMake(value[0]);
+                break;
+            case 'modelYear':
+                vehicle.setModelYear(value[0]);
+                break;
+            case 'model':
+                vehicle.setModel(value[0]);
+                break;
+            case 'vin':
+                vehicle.setVIN(value);
+                break;
+            default:
+                setForm((state) => ({...state, [`${name}`]: value}));
+                break;
+        }
+    }
 
-        if (name === "make") {
-            loadModels(form.modelYear[0], value[0]);
-            setForm({...form, model: [], [`${name}`]: value});
-        }
-        else if (name === "modelYear") {
-            loadModels(value[0], form.make[0]);
-            setForm({...form, model: [], [`${name}`]: value});
-        }
-        else if (name === "vin") {
-            const valid = (await validVIN(value))[0];
-            if (!valid) {
-                setForm({...form, [`${name}`]: value});
-                return;
+    const inspectContactInput = async (): Promise<boolean> => {
+        if (contactFormState.state)
+            return true;
+
+        const [fNameState, fNameMessage] = await validName(form.fName);
+        const [lNameState, lNameMessage] = await validName(form.lName);
+        const [emailState, emailMessage] = await validEmail(form.email);
+        const [phoneState, phoneMessage] = await validPhone(form.phone);
+
+        contactFormStateDispatch({
+            states: {
+                fName: [fNameState, fNameMessage],
+                lName: [lNameState, lNameMessage],
+                email: [emailState, emailMessage],
+                phone: [phoneState, phoneMessage]
             }
-            
-            const data = await loadVehicle(value);
-            if (!data)
-                return;
-            setForm({...form, ...data, [`${name}`]: value});
-        }
-        else {
-            setForm({...form, [`${name}`]: value});
-        }
+        });
+
+        return fNameState && lNameState && emailState && phoneState;
+    }
+
+    const inspectVehicleInput = async (): Promise<boolean> => {
+        if (vehicleFormState.state)
+            return true;
+
+        const [vinState, vinMessage] = await validVIN(vehicle.vin);
+        const [makState, makMessage] = await validValue([vehicle.make], getValues(vehicle.loadedMakes));
+        const [mdlState, mdlMessage] = await validValue([vehicle.model], getValues(vehicle.loadedModels));
+        const [mdyState, mdyMessage] = await validValue([vehicle.modelYear], getValues(vehicle.loadedModelYears));
+        const [serState, serMessage] = await validValue(form.services, getServiceValues(loadedServices.services));
+
+        vehicleFormStateDispatch({
+            states: {
+                services:   [serState, serMessage],
+                make:       [makState, makMessage],
+                model:      [mdlState, mdlMessage],
+                modelYear:  [mdyState, mdyMessage],
+                vin:        [vinState, vinMessage]
+            }
+        });
+
+        return mdyState && makState && mdlState && serState && vinState;
     }
 
     const submitHandler = async (): Promise<boolean> => {
-        if (!formStates.Contact || !formStates.Vehicle)
+        if (!contactFormState.state || !vehicleFormState.state)
             return false;
 
-        const appointmentID = await submitForm(form);
-
+        const appointmentID = await submitForm({...form, ...vehicle.form});
         if (!appointmentID) {
             setCreatedAptID('');
             return false;
@@ -111,83 +115,54 @@ export default function Schedule() {
         return true;
     }
 
-    const inspectContactInput = async (): Promise<boolean> => {
-        if (formStates.Contact)
-            return true;
-
-        const changeEvent = new Event('change');
-        const inputNames = ['fName', 'lName', 'email', 'phone'];
-        inputNames.forEach(inputName => {
-            const input = document.getElementsByName(inputName)[0];
-            input.dispatchEvent(changeEvent);
-        });
-
-        return false;
-    }
-
-    const inspectVehicleInput = async (): Promise<boolean> => {
-        if (formStates.Vehicle)
-            return true;
-
-        const changeEvent = new Event('change');
-        const inputNames = ['make', 'model', 'modelYear', 'vin', 'services'];
-        inputNames.forEach(inputName => {
-            const input = document.getElementsByName(inputName)[0];
-            input.dispatchEvent(changeEvent);
-        });
-
-        return false;
-    }
-
     return (
         <>
-            {/* Appointment Created */}
-            {createdAptID.length === 36 &&
+            {createdAptID.length > 1 &&
                 <Success
                     ID={createdAptID}
                     close={() => setCreatedAptID(' ')}
                 />
             }
-            {/* Appointment Could Not be Created */}
             {!createdAptID &&
                 <Error
                     close={() => setCreatedAptID(' ')}
                 />
             }
-            {/* Form */}
             <Tracker
                 parts={[
                     {
                         part: (
                             <ContactForm
                                 form={form}
+                                formState={contactFormState}
                                 onChange={changeHandler}
-                                updateFormState={(state) => {
-                                    setFormStates({
-                                        ...formStates,
-                                        'Contact': state
-                                    });
+                                updateFormState={(action) => {
+                                    contactFormStateDispatch(action);
                                 }}
                             />
                         ),
-                        partHeader: "Contact",
+                        partHeader: 'Contact',
                         onContinue: async () => await inspectContactInput()
                     },
                     {
                         part: (
                             <VehicleForm
-                                form={form}
-                                loadedValues={{...loadedValues}}
+                                form={{
+                                    ...form, 
+                                    ...vehicle.form
+                                }}
+                                formState={vehicleFormState}
+                                loadedValues={{
+                                    ...loadedServices, 
+                                    ...vehicle.loadedValues
+                                }}
                                 onChange={changeHandler}
-                                updateFormState={(state) => {
-                                    setFormStates({
-                                        ...formStates,
-                                        'Vehicle': state
-                                    });
+                                updateFormState={(action) => {
+                                    vehicleFormStateDispatch(action);
                                 }}
                             />
                         ),
-                        partHeader: "Vehicle",
+                        partHeader: 'Vehicle',
                         onContinue: async () => await inspectVehicleInput() 
                     }
                 ]}

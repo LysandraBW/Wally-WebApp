@@ -5,7 +5,7 @@ import { submitForm } from '@/process/Employee/Login/Submit';
 import { goToDashboard } from '@/lib/Navigation/Redirect';
 import Error from '@/views/Employee/Login/Error';
 import { useReducer, useState } from 'react';
-import FormStateReducer, { InitialFormState } from '@/reducer/FormState/Reducer';
+import FormStateReducer, { InitialFormState } from '@/hook/FormState/Reducer';
 import { hasValue } from '@/lib/Inspector/Inspector/Inspect/Inspectors';
 
 export default function Login() {

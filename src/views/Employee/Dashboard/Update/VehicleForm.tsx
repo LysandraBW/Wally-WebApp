@@ -2,8 +2,8 @@ import { Makes } from "@/database/Export";
 import { useEffect, useReducer, useState } from "react";
 import { Text, Search } from "@/components/Input/Export";
 import { FormPart } from "@/process/Employee/Update/Form/UpdateForm";
-import { LoadVehicle, LoadModels, ModelYears } from "@/lib/Decoder/Decoder";
-import FormStateReducer, { InitialFormState } from "@/reducer/FormState/Reducer";
+import { LoadVehicle, LoadModels, ModelYears } from "@/lib/Vehicle/Decoder";
+import FormStateReducer, { InitialFormState } from "@/hook/FormState/Reducer";
 import { LoadedValues, Values } from "@/process/Employee/Update/Structure/Vehicle";
 import { validLicensePlate, validMake, validModel, validModelYear, validNumber, validVIN } from "@/validation/Validation";
 

@@ -4,7 +4,7 @@ import CreatePayment from "./CreatePayment";
 import {Text} from "@/components/Input/Export";
 import { DB_Payment } from "@/database/Types";
 import { FormPart } from "@/process/Employee/Update/Form/UpdateForm";
-import FormStateReducer, { InitialFormState } from "@/reducer/FormState/Reducer";
+import FormStateReducer, { InitialFormState } from "@/hook/FormState/Reducer";
 import { hasValue } from "@/lib/Inspector/Inspector/Inspect/Inspectors";
 
 interface PaymentFormProps {

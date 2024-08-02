@@ -1,9 +1,6 @@
 import { Text } from '@/components/Input/Export';
-import FormStateReducer from '@/reducer/FormState/Reducer';
-import { InitialContactFormState } from '@/validation/State/Contact';
+import { ReducerState } from '@/hook/FormState/Reducer';
 import { validEmail, validName, validPhone } from '@/validation/Validation';
-import { useEffect, useReducer } from 'react';
-
 interface ContactFormProps {
     form: {
         fName: string;
@@ -11,48 +8,20 @@ interface ContactFormProps {
         email: string;
         phone: string;
     };
-    updateFormState: (state: boolean) => void;
+    formState: ReducerState;
+    updateFormState: (updatedInputState: {name: string, state: [boolean, string?]}) => void;
     onChange: (name: string, value: any) => void;
 }
 
 export default function ContactForm(props: ContactFormProps) {
-    const [formState, formStateDispatch] = useReducer(FormStateReducer, InitialContactFormState);
-
-    useEffect(() => {
-        props.updateFormState(formState.state);
-    }, [formState.state]);
-
-    const inspectFName = async (fName: string = props.form.fName): Promise<boolean> => {
-        const [errState, errMessage] = await validName(fName);
-        formStateDispatch({
-            name: 'fName',
-            state: [errState, errMessage]
-        });
-        return errState;
-    }
-
-    const inspectLName = async (lName: string = props.form.lName): Promise<boolean> => {
-        const [errState, errMessage] = await validName(lName);
-        formStateDispatch({
-            name: 'lName',
-            state: [errState, errMessage]
-        });
-        return errState;
-    }
-
-    const inspectEmail = async (email: string = props.form.email): Promise<boolean> => {
-        const [errState, errMessage] = await validEmail(email);
-        formStateDispatch({
-            name: 'email',
-            state: [errState, errMessage]
-        });
-        return errState;
-    }
-
-    const inspectPhone = async (phone: string = props.form.phone): Promise<boolean> => {
-        const [errState, errMessage] = await validPhone(phone);
-        formStateDispatch({
-            name: 'phone',
+    const inspectInput = async <T,>(
+        inputName: string, 
+        input: T, 
+        callback: (value: T) => Promise<[boolean, string?]>
+    ): Promise<boolean> => {
+        const [errState, errMessage] = await callback(input);
+        props.updateFormState({
+            name: inputName,
             state: [errState, errMessage]
         });
         return errState;
@@ -64,9 +33,9 @@ export default function ContactForm(props: ContactFormProps) {
                 name={'fName'}
                 label={'First Name'}
                 value={props.form.fName}
-                error={formState.input.fName}
+                error={props.formState.input.fName}
                 onChange={(name, value) => {
-                    inspectFName(value);
+                    inspectInput('fName', value, validName);
                     props.onChange(name, value);
                 }}
             />
@@ -74,9 +43,9 @@ export default function ContactForm(props: ContactFormProps) {
                 name={'lName'}
                 label={'Last Name'}
                 value={props.form.lName}
-                error={formState.input.lName}
+                error={props.formState.input.lName}
                 onChange={(name, value) => {
-                    inspectLName(value);
+                    inspectInput('lName', value, validName);
                     props.onChange(name, value);
                 }}
             />
@@ -84,9 +53,9 @@ export default function ContactForm(props: ContactFormProps) {
                 name={'email'}
                 label={'Email'}
                 value={props.form.email}
-                error={formState.input.email}
+                error={props.formState.input.email}
                 onChange={(name, value) => {
-                    inspectEmail(value);
+                    inspectInput('email', value, validEmail);
                     props.onChange(name, value);
                 }}
             />
@@ -94,9 +63,9 @@ export default function ContactForm(props: ContactFormProps) {
                 name={'phone'}
                 label={'Phone'}
                 value={props.form.phone}
-                error={formState.input.phone}
+                error={props.formState.input.phone}
                 onChange={(name, value) => {
-                    inspectPhone(value);
+                    inspectInput('phone', value, validPhone);
                     props.onChange(name, value);
                 }}
             />

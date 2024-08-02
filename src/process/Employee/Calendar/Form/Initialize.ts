@@ -1,6 +1,6 @@
 import { DB_Event, DB_EventSharee } from "@/database/Types";
 import { GetEventSharees } from "@/database/Export";
-import { getSessionID } from "@/lib/Cookies/Cookies";
+import { getSessionID } from "@/lib/Storage/Cookies";
 import { toWebDateTime } from "@/lib/Convert/Convert";
 import { UpdateEvent, UpdateFormStructure, UpdateStructure } from "./Form";
 

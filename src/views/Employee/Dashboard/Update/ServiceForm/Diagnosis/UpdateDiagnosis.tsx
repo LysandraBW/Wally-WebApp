@@ -1,7 +1,7 @@
 import { Multiple, Text } from "@/components/Input/Export";
 import { DB_Diagnosis } from "@/database/Types";
 import { hasValue } from "@/lib/Inspector/Inspector/Inspect/Inspectors";
-import FormStateReducer, { InitialFormState } from "@/reducer/FormState/Reducer";
+import FormStateReducer, { InitialFormState } from "@/hook/FormState/Reducer";
 import { useEffect, useReducer, useState } from "react";
 
 interface UpdateDiagnosisProps {

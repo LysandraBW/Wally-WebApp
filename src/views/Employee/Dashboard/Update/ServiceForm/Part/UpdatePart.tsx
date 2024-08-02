@@ -1,7 +1,7 @@
 import { Multiple } from "@/components/Input/Export";
 import { DB_Part } from "@/database/Types";
 import { hasValue, isNumber } from "@/lib/Inspector/Inspector/Inspect/Inspectors";
-import FormStateReducer, { InitialFormState } from "@/reducer/FormState/Reducer";
+import FormStateReducer, { InitialFormState } from "@/hook/FormState/Reducer";
 import { useEffect, useReducer, useState } from "react";
 
 interface UpdatePartProps {

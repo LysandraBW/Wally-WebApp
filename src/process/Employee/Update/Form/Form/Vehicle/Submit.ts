@@ -1,4 +1,4 @@
-import { getSessionID } from "@/lib/Cookies/Cookies";
+import { getSessionID } from "@/lib/Storage/Cookies";
 import { ProcessedVehicleFormStructure, processVehicleForm } from "./Process";
 import { VehicleFormStructure } from "./Vehicle";
 import { UpdateVehicle } from "@/database/Export";

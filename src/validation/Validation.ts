@@ -1,11 +1,20 @@
 import { inValues, isDateTime, isEmailAddress, isLicensePlate, isName, isNumber, isPhoneNumber, isUniqueIdentifier, isVIN } from "@/lib/Inspector/Inspector/Inspect/Inspectors";
 
+export const validValue = async <T> (
+    value: Array<T>, 
+    values: Array<T>
+): Promise<[boolean, string?]> => {
+    return await inValues({
+        values: values
+    }).inspect(value);
+}
+
 export const validMake = async (
     make: Array<string>, 
     makes: Array<string>
 ): Promise<[boolean, string?]> => {
     return await inValues({
-        values: makes.map(m => m[0])
+        values: makes
     }).inspect(make);
 }
 
@@ -14,7 +23,7 @@ export const validModel = async (
     models: Array<string>
 ): Promise<[boolean, string?]> => {
     return await inValues({
-        values: models.map(m => m[0])
+        values: models
     }).inspect(model);
 }
 
@@ -40,7 +49,7 @@ export const validServices = async (
     allServices: Array<number>
 ): Promise<[boolean, string?]> => {
     return await inValues({
-        values: Object.values(allServices)
+        values: allServices
     }).inspect(services);
 }
 

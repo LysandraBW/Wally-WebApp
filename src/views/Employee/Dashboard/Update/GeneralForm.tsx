@@ -3,7 +3,7 @@ import { DB_Statuses } from "@/database/Info/Info";
 import { DB_Status } from "@/database/Types";
 import { inValues } from "@/lib/Inspector/Inspector/Inspect/Inspectors";
 import { FormPart } from "@/process/Employee/Update/Form/UpdateForm";
-import FormStateReducer from "@/reducer/FormState/Reducer";
+import FormStateReducer from "@/hook/FormState/Reducer";
 import { InitialGeneralFormState } from "@/validation/State/General";
 import { validDate, validEmail, validName, validPhone } from "@/validation/Validation";
 import { useEffect, useReducer, useState } from "react";

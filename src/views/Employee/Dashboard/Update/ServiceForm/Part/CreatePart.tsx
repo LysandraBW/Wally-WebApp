@@ -1,7 +1,7 @@
 import { useReducer, useState } from "react";
 import { Text } from "@/components/Input/Export";
 import { DB_Part } from "@/database/Types";
-import FormStateReducer, { InitialFormState } from "@/reducer/FormState/Reducer";
+import FormStateReducer, { InitialFormState } from "@/hook/FormState/Reducer";
 import { hasValue, isNumber } from "@/lib/Inspector/Inspector/Inspect/Inspectors";
 
 interface CreatePartProps {

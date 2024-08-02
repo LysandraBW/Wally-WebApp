@@ -1,4 +1,4 @@
-import { getSessionID } from "@/lib/Cookies/Cookies";
+import { getSessionID } from "@/lib/Storage/Cookies";
 import { PaymentFormStructure } from "./Payment";
 import { ProcessedPaymentFormStructure, processPaymentForm } from "./Process";
 import { DeletePayment, InsertCreditCard, InsertPayment, UpdateCost } from "@/database/Export";

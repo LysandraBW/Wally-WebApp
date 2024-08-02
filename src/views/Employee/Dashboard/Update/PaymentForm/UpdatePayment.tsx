@@ -2,7 +2,7 @@ import { Multiple } from "@/components/Input/Export";
 import { DB_Payment } from "@/database/Types";
 import { toInteger } from "@/lib/Convert/Convert";
 import { hasValue } from "@/lib/Inspector/Inspector/Inspect/Inspectors";
-import FormStateReducer, { InitialFormState } from "@/reducer/FormState/Reducer";
+import FormStateReducer, { InitialFormState } from "@/hook/FormState/Reducer";
 import { useEffect, useReducer, useState } from "react";
 
 interface UpdatePaymentProps {

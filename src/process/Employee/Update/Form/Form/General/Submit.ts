@@ -1,4 +1,4 @@
-import { getSessionID } from "@/lib/Cookies/Cookies";
+import { getSessionID } from "@/lib/Storage/Cookies";
 import { GeneralFormStructure } from "./General";
 import { ProcessedGeneralFormStructure, processGeneralForm } from "./Process";
 import { UpdateCustomer, UpdateDate, UpdateStatus } from "@/database/Export";

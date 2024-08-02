@@ -5,7 +5,7 @@ import { DB_GeneralEmployee } from "@/database/Types";
 import { every, hasValue, inValues } from "@/lib/Inspector/Inspector/Inspect/Inspectors";
 import { ErrorStructure, Regexes } from "@/lib/Inspector/Inspectors";
 import { UpdateNote as UpdateNoteData } from "@/process/Employee/Update/Form/Form/Note/Note";
-import FormStateReducer, { InitialFormState } from "@/reducer/FormState/Reducer";
+import FormStateReducer, { InitialFormState } from "@/hook/FormState/Reducer";
 import { useContext, useEffect, useReducer, useState } from "react";
 
 interface UpdateNoteProps {

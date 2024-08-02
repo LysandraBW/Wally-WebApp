@@ -1,4 +1,4 @@
-import { getSessionID } from "@/lib/Cookies/Cookies";
+import { getSessionID } from "@/lib/Storage/Cookies";
 import { EventsFormStructure, UpdateStructure } from "./Form";
 import { ProcessedEventsFormStructure, processEventsForm } from "./Process";
 import { DeleteEvent, InsertEvent, InsertEventSharee, UpdateEvent } from "@/database/Export";

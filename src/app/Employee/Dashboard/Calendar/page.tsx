@@ -1,7 +1,7 @@
 'use client';
-import { getSessionID } from "@/lib/Cookies/Cookies";
+import { getSessionID } from "@/lib/Storage/Cookies";
 import { GetAllEmployees, GetEmployee, GetEvents } from "@/database/Export";
-import useInterval from "@/reducer/Alert/Timer";
+import useInterval from "@/hook/Alert/Timer";
 import { goToEmployeeLogin } from "@/lib/Navigation/Redirect";
 import { InitialUpdateForm, UpdateEvent as UpdateEventData, UpdateFormStructure, } from "@/process/Employee/Calendar/Form/Form";
 import { default as CalendarElement } from "@/views/Employee/Dashboard/Calendar/Calendar";
@@ -12,7 +12,7 @@ import { Context, ContextStructure } from "@/process/Employee/Calendar/Context";
 import { Controller, ControllerStructure } from "@/process/Employee/Calendar/Controller";
 import DateEvents from "@/views/Employee/Dashboard/Calendar/DateEvents";
 import { UpdateForm } from "@/process/Employee/Calendar/Form/Initialize";
-import AlertReducer, { AlertActionType, InitialAlert } from "@/reducer/Alert/Reducer";
+import AlertReducer, { AlertActionType, InitialAlert } from "@/hook/Alert/Reducer";
 import UpdateEvent from "@/views/Employee/Dashboard/Calendar/EventManager/UpdateEvent";
 import { submitEventsForm } from "@/process/Employee/Calendar/Form/Submit";
 

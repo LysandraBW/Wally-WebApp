@@ -4,7 +4,7 @@ import { toggleValue } from "@/components/Input/Checkbox/Checkbox";
 import { PageContext } from "@/app/Employee/Dashboard/Update/page";
 import { UpdateNote } from "@/process/Employee/Update/Form/Form/Note/Note";
 import { every, hasValue, inValues } from "@/lib/Inspector/Inspector/Inspect/Inspectors";
-import FormStateReducer, { InitialFormState } from "@/reducer/FormState/Reducer";
+import FormStateReducer, { InitialFormState } from "@/hook/FormState/Reducer";
 import { Regexes } from "@/lib/Inspector/Inspectors";
 
 interface NoteInputProps {
