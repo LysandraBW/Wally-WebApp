@@ -6,7 +6,7 @@ import { useState } from "react";
 interface DiagnosisManagerProps {
     diagnoses: {[diagnosisID: string]: DB_Diagnosis}
     onChange: (updatedValue: {[diagnosisID: string]: DB_Diagnosis}) => void;
-    updateFormError: (state: boolean) => void;
+    updateFormState: (state: boolean) => void;
 }
 
 export default function DiagnosisManager(props: DiagnosisManagerProps) {
@@ -30,7 +30,7 @@ export default function DiagnosisManager(props: DiagnosisManagerProps) {
                                 updatedValue[`${diagnosisID}`] = diagnosis;
                                 props.onChange(updatedValue);
                             }}
-                            updateFormError={props.updateFormError}
+                            updateFormState={props.updateFormState}
                         />
                     </div>
                 ))}

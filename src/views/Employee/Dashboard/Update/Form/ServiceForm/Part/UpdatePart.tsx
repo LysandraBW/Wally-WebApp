@@ -8,7 +8,7 @@ interface UpdatePartProps {
     part: UpdatePartData;
     onDelete: () => any;
     onUpdate: (part: UpdatePartData) => any;   
-    updateFormError: (state: boolean) => void;
+    updateFormState: (state: boolean) => void;
 }
 
 export default function UpdatePart(props: UpdatePartProps) {
@@ -18,7 +18,7 @@ export default function UpdatePart(props: UpdatePartProps) {
     const [formState, formStateDispatch] = useReducer(FormStateReducer, InitialFormState);
 
     useEffect(() => {
-        props.updateFormError(formState.state);
+        props.updateFormState(formState.state);
     }, [formState.state]);
 
     const inspectInput = async <T,>(

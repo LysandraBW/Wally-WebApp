@@ -7,7 +7,7 @@ import CreateService from "./CreateService";
 
 interface ServiceManagerProps {
     services: {[serviceID: string]: DB_AppointmentService};
-    updateFormError: (state: boolean) => void;
+    updateFormState: (state: boolean) => void;
     onChange: (updatedValue: {[serviceID: string]: DB_AppointmentService}) => void;
 }
 
@@ -68,7 +68,7 @@ export default function ServiceManager(props: ServiceManagerProps) {
                                 updatedValue[`${serviceID}`] = service;
                                 props.onChange(updatedValue);
                             }}
-                            updateFormError={props.updateFormError}
+                            updateFormState={props.updateFormState}
                         />
                     </div>
                 ))}

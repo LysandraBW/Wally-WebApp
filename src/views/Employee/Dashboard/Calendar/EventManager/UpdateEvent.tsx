@@ -16,7 +16,7 @@ interface UpdateEventProps {
     onClose:  () => void;
     onDelete: () => void;
     onUpdate: (event: UpdateEventData, updateDatabase?: boolean) => void;
-    updateFormError: (state: boolean) => void;
+    updateFormState: (state: boolean) => void;
 }
 
 export default function UpdateEvent(props: UpdateEventProps) {
@@ -27,7 +27,7 @@ export default function UpdateEvent(props: UpdateEventProps) {
     const [formState, formStateDispatch] = useReducer(FormStateReducer, InitialFormState);
 
     useEffect(() => {
-        props.updateFormError(formState.state);
+        props.updateFormState(formState.state);
     }, [formState.state]);
 
     useEffect(() => {

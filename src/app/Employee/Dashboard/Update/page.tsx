@@ -252,7 +252,7 @@ export default function Update() {
                             form={updateForm.current.Note}
                             changeHandler={updateFormHandler}
                             onSave={async () => await saveForm('Note', submitNoteForm)}
-                            updateFormError={(state) => setFormStates({...formStates, Note: state})}
+                            updateFormState={(state) => setFormStates({...formStates, Note: state})}
                         />
                     </div>
                 }

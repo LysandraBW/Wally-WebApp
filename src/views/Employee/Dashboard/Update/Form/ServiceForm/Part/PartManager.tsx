@@ -6,7 +6,7 @@ import { UpdatePart as UpdatePartData } from "@/process/Employee/Update/Form/For
 interface PartManagerProps {
     parts: {[partID: string]: UpdatePartData};
     onChange: (updatedValue: {[partID: string]: UpdatePartData}) => void;
-    updateFormError: (state: boolean) => void;
+    updateFormState: (state: boolean) => void;
 }
 
 export default function PartManager(props: PartManagerProps) {
@@ -30,7 +30,7 @@ export default function PartManager(props: PartManagerProps) {
                                 updatedValue[`${partID}`] = part;
                                 props.onChange(updatedValue);
                             }}
-                            updateFormError={props.updateFormError}
+                            updateFormState={props.updateFormState}
                         />
                     </div>
                 ))}

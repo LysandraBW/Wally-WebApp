@@ -6,7 +6,7 @@ import { useState } from "react";
 
 interface NoteFormProps {
     form: NoteFormStructure;
-    updateFormError: (state: boolean) => void;
+    updateFormState: (state: boolean) => void;
     changeHandler: (part: FormType, name: string, value: any) => void;
     onSave: () => any;
 }
@@ -32,7 +32,7 @@ export default function NoteForm(props: NoteFormProps) {
                                 updatedValue[`${noteID}`] = note;
                                 props.changeHandler('Note', 'Notes', updatedValue);
                             }}
-                            updateFormState={props.updateFormError}
+                            updateFormState={props.updateFormState}
                         />
                     </div>
                 ))}

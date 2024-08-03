@@ -229,7 +229,7 @@ export default function Calendar() {
                                     updatedValue[`${controller.OpenEvent.EventID}`] = value;
                                     changeHandler(updatedValue, finalUpdate);
                                 }}
-                                updateFormError={(state) => {
+                                updateFormState={(state) => {
                                     setFormError({
                                         ...formState,
                                         'General': state

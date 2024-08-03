@@ -8,7 +8,7 @@ interface UpdateDiagnosisProps {
     diagnosis: DB_Diagnosis
     onDelete: () => any;
     onUpdate: (diagnosis: DB_Diagnosis) => any;   
-    updateFormError: (state: boolean) => void;
+    updateFormState: (state: boolean) => void;
 }
 
 export default function UpdateDiagnosis(props: UpdateDiagnosisProps) {
@@ -18,7 +18,7 @@ export default function UpdateDiagnosis(props: UpdateDiagnosisProps) {
     const [formState, formStateDispatch] = useReducer(FormStateReducer, InitialFormState);
 
     useEffect(() => {
-        props.updateFormError(formState.state);
+        props.updateFormState(formState.state);
     }, [formState.state]);
 
     const inspectInput = async <T,>(

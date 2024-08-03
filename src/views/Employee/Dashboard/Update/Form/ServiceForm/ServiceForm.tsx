@@ -22,28 +22,28 @@ export default function ServiceForm(props: ServiceProps) {
             <div>
                 <ServiceManager
                     services={props.form.Services}
-                    updateFormError={props.updateFormState}
+                    updateFormState={props.updateFormState}
                     onChange={(updatedValue) => props.changeHandler('Service', 'Services', updatedValue)}
                 />
             </div>
             <div>
                 <DiagnosisManager
                     diagnoses={props.form.Diagnoses}
-                    updateFormError={props.updateFormState}
+                    updateFormState={props.updateFormState}
                     onChange={(updatedValue) => props.changeHandler('Service', 'Diagnoses', updatedValue)}
                 />
             </div>
             <div>
                 <RepairManager
                     repairs={props.form.Repairs}
-                    updateFormError={props.updateFormState}
+                    updateFormState={props.updateFormState}
                     onChange={(updatedValue) => props.changeHandler('Service', 'Repairs', updatedValue)}
                 />
             </div>
             <div>
                 <PartManager
                     parts={props.form.Parts}
-                    updateFormError={props.updateFormState}
+                    updateFormState={props.updateFormState}
                     onChange={(updatedValue) => props.changeHandler('Service', 'Parts', updatedValue)}
                 />
             </div>

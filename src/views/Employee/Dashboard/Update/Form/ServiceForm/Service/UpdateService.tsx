@@ -8,7 +8,7 @@ interface UpdateServiceProps {
     service: DB_AppointmentService
     onDelete: () => any;
     onUpdate: (service: DB_AppointmentService) => any;   
-    updateFormError: (state: boolean) => void;
+    updateFormState: (state: boolean) => void;
 }
 
 export default function UpdateService(props: UpdateServiceProps) {
@@ -18,7 +18,7 @@ export default function UpdateService(props: UpdateServiceProps) {
     const [formState, formStateDispatch] = useReducer(FormStateReducer, InitialFormState);
 
     useEffect(() => {
-        props.updateFormError(formState.state);
+        props.updateFormState(formState.state);
     }, [formState.state]);
     
     const inspectInput = async <T,>(

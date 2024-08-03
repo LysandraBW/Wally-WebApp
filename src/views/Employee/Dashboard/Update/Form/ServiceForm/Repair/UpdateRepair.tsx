@@ -8,7 +8,7 @@ interface UpdateRepairProps {
     repair: DB_Repair;
     onDelete: () => any;
     onUpdate: (repair: DB_Repair) => any;  
-    updateFormError: (state: boolean) => void; 
+    updateFormState: (state: boolean) => void; 
 }
 
 export default function UpdateRepair(props: UpdateRepairProps) {
@@ -18,7 +18,7 @@ export default function UpdateRepair(props: UpdateRepairProps) {
     const [formState, formStateDispatch] = useReducer(FormStateReducer, InitialFormState);
 
     useEffect(() => {
-        props.updateFormError(formState.state);
+        props.updateFormState(formState.state);
     }, [formState.state]);
 
     return (
