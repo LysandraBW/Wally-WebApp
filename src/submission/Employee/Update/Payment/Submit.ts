@@ -5,9 +5,10 @@ import { DeletePayment, InsertCreditCard, InsertPayment, UpdateCost } from "@/da
 import { toFloat } from "@/lib/Convert/Convert";
 
 export async function submitPaymentForm(reference: PaymentFormStructure, current: PaymentFormStructure): Promise<boolean> {
-    const processedForm: ProcessedPaymentFormStructure = await processPaymentForm(reference, current);
     const SessionID = await getSessionID();
-    const AppointmentID = processedForm.AppointmentID;
+    const AppointmentID = reference.AppointmentID;
+
+    const processedForm: ProcessedPaymentFormStructure = await processPaymentForm(reference, current);
 
     // Update Cost
     if (processedForm.Update.Cost) {

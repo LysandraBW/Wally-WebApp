@@ -2,9 +2,9 @@ import { Multiple, Text } from "@/components/Input/Export";
 import FormStateReducer from "@/hook/State/Reducer";
 import { InitialFormState } from "@/hook/State/Interface";
 import { useEffect, useReducer, useState } from "react";
-import { contains, validNumber } from "@/validation/Validation";
-import { UpdatePart as UpdatePartData } from "@/submission/Employee/Update/Form/Form/Service/Service";
+import { hasLength, validNumber } from "@/validation/Validation";
 import PartCard from "./PartCard";
+import { UpdatePart as UpdatePartData } from "@/submission/Employee/Update/Service/Form";
 
 interface UpdatePartProps {
     part: UpdatePartData;
@@ -30,8 +30,9 @@ export default function UpdatePart(props: UpdatePartProps) {
     ): Promise<boolean> => {
         const [errState, errMessage] = await callback(input);
         formStateDispatch({
-            name: inputName,
-            state: [errState, errMessage]
+            states: {
+                [`${inputName}`]: [errState, errMessage]
+            }
         });
         return errState;
     }
@@ -52,14 +53,14 @@ export default function UpdatePart(props: UpdatePartProps) {
                                 value={values.PartNumber}
                                 state={formState.input.PartNumber}
                                 onChange={async (name, value) => {
-                                    await inspectInput('PartNumber', values.PartNumber, contains);
+                                    await inspectInput('PartNumber', values.PartNumber, hasLength);
                                     setValues({...values, [`${name}`]: value});
                                 }}
                                 onBlur={() => {
                                     if (values.PartNumber)
                                         return;
                                     setValues({...values, PartNumber: initialValues.PartNumber});
-                                    inspectInput('PartNumber', initialValues.PartNumber, contains);
+                                    inspectInput('PartNumber', initialValues.PartNumber, hasLength);
                                 }}
                             />
                             <Text
@@ -68,14 +69,14 @@ export default function UpdatePart(props: UpdatePartProps) {
                                 value={values.PartName}
                                 state={formState.input.PartName}
                                 onChange={async (name, value) => {
-                                    await inspectInput('PartName', values.PartName, contains);
+                                    await inspectInput('PartName', values.PartName, hasLength);
                                     setValues({...values, [`${name}`]: value});
                                 }}
                                 onBlur={() => {
                                     if (values.PartName)
                                         return;
                                     setValues({...values, PartName: initialValues.PartName});
-                                    inspectInput('PartName', initialValues.PartName, contains);
+                                    inspectInput('PartName', initialValues.PartName, hasLength);
                                 }}
                             />
                             <Text

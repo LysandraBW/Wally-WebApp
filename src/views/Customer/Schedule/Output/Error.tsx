@@ -1,4 +1,4 @@
-import Message from "@/components/Alert/Message/Message";
+import Message, { MessageType } from "@/components/Alert/Message/Message";
 
 interface ErrorProps {
     close: () => void;
@@ -13,7 +13,7 @@ export default function Error(props: ErrorProps) {
                         <p>Unfortunately, something has gone awry. Please try again.</p>
                     </>
                 )} 
-                messageType="Error"
+                messageType={MessageType.Error}
                 onClose={() => props.close()}
             />
     )

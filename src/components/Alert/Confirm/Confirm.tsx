@@ -1,3 +1,5 @@
+import CloseButton from "@/components/Button/Icon/Close";
+
 interface ConfirmProps {
     message: React.ReactNode;
     agreeLabel: string;
@@ -10,13 +12,9 @@ interface ConfirmProps {
 export default function Confirm(props: ConfirmProps) {
     return (
         <>
-            <div 
-                onClick={() => {
-                    props.onClose();
-                }}
-            >
-                x
-            </div>
+            <CloseButton
+                onClick={() => props.onClose()}
+            />
             {props.message}
             <button 
                 onClick={() => {

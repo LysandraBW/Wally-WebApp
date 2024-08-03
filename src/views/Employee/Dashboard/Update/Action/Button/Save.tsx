@@ -1,9 +1,9 @@
+import { FormType } from "@/submission/Employee/Update/Form";
 import { submitGeneralForm } from "@/submission/Employee/Update/General/Submit";
-import { submitNoteForm } from "@/submission/Employee/Update/Form/Note/Submit";
-import { submitPaymentForm } from "@/submission/Employee/Update/Form/Payment/Submit";
+import { submitNoteForm } from "@/submission/Employee/Update/Note/Submit";
+import { submitPaymentForm } from "@/submission/Employee/Update/Payment/Submit";
 import { submitServiceForm } from "@/submission/Employee/Update/Service/Submit";
-import { submitVehicleForm } from "@/submission/Employee/Update/Form/Vehicle/Submit";
-import { FormType } from "@/submission/Employee/Update/Form/Form";
+import { submitVehicleForm } from "@/submission/Employee/Update/Vehicle/Submit";
 
 interface SaveFormProps {
     currentForm: FormType;
@@ -13,15 +13,15 @@ interface SaveFormProps {
 export default function SaveForm(props: SaveFormProps) {
     const sendSubmitFunction =  () => {
         switch (props.currentForm) {
-            case 'General':
+            case FormType.General:
                 props.onSave(submitGeneralForm);
-            case 'Vehicle':
+            case FormType.Vehicle:
                 props.onSave(submitVehicleForm);
-            case 'Note':
+            case FormType.Note:
                 props.onSave(submitNoteForm);
-            case 'Service':
+            case FormType.Service:
                 props.onSave(submitServiceForm);
-            case 'Payment':
+            case FormType.Payment:
                 props.onSave(submitPaymentForm);
         }
     }

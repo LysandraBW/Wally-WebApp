@@ -1,4 +1,4 @@
-import { goToDashboard } from "@/lib/Navigation/Redirect";
+import { goToDashboard } from "@/lib/Navigation/Navigation";
 
 export default function BackToDashboard() {
     return (

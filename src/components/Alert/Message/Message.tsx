@@ -1,3 +1,4 @@
+import CloseButton from "@/components/Button/Icon/Close";
 import { useState } from "react";
 
 interface MessageProps {
@@ -6,7 +7,7 @@ interface MessageProps {
     onClose: () => any;
 }
 
-export type MessageType = 'Default' | 'Error';
+export enum MessageType {Default, Error, Success};
 
 export default function Message(props: MessageProps) {
     const [visible, setVisible] = useState(true);
@@ -15,17 +16,15 @@ export default function Message(props: MessageProps) {
         <>
             {visible &&
                 <div>
-                    <div 
+                    <CloseButton 
                         onClick={() => {
                             setVisible(false);
                             props.onClose();
                         }}
-                    >
-                        x
-                    </div>
-                        {props.message}
+                    />
+                    {props.message}
                 </div>
-        }
+            }
         </>
     )
 }

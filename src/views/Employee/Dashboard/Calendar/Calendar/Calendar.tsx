@@ -1,7 +1,7 @@
-import { EventsFormStructure, UpdateEvent } from "@/submission/Employee/Calendar/Form";
+import { EventsFormStructure } from "@/submission/Employee/Calendar/Form";
 import { useEffect, useState } from "react";
 import CalendarDate from "./CalendarDate";
-import { sameDay } from "@/process/Calendar/Helper";
+import { getDateEvents } from "@/process/Calendar/Helper";
 
 export interface CalendarProps {
     month:  number;
@@ -9,15 +9,6 @@ export interface CalendarProps {
     events: EventsFormStructure;
     onShowDate: (date: number) => void;
     onShowEvent: (eventID: number, appointmentID: string | null) => void;
-}
-
-export const getDateEvents = (date: Date, events: EventsFormStructure) => {
-    const dateEvents: Array<UpdateEvent> = [];
-    for (const event of Object.values(events.Events)) {
-        if (sameDay(date, new Date(event.UpdatedDate)))
-            dateEvents.push(event);
-    }
-    return dateEvents;
 }
 
 export default function Calendar(props: CalendarProps) {

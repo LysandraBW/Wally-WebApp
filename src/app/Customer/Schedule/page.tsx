@@ -9,19 +9,18 @@ import VehicleForm from '@/views/Customer/Schedule/Vehicle';
 import Success from '@/views/Customer/Schedule/Output/Success';
 import Error from '@/views/Customer/Schedule/Output/Error';
 import FormStateReducer from '@/hook/State/Reducer';
-import { InitialContactFormState } from '@/validation/State/Contact';
-import { InitialVehicleFormState } from '@/validation/State/Vehicle';
-import { validEmail, validMake, validModel, validModelYear, validName, validPhone, validServices, validValue, validVIN } from '@/validation/Validation';
+import { validEmail, validName, validPhone, validValue, validVIN } from '@/validation/Validation';
 import useVehicle from '@/hook/Vehicle/Vehicle';
 import { loadMakes, loadModelYears } from '@/lib/Vehicle/Load';
 import { getValues } from "@/lib/Vehicle/Value";
 import { loadServices } from "@/lib/Service/Load";
 import { flattenValues } from "@/lib/Service/Value";
+import { InitialFormState } from '@/hook/State/Interface';
 
 export default function Schedule() {
     const [form, setForm] = useState(Form);
-    const [contactFormState, contactFormStateDispatch] = useReducer(FormStateReducer, InitialContactFormState);
-    const [vehicleFormState, vehicleFormStateDispatch] = useReducer(FormStateReducer, InitialVehicleFormState);
+    const [contactFormState, contactFormStateDispatch] = useReducer(FormStateReducer, InitialFormState);
+    const [vehicleFormState, vehicleFormStateDispatch] = useReducer(FormStateReducer, InitialFormState);
     const vehicle = useVehicle();
 
     const [loadedServices, setLoadedServices] = useState(LoadedServices);

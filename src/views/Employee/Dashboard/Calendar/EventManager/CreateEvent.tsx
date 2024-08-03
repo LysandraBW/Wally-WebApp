@@ -4,10 +4,10 @@ import { UpdateEvent } from "@/submission/Employee/Calendar/Form";
 import { PageContext } from "@/app/Employee/Dashboard/Calendar/page";
 import FormStateReducer from "@/hook/State/Reducer";
 import { InitialFormState } from "@/hook/State/Interface";
-import { eachEntry, contains, validDate } from "@/validation/Validation";
-import { Regexes } from "@/lib/Inspector/Inspectors";
+import { every, hasLength, validDate } from "@/validation/Validation";
 import CloseButton from "@/components/Button/Icon/Close";
 import AddButton from "@/components/Button/Text/Add";
+import { Regexes } from "@/validation/Regexes";
 
 interface CreateEventProps {
     onClose: () => void;
@@ -37,16 +37,17 @@ export default function CreateEvent(props: CreateEventProps) {
     ): Promise<boolean> => {
         const [errState, errMessage] = await callback(input);
         formStateDispatch({
-            name: inputName,
-            state: [errState, errMessage]
+            states: {
+                [`${inputName}`]: [errState, errMessage]
+            }
         });
         return errState;
     }
 
     const inspectEvent = async (): Promise<boolean> => {
-        const validName = await inspectInput('Name', values.Name, contains);
-        const validSummary = await inspectInput('Summary', values.Summary, contains);
-        const validSharees = await inspectInput('Sharees', values.Sharees, await eachEntry(async (v) => (
+        const validName = await inspectInput('Name', values.Name, hasLength);
+        const validSummary = await inspectInput('Summary', values.Summary, hasLength);
+        const validSharees = await inspectInput('Sharees', values.Sharees, await every(async (v) => (
             !!v.match(Regexes.UniqueIdentifier)
         )));
         const validUpdatedDate = await inspectInput('UpdatedDate', values.UpdatedDate, validDate);
@@ -56,7 +57,7 @@ export default function CreateEvent(props: CreateEventProps) {
     return (
         <div>
             <CloseButton
-                onClose={props.onClose}
+                onClick={props.onClose}
             />
             <TextArea
                 name={'Name'}
@@ -65,7 +66,7 @@ export default function CreateEvent(props: CreateEventProps) {
                 state={formState.input.Name}
                 onChange={async (name, value) => {
                     setValues({...values, [`${name}`]: value});
-                    inspectInput('Name', values.Name, contains);
+                    inspectInput('Name', values.Name, hasLength);
                 }}
             />
             <TextArea
@@ -75,7 +76,7 @@ export default function CreateEvent(props: CreateEventProps) {
                 state={formState.input.Summary}
                 onChange={async (name, value) => {
                     setValues({...values, [`${name}`]: value});
-                    inspectInput('Summary', values.Summary, contains);
+                    inspectInput('Summary', values.Summary, hasLength);
                 }}
             />
             <Text
@@ -95,7 +96,7 @@ export default function CreateEvent(props: CreateEventProps) {
                 value={values.Sharees}
                 values={context.Employees.filter(e => e.EmployeeID != context.Employee.EmployeeID).map(e => [e.EmployeeID, `${e.FName} ${e.LName}`])}
                 onChange={async (name, value) => {
-                    inspectInput('Sharees', value, await eachEntry(async (v) => !!v.match(Regexes.UniqueIdentifier)));
+                    inspectInput('Sharees', value, await every(async (v) => !!v.match(Regexes.UniqueIdentifier)));
                     setValues({...values, Sharees: value});
                 }}
             />

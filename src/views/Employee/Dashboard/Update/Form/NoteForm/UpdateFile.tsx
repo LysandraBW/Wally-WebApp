@@ -13,7 +13,7 @@ export default function UpdateAttachment(props: UpdateAttachmentProps) {
                 <div key={i}>
                     {attachment.Name} 
                     <CloseButton 
-                        onClose={() => {
+                        onClick={() => {
                             props.updateAttachments(props.attachments.filter(_attachment => attachment !== _attachment));
                         }}
                     />

@@ -3,8 +3,8 @@ import { Text } from "@/components/Input/Export";
 import { DB_Repair } from "@/database/Types";
 import FormStateReducer from "@/hook/State/Reducer";
 import { InitialFormState } from "@/hook/State/Interface";
-import { hasValue } from "@/lib/ok/Inspector/Inspect/Inspectors";
 import AddButton from "@/components/Button/Text/Add";
+import { hasLength } from "@/validation/Validation";
 
 interface CreateRepairProps {
     onChange: (name: string, value: any) => any;
@@ -20,11 +20,13 @@ export default function CreateRepair(props: CreateRepairProps) {
     const [formState, formStateDispatch] = useReducer(FormStateReducer, InitialFormState);
 
     const inspectRepair = async (repair: string = values.Repair): Promise<boolean> => {
-        const [repairState, repairMessage] = await hasValue().inspect(repair);
+        const [repairState, repairMessage] = await hasLength(repair);
         formStateDispatch({
-            name: 'Repair',
-            state: [repairState, repairMessage]
+            states: {
+                'Repair': [repairState, repairMessage]
+            }
         });
+
         return repairState;
     }
     

@@ -1,36 +1,7 @@
 import { LoadModels, LoadVehicle } from "@/lib/Vehicle/Decoder";
 import { validVIN } from "@/validation/Validation";
 import { useState } from "react";
-
-interface LoadedValuesStructure {
-    makes:      Array<[string, string]>;
-    models:     Array<[string, string]>;
-    modelYears: Array<[number, string]>;
-}
-
-const LoadedValues: LoadedValuesStructure = {
-    makes:      [],
-    models:     [],
-    modelYears: [],
-}
-
-interface VehicleStructure {
-    make: string;
-    model: string;
-    modelYear: number;
-    vin: string;
-    mileage: number;
-    licensePlate: string;
-}
-
-const Vehicle: VehicleStructure = {
-    make: '',
-    model: '',
-    modelYear: -1,
-    vin: '',
-    mileage: -1,
-    licensePlate: ''
-}
+import { Vehicle, LoadedValues } from "./Interface";
 
 export default function useVehicle() {
     const [vehicle, setVehicle] = useState(Vehicle);

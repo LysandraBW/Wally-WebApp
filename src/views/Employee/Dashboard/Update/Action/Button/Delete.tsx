@@ -1,6 +1,6 @@
 import { PageContext } from "@/app/Employee/Dashboard/Update/page";
 import { Delete } from "@/database/Export";
-import { goToDashboard } from "@/lib/Navigation/Redirect";
+import { goToDashboard } from "@/lib/Navigation/Navigation";
 import { useContext } from "react";
 
 export default function DeleteAppointment() {

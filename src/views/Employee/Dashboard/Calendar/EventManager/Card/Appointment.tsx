@@ -1,4 +1,4 @@
-import { goToApt, goToUpdateApt } from "@/lib/Navigation/Redirect";
+import { goToApt, goToUpdateApt } from "@/lib/Navigation/Navigation";
 
 interface AppointmentCardProps {
     name: string;

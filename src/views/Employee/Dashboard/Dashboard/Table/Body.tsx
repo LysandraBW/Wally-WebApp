@@ -1,10 +1,10 @@
-import AptRow from "./Row";
+import Appointment from "./Row";
 import { UpdateLabel } from "@/database/Export";
 import { useContext } from "react";
-import { DefaultPageContext } from "@/app/Employee/Dashboard/Dashboard/page";
 import { toggleValue } from "@/lib/Input/Toggle";
 import { DB_AllAppointmentLabels, DB_AppointmentOverview } from "@/database/Types";
 import { updateAppointmentLabel } from "@/database/Appointment/Label/Helper";
+import { PageContext } from "@/app/Employee/Dashboard/Dashboard/page";
 
 interface BodyProps {
     current: Array<DB_AppointmentOverview>;
@@ -18,7 +18,7 @@ interface BodyProps {
 }
 
 export default function Body(props: BodyProps) {
-    const context = useContext(DefaultPageContext);
+    const context = useContext(PageContext);
 
     const updateLabel = async (appointmentID: string, labelName: string) => {
         const updatedLabels = updateAppointmentLabel(
@@ -49,7 +49,7 @@ export default function Body(props: BodyProps) {
                         updateLabel(appointment.AppointmentID, 'Seen');
                     }}
                 >
-                    <AptRow
+                    <Appointment
                         appointment={appointment}
                         labels={props.allLabels[`${appointment.AppointmentID}`]}
                         updateLabel={updateLabel}

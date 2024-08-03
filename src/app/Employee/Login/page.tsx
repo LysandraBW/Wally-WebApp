@@ -2,12 +2,12 @@
 import { Button, Text } from '@/components/Input/Export';
 import { Form } from '@/submission/Employee/Login/Form';
 import { submitForm } from '@/submission/Employee/Login/Submit';
-import { goToDashboard } from '@/lib/Navigation/Redirect';
+import { goToDashboard } from '@/lib/Navigation/Navigation';
 import Error from '@/views/Employee/Login/Error';
 import { useReducer, useState } from 'react';
 import FormStateReducer from '@/hook/State/Reducer';
 import { InitialFormState } from "@/hook/State/Interface";
-import { hasValue } from '@/lib/ok/Inspector/Inspect/Inspectors';
+import { hasLength } from '@/validation/Validation';
 
 export default function Login() {
     const [form, setForm] = useState(Form);
@@ -15,16 +15,21 @@ export default function Login() {
     const [loginFailed, setLoginFailed] = useState(false);
 
     const changeHandler = async (name: string, value: any) => {
-        setForm({...form, [`${name}`]: value});
+        setForm({
+            ...form, 
+            [`${name}`]: value
+        });
+        
         formStateDispatch({
-            name: name,
-            state: await hasValue().inspect(value)
+            states: {
+                [`${name}`]: await hasLength(value)
+            }
         });
     }
     
     const submitHandler = async (): Promise<void> => {
-        const [usernameState, usernameMessage] = await hasValue().inspect(form.username);
-        const [passwordState, passwordMessage] = await hasValue().inspect(form.password);
+        const [usernameState, usernameMessage] = await hasLength(form.username);
+        const [passwordState, passwordMessage] = await hasLength(form.password);
 
         formStateDispatch({
             states: {

@@ -2,7 +2,7 @@ import { Text } from "@/components/Input/Export";
 import { DB_AppointmentService } from "@/database/Types";
 import FormStateReducer from "@/hook/State/Reducer";
 import { InitialFormState } from "@/hook/State/Interface";
-import { contains } from "@/validation/Validation";
+import { hasLength } from "@/validation/Validation";
 import { useReducer, useState } from "react";
 
 interface CreateServiceProps {
@@ -29,16 +29,17 @@ export default function CreateService(props: CreateServiceProps) {
     ): Promise<boolean> => {
         const [errState, errMessage] = await callback(input);
         formStateDispatch({
-            name: inputName,
-            state: [errState, errMessage]
+            states: {
+                [`${inputName}`]: [errState, errMessage]
+            }
         });
         return errState;
     }
-
+    
     const inspectService = async (): Promise<boolean> => {
-        const validClass = await inspectInput('Class', values.Class, contains);
-        const validState = await inspectInput('Service', values.Service, contains);
-        const validDivision = await inspectInput('Division', values.Division, contains);
+        const validClass = await inspectInput('Class', values.Class, hasLength);
+        const validState = await inspectInput('Service', values.Service, hasLength);
+        const validDivision = await inspectInput('Division', values.Division, hasLength);
         return validState && validDivision && validClass;
     }
 
@@ -51,7 +52,7 @@ export default function CreateService(props: CreateServiceProps) {
                 state={formState.input.Service}
                 onChange={async (name, value) => {
                     setValues({...values, [`${name}`]: value});
-                    inspectInput('Service', values.Service, contains);
+                    inspectInput('Service', values.Service, hasLength);
                 }}
             />
             <Text
@@ -61,7 +62,7 @@ export default function CreateService(props: CreateServiceProps) {
                 label={'Division'}
                 onChange={async (name, value) => {
                     setValues({...values, [`${name}`]: value});
-                    inspectInput('Division', values.Division, contains);
+                    inspectInput('Division', values.Division, hasLength);
                 }}
             />
             <Text
@@ -71,7 +72,7 @@ export default function CreateService(props: CreateServiceProps) {
                 label={'Class'}
                 onChange={async (name, value) => {
                     setValues({...values, [`${name}`]: value});
-                    inspectInput('Class', values.Class, contains);
+                    inspectInput('Class', values.Class, hasLength);
                 }}
             />
             <button 

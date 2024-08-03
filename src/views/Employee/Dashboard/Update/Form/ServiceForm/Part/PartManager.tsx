@@ -1,11 +1,11 @@
 import { useState } from "react";
 import UpdatePart from "./UpdatePart";
 import CreatePart from "./CreatePart";
-import { UpdatePart as UpdatePartData } from "@/submission/Employee/Update/Form/Form/Service/Service";
+import { PartsStructure } from "@/submission/Employee/Update/Service/Form";
 
 interface PartManagerProps {
-    parts: {[partID: string]: UpdatePartData};
-    onChange: (updatedValue: {[partID: string]: UpdatePartData}) => void;
+    parts: PartsStructure;
+    onChange: (updatedValue: PartsStructure) => void;
     updateFormState: (state: boolean) => void;
 }
 

@@ -1,5 +1,5 @@
-export const updateMessage = (formPart: string, output: boolean) => {
+export const updateMessage = (output: boolean) => {
     if (!output)
-        return `Unsuccessfully Updated ${formPart} Information`;
-    return `Successfully Updated ${formPart} Information`;
+        return `Unsuccessfully Updated Information`;
+    return `Successfully Updated Information`;
 }

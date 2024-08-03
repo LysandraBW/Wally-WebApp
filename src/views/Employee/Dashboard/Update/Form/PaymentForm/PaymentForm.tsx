@@ -2,11 +2,11 @@ import { useEffect, useReducer, useState } from "react";
 import UpdatePayment from "./UpdatePayment";
 import CreatePayment from "./CreatePayment";
 import {Text} from "@/components/Input/Export";
-import { FormType } from "@/submission/Employee/Update/Form/Form";
 import FormStateReducer from "@/hook/State/Reducer";
 import { InitialFormState } from "@/hook/State/Interface";
-import { hasValue } from "@/lib/ok/Inspector/Inspect/Inspectors";
 import { UpdatePayment as UpdatePaymentData } from "@/submission/Employee/Update/Payment/Form";
+import { hasLength } from "@/validation/Validation";
+import { FormType } from "@/submission/Employee/Update/Form";
 
 interface PaymentFormProps {
     form: {
@@ -14,7 +14,7 @@ interface PaymentFormProps {
         Payments: {[paymentID: string]: UpdatePaymentData};
     };
     updateFormState: (state: boolean) => void;
-    changeHandler: (formPart: FormType, name: string, value: any) => void;
+    changeHandler: (part: FormType, name: string, value: any) => void;
 }
 
 export default function PaymentForm(props: PaymentFormProps) {
@@ -27,10 +27,11 @@ export default function PaymentForm(props: PaymentFormProps) {
     }, [formState.state]);
 
     const inspectCost = async (cost: string): Promise<boolean> => {
-        const [errState, errMessage] = await hasValue().inspect(cost);
+        const [errState, errMessage] = await hasLength(cost);
         formStateDispatch({
-            name: 'Cost',
-            state: [errState, errMessage]
+            states: {
+                Cost: [errState, errMessage]
+            }
         });
         return errState;
     }
@@ -43,13 +44,13 @@ export default function PaymentForm(props: PaymentFormProps) {
                 value={props.form.Cost}
                 state={formState.input.Cost}
                 onChange={(name, value) => {
-                    props.changeHandler('Payment', name, value);
+                    props.changeHandler(FormType.Payment, name, value);
                     inspectCost(value);
                 }}
                 onBlur={() => {
                     if (props.form.Cost)
                         return;
-                    props.changeHandler('Payment', 'Cost', initialCost);
+                    props.changeHandler(FormType.Payment, 'Cost', initialCost);
                     inspectCost(initialCost);
                 }}
             />
@@ -62,17 +63,18 @@ export default function PaymentForm(props: PaymentFormProps) {
                             onDelete={() => {
                                 let updatedValue = {...props.form.Payments};
                                 delete updatedValue[`${paymentID}`];
-                                props.changeHandler('Payment', 'Payments', updatedValue);
+                                props.changeHandler(FormType.Payment, 'Payments', updatedValue);
                             }}
                             onUpdate={(part) => {
                                 let updatedValue = {...props.form.Payments};
                                 updatedValue[`${paymentID}`] = part;
-                                props.changeHandler('Payment', 'Payments', updatedValue);
+                                props.changeHandler(FormType.Payment, 'Payments', updatedValue);
                             }}
                             updateFormState={(state: boolean) => {
                                 formStateDispatch({
-                                    name: `Payment ${i}`,
-                                    state: [state, '']
+                                    states: {
+                                        [`Payment ${i}`]: [state, '']
+                                    }
                                 });
                             }}
                         />
@@ -83,7 +85,7 @@ export default function PaymentForm(props: PaymentFormProps) {
                 Type in a Payment Here
                 <CreatePayment
                     onChange={(name, value) => {
-                        props.changeHandler('Payment', 'Payments', {...props.form.Payments, [`${-counter}`]: value});
+                        props.changeHandler(FormType.Payment, 'Payments', {...props.form.Payments, [`${-counter}`]: value});
                         setCounter(counter+1);
                     }}
                 />

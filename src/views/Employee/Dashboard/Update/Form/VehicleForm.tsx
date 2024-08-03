@@ -1,19 +1,19 @@
 import { useEffect, useReducer } from 'react';
 import { Text, Search } from '@/components/Input/Export';
-import { FormType } from '@/submission/Employee/Update/Form/Form';
 import { LoadModels } from '@/lib/Vehicle/Decoder';
 import FormStateReducer from '@/hook/State/Reducer';
 import { InitialFormState } from "@/hook/State/Interface";
-import { validLicensePlate, validNumber, validValue, validVIN } from '@/validation/Validation';
+import { inValues, validLicensePlate, validNumber, validValue, validVIN } from '@/validation/Validation';
 import { VehicleFormStructure } from '@/submission/Employee/Update/Vehicle/Form';
 import useVehicle from '@/hook/Vehicle/Vehicle';
 import { loadMakes, loadModelYears } from '@/lib/Vehicle/Load';
 import { getValues } from "@/lib/Vehicle/Value";
+import { FormType } from '@/submission/Employee/Update/Form';
 
 interface VehicleProps {
     form: VehicleFormStructure;
     updateFormState: (state: boolean) => void;
-    changeHandler: (part: FormType, name: string, value: any) => void;
+    changeHandler: (type: FormType, name: string, value: any) => void;
 }
 
 export default function Vehicle(props: VehicleProps) {
@@ -54,8 +54,9 @@ export default function Vehicle(props: VehicleProps) {
     ): Promise<boolean> => {
         const [errState, errMessage] = await callback(input);
         formStateDispatch({
-            name: inputName,
-            state: [errState, errMessage]
+            states: {
+                [`${inputName}`]: [errState, errMessage]
+            }
         });
         return errState;
     }
@@ -63,15 +64,15 @@ export default function Vehicle(props: VehicleProps) {
     const changeHandler = async (name: string, value: any) => {
         switch (name) {
             case 'make':
-                inspectInput(name, value, async (v) => await validValue(value, getValues(vehicle.loadedMakes)));
+                inspectInput(name, value, await inValues(getValues(vehicle.loadedMakes)));
                 vehicle.setMake(value[0]);
                 break;
             case 'modelYear':
-                inspectInput(name, value, async (v) => await validValue(value, getValues(vehicle.loadedModelYears)));
+                inspectInput(name, value, await inValues(getValues(vehicle.loadedModelYears)));
                 vehicle.setModelYear(value[0]);
                 break;
             case 'model':
-                inspectInput(name, value, async (v) => await validValue(value, getValues(vehicle.loadedModels)));
+                inspectInput(name, value, await inValues(getValues(vehicle.loadedModels)));
                 vehicle.setModel(value[0]);
                 break;
             case 'vin':
@@ -85,7 +86,7 @@ export default function Vehicle(props: VehicleProps) {
                 inspectInput(name, value, validLicensePlate);
                 break;
         }
-        props.changeHandler('Vehicle', name, value);
+        props.changeHandler(FormType.Vehicle, name, value);
     }
 
     return (

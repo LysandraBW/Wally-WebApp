@@ -22,8 +22,9 @@ export default function LookupForm(props: LookupFormProps) {
     ): Promise<boolean> => {
         const [errState, errMessage] = await callback(value);
         props.updateFormState({
-            name: name,
-            state: [errState, errMessage]
+            states: {
+                [`${name}`]: [errState, errMessage]
+            }
         });
         return errState;
     }

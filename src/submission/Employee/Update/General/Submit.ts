@@ -5,7 +5,7 @@ import { UpdateCustomer, UpdateDate, UpdateStatus } from "@/database/Export";
 
 export async function submitGeneralForm(reference: GeneralFormStructure, current: GeneralFormStructure): Promise<boolean> {
     const processedForm: ProcessedGeneralFormStructure = await processGeneralForm(reference, current);
-    
+
     const SessionID = await getSessionID();
     const AppointmentID = processedForm.AppointmentID;
 

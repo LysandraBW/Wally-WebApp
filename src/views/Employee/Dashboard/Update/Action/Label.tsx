@@ -1,10 +1,10 @@
 import { PageContext } from "@/app/Employee/Dashboard/Update/page";
 import { UpdateLabel } from "@/database/Export";
-import { ContextStructure } from "@/submission/Employee/Update/Context";
+import { PageContextStructure } from "@/process/Update/Context";
 import { useContext } from "react";
 
 interface UpdateAppointmentLabelProps {
-    updateContext: (context: ContextStructure) => void;
+    updateContext: (context: PageContextStructure) => void;
 }
 
 export default function UpdateAppointmentLabel(props: UpdateAppointmentLabelProps) {

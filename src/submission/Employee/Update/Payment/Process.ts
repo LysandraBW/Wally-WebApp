@@ -1,6 +1,7 @@
-import { updatedValue } from "@/lib/Process/Compare";
-import { MathSet } from "@/lib/Process/MathSet";
+import { updatedValue } from "@/lib/Submission/Compare";
+import { MathSet } from "@/lib/Submission/MathSet";
 import { PaymentFormStructure } from "./Form";
+import { toInteger } from "@/lib/Convert/Convert";
 
 export interface ProcessedPaymentFormStructure {
     AppointmentID: string;
@@ -23,7 +24,7 @@ export async function processPaymentForm(reference: PaymentFormStructure, curren
     const processedCostForm: ProcessedPaymentFormStructure = {
         AppointmentID: current.AppointmentID,
         Update: {
-            Cost: updatedValue(reference.Cost, current.Cost)
+            Cost: updatedValue(toInteger(reference.Cost), toInteger(current.Cost))
         },
         Insert: [],
         Delete: []

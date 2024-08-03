@@ -1,7 +1,7 @@
 import { toDatabaseDateTime } from "@/lib/Convert/Convert";
-import { sameObject, updatedValue } from "@/lib/Process/Compare";
-import { MathSet } from "@/lib/Process/MathSet";
-import { EventsFormStructure } from "../Form";
+import { sameObject, updatedValue } from "@/lib/Submission/Compare";
+import { MathSet } from "@/lib/Submission/MathSet";
+import { EventsFormStructure } from "./Form";
 
 export interface ProcessedEventsFormStructure {
     Update: Array<{

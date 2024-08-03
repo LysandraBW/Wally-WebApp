@@ -1,6 +1,6 @@
 import { Multiple, Text } from "@/components/Input/Export";
 import { DB_AppointmentService } from "@/database/Types";
-import { contains } from "@/validation/Validation";
+import { hasLength } from "@/validation/Validation";
 import FormStateReducer from "@/hook/State/Reducer";
 import { InitialFormState } from "@/hook/State/Interface";
 import { useEffect, useReducer, useState } from "react";
@@ -30,8 +30,9 @@ export default function UpdateService(props: UpdateServiceProps) {
     ): Promise<boolean> => {
         const [errState, errMessage] = await callback(input);
         formStateDispatch({
-            name: inputName,
-            state: [errState, errMessage]
+            states: {
+                [`${inputName}`]: [errState, errMessage]
+            }
         });
         return errState;
     }
@@ -53,12 +54,12 @@ export default function UpdateService(props: UpdateServiceProps) {
                                 state={formState.input.Service}
                                 onChange={async (name, value) => {
                                     setValues({...values, [`${name}`]: value});
-                                    inspectInput('Service', values.Service, contains);
+                                    inspectInput('Service', values.Service, hasLength);
                                 }}
                                 onBlur={async () => {
                                     if (values.Class)
                                         return;
-                                    inspectInput('Service', initialValues.Service, contains);
+                                    inspectInput('Service', initialValues.Service, hasLength);
                                     setValues({...values, Service: initialValues.Service});
                                 }}
                             />
@@ -69,12 +70,12 @@ export default function UpdateService(props: UpdateServiceProps) {
                                 label={'Division'}
                                 onChange={async (name, value) => {
                                     setValues({...values, [`${name}`]: value});
-                                    inspectInput('Division', values.Division, contains);
+                                    inspectInput('Division', values.Division, hasLength);
                                 }}
                                 onBlur={async () => {
                                     if (values.Class)
                                         return;
-                                    inspectInput('Division', initialValues.Division, contains);
+                                    inspectInput('Division', initialValues.Division, hasLength);
                                     setValues({...values, Division: initialValues.Division});
                                 }}
                             />
@@ -85,12 +86,12 @@ export default function UpdateService(props: UpdateServiceProps) {
                                 label={'Class'}
                                 onChange={async (name, value) => {
                                     setValues({...values, [`${name}`]: value});
-                                    inspectInput('Class', values.Class, contains);
+                                    inspectInput('Class', values.Class, hasLength);
                                 }}
                                 onBlur={async () => {
                                     if (values.Class)
                                         return;
-                                    inspectInput('Class', initialValues.Class, contains);
+                                    inspectInput('Class', initialValues.Class, hasLength);
                                     setValues({...values, Class: initialValues.Class});
                                 }}
                             />

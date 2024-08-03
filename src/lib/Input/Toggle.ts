@@ -1,4 +1,3 @@
-
 export function toggleValue<T>(values: Array<T>, value: T): Array<T> {
     let updatedValue: Array<any> = [...values];
     const index = updatedValue.indexOf(value);

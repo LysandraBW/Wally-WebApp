@@ -1,16 +1,16 @@
 import { PageContext } from "@/app/Employee/Dashboard/Update/page";
 import { File, Multiple, Text, Toggle, ToggleGroup } from "@/components/Input/Export";
-import { Regexes } from "@/lib/Inspector/Inspectors";
-import { UpdateNote as UpdateNoteData } from "@/submission/Employee/Update/Form/Form/Note/Note";
 import FormStateReducer from "@/hook/State/Reducer";
 import { InitialFormState } from "@/hook/State/Interface";
 import { createContext, useContext, useEffect, useReducer, useState } from "react";
-import { eachEntry, contains, validBit } from "@/validation/Validation";
+import { every, hasLength, validBit } from "@/validation/Validation";
 import UpdateAttachment from "./UpdateFile";
 import { fileListToFormData } from "@/lib/Files/FileData";
 import SaveButton from "@/components/Button/Text/Save";
+import { DefaultNoteContext, loadNoteContext } from "@/process/Update/Note/Context";
+import { UpdateNote as UpdateNoteData } from "@/submission/Employee/Update/Note/Form";
 import NoteCard from "./NoteCard";
-import { DefaultNoteContext, loadNoteContext } from "@/submission/Employee/Update/Form/Form/Note/Context";
+import { Regexes } from "@/validation/Regexes";
 
 interface UpdateNoteProps {
     note: UpdateNoteData;
@@ -45,8 +45,9 @@ export default function UpdateNote(props: UpdateNoteProps) {
     ): Promise<boolean> => {
         const [errState, errMessage] = await callback(input);
         formStateDispatch({
-            name: inputName,
-            state: [errState, errMessage]
+            states: {
+                [`${inputName}`]: [errState, errMessage]
+            }
         });
         return errState;
     }
@@ -65,13 +66,13 @@ export default function UpdateNote(props: UpdateNoteProps) {
                                     value={values.Head} 
                                     onChange={(name, value) => {
                                         setValues({...values, Head: value});
-                                        inspectInput('Head', value, contains);
+                                        inspectInput('Head', value, hasLength);
                                     }}
                                     onBlur={async () => {
                                         if (values.Head)
                                             return;
                                         setValues({...values, Head: initialValues.Head});
-                                        inspectInput('Head', initialValues.Head, contains);
+                                        inspectInput('Head', initialValues.Head, hasLength);
                                     }}
                                 />
                             </div>
@@ -83,13 +84,13 @@ export default function UpdateNote(props: UpdateNoteProps) {
                                     value={values.Body} 
                                     onChange={(name, value) => {
                                         setValues({...values, Body: value});
-                                        inspectInput('Body', value, contains);
+                                        inspectInput('Body', value, hasLength);
                                     }}
                                     onBlur={async () => {
                                         if (values.Body)
                                             return;
                                         setValues({...values, Body: initialValues.Body});
-                                        inspectInput('Body', initialValues.Body, contains);
+                                        inspectInput('Body', initialValues.Body, hasLength);
                                     }}
                                 />
                             </div>
@@ -128,7 +129,7 @@ export default function UpdateNote(props: UpdateNoteProps) {
                                     value={values.Sharees}
                                     values={noteContext.noteSharees}
                                     onChange={async (name, value) => {
-                                        inspectInput('Sharees', value, await eachEntry(async (v) => !!v.match(Regexes.UniqueIdentifier)));
+                                        inspectInput('Sharees', value, await every(async (v) => !!v.match(Regexes.UniqueIdentifier)));
                                         setValues({...values, Sharees: value});
                                     }}
                                 />

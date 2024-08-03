@@ -1,8 +1,8 @@
 import UpdateNote from "./UpdateNote";
 import CreateNote from "./CreateNote";
-import { NoteFormStructure } from "@/submission/Employee/Update/Form/Form/Note/Note";
-import { FormType } from "@/submission/Employee/Update/Form/Form";
 import { useState } from "react";
+import { NoteFormStructure } from "@/submission/Employee/Update/Note/Form";
+import { FormType } from "@/submission/Employee/Update/Form";
 
 interface NoteFormProps {
     form: NoteFormStructure;
@@ -25,12 +25,12 @@ export default function NoteForm(props: NoteFormProps) {
                             onDelete={() => {
                                 let updatedValue = {...props.form.Notes};
                                 delete updatedValue[`${noteID}`];
-                                props.changeHandler('Note', 'Notes', updatedValue);
+                                props.changeHandler(FormType.Note, 'Notes', updatedValue);
                             }}
                             onUpdate={(note) => {
                                 let updatedValue = {...props.form.Notes}
                                 updatedValue[`${noteID}`] = note;
-                                props.changeHandler('Note', 'Notes', updatedValue);
+                                props.changeHandler(FormType.Note, 'Notes', updatedValue);
                             }}
                             updateFormState={props.updateFormState}
                         />
@@ -41,7 +41,7 @@ export default function NoteForm(props: NoteFormProps) {
                 Type in a Note Here
                 <CreateNote
                     onChange={(name, value) => {
-                        props.changeHandler('Note', name, {...props.form.Notes, [`${-counter}`]: value});
+                        props.changeHandler(FormType.Note, name, {...props.form.Notes, [`${-counter}`]: value});
                         setCounter(counter+1);
                     }}
                 />

@@ -1,5 +1,4 @@
 import { DB_EmployeeNote } from "@/database/Types";
-import { useEffect } from "react";
 
 interface NoteProps {
     note: DB_EmployeeNote;

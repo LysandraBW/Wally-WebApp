@@ -1,10 +1,10 @@
 import { Multiple, Text } from "@/components/Input/Export";
 import { DB_Repair } from "@/database/Types";
-import { hasValue } from "@/lib/ok/Inspector/Inspect/Inspectors";
 import FormStateReducer from "@/hook/State/Reducer";
 import { InitialFormState } from "@/hook/State/Interface";
 import { useEffect, useReducer, useState } from "react";
 import RepairCard from "./RepairCard";
+import { hasLength } from "@/validation/Validation";
 
 interface UpdateRepairProps {
     repair: DB_Repair;
@@ -41,9 +41,11 @@ export default function UpdateRepair(props: UpdateRepairProps) {
                                 onChange={async (name, value) => {
                                     setValues({...values, [`${name}`]: value});
                                     formStateDispatch({
-                                        name: 'Repair',
-                                        state: await hasValue().inspect(value)
+                                        states: {
+                                            'Repair': await hasLength(value)
+                                        }
                                     });
+                            
                                 }}
                                 onBlur={() => {
                                     if (values.Repair)

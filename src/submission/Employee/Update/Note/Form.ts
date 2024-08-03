@@ -1,6 +1,6 @@
 import { DB_Note } from "@/database/Types";
 
-export enum NoteType { Attachment, File };
+export enum NoteType {Attachment, File};
 
 export interface UpdateNote extends DB_Note {
     Type: NoteType;

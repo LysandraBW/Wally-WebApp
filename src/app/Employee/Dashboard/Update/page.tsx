@@ -4,33 +4,34 @@ import { useSearchParams } from "next/navigation";
 import { GetAllEmployees, GetAppointment, GetEmployee } from "@/database/Export";
 import NoteForm from "@/views/Employee/Dashboard/Update/Form/NoteForm/NoteForm";
 import { getSessionID } from "@/lib/Storage/Storage";
-import { goToEmployeeLogin } from "@/lib/Navigation/Redirect";
 import useInterval from "@/hook/Alert/Timer";
-import { Context, ContextStructure } from "@/submission/Employee/Update/Context";
-import SearchAppointment from "@/views/Employee/Dashboard/Update/Gadgets/Search";
 import AlertReducer, { AlertActionType, InitialAlert } from "@/hook/Alert/Reducer";
-import { UpdateForm } from "@/submission/Employee/Update/Form/Initialize";
-import { FormType, UpdateFormStructure } from "@/submission/Employee/Update/Form/Form";
-import { submitNoteForm } from "@/submission/Employee/Update/Form/Note/Submit";
 import { createContext } from "react";
 import { updateMessage } from "@/process/Update/Helper";
-import DeleteAppointment from "@/views/Employee/Dashboard/Update/Delete";
-import UpdateAppointmentLabel from "@/views/Employee/Dashboard/Update/UpdateLabel";
-import BackToDashboard from "@/components/Action/Button/BackToDashboard";
-import FormTabs from "@/views/Employee/Dashboard/Update/FormT";
-import ResetForm from "@/views/Employee/Dashboard/Update/Gadgets/Reset";
-import SaveForm from "@/views/Employee/Dashboard/Update/Gadgets/Save";
-import Form from "@/views/Employee/Dashboard/Update/Form";
+import { DefaultPageContext, PageContextStructure } from "@/process/Update/Context";
+import { UpdateFormStructure } from "@/submission/Employee/Update/Form";
+import { FormType } from "@/submission/Employee/Update/Form";
+import { goToEmployeeLogin } from "@/lib/Navigation/Navigation";
+import { UpdateForm } from "@/submission/Employee/Update/Prepare";
+import { MessageType } from "@/components/Alert/Message/Message";
+import SearchAppointment from "@/views/Employee/Dashboard/Update/Action/Search";
+import BackToDashboard from "@/components/Button/Text/Dash";
+import DeleteAppointment from "@/views/Employee/Dashboard/Update/Action/Button/Delete";
+import UpdateAppointmentLabel from "@/views/Employee/Dashboard/Update/Action/Label";
+import FormTabs from "@/views/Employee/Dashboard/Update/Action/Tabs";
+import Form from "@/views/Employee/Dashboard/Update/Form/Form";
+import SaveForm from "@/views/Employee/Dashboard/Update/Action/Button/Save";
+import ResetForm from "@/views/Employee/Dashboard/Update/Action/Button/Reset";
+import { submitNoteForm } from "@/submission/Employee/Update/Note/Submit";
 
 let ran = false;
-export const PageContext = createContext(Context);
+export const PageContext = createContext(DefaultPageContext);
 
 export default function Update() {
-    const [context, setContext] = useState(Context);
+    const [context, setContext] = useState(DefaultPageContext);
     const [updateForm, setUpdateForm] = useState<UpdateFormStructure>();
     const [formStates, setFormStates] = useState<{[formPart: string]: boolean}>({});
-    const [currentForm, setCurrentForm] = useState<FormType>('General');
-
+    const [currentForm, setCurrentForm] = useState(FormType.General);
     const [alert, alertDispatch] = useReducer(AlertReducer, InitialAlert);
     const searchParams = useSearchParams();
 
@@ -49,12 +50,12 @@ export default function Update() {
             if (!Employee || !Employees.length)
                 throw 'Employee(s) Error';
 
-            const loadedContext: ContextStructure = {
+            const loadedContext: PageContextStructure = {
                 ...context,
+                Employees,
                 Employee: {
                     SessionID,
-                    Employee,
-                    Employees
+                    Employee
                 }
             }
 
@@ -192,7 +193,7 @@ export default function Update() {
             type: AlertActionType.AddMessage,
             addMessage: {
                 message,
-                messageType: output ? 'Default' : 'Error'
+                messageType: output ? MessageType.Success : MessageType.Error
             }
         });
     }
@@ -209,7 +210,7 @@ export default function Update() {
         const output = await submitForm(reference as T, current as T);
         if (output)
             await loadUpdateForm();         
-        addMessage(updateMessage(formPart, output), output);
+        addMessage(updateMessage(output), output);
     }
 
     return (
@@ -229,7 +230,7 @@ export default function Update() {
                         <BackToDashboard/>
                         <DeleteAppointment/>
                         <UpdateAppointmentLabel
-                            updateContext={setContext}
+                            updateContext={(context) => setContext(context)}
                         />
                         <FormTabs
                             currentForm={currentForm}
@@ -249,9 +250,9 @@ export default function Update() {
                             onReset={() => resetFormHandler(currentForm)}
                         />
                         <NoteForm
-                            form={updateForm.current.Note}
+                            form={updateForm.current[FormType.Note]}
                             changeHandler={updateFormHandler}
-                            onSave={async () => await saveForm('Note', submitNoteForm)}
+                            onSave={async () => await saveForm(FormType.Note, submitNoteForm)}
                             updateFormState={(state) => setFormStates({...formStates, Note: state})}
                         />
                     </div>

@@ -4,14 +4,14 @@ import { ServiceFormStructure } from "./Service/Form";
 import { PaymentFormStructure } from "./Payment/Form";
 import { NoteFormStructure } from "./Note/Form";
 
-export type FormType = 'General' | 'Vehicle' | 'Service' | 'Payment' | 'Note';
+export enum FormType {General, Vehicle, Service, Payment, Note};
 
 export interface UpdateStructure {
-    General:    GeneralFormStructure;
-    Vehicle:    VehicleFormStructure;
-    Service:    ServiceFormStructure;
-    Payment:    PaymentFormStructure;
-    Note:       NoteFormStructure;
+    [FormType.General]:    GeneralFormStructure;
+    [FormType.Vehicle]:    VehicleFormStructure;
+    [FormType.Service]:    ServiceFormStructure;
+    [FormType.Payment]:    PaymentFormStructure;
+    [FormType.Note]:       NoteFormStructure;
 }
 
 export interface UpdateFormStructure {

@@ -1,10 +1,10 @@
 interface CloseButtonProps {
-    onClose: () => void;
+    onClick: () => void;
 }
 
 export default function CloseButton(props: CloseButtonProps) {
     return (
-        <div onClick={() => props.onClose()}>
+        <div onClick={() => props.onClick()}>
             x
         </div>
     )

@@ -2,7 +2,7 @@ import { useReducer, useState } from "react";
 import { Text } from "@/components/Input/Export";
 import FormStateReducer from "@/hook/State/Reducer";
 import { InitialFormState } from "@/hook/State/Interface";
-import { contains } from "@/validation/Validation";
+import { hasLength } from "@/validation/Validation";
 import { UpdatePayment } from "@/submission/Employee/Update/Payment/Form";
 import AddButton from "@/components/Button/Text/Add";
 
@@ -32,18 +32,19 @@ export default function CreatePayment(props: CreatePaymentProps) {
     ): Promise<boolean> => {
         const [errState, errMessage] = await callback(input);
         formStateDispatch({
-            name: inputName,
-            state: [errState, errMessage]
+            states: {
+                [`${inputName}`]: [errState, errMessage]
+            }
         });
         return errState;
     }
 
     const inspectAll = async () => {
-        const validCCN = await inspectInput('CCN', values.CCN, contains);
-        const validEXP = await inspectInput('EXP', values.EXP, contains);
-        const validName = await inspectInput('Name', values.Name, contains);
-        const validType = await inspectInput('Type', values.Type, contains);
-        const validPayment = await inspectInput('Payment', values.Payment, contains);
+        const validCCN = await inspectInput('CCN', values.CCN, hasLength);
+        const validEXP = await inspectInput('EXP', values.EXP, hasLength);
+        const validName = await inspectInput('Name', values.Name, hasLength);
+        const validType = await inspectInput('Type', values.Type, hasLength);
+        const validPayment = await inspectInput('Payment', values.Payment, hasLength);
         return validType && validCCN && validPayment && validName && validEXP;
     }
 
@@ -55,7 +56,7 @@ export default function CreatePayment(props: CreatePaymentProps) {
                 value={values.Payment}
                 state={formState.input.Payment}
                 onChange={async (name, value) => {
-                    inspectInput('Payment', value, contains);
+                    inspectInput('Payment', value, hasLength);
                     setValues({...values, [`${name}`]: value});
                 }}
             />
@@ -65,7 +66,7 @@ export default function CreatePayment(props: CreatePaymentProps) {
                 value={values.Name}
                 state={formState.input.Name}
                 onChange={async (name, value) => {
-                    inspectInput('Name', value, contains);
+                    inspectInput('Name', value, hasLength);
                     setValues({...values, [`${name}`]: value});
                 }}
             />
@@ -75,7 +76,7 @@ export default function CreatePayment(props: CreatePaymentProps) {
                 value={values.Type}
                 state={formState.input.Type}
                 onChange={async (name, value) => {
-                    inspectInput('Type', value, contains);
+                    inspectInput('Type', value, hasLength);
                     setValues({...values, [`${name}`]: value});
                 }}
             />
@@ -85,7 +86,7 @@ export default function CreatePayment(props: CreatePaymentProps) {
                 value={values.CCN}
                 state={formState.input.CCN}
                 onChange={async (name, value) => {
-                    inspectInput('CCN', value, contains);
+                    inspectInput('CCN', value, hasLength);
                     setValues({...values, [`${name}`]: value});
                 }}
             />
@@ -95,7 +96,7 @@ export default function CreatePayment(props: CreatePaymentProps) {
                 value={values.EXP}
                 state={formState.input.EXP}
                 onChange={async (name, value) => {
-                    inspectInput('EXP', value, contains);
+                    inspectInput('EXP', value, hasLength);
                     setValues({...values, [`${name}`]: value});
                 }}
             />            

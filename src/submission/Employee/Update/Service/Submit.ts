@@ -4,10 +4,11 @@ import { ProcessedServiceFormStructure, processServiceForm } from "./Process";
 import { DeletePart, DeleteDiagnosis, DeleteRepair, DeleteService, InsertDiagnosis, InsertPart, InsertRepair, InsertService, UpdateDiagnosis, UpdatePart, UpdateRepair, UpdateService } from "@/database/Export";
 
 export async function submitServiceForm(reference: ServiceFormStructure, current: ServiceFormStructure): Promise<boolean> {
-    const processedForm: ProcessedServiceFormStructure = await processServiceForm(reference, current);
     const SessionID = await getSessionID();
-    const AppointmentID = processedForm.AppointmentID;
-    
+    const AppointmentID = reference.AppointmentID;
+
+    const processedForm: ProcessedServiceFormStructure = await processServiceForm(reference, current);
+
     for (const updateService of processedForm.Update.Services) {
         const output = await UpdateService({
             SessionID,
@@ -134,4 +135,3 @@ export async function submitServiceForm(reference: ServiceFormStructure, current
 
     return true;
 }
-

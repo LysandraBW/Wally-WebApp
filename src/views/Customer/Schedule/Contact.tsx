@@ -1,5 +1,5 @@
 import { Text } from '@/components/Input/Export';
-import { FormState } from "@/hook/State/Interface";
+import { FormState, FormStateAction } from "@/hook/State/Interface";
 import { validEmail, validName, validPhone } from '@/validation/Validation';
 interface ContactFormProps {
     form: {
@@ -9,7 +9,7 @@ interface ContactFormProps {
         phone: string;
     };
     formState: FormState;
-    updateFormState: (updatedInputState: {name: string, state: [boolean, string?]}) => void;
+    updateFormState: (formStateAction: FormStateAction) => void;
     onChange: (name: string, value: any) => void;
 }
 
@@ -21,8 +21,9 @@ export default function ContactForm(props: ContactFormProps) {
     ): Promise<boolean> => {
         const [errState, errMessage] = await callback(input);
         props.updateFormState({
-            name: inputName,
-            state: [errState, errMessage]
+            states: {
+                [`${inputName}`]: [errState, errMessage]
+            }
         });
         return errState;
     }

@@ -16,7 +16,7 @@ export interface PageContextStructure {
     };
     Paused: boolean;
     Loaded: boolean;
-}
+};
 
 export const DefaultPageContext: PageContextStructure = {
     Employee: {

@@ -11,7 +11,7 @@ async function uploadAttachments(data: {
     NoteID: number,
     fileList: unknown
 }): Promise<boolean> {
-    // Because the compiler (understandbly) cannot
+    // Because the compiler (understandably) cannot
     // verify the type of data.fileList,
     // I had to use 'unknown' and convert it to a File.
     const fileList = <File> data.fileList;
@@ -36,10 +36,11 @@ async function uploadAttachments(data: {
     return true;
 }
 
-export async function submitNoteForm(reference: NoteFormStructure, current: NoteFormStructure): Promise<boolean> {
-    const processedForm: ProcessedNoteFormStructure = await processNoteForm(reference, current);
+export async function submitNoteForm(reference: NoteFormStructure, current: NoteFormStructure): Promise<boolean> {    
     const SessionID = await getSessionID();
-    const AppointmentID = processedForm.AppointmentID;
+    const AppointmentID = reference.AppointmentID;
+
+    const processedForm: ProcessedNoteFormStructure = await processNoteForm(reference, current);
 
     // Update Note
     for (const updateNote of processedForm.Update) {

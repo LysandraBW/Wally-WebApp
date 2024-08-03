@@ -11,7 +11,10 @@ export default function SearchAppointment(props: SearchAppointmentProps) {
         <div>
             <h1>Start by Finding an Appointment</h1>
             <div>
-                <input name='appID' onChange={(event) => setSearch(event.target.value)}/>
+                <input 
+                    name='aptID' 
+                    onChange={(event) => setSearch(event.target.value)}
+                />
                 <button onClick={() => props.onSearch(search)}>
                     Go
                 </button>

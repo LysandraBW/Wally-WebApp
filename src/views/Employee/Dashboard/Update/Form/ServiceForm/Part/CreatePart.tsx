@@ -3,7 +3,7 @@ import { Text } from "@/components/Input/Export";
 import { DB_Part } from "@/database/Types";
 import FormStateReducer from "@/hook/State/Reducer";
 import { InitialFormState } from "@/hook/State/Interface";
-import { contains, validNumber } from "@/validation/Validation";
+import { hasLength, validNumber } from "@/validation/Validation";
 import AddButton from "@/components/Button/Text/Add";
 
 interface CreatePartProps {
@@ -29,17 +29,18 @@ export default function CreatePart(props: CreatePartProps) {
     ): Promise<boolean> => {
         const [errState, errMessage] = await callback(input);
         formStateDispatch({
-            name: inputName,
-            state: [errState, errMessage]
+            states: {
+                [`${inputName}`]: [errState, errMessage]
+            }
         });
         return errState;
     }
     
     const inspectPart = async () => {
-        const partName = await inspectInput('PartName', values.PartName, contains);
+        const partName = await inspectInput('PartName', values.PartName, hasLength);
         const quantity = await inspectInput('Quantity', values.Quantity, validNumber);
         const unitCost = await inspectInput('UnitCost', values.UnitCost, validNumber);
-        const partNumber = await inspectInput('PartNumber', values.PartNumber, contains);
+        const partNumber = await inspectInput('PartNumber', values.PartNumber, hasLength);
         return partNumber && partName && quantity && unitCost;
     }
 
@@ -51,7 +52,7 @@ export default function CreatePart(props: CreatePartProps) {
                 value={values.PartNumber}
                 state={formState.input.PartNumber}
                 onChange={async (name, value) => {
-                    await inspectInput('PartNumber', values.PartNumber, contains);
+                    await inspectInput('PartNumber', values.PartNumber, hasLength);
                     setValues({...values, [`${name}`]: value});
                 }}
             />
@@ -61,7 +62,7 @@ export default function CreatePart(props: CreatePartProps) {
                 value={values.PartName}
                 state={formState.input.PartName}
                 onChange={async (name, value) => {
-                    await inspectInput('PartName', values.PartName, contains);
+                    await inspectInput('PartName', values.PartName, hasLength);
                     setValues({...values, [`${name}`]: value});
                 }}
             />

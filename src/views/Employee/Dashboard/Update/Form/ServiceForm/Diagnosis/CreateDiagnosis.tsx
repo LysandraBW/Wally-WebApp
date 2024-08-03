@@ -3,7 +3,7 @@ import { Text } from "@/components/Input/Export";
 import { DB_Diagnosis } from "@/database/Types";
 import FormStateReducer from "@/hook/State/Reducer";
 import { InitialFormState } from "@/hook/State/Interface";
-import { contains } from "@/validation/Validation";
+import { hasLength } from "@/validation/Validation";
 import AddButton from "@/components/Button/Text/Add";
 
 interface CreateDiagnosisProps {
@@ -27,15 +27,16 @@ export default function CreateDiagnosis(props: CreateDiagnosisProps) {
     ): Promise<boolean> => {
         const [errState, errMessage] = await callback(input);
         formStateDispatch({
-            name: inputName,
-            state: [errState, errMessage]
+            states: {
+                [`${inputName}`]: [errState, errMessage]
+            }
         });
         return errState;
     }
 
     const inspectDiagnosis = async (): Promise<boolean> => {
-        const codeState = await inspectInput('Code', values.Code, contains);
-        const messageState = await inspectInput('Message', values.Message, contains);
+        const codeState = await inspectInput('Code', values.Code, hasLength);
+        const messageState = await inspectInput('Message', values.Message, hasLength);
         return codeState && messageState;
     }
     
@@ -47,7 +48,7 @@ export default function CreateDiagnosis(props: CreateDiagnosisProps) {
                 value={values.Code}
                 state={formState.input.Code}
                 onChange={async (name, value) => {
-                    inspectInput(name, value, contains);
+                    inspectInput(name, value, hasLength);
                     setValues({...values, [`${name}`]: value});
                 }}
             />
@@ -57,7 +58,7 @@ export default function CreateDiagnosis(props: CreateDiagnosisProps) {
                 value={values.Message}
                 state={formState.input.Message}
                 onChange={async (name, value) => {
-                    inspectInput(name, value, contains);
+                    inspectInput(name, value, hasLength);
                     setValues({...values, [`${name}`]: value});
                 }}
             />

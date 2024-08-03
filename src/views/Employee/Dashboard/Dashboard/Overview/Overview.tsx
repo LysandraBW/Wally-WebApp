@@ -1,11 +1,11 @@
 import { GetAppointment } from "@/database/Export";
-import { goToUpdateApt } from "@/lib/Navigation/Redirect";
+import { goToUpdateApt } from "@/lib/Navigation/Navigation";
 import { useContext, useEffect, useState } from "react";
-import { DefaultPageContext } from "@/app/Employee/Dashboard/Dashboard/page";
 import { toString } from "@/lib/Convert/Convert";
 import { DB_Appointment } from "@/database/Types";
 import { useRouter } from 'next/navigation';
 import Note from "./Note";
+import { PageContext } from "@/app/Employee/Dashboard/Dashboard/page";
 
 interface OverviewProps {
     aptID: string;
@@ -13,7 +13,7 @@ interface OverviewProps {
 }
 
 export default function Overview(props: OverviewProps) {
-    const context = useContext(DefaultPageContext);
+    const context = useContext(PageContext);
     const [appointment, setAppointment] = useState<DB_Appointment>();
     const { replace } = useRouter();
 

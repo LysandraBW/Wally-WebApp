@@ -1,13 +1,13 @@
 import { Segment, Text } from '@/components/Input/Export';
 import { DB_Statuses } from '@/database/Info/Info';
 import { DB_Status } from '@/database/Types';
-import { inValues } from '@/lib/ok/Inspector/Inspect/Inspectors';
-import { FormType } from '@/submission/Employee/Update/Form/Form';
+import { InitialFormState } from '@/hook/State/Interface';
 import FormStateReducer from '@/hook/State/Reducer';
-import { InitialGeneralFormState } from '@/validation/State/General';
+import { inValues } from '@/lib/Inspector/Inspector/Inspect/Inspectors';
+import { FormType } from '@/submission/Employee/Update/Form';
+import { GeneralFormStructure } from '@/submission/Employee/Update/General/Form';
 import { validDate, validEmail, validName, validPhone } from '@/validation/Validation';
 import { useEffect, useReducer, useState } from 'react';
-import { GeneralFormStructure } from '@/submission/Employee/Update/Form/Form/General/General';
 
 interface GeneralProps {
     form: GeneralFormStructure;
@@ -17,7 +17,7 @@ interface GeneralProps {
 
 export default function General(props: GeneralProps) {
     const [statuses, setStatuses] = useState<Array<[any, string]>>([]);
-    const [formState, formStateDispatch] = useReducer(FormStateReducer, InitialGeneralFormState);
+    const [formState, formStateDispatch] = useReducer(FormStateReducer, InitialFormState);
 
     useEffect(() => {
         const load = async () => {
@@ -53,8 +53,9 @@ export default function General(props: GeneralProps) {
     ): Promise<boolean> => {
         const [errState, errMessage] = await callback(input);
         formStateDispatch({
-            name: inputName,
-            state: [errState, errMessage]
+            states: {
+                [`${inputName}`]: [errState, errMessage]
+            }
         });
         return errState;
     }
@@ -67,7 +68,7 @@ export default function General(props: GeneralProps) {
                 value={props.form.FName}
                 state={formState.input.FName}
                 onChange={(name, value) => {
-                    props.changeHandler('General', name, value);
+                    props.changeHandler(FormType.General, name, value);
                     inspectInput('FName', value, validName);
                 }}
             />
@@ -77,7 +78,7 @@ export default function General(props: GeneralProps) {
                 value={props.form.LName}
                 state={formState.input.LName}
                 onChange={(name, value) => {
-                    props.changeHandler('General', name, value);
+                    props.changeHandler(FormType.General, name, value);
                     inspectInput('LName', value, validName);
                 }}
             />
@@ -87,7 +88,7 @@ export default function General(props: GeneralProps) {
                 value={props.form.Email}
                 state={formState.input.Email}
                 onChange={(name, value) => {
-                    props.changeHandler('General', name, value);
+                    props.changeHandler(FormType.General, name, value);
                     inspectInput('Email', value, validEmail);
                 }}
             />
@@ -97,7 +98,7 @@ export default function General(props: GeneralProps) {
                 value={props.form.Phone}
                 state={formState.input.Phone}
                 onChange={(name, value) => {
-                    props.changeHandler('General', name, value);
+                    props.changeHandler(FormType.General, name, value);
                     inspectInput('Phone', value, validPhone);
                 }}
             />
@@ -108,7 +109,7 @@ export default function General(props: GeneralProps) {
                 value={props.form.StartDate}
                 state={formState.input.StartDate}
                 onChange={(name, value) => {
-                    props.changeHandler('General', name, value);
+                    props.changeHandler(FormType.General, name, value);
                     inspectInput('StartDate', value, validDate);
                 }}
             />
@@ -119,7 +120,7 @@ export default function General(props: GeneralProps) {
                 value={props.form.EndDate}
                 state={formState.input.EndDate}
                 onChange={(name, value) => {
-                    props.changeHandler('General', name, value);
+                    props.changeHandler(FormType.General, name, value);
                     inspectInput('EndDate', value, validDate);
                 }}
             />
@@ -130,7 +131,7 @@ export default function General(props: GeneralProps) {
                 values={statuses}
                 state={formState.input.StatusID}
                 onChange={(name, value) => {
-                    props.changeHandler('General', name, value);
+                    props.changeHandler(FormType.General, name, value);
                     inspectInput('StatusID', value, async (v: string) => {
                         return await inValues({
                             values: statuses.map(s => s[0])

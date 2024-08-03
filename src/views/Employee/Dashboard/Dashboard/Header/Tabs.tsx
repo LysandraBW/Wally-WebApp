@@ -1,13 +1,12 @@
-import { DefaultPageContext } from "@/app/Employee/Dashboard/Dashboard/page";
+import { PageContext } from "@/app/Employee/Dashboard/Dashboard/page";
 import { useContext } from "react";
-
 
 interface TabsProps {
     updateFilter: (filter: {[k: string]: any}) => void;
 }
 
 export default function Tabs(props: TabsProps) {
-    const context = useContext(DefaultPageContext);
+    const context = useContext(PageContext);
     
     return (
         <div>

@@ -7,13 +7,12 @@ import Error from "@/views/Customer/Lookup/Output/Error";
 import LookupForm from "@/views/Customer/Lookup/Lookup";
 import AppointmentSummary from "@/views/Customer/Lookup/Output/Summary";
 import FormStateReducer from "@/hook/State/Reducer";
-import { InitialLookupFormState } from "@/validation/State/Lookup";
 import { validEmail, validUniqueIdentifier } from "@/validation/Validation";
+import { InitialFormState } from "@/hook/State/Interface";
 
 export default function Lookup() {
     const [form, setForm] = useState(Form);
-    const [formState, formStateDispatch] = useReducer(FormStateReducer, InitialLookupFormState);
-
+    const [formState, formStateDispatch] = useReducer(FormStateReducer, InitialFormState);
     const [outputError, setOutputError] = useState(false);
     const [output, setOutput] = useState<DB_AppointmentSummary>();
 

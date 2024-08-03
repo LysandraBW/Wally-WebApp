@@ -1,5 +1,5 @@
-import { sameObject, updatedValue } from "@/lib/Process/Compare";
-import { MathSet } from "@/lib/Process/MathSet";
+import { sameObject, updatedValue } from "@/lib/Submission/Compare";
+import { MathSet } from "@/lib/Submission/MathSet";
 import { NoteFormStructure } from "./Form";
 
 export interface ProcessedNoteFormStructure {

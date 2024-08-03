@@ -2,26 +2,26 @@
 import { getSessionID } from "@/lib/Storage/Storage";
 import { GetAllEmployees, GetEmployee, GetEvents } from "@/database/Export";
 import useInterval from "@/hook/Alert/Timer";
-import { goToEmployeeLogin } from "@/lib/Navigation/Redirect";
-import { InitialUpdateForm, UpdateEvent as UpdateEventData, UpdateFormStructure, } from "@/submission/Employee/Calendar/Form";
-import { default as CalendarElement } from "@/views/Employee/Dashboard/Calendar/Calendar";
+import { InitialUpdateForm, UpdateFormStructure, } from "@/submission/Employee/Calendar/Form";
 import CreateEvent from "@/views/Employee/Dashboard/Calendar/EventManager/CreateEvent";
 import { createContext, useEffect, useReducer, useState } from "react";
 import Search from "@/views/Employee/Dashboard/Calendar/Calendar/CalendarSearch";
-import { DefaultPageContext, PageContextStructure } from "@/process/Calendar/Context";
-import { Controller, ControllerStructure } from "@/submission/Employee/Calendar/Controller";
-import DateEvents from "@/views/Employee/Dashboard/Calendar/DateEvents";
-import { UpdateForm } from "@/submission/Employee/Calendar/Initialize";
+import { DefaultPageContext } from "@/process/Calendar/Context";
 import AlertReducer, { AlertActionType, InitialAlert } from "@/hook/Alert/Reducer";
 import UpdateEvent from "@/views/Employee/Dashboard/Calendar/EventManager/UpdateEvent";
 import { submitEventsForm } from "@/submission/Employee/Calendar/Submit";
+import { DefaultController } from "@/process/Calendar/Controller";
+import { goToEmployeeLogin } from "@/lib/Navigation/Navigation";
+import { UpdateForm } from "@/submission/Employee/Calendar/Prepare";
+import DayEvents from "@/views/Employee/Dashboard/Calendar/Events/DayEvents";
+import CalendarElement from "@/views/Employee/Dashboard/Calendar/Calendar/Calendar";
 
 export const PageContext = createContext(DefaultPageContext);
 let ran = false;
 
 export default function Calendar() {
-    const [context, setContext] = useState<PageContextStructure>(DefaultPageContext);
-    const [controller, setController] = useState<ControllerStructure>(Controller);
+    const [context, setContext] = useState(DefaultPageContext);
+    const [controller, setController] = useState(DefaultController);
     const [updateForm, setUpdateForm] = useState<UpdateFormStructure>(InitialUpdateForm);
     const [alert, alertDispatch] = useReducer(AlertReducer, InitialAlert);
     const [formState, setFormError] = useState<{[formPart: string]: boolean}>({});
@@ -79,8 +79,8 @@ export default function Calendar() {
 
         if (updateDatabase && formState.Event) {
             submitEventsForm(
-                updatedForm.reference.Events, 
-                updatedForm.current.Events
+                updatedForm.reference, 
+                updatedForm.current
             );
         }
     }
@@ -107,8 +107,8 @@ export default function Calendar() {
         }
 
         const output = await submitEventsForm(
-            updatedForm.reference.Events, 
-            updatedForm.current.Events
+            updatedForm.reference, 
+            updatedForm.current
         );
 
         if (!output)
@@ -123,7 +123,7 @@ export default function Calendar() {
         if (!updateForm)
             return null;
 
-        const matchingEvent = Object.values({...updateForm.current.Events.Events}).find(e => {
+        const matchingEvent = Object.values({...updateForm.current.Events}).find(e => {
             if (!eventID)
                 return e.AppointmentID === aptID;
             return e.EventID === eventID;
@@ -178,7 +178,7 @@ export default function Calendar() {
                         <CalendarElement
                             year={controller.Date.getFullYear()}
                             month={controller.Date.getMonth()}
-                            events={updateForm.current.Events}
+                            events={updateForm.current}
                             onShowDate={(date) => {
                                 const updatedDate = new Date(controller.Date);
                                 updatedDate.setDate(date);
@@ -212,10 +212,10 @@ export default function Calendar() {
                                     if (!controller.OpenEvent)
                                         return;
 
-                                    let updatedValue = {...updateForm.current.Events.Events};
+                                    let updatedValue = {...updateForm.current.Events};
                                     delete updatedValue[`${controller.OpenEvent.EventID}`];
                                     changeHandler(updatedValue, true);
-                                    
+                                
                                     setController({
                                         ...controller,
                                         OpenEvent: null
@@ -224,8 +224,7 @@ export default function Calendar() {
                                 onUpdate={(value: any, finalUpdate: boolean = false) => {
                                     if (!controller.OpenEvent)
                                         return;
-
-                                    let updatedValue = {...updateForm.current.Events.Events};
+                                    let updatedValue = {...updateForm.current.Events};
                                     updatedValue[`${controller.OpenEvent.EventID}`] = value;
                                     changeHandler(updatedValue, finalUpdate);
                                 }}
@@ -238,9 +237,9 @@ export default function Calendar() {
                             />
                         }
                         {!!controller.OpenDay &&
-                            <DateEvents
+                            <DayEvents
                                 date={controller.Date}
-                                events={updateForm.current.Events}
+                                events={updateForm.current}
                                 onClose={() => {
                                     setController({
                                         ...controller,

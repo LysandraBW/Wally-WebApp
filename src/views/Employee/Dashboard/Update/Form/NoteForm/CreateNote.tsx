@@ -1,13 +1,13 @@
 import { useContext, useReducer, useState } from "react";
 import { File, TextArea, Toggle, ToggleGroup } from "@/components/Input/Export";
 import { PageContext } from "@/app/Employee/Dashboard/Update/page";
-import { UpdateNote } from "@/submission/Employee/Update/Form/Form/Note/Note";
 import FormStateReducer from "@/hook/State/Reducer";
 import { InitialFormState } from "@/hook/State/Interface";
-import { Regexes } from "@/lib/Inspector/Inspectors";
-import { eachEntry, contains, validBit } from "@/validation/Validation";
+import { every, hasLength, validBit } from "@/validation/Validation";
 import AddButton from "@/components/Button/Text/Add";
 import { fileListToFormData } from "@/lib/Files/FileData";
+import { NoteType, UpdateNote } from "@/submission/Employee/Update/Note/Form";
+import { Regexes } from "@/validation/Regexes";
 
 interface NoteInputProps {
     onChange: (name: string, value: any) => any;
@@ -19,7 +19,7 @@ const defaultValues: UpdateNote = {
     AppointmentID:  '',
     Head:           '',
     Body:           '',
-    Type:           'File',
+    Type:           NoteType.File,
     Files:          null,
     ShowCustomer:   0,
     Attachments:    [],
@@ -40,17 +40,18 @@ export default function CreateNote(props: NoteInputProps) {
     ): Promise<boolean> => {
         const [errState, errMessage] = await callback(input);
         formStateDispatch({
-            name: inputName,
-            state: [errState, errMessage]
+            states: {
+                [`${inputName}`]: [errState, errMessage]
+            }
         });
         return errState;
     }
 
     const inspectNote = async (): Promise<boolean> => {
-        const head = await inspectInput('Head', values.Head, contains);
-        const body = await inspectInput('Body', values.Body, contains);
+        const head = await inspectInput('Head', values.Head, hasLength);
+        const body = await inspectInput('Body', values.Body, hasLength);
         const showCustomer = await inspectInput('ShowCustomer', values.ShowCustomer, validBit);
-        const sharees = await inspectInput('Sharees', values.Sharees, await eachEntry(async (v) => (
+        const sharees = await inspectInput('Sharees', values.Sharees, await every(async (v) => (
             !!v.match(Regexes.UniqueIdentifier)
         )));
         return head && body && showCustomer && sharees;
@@ -65,7 +66,7 @@ export default function CreateNote(props: NoteInputProps) {
                 state={formState.input.Head}
                 onChange={async (name, value) => {
                     setValues({...values, [`${name}`]: value});
-                    inspectInput('Head', value, contains);
+                    inspectInput('Head', value, hasLength);
                 }}
             />
             <TextArea
@@ -75,7 +76,7 @@ export default function CreateNote(props: NoteInputProps) {
                 state={formState.input.Body}
                 onChange={async (name, value) => {
                     setValues({...values, [`${name}`]: value});
-                    inspectInput('Body', value, contains);
+                    inspectInput('Body', value, hasLength);
                 }}
             />
             <File
@@ -101,11 +102,11 @@ export default function CreateNote(props: NoteInputProps) {
                 name='Sharees'
                 label='Sharees'
                 value={values.Sharees}
-                values={context.Employee.Employees.filter(e => (
+                values={context.Employees.filter(e => (
                     e.EmployeeID != context.Employee.Employee.EmployeeID
                 )).map(e => [e.EmployeeID, `${e.FName} ${e.LName}`])}
                 onChange={async (name, value) => {
-                    inspectInput('Sharees', value, await eachEntry(async (v) => !!v.match(Regexes.UniqueIdentifier)));
+                    inspectInput('Sharees', value, await every(async (v) => !!v.match(Regexes.UniqueIdentifier)));
                     setValues({...values, Sharees: value});
                 }}
             />

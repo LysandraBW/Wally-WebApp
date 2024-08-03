@@ -1,17 +1,17 @@
 import { PageContext } from "@/app/Employee/Dashboard/Calendar/page";
 import { Multiple, Text, ToggleGroup } from "@/components/Input/Export";
-import { DB_GeneralEmployee } from "@/database/Types";
 import { getTimeFromWebDateTime } from "@/lib/Convert/Convert";
 import { UpdateEvent as UpdateEventData } from "@/submission/Employee/Calendar/Form";
 import FormStateReducer from "@/hook/State/Reducer";
 import { InitialFormState } from "@/hook/State/Interface";
 import { useContext, useEffect, useReducer, useState } from "react";
-import { eachEntry, contains, validDate } from "@/validation/Validation";
-import { Regexes } from "@/lib/Inspector/Inspectors";
+import { every, hasLength, validDate } from "@/validation/Validation";
 import SaveButton from "@/components/Button/Text/Save";
 import EventCard from "./Card/Event";
 import AppointmentCard from "./Card/Appointment";
 import CloseButton from "@/components/Button/Icon/Close";
+import { DefaultEventContext, loadEventContext } from "@/process/Calendar/Event/Context";
+import { Regexes } from "@/validation/Regexes";
 
 interface UpdateEventProps {
     event: UpdateEventData;
@@ -21,53 +21,15 @@ interface UpdateEventProps {
     updateFormState: (state: boolean) => void;
 }
 
-const EventContext: {
-    isEventOwner: boolean;
-    eventOwner: {
-        name: string;
-        employee: DB_GeneralEmployee;
-    }
-    eventSharees: Array<[string, string]>;
-} = {
-    isEventOwner: false,
-    eventOwner: {
-        name: '',
-        employee: {
-            EmployeeID: '',
-            FName: '',
-            LName: ''
-        }
-    },
-    eventSharees: []
-}
-
 export default function UpdateEvent(props: UpdateEventProps) {
     const context = useContext(PageContext);
-    const [eventContext, setEventContext] = useState(EventContext);
-
+    const [eventContext, setEventContext] = useState(DefaultEventContext);
     const [edit, setEdit] = useState(false);
     const [values, setValues] = useState(props.event);
     const [formState, formStateDispatch] = useReducer(FormStateReducer, InitialFormState);
 
     useEffect(() => {
-        const owner = context.Employees.find(e => e.EmployeeID === props.event.EmployeeID);
-        if (!owner)
-            throw 'Cannot Find Event Owner';
-
-        const ownerName = `${owner.FName} ${owner.LName}`;
-        const isEventOwner = owner.EmployeeID === context.Employee.EmployeeID;
-        const eventSharees = context.Employees.filter(e => (
-            e.EmployeeID !== owner.EmployeeID
-        )).map(e => [e.EmployeeID, `${e.FName} ${e.LName}`]) as Array<[string, string]>;
-
-        setEventContext({
-            isEventOwner,
-            eventOwner: {
-                employee: owner,
-                name: ownerName
-            },
-            eventSharees: eventSharees
-        });
+        setEventContext(loadEventContext(context, props.event));
     }, []);
 
     useEffect(() => {
@@ -90,8 +52,9 @@ export default function UpdateEvent(props: UpdateEventProps) {
     ): Promise<boolean> => {
         const [errState, errMessage] = await callback(input);
         formStateDispatch({
-            name: inputName,
-            state: [errState, errMessage]
+            states: {
+                [`${inputName}`]: [errState, errMessage]
+            }
         });
         return errState;
     }
@@ -99,7 +62,7 @@ export default function UpdateEvent(props: UpdateEventProps) {
     return (
         <div>
             <CloseButton
-                onClose={() => {
+                onClick={() => {
                     setEdit(false);
                     if (eventContext.isEventOwner)
                         props.onUpdate(values);
@@ -117,7 +80,7 @@ export default function UpdateEvent(props: UpdateEventProps) {
                                 state={formState.input.Name}
                                 onChange={(name, value) => {
                                     setValues({...values, Name: value});
-                                    inspectInput('Name', value, contains);
+                                    inspectInput('Name', value, hasLength);
                                 }}
                             />
                             <Text
@@ -127,7 +90,7 @@ export default function UpdateEvent(props: UpdateEventProps) {
                                 state={formState.input.Summary}
                                 onChange={(name, value) => {
                                     setValues({...values, Summary: value});
-                                    inspectInput('Summary', value, contains);
+                                    inspectInput('Summary', value, hasLength);
                                 }}
                             />
                             <Text
@@ -147,7 +110,7 @@ export default function UpdateEvent(props: UpdateEventProps) {
                                 value={values.Sharees}
                                 values={eventContext.eventSharees}
                                 onChange={async (name, value) => {
-                                    inspectInput('Sharees', value, await eachEntry(async (v) => !!v.match(Regexes.UniqueIdentifier)));
+                                    inspectInput('Sharees', value, await every(async (v) => !!v.match(Regexes.UniqueIdentifier)));
                                     setValues({...values, Sharees: value});
                                 }}
                             />

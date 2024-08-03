@@ -2,9 +2,9 @@ import { Multiple, Text } from "@/components/Input/Export";
 import { DB_Diagnosis } from "@/database/Types";
 import FormStateReducer from "@/hook/State/Reducer";
 import { InitialFormState } from "@/hook/State/Interface";
-import { contains } from "@/validation/Validation";
+import { hasLength } from "@/validation/Validation";
 import { useEffect, useReducer, useState } from "react";
-import DiagnosisCard from "../../../Card/DiagnosisCard";
+import DiagnosisCard from "./DiagnosisCard";
 
 interface UpdateDiagnosisProps {
     diagnosis: DB_Diagnosis
@@ -30,8 +30,9 @@ export default function UpdateDiagnosis(props: UpdateDiagnosisProps) {
     ): Promise<boolean> => {
         const [errState, errMessage] = await callback(input);
         formStateDispatch({
-            name: inputName,
-            state: [errState, errMessage]
+            states: {
+                [`${inputName}`]: [errState, errMessage]
+            }
         });
         return errState;
     }
@@ -52,14 +53,14 @@ export default function UpdateDiagnosis(props: UpdateDiagnosisProps) {
                                 value={values.Code}
                                 state={formState.input.Code}
                                 onChange={async (name, value) => {
-                                    inspectInput(name, value, contains);
+                                    inspectInput(name, value, hasLength);
                                     setValues({...values, [`${name}`]: value});
                                 }}
                                 onBlur={() => {
                                     if (values.Code)
                                         return;
                                     setValues({...values, Code: initialValues.Code});
-                                    inspectInput('Code', initialValues.Code, contains);
+                                    inspectInput('Code', initialValues.Code, hasLength);
                                 }}
                             />
                             <Text
@@ -68,14 +69,14 @@ export default function UpdateDiagnosis(props: UpdateDiagnosisProps) {
                                 value={values.Message}
                                 state={formState.input.Message}
                                 onChange={async (name, value) => {
-                                    inspectInput(name, value, contains);
+                                    inspectInput(name, value, hasLength);
                                     setValues({...values, [`${name}`]: value});
                                 }}
                                 onBlur={() => {
                                     if (values.Code)
                                         return;
                                     setValues({...values, Code: initialValues.Code});
-                                    inspectInput('Code', initialValues.Code, contains);
+                                    inspectInput('Code', initialValues.Code, hasLength);
                                 }}
                             />
                         </div>

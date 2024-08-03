@@ -71,7 +71,7 @@ export const validLicensePlate = async (
     return await Inspector.isLicensePlate().inspect(licensePlate);
 }
 
-export const contains = async (
+export const hasLength = async (
     value: string
 ): Promise<InspectionMessageOutput> => {
     return await Inspector.hasValue().inspect(value);
@@ -85,7 +85,7 @@ export const validBit = async (
     }).inspect(value);
 }
 
-export const isInValues = async (
+export const inValues = async (
     values: Array<any>
 ) => {
     return async (v: any) => await Inspector.inValues({
@@ -93,7 +93,7 @@ export const isInValues = async (
     }).inspect(v);
 }
 
-export const eachEntry = async (
+export const every = async (
     callback: (v: any) => Promise<boolean>
 ) => {
     return async (v: any) => await Inspector.every({

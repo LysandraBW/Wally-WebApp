@@ -1,33 +1,32 @@
 'use client';
 import { getSessionID } from "@/lib/Storage/Storage";
 import { Delete, GetAllAppointments, GetEmployee, Restore } from "@/database/Export";
-import { goTo, goToEmployeeLogin } from "@/lib/Navigation/Redirect";
+import { goToEmployeeLogin } from "@/lib/Navigation/Navigation";
 import { useEffect, useReducer, useState, createContext } from "react";
 import useInterval from "@/hook/Alert/Timer";
 import Head from "@/views/Employee/Dashboard/Dashboard/Table/Head";
 import Body from "@/views/Employee/Dashboard/Dashboard/Table/Body";
 import Overview from "@/views/Employee/Dashboard/Dashboard/Overview/Overview";
-import { DefaultPageContext, PageContextStructure } from "@/process/Dashboard/Context";
-import { DefaultController, ControllerStructure } from "@/process/Dashboard/Controller";
-import { DefaultFilter, FilterStructure } from "@/process/Dashboard/Filter";
+import { DefaultPageContext } from "@/process/Dashboard/Context";
+import { DefaultController } from "@/process/Dashboard/Controller";
+import { DefaultFilter, FilterStructure } from "@/process/Dashboard/Interface";
 import AlertReducer, { AlertActionType, InitialAlert } from "@/hook/Alert/Reducer";
 import { DB_Labels, DB_Statuses } from "@/database/Info/Info";
 import Action from "@/views/Employee/Dashboard/Dashboard/Header/Action";
 import Search from "@/views/Employee/Dashboard/Dashboard/Header/Search";
 import Tabs from "@/views/Employee/Dashboard/Dashboard/Header/Tabs";
 import Navigation from "@/views/Employee/Dashboard/Dashboard/Table/Navigation";
-import { useRouter, useSearchParams } from "next/navigation";
-import util from "util";
+import { useSearchParams } from "next/navigation";
 import { deleteMessage, restoreMessage } from "@/process/Dashboard/Helper";
-import { DB_AppointmentOverview } from "@/database/Types";
+import { MessageType } from "@/components/Alert/Message/Message";
 
 let ran = false;
 export const PageContext = createContext(DefaultPageContext);
 
 export default function Dashboard() {
-    const [context, setContext] = useState<PageContextStructure>(DefaultPageContext);
-    const [controller, setController] = useState<ControllerStructure>(DefaultController);
-    const [filter, setFilter] = useState<FilterStructure>(DefaultFilter);
+    const [context, setContext] = useState(DefaultPageContext);
+    const [controller, setController] = useState(DefaultController);
+    const [filter, setFilter] = useState(DefaultFilter);
     const [alert, alertDispatch] = useReducer(AlertReducer, InitialAlert);
 
     // Apart from the other variables is the currently
@@ -67,7 +66,6 @@ export default function Dashboard() {
                 },
                 Loaded: true
             });
-
             
         await loadAllAppointments(filter);
 
@@ -75,7 +73,6 @@ export default function Dashboard() {
         let searchedAptID = searchParameters.get('AptID');
         if (searchedAptID)
             setOpenAptID(searchedAptID);
-        
         }
         if (ran) 
             return;
@@ -186,7 +183,7 @@ export default function Dashboard() {
             type: AlertActionType.AddMessage, 
             addMessage: {
                 message: deleteMessage(lengthA, lengthD),
-                messageType: lengthA === lengthD ? 'Default' : 'Error'
+                messageType: lengthA === lengthD ? MessageType.Success : MessageType.Error
             }
         });
     }
@@ -264,13 +261,13 @@ export default function Dashboard() {
             type: AlertActionType.AddMessage, 
             addMessage: {
                 message: restoreMessage(lengthA, lengthD),
-                messageType: lengthA === lengthD ? 'Default' : 'Error'
+                messageType: lengthA === lengthD ?  MessageType.Success : MessageType.Error
             }
         });
     }
 
     return (
-        <DefaultPageContext.Provider value={context}>
+        <PageContext.Provider value={context}>
             <div>
                 {/* Displaying Confirmation */}
                 {alert.confirmation && alert.confirmation}
@@ -386,6 +383,6 @@ export default function Dashboard() {
                     />
                 }
             </div>
-        </DefaultPageContext.Provider>
+        </PageContext.Provider>
     )
 }

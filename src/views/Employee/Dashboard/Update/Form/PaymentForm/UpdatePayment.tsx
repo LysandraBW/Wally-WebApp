@@ -3,9 +3,9 @@ import FormStateReducer from "@/hook/State/Reducer";
 import { InitialFormState } from "@/hook/State/Interface";
 import { useEffect, useReducer, useState } from "react";
 import { UpdatePayment as UpdatePaymentDate } from "@/submission/Employee/Update/Payment/Form";
-import { contains } from "@/validation/Validation";
-import PaymentCard from "../../Card/Paymen";
+import { hasLength } from "@/validation/Validation";
 import { toWebDateTime } from "@/lib/Convert/Convert";
+import PaymentCard from "./PaymentCard";
 
 interface UpdatePaymentProps {
     payment: UpdatePaymentDate
@@ -31,8 +31,9 @@ export default function UpdatePayment(props: UpdatePaymentProps) {
     ): Promise<boolean> => {
         const [errState, errMessage] = await callback(input);
         formStateDispatch({
-            name: inputName,
-            state: [errState, errMessage]
+            states: {
+                [`${inputName}`]: [errState, errMessage]
+            }
         });
         return errState;
     }
@@ -54,13 +55,13 @@ export default function UpdatePayment(props: UpdatePaymentProps) {
                                 state={formState.input.Payment}
                                 onChange={(name, value) => {
                                     setValues({...values, Payment: value});
-                                    inspectInput('Payment', value, contains);
+                                    inspectInput('Payment', value, hasLength);
                                 }}
                                 onBlur={() => {
                                     if (values.Payment)
                                         return;
                                     setValues({...values, Payment: initialValues.Payment});
-                                    inspectInput('Payment', initialValues.Payment, contains);
+                                    inspectInput('Payment', initialValues.Payment, hasLength);
                                 }}
                             />
                             <Text
@@ -69,14 +70,14 @@ export default function UpdatePayment(props: UpdatePaymentProps) {
                                 value={values.Name}
                                 state={formState.input.Name}
                                 onChange={async (name, value) => {
-                                    inspectInput('Name', value, contains);
+                                    inspectInput('Name', value, hasLength);
                                     setValues({...values, [`${name}`]: value});
                                 }}
                                 onBlur={() => {
                                     if (values.Name)
                                         return;
                                     setValues({...values, Name: initialValues.Name});
-                                    inspectInput('Name', initialValues.Name, contains);
+                                    inspectInput('Name', initialValues.Name, hasLength);
                                 }}
                             />
                             <Text
@@ -85,14 +86,14 @@ export default function UpdatePayment(props: UpdatePaymentProps) {
                                 value={values.Type}
                                 state={formState.input.Type}
                                 onChange={async (name, value) => {
-                                    inspectInput('Type', value, contains);
+                                    inspectInput('Type', value, hasLength);
                                     setValues({...values, [`${name}`]: value});
                                 }}
                                 onBlur={() => {
                                     if (values.Type)
                                         return;
                                     setValues({...values, Type: initialValues.Type});
-                                    inspectInput('Type',  initialValues.Type, contains);
+                                    inspectInput('Type',  initialValues.Type, hasLength);
                                 }}
                             />
                             <Text
@@ -101,14 +102,14 @@ export default function UpdatePayment(props: UpdatePaymentProps) {
                                 value={values.CCN}
                                 state={formState.input.CCN}
                                 onChange={async (name, value) => {
-                                    inspectInput('CCN', value, contains);
+                                    inspectInput('CCN', value, hasLength);
                                     setValues({...values, [`${name}`]: value});
                                 }}
                                 onBlur={() => {
                                     if (values.CCN)
                                         return;
                                     setValues({...values, CCN: initialValues.CCN});
-                                    inspectInput('Type', initialValues.CCN, contains);
+                                    inspectInput('Type', initialValues.CCN, hasLength);
                                 }}
                             />
                             <Text
@@ -117,14 +118,14 @@ export default function UpdatePayment(props: UpdatePaymentProps) {
                                 value={values.EXP}
                                 state={formState.input.EXP}
                                 onChange={async (name, value) => {
-                                    inspectInput('EXP', value, contains);
+                                    inspectInput('EXP', value, hasLength);
                                     setValues({...values, [`${name}`]: value});
                                 }}
                                 onBlur={() => {
                                     if (values.EXP)
                                         return;
                                     setValues({...values, EXP: initialValues.EXP});
-                                    inspectInput('EXP', initialValues.EXP, contains);
+                                    inspectInput('EXP', initialValues.EXP, hasLength);
                                 }}
                             />
                         </div>
