@@ -1,8 +1,10 @@
-import { Multiple } from "@/components/Input/Export";
-import FormStateReducer, { InitialFormState } from "@/hook/FormState/Reducer";
+import { Multiple, Text } from "@/components/Input/Export";
+import FormStateReducer from "@/hook/State/Reducer";
+import { InitialFormState } from "@/hook/State/Interface";
 import { useEffect, useReducer, useState } from "react";
-import { hasValue, validNumber } from "@/validation/Validation";
-import { UpdatePart as UpdatePartData } from "@/process/Employee/Update/Form/Form/Service/Service";
+import { contains, validNumber } from "@/validation/Validation";
+import { UpdatePart as UpdatePartData } from "@/submission/Employee/Update/Form/Form/Service/Service";
+import PartCard from "./PartCard";
 
 interface UpdatePartProps {
     part: UpdatePartData;
@@ -44,104 +46,85 @@ export default function UpdatePart(props: UpdatePartProps) {
                     }}
                     children={(
                         <div>
-                            <div>
-                                <input 
-                                    value={values.PartNumber} 
-                                    onChange={async (event) => {
-                                        const value = event.target.value;
-                                        setValues({...values, PartNumber: value});
-                                        inspectInput('PartNumber', initialValues.PartNumber, hasValue);
-                                    }}
-                                    onBlur={() => {
-                                        if (values.PartNumber)
-                                            return;
-                                        setValues({...values, PartNumber: initialValues.PartNumber});
-                                        inspectInput('PartNumber', initialValues.PartNumber, hasValue);
-                                    }}
-                                />
-                                {formState.input.PartNumber && !formState.input.PartNumber.state &&
-                                    <span>{formState.input.PartNumber.message}</span>
-                                }
-                            </div>
-                            <div>
-                                <input 
-                                    value={values.PartName} 
-                                    onChange={async (event) => {
-                                            const value = event.target.value;
-                                            setValues({...values, PartName: value});
-                                            inspectInput('PartName', initialValues.PartName, hasValue);
-                                        }}
-                                    onBlur={() => {
-                                        if (values.PartName)
-                                            return;
-                                        setValues({...values, PartName: initialValues.PartName});
-                                        inspectInput('PartName', initialValues.PartName, hasValue);
-                                    }}
-                                />
-                                {formState.input.PartName && !formState.input.PartName.state &&
-                                    <span>{formState.input.PartName.message}</span>
-                                }
-                            </div>
-                            <div>
-                                <input 
-                                    type='number'
-                                    value={values.UnitCost} 
-                                    onChange={async (event) => {
-                                        const value = event.target.value;
-                                        setValues({...values, UnitCost: value});
-                                        inspectInput('UnitCost', initialValues.UnitCost, validNumber);
-                                    }}
-                                    onBlur={() => {
-                                        if (values.UnitCost)
-                                            return;
-                                        setValues({...values, UnitCost: initialValues.UnitCost});
-                                        inspectInput('UnitCost', initialValues.UnitCost, validNumber);
-                                    }}
-                                />
-                                {formState.input.UnitCost && !formState.input.UnitCost.state &&
-                                    <span>{formState.input.UnitCost.message}</span>
-                                }
-                            </div>
-                            <div>
-                                <input 
-                                    type='number'
-                                    value={values.Quantity} 
-                                    onChange={async (event) => {
-                                        const value = event.target.value;
-                                        setValues({...values, Quantity: value});
-                                        inspectInput('Quantity', initialValues.Quantity, validNumber);
-                                    }}
-                                    onBlur={() => {
-                                        if (values.Quantity)
-                                            return;
-                                        setValues({...values, Quantity: initialValues.Quantity});
-                                        inspectInput('Quantity', initialValues.Quantity, validNumber);
-                                    }}
-                                />
-                                {formState.input.Quantity && !formState.input.Quantity.state &&
-                                    <span>{formState.input.Quantity.message}</span>
-                                }
-                            </div>
+                            <Text
+                                name={'PartNumber'}
+                                label={'Part Number'}
+                                value={values.PartNumber}
+                                state={formState.input.PartNumber}
+                                onChange={async (name, value) => {
+                                    await inspectInput('PartNumber', values.PartNumber, contains);
+                                    setValues({...values, [`${name}`]: value});
+                                }}
+                                onBlur={() => {
+                                    if (values.PartNumber)
+                                        return;
+                                    setValues({...values, PartNumber: initialValues.PartNumber});
+                                    inspectInput('PartNumber', initialValues.PartNumber, contains);
+                                }}
+                            />
+                            <Text
+                                name={'PartName'}
+                                label={'Part Name'}
+                                value={values.PartName}
+                                state={formState.input.PartName}
+                                onChange={async (name, value) => {
+                                    await inspectInput('PartName', values.PartName, contains);
+                                    setValues({...values, [`${name}`]: value});
+                                }}
+                                onBlur={() => {
+                                    if (values.PartName)
+                                        return;
+                                    setValues({...values, PartName: initialValues.PartName});
+                                    inspectInput('PartName', initialValues.PartName, contains);
+                                }}
+                            />
+                            <Text
+                                type='number'
+                                name={'UnitCost'}
+                                label={'Unit Cost'}
+                                value={values.UnitCost}
+                                state={formState.input.UnitCost}
+                                onChange={async (name, value) => {
+                                    await inspectInput('UnitCost', values.UnitCost, validNumber);
+                                    setValues({...values, [`${name}`]: value});
+                                }}
+                                onBlur={() => {
+                                    if (values.UnitCost)
+                                        return;
+                                    setValues({...values, UnitCost: initialValues.UnitCost});
+                                    inspectInput('UnitCost', initialValues.UnitCost, validNumber);
+                                }}
+                            />
+                            <Text
+                                type='number'
+                                name={'Quantity'}
+                                label={'Quantity'}
+                                value={values.Quantity}
+                                state={formState.input.Quantity}
+                                onChange={async (name, value) => {
+                                    await inspectInput('Quantity', values.Quantity, validNumber);
+                                    setValues({...values, [`${name}`]: value});
+                                }}
+                                onBlur={() => {
+                                    if (values.Quantity)
+                                        return;
+                                    setValues({...values, Quantity: initialValues.Quantity});
+                                    inspectInput('Quantity', initialValues.Quantity, validNumber);
+                                }}
+                            />
                         </div>
                     )}
                 />
             }
             {!edit && 
-                <div>
-                    <span 
-                        onClick={() => setEdit(true)}
-                    >
-                        {props.part.PartNumber} 
-                        {props.part.PartName} 
-                        {props.part.UnitCost} 
-                        {props.part.Quantity}
-                    </span>
-                    <span 
-                        onClick={() => props.onDelete()}
-                    >
-                        DELETE
-                    </span>
-                </div>
+                <PartCard
+                    partName={values.PartName}
+                    unitCost={values.UnitCost}
+                    quantity={values.Quantity}
+                    partNumber={values.PartNumber}
+                    onEdit={() => setEdit(true)}
+                    onDelete={props.onDelete()}
+                />
             }
         </>
     )

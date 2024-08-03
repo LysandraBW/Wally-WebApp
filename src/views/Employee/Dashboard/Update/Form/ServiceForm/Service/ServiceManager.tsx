@@ -1,21 +1,15 @@
-import { Services } from "@/database/Export";
 import { DB_AppointmentService } from "@/database/Types";
 import { useEffect, useState } from "react";
 import UpdateService from "./UpdateService";
-import { Checkbox } from "@/components/Input/Export";
+import { CheckboxLayered } from "@/components/Input/Export";
 import CreateService from "./CreateService";
+import { loadLayeredServices, ServiceType, ServiceValuesType } from "@/lib/Service/Load";
 
 interface ServiceManagerProps {
     services: {[serviceID: string]: DB_AppointmentService};
     updateFormState: (state: boolean) => void;
     onChange: (updatedValue: {[serviceID: string]: DB_AppointmentService}) => void;
 }
-
-// Stores the Class, Division, and Service of a Defined Service
-type ServiceType = {[k: string]: DB_AppointmentService};
-
-// Stores all the Defined Services, Ordered by Class (k) and Division (j)
-type ServiceValuesType = {[k: string]: {[j: string]: Array<[number, string]>}};
 
 export default function ServiceManager(props: ServiceManagerProps) {
     const [services, setServices] = useState<ServiceType>();
@@ -24,28 +18,9 @@ export default function ServiceManager(props: ServiceManagerProps) {
 
     useEffect(() => {
         const load = async () => {
-            const serviceValues: ServiceValuesType = {};
-            const services: ServiceType = {};
-
-            const dbServices = await Services();
-            dbServices.forEach(service => {
-                services[service.ServiceID] = {
-                    ...service, 
-                    AppointmentID: '', 
-                    AppointmentServiceID: 0
-                };
-
-                if (service.ServiceID === 1)
-                    return;
-
-                if (!serviceValues[service.Class])
-                    serviceValues[service.Class] = {};
-                if (!serviceValues[service.Class][service.Division])
-                    serviceValues[service.Class][service.Division] = [];
-                serviceValues[service.Class][service.Division].push([service.ServiceID, service.Service]);
-            });
-            setServiceValues(serviceValues);
+            const {services, serviceValues} = await loadLayeredServices();
             setServices(services);
+            setServiceValues(serviceValues);
         }
         load();
     }, []);
@@ -74,10 +49,9 @@ export default function ServiceManager(props: ServiceManagerProps) {
                 ))}
             </div>
             <div>
-                {/* Checkboxes */}
                 {serviceValues && services &&
                     <div>
-                        <Checkbox
+                        <CheckboxLayered
                             name='Services'
                             label={'Services'}
                             value={Object.values(props.services).map(s => s.ServiceID)}

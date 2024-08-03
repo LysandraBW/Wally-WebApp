@@ -1,13 +1,13 @@
 import { Segment, Text } from '@/components/Input/Export';
 import { DB_Statuses } from '@/database/Info/Info';
 import { DB_Status } from '@/database/Types';
-import { inValues } from '@/lib/Inspector/Inspector/Inspect/Inspectors';
-import { FormType } from '@/process/Employee/Update/Form/UpdateForm';
-import FormStateReducer from '@/hook/FormState/Reducer';
+import { inValues } from '@/lib/ok/Inspector/Inspect/Inspectors';
+import { FormType } from '@/submission/Employee/Update/Form/Form';
+import FormStateReducer from '@/hook/State/Reducer';
 import { InitialGeneralFormState } from '@/validation/State/General';
 import { validDate, validEmail, validName, validPhone } from '@/validation/Validation';
 import { useEffect, useReducer, useState } from 'react';
-import { GeneralFormStructure } from '@/process/Employee/Update/Form/Form/General/General';
+import { GeneralFormStructure } from '@/submission/Employee/Update/Form/Form/General/General';
 
 interface GeneralProps {
     form: GeneralFormStructure;
@@ -63,9 +63,9 @@ export default function General(props: GeneralProps) {
         <>
             <Text
                 name={'FName'}
-                value={props.form.FName}
-                error={formState.input.FName}
                 label={'First Name'}
+                value={props.form.FName}
+                state={formState.input.FName}
                 onChange={(name, value) => {
                     props.changeHandler('General', name, value);
                     inspectInput('FName', value, validName);
@@ -73,9 +73,9 @@ export default function General(props: GeneralProps) {
             />
             <Text
                 name={'LName'}
-                value={props.form.LName}
-                error={formState.input.LName}
                 label={'Last Name'}
+                value={props.form.LName}
+                state={formState.input.LName}
                 onChange={(name, value) => {
                     props.changeHandler('General', name, value);
                     inspectInput('LName', value, validName);
@@ -83,9 +83,9 @@ export default function General(props: GeneralProps) {
             />
             <Text
                 name={'Email'}
-                value={props.form.Email}
-                error={formState.input.Email}
                 label={'Email Address'}
+                value={props.form.Email}
+                state={formState.input.Email}
                 onChange={(name, value) => {
                     props.changeHandler('General', name, value);
                     inspectInput('Email', value, validEmail);
@@ -93,9 +93,9 @@ export default function General(props: GeneralProps) {
             />
             <Text
                 name={'Phone'}
-                value={props.form.Phone}
-                error={formState.input.Phone}
                 label={'Phone'}
+                value={props.form.Phone}
+                state={formState.input.Phone}
                 onChange={(name, value) => {
                     props.changeHandler('General', name, value);
                     inspectInput('Phone', value, validPhone);
@@ -104,9 +104,9 @@ export default function General(props: GeneralProps) {
             <Text
                 type='datetime-local'
                 name={'StartDate'}
-                value={props.form.StartDate}
-                error={formState.input.StartDate}
                 label={'Start Date'}
+                value={props.form.StartDate}
+                state={formState.input.StartDate}
                 onChange={(name, value) => {
                     props.changeHandler('General', name, value);
                     inspectInput('StartDate', value, validDate);
@@ -115,9 +115,9 @@ export default function General(props: GeneralProps) {
             <Text
                 type='datetime-local'
                 name={'EndDate'}
-                value={props.form.EndDate}
-                error={formState.input.EndDate}
                 label={'End Date'}
+                value={props.form.EndDate}
+                state={formState.input.EndDate}
                 onChange={(name, value) => {
                     props.changeHandler('General', name, value);
                     inspectInput('EndDate', value, validDate);
@@ -125,10 +125,10 @@ export default function General(props: GeneralProps) {
             />
             <Segment
                 name={'StatusID'}
-                value={props.form.StatusID}
-                error={formState.input.StatusID}
-                values={statuses}
                 label={'StatusID'}
+                value={props.form.StatusID}
+                values={statuses}
+                state={formState.input.StatusID}
                 onChange={(name, value) => {
                     props.changeHandler('General', name, value);
                     inspectInput('StatusID', value, async (v: string) => {

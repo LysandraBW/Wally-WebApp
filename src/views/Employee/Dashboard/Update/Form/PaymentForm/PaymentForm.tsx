@@ -2,10 +2,11 @@ import { useEffect, useReducer, useState } from "react";
 import UpdatePayment from "./UpdatePayment";
 import CreatePayment from "./CreatePayment";
 import {Text} from "@/components/Input/Export";
-import { FormType } from "@/process/Employee/Update/Form/UpdateForm";
-import FormStateReducer, { InitialFormState } from "@/hook/FormState/Reducer";
-import { hasValue } from "@/lib/Inspector/Inspector/Inspect/Inspectors";
-import { UpdatePayment as UpdatePaymentData } from "@/process/Employee/Update/Form/Form/Payment/Payment";
+import { FormType } from "@/submission/Employee/Update/Form/Form";
+import FormStateReducer from "@/hook/State/Reducer";
+import { InitialFormState } from "@/hook/State/Interface";
+import { hasValue } from "@/lib/ok/Inspector/Inspect/Inspectors";
+import { UpdatePayment as UpdatePaymentData } from "@/submission/Employee/Update/Payment/Form";
 
 interface PaymentFormProps {
     form: {
@@ -40,7 +41,7 @@ export default function PaymentForm(props: PaymentFormProps) {
                 name={"Cost"}
                 label={"Cost"}
                 value={props.form.Cost}
-                error={formState.input.Cost}
+                state={formState.input.Cost}
                 onChange={(name, value) => {
                     props.changeHandler('Payment', name, value);
                     inspectCost(value);

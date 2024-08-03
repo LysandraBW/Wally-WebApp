@@ -1,5 +1,5 @@
 import { DB_AppointmentOverview } from "@/database/Types";
-import { FilterStructure } from "@/process/Employee/Dashboard/Filter";
+import { FilterStructure } from "@/process/Dashboard/Filter";
 
 interface HeadProps {
     currentAppointments: Array<DB_AppointmentOverview>;

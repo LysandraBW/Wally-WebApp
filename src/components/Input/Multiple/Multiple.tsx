@@ -1,5 +1,5 @@
 interface MultipleProps {
-    onBlur: () => any;
+    onBlur?: () => any;
     children: React.ReactNode;
 }
 

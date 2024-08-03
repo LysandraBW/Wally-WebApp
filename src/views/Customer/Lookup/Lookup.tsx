@@ -1,5 +1,6 @@
 import { Text, Button } from '@/components/Input/Export';
-import { ReducerAction, ReducerState } from '@/hook/FormState/Reducer';
+import { FormStateAction } from "@/hook/State/Interface";
+import { FormState } from "@/hook/State/Interface";
 import { validUniqueIdentifier, validEmail } from '@/validation/Validation';
 
 interface LookupFormProps {
@@ -7,8 +8,8 @@ interface LookupFormProps {
         appointmentID: string;
         email: string;
     }
-    formState: ReducerState;
-    updateFormState: (action: ReducerAction) => void;
+    formState: FormState;
+    updateFormState: (action: FormStateAction) => void;
     onChange: (name: string, value: any) => void;
     onSubmit: () => void;
 }
@@ -33,7 +34,7 @@ export default function LookupForm(props: LookupFormProps) {
                 name={'appointmentID'}
                 label={'Appointment ID'}
                 value={props.form.appointmentID}
-                error={props.formState.input.appointmentID}
+                state={props.formState.input.appointmentID}
                 onChange={(name, value) => {
                     inspectInput(name, value, validUniqueIdentifier);
                     props.onChange(name, value);
@@ -43,7 +44,7 @@ export default function LookupForm(props: LookupFormProps) {
                 name={'email'}
                 label={'Email'}
                 value={props.form.email}
-                error={props.formState.input.email}
+                state={props.formState.input.email}
                 onChange={(name, value) => {
                     inspectInput(name, value, validEmail);
                     props.onChange(name, value);

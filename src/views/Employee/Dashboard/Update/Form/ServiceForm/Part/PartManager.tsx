@@ -1,7 +1,7 @@
 import { useState } from "react";
 import UpdatePart from "./UpdatePart";
 import CreatePart from "./CreatePart";
-import { UpdatePart as UpdatePartData } from "@/process/Employee/Update/Form/Form/Service/Service";
+import { UpdatePart as UpdatePartData } from "@/submission/Employee/Update/Form/Form/Service/Service";
 
 interface PartManagerProps {
     parts: {[partID: string]: UpdatePartData};

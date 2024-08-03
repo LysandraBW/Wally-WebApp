@@ -1,12 +1,13 @@
 'use client';
 import { Button, Text } from '@/components/Input/Export';
-import { Form } from '@/process/Employee/Login/Form';
-import { submitForm } from '@/process/Employee/Login/Submit';
+import { Form } from '@/submission/Employee/Login/Form';
+import { submitForm } from '@/submission/Employee/Login/Submit';
 import { goToDashboard } from '@/lib/Navigation/Redirect';
 import Error from '@/views/Employee/Login/Error';
 import { useReducer, useState } from 'react';
-import FormStateReducer, { InitialFormState } from '@/hook/FormState/Reducer';
-import { hasValue } from '@/lib/Inspector/Inspector/Inspect/Inspectors';
+import FormStateReducer from '@/hook/State/Reducer';
+import { InitialFormState } from "@/hook/State/Interface";
+import { hasValue } from '@/lib/ok/Inspector/Inspect/Inspectors';
 
 export default function Login() {
     const [form, setForm] = useState(Form);
@@ -56,14 +57,14 @@ export default function Login() {
                     name='username'
                     label='Username'
                     value={form.username}
-                    error={formState.input.username}
+                    state={formState.input.username}
                     onChange={changeHandler}
                 />
                 <Text
                     name='password'
                     label='Password'
                     value={form.password}
-                    error={formState.input.password}
+                    state={formState.input.password}
                     onChange={changeHandler}
                 />
                 <Button

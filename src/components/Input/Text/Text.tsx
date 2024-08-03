@@ -1,5 +1,5 @@
-"use client";
-import { Input, WriteInputProps } from "../Input";
+'use client';
+import { Input, WriteInputProps } from '../Input';
 
 interface TextProps extends WriteInputProps {
     type?: string;
@@ -12,8 +12,8 @@ export default function Text(props: TextProps) {
             input={
                 <input
                     name={props.name}
-                    type={props.type || "text"}
-                    value={props.value || ""}
+                    type={props.type || 'text'}
+                    value={props.value || ''}
                     onBlur={() => {
                         props.onBlur && props.onBlur();
                     }}
@@ -23,7 +23,7 @@ export default function Text(props: TextProps) {
                     }}
                 />
             }
-            error={props.error || {state: false, message: ''}}
+            state={props.state || {state: false, message: ''}}
         />
     )
 }

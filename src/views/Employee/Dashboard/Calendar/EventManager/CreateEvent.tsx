@@ -1,32 +1,33 @@
 import { useContext, useReducer, useState } from "react";
-import { Text, TextArea, Toggle } from "@/components/Input/Export";
-import { toggleValue } from "@/components/Input/Checkbox/Checkbox";
-import { UpdateEvent } from "@/process/Employee/Calendar/Form/Form";
+import { Text, TextArea, ToggleGroup } from "@/components/Input/Export";
+import { UpdateEvent } from "@/submission/Employee/Calendar/Form";
 import { PageContext } from "@/app/Employee/Dashboard/Calendar/page";
-import FormStateReducer, { InitialFormState } from "@/hook/FormState/Reducer";
-import { hasValue, validDate } from "@/validation/Validation";
-import { every } from "@/lib/Inspector/Inspector/Inspect/Inspectors";
+import FormStateReducer from "@/hook/State/Reducer";
+import { InitialFormState } from "@/hook/State/Interface";
+import { eachEntry, contains, validDate } from "@/validation/Validation";
 import { Regexes } from "@/lib/Inspector/Inspectors";
+import CloseButton from "@/components/Button/Icon/Close";
+import AddButton from "@/components/Button/Text/Add";
 
 interface CreateEventProps {
     onClose: () => void;
     onCreate: (value: any) => void;
 }
 
-const defaultInput: UpdateEvent = {
+const defaultValues: UpdateEvent = {
     EventID:        -1,
     EmployeeID:     '',
     AppointmentID:  '',
     Name:           '',
     Summary:        '',
     Sharees:        [],
-    UpdatedEvent:   '',
+    UpdatedDate:   '',
     Date: new Date()
 }
 
 export default function CreateEvent(props: CreateEventProps) {
     const context = useContext(PageContext);
-    const [values, setValues] = useState<UpdateEvent>(defaultInput);
+    const [values, setValues] = useState(defaultValues);
     const [formState, formStateDispatch] = useReducer(FormStateReducer, InitialFormState);
 
     const inspectInput = async <T,>(
@@ -43,88 +44,69 @@ export default function CreateEvent(props: CreateEventProps) {
     }
 
     const inspectEvent = async (): Promise<boolean> => {
-        const name = await inspectInput('Name', values.Name, hasValue);
-        const summary = await inspectInput('Summary', values.Summary, hasValue);
-        const sharees = await inspectInput('Sharees', values.Sharees, async (v) => await every({
-            callback: (v: string) => !!v.match(Regexes.UniqueIdentifier)
-        }).inspect(v));
-        const date = await inspectInput('UpdatedEvent', values.UpdatedEvent, validDate);
-
-        return name && summary && sharees && date;
+        const validName = await inspectInput('Name', values.Name, contains);
+        const validSummary = await inspectInput('Summary', values.Summary, contains);
+        const validSharees = await inspectInput('Sharees', values.Sharees, await eachEntry(async (v) => (
+            !!v.match(Regexes.UniqueIdentifier)
+        )));
+        const validUpdatedDate = await inspectInput('UpdatedDate', values.UpdatedDate, validDate);
+        return validName && validSummary && validSharees && validUpdatedDate;
     }
 
     return (
         <div>
-            <span
-                onClick={() => {
-                    props.onClose();
-                }}
-            >
-                x
-            </span>
+            <CloseButton
+                onClose={props.onClose}
+            />
             <TextArea
                 name={'Name'}
                 label={'Name'}
                 value={values.Name}
-                error={formState.input.Name}
+                state={formState.input.Name}
                 onChange={async (name, value) => {
                     setValues({...values, [`${name}`]: value});
-                    inspectInput('Name', values.Name, hasValue);
+                    inspectInput('Name', values.Name, contains);
                 }}
             />
             <TextArea
                 name={'Summary'}
                 label={'Summary'}
                 value={values.Summary}
-                error={formState.input.Summary}
+                state={formState.input.Summary}
                 onChange={async (name, value) => {
                     setValues({...values, [`${name}`]: value});
-                    inspectInput('Summary', values.Summary, hasValue);
+                    inspectInput('Summary', values.Summary, contains);
                 }}
             />
             <Text
                 type='datetime-local'
-                name='UpdatedEvent'
+                name='UpdatedDate'
                 label='Date'
-                value={values.UpdatedEvent}
-                error={formState.input.UpdatedEvent}
+                value={values.UpdatedDate}
+                state={formState.input.UpdatedDate}
                 onChange={async (name, value) => {
                     setValues({...values, [`${name}`]: value});
-                    inspectInput('UpdatedEvent', values.UpdatedEvent, validDate);
+                    inspectInput('UpdatedDate', values.UpdatedDate, validDate);
                 }}
             />
-            <div>
-                {context.Employees.map((employee, i) => (
-                    <div key={i}>
-                        {/* Cannot Add Yourself as Sharee */}
-                        {employee.EmployeeID !== context.Employee.EmployeeID && 
-                            <Toggle
-                                name='Sharees'
-                                label={`Add ${employee.FName} ${employee.LName}`}
-                                value={values.Sharees.includes(employee.EmployeeID) ? 1 : 0}
-                                error={formState.input.Sharees}
-                                onChange={async (name, value) => {
-                                    const updatedValue = toggleValue(values.Sharees, employee.EmployeeID);
-                                    inspectInput('Sharees', updatedValue, async (v) => await every({
-                                        callback: (v: string) => !!v.match(Regexes.UniqueIdentifier)
-                                    }).inspect(v));
-                                    setValues({...values, Sharees: updatedValue});
-                                }}
-                            />
-                        }
-                    </div>
-                ))}
-            </div>
-            <button 
+            <ToggleGroup
+                name='Sharees'
+                label='Sharees'
+                value={values.Sharees}
+                values={context.Employees.filter(e => e.EmployeeID != context.Employee.EmployeeID).map(e => [e.EmployeeID, `${e.FName} ${e.LName}`])}
+                onChange={async (name, value) => {
+                    inspectInput('Sharees', value, await eachEntry(async (v) => !!v.match(Regexes.UniqueIdentifier)));
+                    setValues({...values, Sharees: value});
+                }}
+            />
+            <AddButton 
                 onClick={async () => {
                     if (!(await inspectEvent()))
                         return false;
                     props.onCreate(values);
-                    setValues(defaultInput);
+                    setValues(defaultValues);
                 }}
-            >
-                Add
-            </button>
+            />
         </div>
     )
 }

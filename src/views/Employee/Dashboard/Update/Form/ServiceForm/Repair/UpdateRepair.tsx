@@ -1,8 +1,10 @@
 import { Multiple, Text } from "@/components/Input/Export";
 import { DB_Repair } from "@/database/Types";
-import { hasValue } from "@/lib/Inspector/Inspector/Inspect/Inspectors";
-import FormStateReducer, { InitialFormState } from "@/hook/FormState/Reducer";
+import { hasValue } from "@/lib/ok/Inspector/Inspect/Inspectors";
+import FormStateReducer from "@/hook/State/Reducer";
+import { InitialFormState } from "@/hook/State/Interface";
 import { useEffect, useReducer, useState } from "react";
+import RepairCard from "./RepairCard";
 
 interface UpdateRepairProps {
     repair: DB_Repair;
@@ -31,32 +33,34 @@ export default function UpdateRepair(props: UpdateRepairProps) {
                     }}
                     children={(
                         <div>
-                            <div>
-                                <input 
-                                    value={values.Repair} 
-                                    onChange={async (event) => {
-                                        const value = event.target.value;
-                                        setValues({...values, Repair: value});
-                                        formStateDispatch({
-                                            name: 'Repair',
-                                            state: await hasValue().inspect(value)
-                                        });
-                                    }}
-                                    onBlur={() => !values.Repair && setValues({...values, Repair: initialRepair})}
-                                />
-                                {formState.input.Repair.state &&
-                                    <span>{formState.input.Repair.message}</span>
-                                }
-                            </div>
+                            <Text
+                                name={'Repair'}
+                                label={'Repair'}
+                                value={values.Repair}
+                                state={formState.input.Repair}
+                                onChange={async (name, value) => {
+                                    setValues({...values, [`${name}`]: value});
+                                    formStateDispatch({
+                                        name: 'Repair',
+                                        state: await hasValue().inspect(value)
+                                    });
+                                }}
+                                onBlur={() => {
+                                    if (values.Repair)
+                                        return;
+                                    setValues({...values, Repair: initialRepair});
+                                }}
+                            />
                         </div>
                     )}
                 />
             }
             {!edit && 
-                <div>
-                    <span onClick={() => setEdit(true)}>{props.repair.Repair}</span>
-                    <span onClick={() => props.onDelete()}>DELETE</span>
-                </div>
+                <RepairCard
+                    repair={props.repair.Repair}
+                    onEdit={() => setEdit(true)}
+                    onDelete={() => props.onDelete()}
+                />
             }
         </>
     )

@@ -23,7 +23,7 @@ export default function Segment(props: SegmentProps<any>) {
                     ))}
                 </>
             }
-            error={props.error || {state: false, message: ''}}
+            state={props.state || {state: false, message: ''}}
         />
     )
 }

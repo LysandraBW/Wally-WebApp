@@ -1,7 +1,8 @@
-import { ReducerState } from '@/hook/FormState/Reducer';
+import { FormState } from "@/hook/State/Interface";
 import { Text, Search, Checkbox } from '@/components/Input/Export';
 import { validValue, validVIN } from '@/validation/Validation';
-import { getServiceValues, getValues } from '@/lib/Vehicle/Load';
+import { getValues } from "@/lib/Vehicle/Value";
+import { flattenValues } from "@/lib/Service/Value";
 
 interface VehicleFormProps {
     form: {
@@ -17,7 +18,7 @@ interface VehicleFormProps {
         modelYears: Array<[number, string]>;
         services:   {[k: string]: Array<[number, string]>};
     };
-    formState: ReducerState;
+    formState: FormState;
     updateFormState: (updatedInputState: {name: string, state: [boolean, string?]}) => void;
     onChange: (name: string, value: any) => void;
 }
@@ -42,7 +43,7 @@ export default function VehicleForm(props: VehicleFormProps) {
                 name={'vin'}
                 label={'VIN'}
                 value={props.form.vin}
-                error={props.formState.input.vin}
+                state={props.formState.input.vin}
                 onChange={(name, value) => {
                     inspectInput('vin', value, validVIN);
                     props.onChange(name, value);
@@ -54,7 +55,7 @@ export default function VehicleForm(props: VehicleFormProps) {
                 defaultLabel={'Select a Year'}
                 value={props.form.modelYear}
                 values={props.loadedValues.modelYears}
-                error={props.formState.input.modelYear}
+                state={props.formState.input.modelYear}
                 onChange={(name, value) => {
                     const modelYears = getValues(props.loadedValues.modelYears);
                     inspectInput('modelYear', value, v => validValue(v, modelYears));
@@ -68,7 +69,7 @@ export default function VehicleForm(props: VehicleFormProps) {
                 defaultLabel='Select a Make'
                 value={props.form.make}
                 values={props.loadedValues.makes}
-                error={props.formState.input.make}
+                state={props.formState.input.make}
                 onChange={(name, value) => {
                     const makes = getValues(props.loadedValues.makes);
                     inspectInput('make', value, v => validValue(v, makes));
@@ -82,7 +83,7 @@ export default function VehicleForm(props: VehicleFormProps) {
                 defaultLabel='Select a Model'
                 value={props.form.model}
                 values={props.loadedValues.models}
-                error={props.formState.input.model}
+                state={props.formState.input.model}
                 onChange={(name, value) => {
                     const models = getValues(props.loadedValues.models);
                     inspectInput('model', value, v => validValue(v, models));
@@ -96,9 +97,9 @@ export default function VehicleForm(props: VehicleFormProps) {
                 label={'Service'}
                 value={props.form.services}
                 values={props.loadedValues.services}
-                error={props.formState.input.services}
+                state={props.formState.input.services}
                 onChange={(name, value) => {
-                    const allServices = getServiceValues(props.loadedValues.services);
+                    const allServices = flattenValues(props.loadedValues.services);
                     inspectInput('services', value, v => validValue(v, allServices));
                     props.onChange(name, value);
                 }}

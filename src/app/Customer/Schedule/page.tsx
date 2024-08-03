@@ -1,19 +1,22 @@
 'use client';
 import { useEffect, useReducer, useState } from 'react';
 import Tracker from '@/components/Form/Tracker/Tracker';
-import { Form } from '@/process/Customer/Schedule/Form';
-import { LoadedServices } from '@/process/Customer/Schedule/Load';
-import submitForm from '@/process/Customer/Schedule/Submit';
+import { Form } from '@/submission/Customer/Schedule/Form';
+import { LoadedServices } from '@/submission/Customer/Schedule/Load';
+import submitForm from '@/submission/Customer/Schedule/Submit';
 import ContactForm from '@/views/Customer/Schedule/Contact';
 import VehicleForm from '@/views/Customer/Schedule/Vehicle';
 import Success from '@/views/Customer/Schedule/Output/Success';
 import Error from '@/views/Customer/Schedule/Output/Error';
-import FormStateReducer from '@/hook/FormState/Reducer';
+import FormStateReducer from '@/hook/State/Reducer';
 import { InitialContactFormState } from '@/validation/State/Contact';
 import { InitialVehicleFormState } from '@/validation/State/Vehicle';
 import { validEmail, validMake, validModel, validModelYear, validName, validPhone, validServices, validValue, validVIN } from '@/validation/Validation';
 import useVehicle from '@/hook/Vehicle/Vehicle';
-import { getServiceValues, getValues, loadMakes, loadModelYears, loadServices } from '@/lib/Vehicle/Load';
+import { loadMakes, loadModelYears } from '@/lib/Vehicle/Load';
+import { getValues } from "@/lib/Vehicle/Value";
+import { loadServices } from "@/lib/Service/Load";
+import { flattenValues } from "@/lib/Service/Value";
 
 export default function Schedule() {
     const [form, setForm] = useState(Form);
@@ -85,7 +88,7 @@ export default function Schedule() {
         const [makState, makMessage] = await validValue([vehicle.make], getValues(vehicle.loadedMakes));
         const [mdlState, mdlMessage] = await validValue([vehicle.model], getValues(vehicle.loadedModels));
         const [mdyState, mdyMessage] = await validValue([vehicle.modelYear], getValues(vehicle.loadedModelYears));
-        const [serState, serMessage] = await validValue(form.services, getServiceValues(loadedServices.services));
+        const [serState, serMessage] = await validValue(form.services, flattenValues(loadedServices.services));
 
         vehicleFormStateDispatch({
             states: {

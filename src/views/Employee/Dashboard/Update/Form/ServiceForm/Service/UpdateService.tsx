@@ -1,8 +1,10 @@
-import { Multiple } from "@/components/Input/Export";
+import { Multiple, Text } from "@/components/Input/Export";
 import { DB_AppointmentService } from "@/database/Types";
-import FormStateReducer, { InitialFormState } from "@/hook/FormState/Reducer";
-import { hasValue } from "@/validation/Validation";
+import { contains } from "@/validation/Validation";
+import FormStateReducer from "@/hook/State/Reducer";
+import { InitialFormState } from "@/hook/State/Interface";
 import { useEffect, useReducer, useState } from "react";
+import ServiceCard from "./ServiceCard";
 
 interface UpdateServiceProps {
     service: DB_AppointmentService
@@ -44,72 +46,66 @@ export default function UpdateService(props: UpdateServiceProps) {
                     }}
                     children={(
                         <div>
-                            <div>
-                                <input 
-                                    value={values.Class} 
-                                    onChange={async (event) => {
-                                        const value = event.target.value;
-                                        setValues({...values, Class: value});
-                                        inspectInput('Class', value, hasValue);
-                                    }}
-                                    onBlur={async () => {
-                                        if (values.Class)
-                                            return;
-                                        inspectInput('Class', initialValues.Class, hasValue);
-                                        setValues({...values, Class: initialValues.Class});
-                                    }}
-                                />
-                                {formState.input.Class && !formState.input.Class.state && 
-                                    <span>{formState.input.Class.message}</span>
-                                }
-                            </div>
-                            <div>
-                                <input 
-                                    value={values.Division} 
-                                    onChange={async (event) => {
-                                        const value = event.target.value;
-                                        setValues({...values, Division: value});
-                                        inspectInput('Division', initialValues.Division, hasValue);
-                                    }}
-                                    onBlur={async () => {
-                                        if (values.Division)
-                                            return;
-                                        inspectInput('Division', initialValues.Division, hasValue);
-                                        setValues({...values, Division: initialValues.Division});
-                                    }}
-                                />
-                                {formState.input.Division && !formState.input.Division.state && 
-                                    <span>{formState.input.Division.message}</span>
-                                }
-                            </div>
-                            <div>
-                                <input 
-                                    value={values.Service} 
-                                    onChange={async (event) => {
-                                        const value = event.target.value;
-                                        setValues({...values, Service: value});
-                                        inspectInput('Service', initialValues.Service, hasValue);
-                                    }}
-                                    onBlur={async () => {
-                                        if (values.Service)
-                                            return;
-                                        inspectInput('Service', initialValues.Service, hasValue);
-                                        setValues({...values, Service: initialValues.Service});
-                                    }}
-                                />
-                                {formState.input.Service && !formState.input.Service.state && 
-                                    <span>{formState.input.Service.message}</span>
-                                }
-                            </div>
+                            <Text
+                                name={'Service'}
+                                label={'Service'}
+                                value={values.Service}
+                                state={formState.input.Service}
+                                onChange={async (name, value) => {
+                                    setValues({...values, [`${name}`]: value});
+                                    inspectInput('Service', values.Service, contains);
+                                }}
+                                onBlur={async () => {
+                                    if (values.Class)
+                                        return;
+                                    inspectInput('Service', initialValues.Service, contains);
+                                    setValues({...values, Service: initialValues.Service});
+                                }}
+                            />
+                            <Text
+                                name={'Division'}
+                                value={values.Division}
+                                state={formState.input.Division}
+                                label={'Division'}
+                                onChange={async (name, value) => {
+                                    setValues({...values, [`${name}`]: value});
+                                    inspectInput('Division', values.Division, contains);
+                                }}
+                                onBlur={async () => {
+                                    if (values.Class)
+                                        return;
+                                    inspectInput('Division', initialValues.Division, contains);
+                                    setValues({...values, Division: initialValues.Division});
+                                }}
+                            />
+                            <Text
+                                name={'Class'}
+                                value={values.Class}
+                                state={formState.input.Class}
+                                label={'Class'}
+                                onChange={async (name, value) => {
+                                    setValues({...values, [`${name}`]: value});
+                                    inspectInput('Class', values.Class, contains);
+                                }}
+                                onBlur={async () => {
+                                    if (values.Class)
+                                        return;
+                                    inspectInput('Class', initialValues.Class, contains);
+                                    setValues({...values, Class: initialValues.Class});
+                                }}
+                            />
                         </div>
                     )}
                 />
             }
             {!edit && 
-                <div>
-                    <span onClick={() => setEdit(true)}>{props.service.Class} - {props.service.Division} - {props.service.Service}</span>
-                    <span onClick={() => props.onDelete()}>DELETE</span>
-                </div>
+                <ServiceCard
+                    class={props.service.Class}
+                    division={props.service.Division}
+                    service={props.service.Service}
+                    onEdit={() => setEdit(true)}
+                    onDelete={() => props.onDelete()}
+                />
             }
         </>
     )

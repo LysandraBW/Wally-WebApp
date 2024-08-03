@@ -1,20 +1,22 @@
 import { useReducer, useState } from "react";
 import { Text } from "@/components/Input/Export";
 import { DB_Repair } from "@/database/Types";
-import FormStateReducer, { InitialFormState } from "@/hook/FormState/Reducer";
-import { hasValue } from "@/lib/Inspector/Inspector/Inspect/Inspectors";
+import FormStateReducer from "@/hook/State/Reducer";
+import { InitialFormState } from "@/hook/State/Interface";
+import { hasValue } from "@/lib/ok/Inspector/Inspect/Inspectors";
+import AddButton from "@/components/Button/Text/Add";
 
 interface CreateRepairProps {
     onChange: (name: string, value: any) => any;
 }
 
-const defaultInput: DB_Repair = {
+const defaultValues: DB_Repair = {
     RepairID:   0,
     Repair:     ''
 }
 
 export default function CreateRepair(props: CreateRepairProps) {
-    const [values, setValues] = useState<DB_Repair>(defaultInput);
+    const [values, setValues] = useState<DB_Repair>(defaultValues);
     const [formState, formStateDispatch] = useReducer(FormStateReducer, InitialFormState);
 
     const inspectRepair = async (repair: string = values.Repair): Promise<boolean> => {
@@ -30,24 +32,22 @@ export default function CreateRepair(props: CreateRepairProps) {
         <div>
             <Text
                 name={'Repair'}
-                value={values.Repair}
-                error={formState.input.Repair}
                 label={'Repair'}
+                value={values.Repair}
+                state={formState.input.Repair}
                 onChange={async (name, value) => {
                     inspectRepair(value);
                     setValues({...values, [`${name}`]: value});
                 }}
             />
-            <button 
+            <AddButton 
                 onClick={async () => {
                     if (!(await inspectRepair()))
                         return;
                     props.onChange('Repairs', values);
-                    setValues(defaultInput);
+                    setValues(defaultValues);
                 }}
-            >
-                Add
-            </button>
+            />
         </div>
     )
 }

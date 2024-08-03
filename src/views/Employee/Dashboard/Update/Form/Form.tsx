@@ -1,12 +1,12 @@
-import GeneralForm from "@/views/Employee/Dashboard/Update/GeneralForm";
-import ServiceForm from "@/views/Employee/Dashboard/Update/Form/ServiceForm/ServiceForm";
-import PaymentForm from "@/views/Employee/Dashboard/Update/Form/PaymentForm/PaymentForm";
-import VehicleForm from "@/views/Employee/Dashboard/Update/VehicleForm";
-import { GeneralFormStructure } from "@/process/Employee/Update/Form/Form/General/General";
-import { PaymentFormStructure } from "@/process/Employee/Update/Form/Form/Payment/Payment";
-import { ServiceFormStructure } from "@/process/Employee/Update/Form/Form/Service/Service";
-import { VehicleFormStructure } from "@/process/Employee/Update/Form/Form/Vehicle/Vehicle";
-import { FormType } from "@/process/Employee/Update/Form/UpdateForm";
+import { GeneralFormStructure } from "@/submission/Employee/Update/Form/Form/General/General";
+import { PaymentFormStructure } from "@/submission/Employee/Update/Payment/Form";
+import { ServiceFormStructure } from "@/submission/Employee/Update/Form/Form/Service/Service";
+import { VehicleFormStructure } from "@/submission/Employee/Update/Vehicle/Form";
+import { FormType } from "@/submission/Employee/Update/Form/Form";
+import GeneralForm from "./GeneralForm";
+import VehicleForm from "./VehicleForm";
+import ServiceForm from "./ServiceForm/ServiceForm";
+import PaymentForm from "./PaymentForm/PaymentForm";
 
 interface FormProps {
     form: unknown;

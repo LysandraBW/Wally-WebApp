@@ -7,9 +7,9 @@ import useInterval from "@/hook/Alert/Timer";
 import Head from "@/views/Employee/Dashboard/Dashboard/Table/Head";
 import Body from "@/views/Employee/Dashboard/Dashboard/Table/Body";
 import Overview from "@/views/Employee/Dashboard/Dashboard/Overview/Overview";
-import { Context, ContextStructure } from "@/process/Employee/Dashboard/Context";
-import { Controller, ControllerStructure } from "@/process/Employee/Dashboard/Controller";
-import { Filter, FilterStructure } from "@/process/Employee/Dashboard/Filter";
+import { DefaultPageContext, PageContextStructure } from "@/process/Dashboard/Context";
+import { DefaultController, ControllerStructure } from "@/process/Dashboard/Controller";
+import { DefaultFilter, FilterStructure } from "@/process/Dashboard/Filter";
 import AlertReducer, { AlertActionType, InitialAlert } from "@/hook/Alert/Reducer";
 import { DB_Labels, DB_Statuses } from "@/database/Info/Info";
 import Action from "@/views/Employee/Dashboard/Dashboard/Header/Action";
@@ -18,16 +18,16 @@ import Tabs from "@/views/Employee/Dashboard/Dashboard/Header/Tabs";
 import Navigation from "@/views/Employee/Dashboard/Dashboard/Table/Navigation";
 import { useRouter, useSearchParams } from "next/navigation";
 import util from "util";
-import { deleteMessage, restoreMessage } from "@/process/Employee/Dashboard/Helper";
+import { deleteMessage, restoreMessage } from "@/process/Dashboard/Helper";
 import { DB_AppointmentOverview } from "@/database/Types";
 
 let ran = false;
-export const PageContext = createContext(Context);
+export const PageContext = createContext(DefaultPageContext);
 
 export default function Dashboard() {
-    const [context, setContext] = useState<ContextStructure>(Context);
-    const [controller, setController] = useState<ControllerStructure>(Controller);
-    const [filter, setFilter] = useState<FilterStructure>(Filter);
+    const [context, setContext] = useState<PageContextStructure>(DefaultPageContext);
+    const [controller, setController] = useState<ControllerStructure>(DefaultController);
+    const [filter, setFilter] = useState<FilterStructure>(DefaultFilter);
     const [alert, alertDispatch] = useReducer(AlertReducer, InitialAlert);
 
     // Apart from the other variables is the currently
@@ -270,7 +270,7 @@ export default function Dashboard() {
     }
 
     return (
-        <PageContext.Provider value={context}>
+        <DefaultPageContext.Provider value={context}>
             <div>
                 {/* Displaying Confirmation */}
                 {alert.confirmation && alert.confirmation}
@@ -372,7 +372,7 @@ export default function Dashboard() {
                             setController({
                                 ...controller, 
                                 Current: {
-                                    ...Controller.Current,
+                                    ...DefaultController.Current,
                                     Page: controller.Current.Page - 1
                                 }
                             });
@@ -386,6 +386,6 @@ export default function Dashboard() {
                     />
                 }
             </div>
-        </PageContext.Provider>
+        </DefaultPageContext.Provider>
     )
 }

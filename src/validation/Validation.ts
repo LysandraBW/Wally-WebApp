@@ -1,18 +1,19 @@
-import { hasValue as _hasValue, inValues, isDateTime, isEmailAddress, isLicensePlate, isName, isNumber, isPhoneNumber, isUniqueIdentifier, isVIN } from "@/lib/Inspector/Inspector/Inspect/Inspectors";
+import { InspectionMessageOutput } from "@/lib/Inspector/Inspector/Inspect/Inspector";
+import * as Inspector from "@/lib/Inspector/Inspector/Inspect/Inspectors";
 
 export const validValue = async <T> (
     value: Array<T>, 
     values: Array<T>
-): Promise<[boolean, string?]> => {
-    return await inValues({
+): Promise<InspectionMessageOutput> => {
+    return await Inspector.inValues({
         values: values
     }).inspect(value);
 }
 
 export const validVIN = async (
     vin: string
-): Promise<[boolean, string?]> => {
-    return await isVIN({
+): Promise<InspectionMessageOutput> => {
+    return await Inspector.isVIN({
         optional: true
     }).inspect(vin);
 }
@@ -20,58 +21,82 @@ export const validVIN = async (
 export const validServices = async (
     services: Array<number>,
     allServices: Array<number>
-): Promise<[boolean, string?]> => {
-    return await inValues({
+): Promise<InspectionMessageOutput> => {
+    return await Inspector.inValues({
         values: allServices
     }).inspect(services);
 }
 
 export const validName = async (
     name: string
-): Promise<[boolean, string?]> => {
-    return await isName().inspect(name);
+): Promise<InspectionMessageOutput> => {
+    return await Inspector.isName().inspect(name);
 }
 
 export const validEmail = async (
     email: string
-): Promise<[boolean, string?]> => {
-    return await isEmailAddress().inspect(email);
+): Promise<InspectionMessageOutput> => {
+    return await Inspector.isEmailAddress().inspect(email);
 }
 
 export const validPhone = async (
     phone: string
-): Promise<[boolean, string?]> => {
-    return await isPhoneNumber().inspect(phone);
+): Promise<InspectionMessageOutput> => {
+    return await Inspector.isPhoneNumber().inspect(phone);
 }
 
 export const validUniqueIdentifier = async (
     uniqueIdentifier: string
-): Promise<[boolean, string?]> => {
-    return await isUniqueIdentifier().inspect(uniqueIdentifier);
+): Promise<InspectionMessageOutput> => {
+    return await Inspector.isUniqueIdentifier().inspect(uniqueIdentifier);
 }
 
 export const validDate = async (
     datetime: string
-): Promise<[boolean, string?]> => {
-    return await isDateTime({
+): Promise<InspectionMessageOutput> => {
+    return await Inspector.isDateTime({
         optional: true
     }).inspect(datetime);
 }
 
 export const validNumber = async (
     number: string | number
-): Promise<[boolean, string?]> => {
-    return await isNumber().inspect(number);
+): Promise<InspectionMessageOutput> => {
+    return await Inspector.isNumber().inspect(number);
 }
 
 export const validLicensePlate = async (
     licensePlate: string
-): Promise<[boolean, string?]> => {
-    return await isLicensePlate().inspect(licensePlate);
+): Promise<InspectionMessageOutput> => {
+    return await Inspector.isLicensePlate().inspect(licensePlate);
 }
 
-export const hasValue = async (
+export const contains = async (
     value: string
-): Promise<[boolean, string?]> => {
-    return await _hasValue().inspect(value);
+): Promise<InspectionMessageOutput> => {
+    return await Inspector.hasValue().inspect(value);
+}
+
+export const validBit = async (
+    value: number
+): Promise<InspectionMessageOutput> => {
+    return await Inspector.inValues({
+        values: [0, 1]
+    }).inspect(value);
+}
+
+export const isInValues = async (
+    values: Array<any>
+) => {
+    return async (v: any) => await Inspector.inValues({
+        values: values
+    }).inspect(v);
+}
+
+export const eachEntry = async (
+    callback: (v: any) => Promise<boolean>
+) => {
+    return async (v: any) => await Inspector.every({
+        callback: callback
+    }).inspect(v);
 }

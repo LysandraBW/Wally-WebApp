@@ -1,12 +1,14 @@
-import { useEffect, useReducer } from "react";
-import { Text, Search } from "@/components/Input/Export";
-import { FormType } from "@/process/Employee/Update/Form/UpdateForm";
-import { LoadModels } from "@/lib/Vehicle/Decoder";
-import FormStateReducer, { InitialFormState } from "@/hook/FormState/Reducer";
-import { validLicensePlate, validNumber, validValue, validVIN } from "@/validation/Validation";
-import { VehicleFormStructure } from "@/process/Employee/Update/Form/Form/Vehicle/Vehicle";
-import useVehicle from "@/hook/Vehicle/Vehicle";
-import { getValues, loadMakes, loadModelYears } from "@/lib/Vehicle/Load";
+import { useEffect, useReducer } from 'react';
+import { Text, Search } from '@/components/Input/Export';
+import { FormType } from '@/submission/Employee/Update/Form/Form';
+import { LoadModels } from '@/lib/Vehicle/Decoder';
+import FormStateReducer from '@/hook/State/Reducer';
+import { InitialFormState } from "@/hook/State/Interface";
+import { validLicensePlate, validNumber, validValue, validVIN } from '@/validation/Validation';
+import { VehicleFormStructure } from '@/submission/Employee/Update/Vehicle/Form';
+import useVehicle from '@/hook/Vehicle/Vehicle';
+import { loadMakes, loadModelYears } from '@/lib/Vehicle/Load';
+import { getValues } from "@/lib/Vehicle/Value";
 
 interface VehicleProps {
     form: VehicleFormStructure;
@@ -27,12 +29,12 @@ export default function Vehicle(props: VehicleProps) {
 
             formStateDispatch({
                 states: {                    
-                    VIN:            await validVIN(props.form.VIN),
-                    Mileage:        await validNumber(props.form.Mileage),
-                    LicensePlate:   await validLicensePlate(props.form.LicensePlate),
-                    Make:           await validValue([props.form.Make], loadedMakes.map(m => m[0])),
-                    Model:          await validValue([props.form.Model], loadedModels.map(m => m[0])),
-                    ModelYear:      await validValue([props.form.ModelYear], loadedModelYears.map(m => m[0]))
+                    VIN: await validVIN(props.form.VIN),
+                    Mileage: await validNumber(props.form.Mileage),
+                    LicensePlate: await validLicensePlate(props.form.LicensePlate),
+                    Make: await validValue([props.form.Make], getValues(loadedMakes)),
+                    Model: await validValue([props.form.Model], getValues(loadedModels)),
+                    ModelYear: await validValue([props.form.ModelYear], getValues(loadedModelYears))
                 }
             });
 
@@ -89,56 +91,56 @@ export default function Vehicle(props: VehicleProps) {
     return (
         <>
             <Text
-                name={"VIN"}
-                label={"VIN"}
+                name={'VIN'}
+                label={'VIN'}
                 value={props.form.VIN}
-                error={formState.input.VIN}
+                state={formState.input.VIN}
                 onChange={(name, value) => changeHandler(name, value)}
             />
             <Search
-                name={"ModelYear"}
-                label={"Model Year"}
-                defaultLabel="Select a Year"
+                name={'ModelYear'}
+                label={'Model Year'}
+                defaultLabel='Select a Year'
                 value={[vehicle.modelYear]}
-                error={formState.input.ModelYear}
+                state={formState.input.ModelYear}
                 values={vehicle.loadedModelYears}
                 onChange={(name, value) => changeHandler(name, value)}
                 size={10}
             />
             <Search
-                name={"Make"}
-                label={"Make"}
-                defaultLabel="Select a Make"
+                name={'Make'}
+                label={'Make'}
+                defaultLabel='Select a Make'
                 value={[vehicle.make]}
-                error={formState.input.Make}
+                state={formState.input.Make}
                 values={vehicle.loadedMakes}
                 onChange={(name, value) => changeHandler(name, value)}
                 size={10}
             />
             <Search
-                name={"Model"}
-                label={"Model"}
-                defaultLabel="Select a Model"
+                name={'Model'}
+                label={'Model'}
+                defaultLabel='Select a Model'
                 value={[vehicle.model]}
-                error={formState.input.Model}
+                state={formState.input.Model}
                 values={vehicle.loadedModels}
                 onChange={(name, value) => changeHandler(name, value)}
                 disabled={!props.form.ModelYear || !props.form.Make}
                 size={10}
             />
             <Text
-                type="number"
-                name={"Mileage"}
-                label={"Mileage"}
+                type='number'
+                name={'Mileage'}
+                label={'Mileage'}
                 value={vehicle.mileage}
-                error={formState.input.Mileage}
+                state={formState.input.Mileage}
                 onChange={(name, value) => changeHandler(name, value)}
             />
             <Text
-                name={"LicensePlate"}
-                label={"License Plate"}
+                name={'LicensePlate'}
+                label={'License Plate'}
                 value={vehicle.licensePlate}
-                error={formState.input.LicensePlate}
+                state={formState.input.LicensePlate}
                 onChange={(name, value) => changeHandler(name, value)}
             />
         </>

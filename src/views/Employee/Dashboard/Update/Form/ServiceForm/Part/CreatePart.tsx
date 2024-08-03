@@ -1,14 +1,16 @@
 import { useReducer, useState } from "react";
 import { Text } from "@/components/Input/Export";
 import { DB_Part } from "@/database/Types";
-import FormStateReducer, { InitialFormState } from "@/hook/FormState/Reducer";
-import { hasValue, validNumber } from "@/validation/Validation";
+import FormStateReducer from "@/hook/State/Reducer";
+import { InitialFormState } from "@/hook/State/Interface";
+import { contains, validNumber } from "@/validation/Validation";
+import AddButton from "@/components/Button/Text/Add";
 
 interface CreatePartProps {
     onChange: (name: string, value: any) => any;
 }
 
-const defaultInput: DB_Part = {
+const defaultValues: DB_Part = {
     PartID:     0,
     PartNumber: '',
     PartName:   '',
@@ -17,7 +19,7 @@ const defaultInput: DB_Part = {
 }
 
 export default function CreatePart(props: CreatePartProps) {
-    const [values, setValues] = useState<DB_Part>(defaultInput);
+    const [values, setValues] = useState<DB_Part>(defaultValues);
     const [formState, formStateDispatch] = useReducer(FormStateReducer, InitialFormState);
 
     const inspectInput = async <T,>(
@@ -34,10 +36,10 @@ export default function CreatePart(props: CreatePartProps) {
     }
     
     const inspectPart = async () => {
-        const partName = await inspectInput('PartName', values.PartName, hasValue);
+        const partName = await inspectInput('PartName', values.PartName, contains);
         const quantity = await inspectInput('Quantity', values.Quantity, validNumber);
         const unitCost = await inspectInput('UnitCost', values.UnitCost, validNumber);
-        const partNumber = await inspectInput('PartNumber', values.PartNumber, hasValue);
+        const partNumber = await inspectInput('PartNumber', values.PartNumber, contains);
         return partNumber && partName && quantity && unitCost;
     }
 
@@ -45,30 +47,30 @@ export default function CreatePart(props: CreatePartProps) {
         <div>
             <Text
                 name={'PartNumber'}
-                value={values.PartNumber}
-                error={formState.input.PartNumber}
                 label={'Part Number'}
+                value={values.PartNumber}
+                state={formState.input.PartNumber}
                 onChange={async (name, value) => {
-                    await inspectInput('PartNumber', values.PartNumber, hasValue);
+                    await inspectInput('PartNumber', values.PartNumber, contains);
                     setValues({...values, [`${name}`]: value});
                 }}
             />
             <Text
                 name={'PartName'}
-                value={values.PartName}
-                error={formState.input.PartName}
                 label={'Part Name'}
+                value={values.PartName}
+                state={formState.input.PartName}
                 onChange={async (name, value) => {
-                    await inspectInput('PartName', values.PartName, hasValue);
+                    await inspectInput('PartName', values.PartName, contains);
                     setValues({...values, [`${name}`]: value});
                 }}
             />
             <Text
                 type='number'
                 name={'UnitCost'}
-                value={values.UnitCost}
-                error={formState.input.UnitCost}
                 label={'Unit Cost'}
+                value={values.UnitCost}
+                state={formState.input.UnitCost}
                 onChange={async (name, value) => {
                     await inspectInput('UnitCost', values.UnitCost, validNumber);
                     setValues({...values, [`${name}`]: value});
@@ -77,24 +79,22 @@ export default function CreatePart(props: CreatePartProps) {
             <Text
                 type='number'
                 name={'Quantity'}
-                value={values.Quantity}
-                error={formState.input.Quantity}
                 label={'Quantity'}
+                value={values.Quantity}
+                state={formState.input.Quantity}
                 onChange={async (name, value) => {
                     await inspectInput('Quantity', values.Quantity, validNumber);
                     setValues({...values, [`${name}`]: value});
                 }}
             />
-            <button 
+            <AddButton 
                 onClick={async () => {
                     if (!(await inspectPart()))
                         return;
                     props.onChange('Parts', values);
-                    setValues(defaultInput);
+                    setValues(defaultValues);
                 }}
-            >
-                Add
-            </button>
+            />
         </div>
     )
 }

@@ -1,4 +1,4 @@
-import { PageContext } from "@/app/Employee/Dashboard/Dashboard/page";
+import { DefaultPageContext } from "@/app/Employee/Dashboard/Dashboard/page";
 import { useContext } from "react";
 
 
@@ -7,7 +7,7 @@ interface TabsProps {
 }
 
 export default function Tabs(props: TabsProps) {
-    const context = useContext(PageContext);
+    const context = useContext(DefaultPageContext);
     
     return (
         <div>

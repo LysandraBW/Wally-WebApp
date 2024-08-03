@@ -3,24 +3,24 @@ import { getSessionID } from "@/lib/Storage/Storage";
 import { GetAllEmployees, GetEmployee, GetEvents } from "@/database/Export";
 import useInterval from "@/hook/Alert/Timer";
 import { goToEmployeeLogin } from "@/lib/Navigation/Redirect";
-import { InitialUpdateForm, UpdateEvent as UpdateEventData, UpdateFormStructure, } from "@/process/Employee/Calendar/Form/Form";
+import { InitialUpdateForm, UpdateEvent as UpdateEventData, UpdateFormStructure, } from "@/submission/Employee/Calendar/Form";
 import { default as CalendarElement } from "@/views/Employee/Dashboard/Calendar/Calendar";
 import CreateEvent from "@/views/Employee/Dashboard/Calendar/EventManager/CreateEvent";
 import { createContext, useEffect, useReducer, useState } from "react";
-import Search from "@/views/Employee/Dashboard/Calendar/Gadgets/Search";
-import { Context, ContextStructure } from "@/process/Employee/Calendar/Context";
-import { Controller, ControllerStructure } from "@/process/Employee/Calendar/Controller";
+import Search from "@/views/Employee/Dashboard/Calendar/Calendar/CalendarSearch";
+import { DefaultPageContext, PageContextStructure } from "@/process/Calendar/Context";
+import { Controller, ControllerStructure } from "@/submission/Employee/Calendar/Controller";
 import DateEvents from "@/views/Employee/Dashboard/Calendar/DateEvents";
-import { UpdateForm } from "@/process/Employee/Calendar/Form/Initialize";
+import { UpdateForm } from "@/submission/Employee/Calendar/Initialize";
 import AlertReducer, { AlertActionType, InitialAlert } from "@/hook/Alert/Reducer";
 import UpdateEvent from "@/views/Employee/Dashboard/Calendar/EventManager/UpdateEvent";
-import { submitEventsForm } from "@/process/Employee/Calendar/Form/Submit";
+import { submitEventsForm } from "@/submission/Employee/Calendar/Submit";
 
-export const PageContext = createContext(Context);
+export const PageContext = createContext(DefaultPageContext);
 let ran = false;
 
 export default function Calendar() {
-    const [context, setContext] = useState<ContextStructure>(Context);
+    const [context, setContext] = useState<PageContextStructure>(DefaultPageContext);
     const [controller, setController] = useState<ControllerStructure>(Controller);
     const [updateForm, setUpdateForm] = useState<UpdateFormStructure>(InitialUpdateForm);
     const [alert, alertDispatch] = useReducer(AlertReducer, InitialAlert);

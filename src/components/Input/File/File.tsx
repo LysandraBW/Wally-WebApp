@@ -21,7 +21,7 @@ export default function File(props: FileProps) {
                     multiple={props.multiple}
                 />
             }
-            error={props.error || {state: false, message: ''}}
+            state={props.state || {state: false, message: ''}}
         />
     )
 }

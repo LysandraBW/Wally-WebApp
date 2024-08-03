@@ -51,7 +51,6 @@ export interface DB_Event {
     Name:           string;
     Date:           Date;
     Summary:        string;
-    // Events have a NULL AppointmentID
     AppointmentID:  string | null;
 }
 
@@ -104,7 +103,6 @@ export interface DB_Attachment {
     Name:   string;
 }
 
-// Used in a Customer's Appointment Overview
 export interface DB_Note {
     NoteID:         number;
     EmployeeID:     string;
@@ -117,7 +115,6 @@ export interface DB_Note {
     Attachments:    Array<DB_Attachment>;
 }
 
-// Used in an Employee's Appointment Overview
 export interface DB_EmployeeNote extends DB_Note {
     OwnerFName: string;
     OwnerLName: string;
@@ -168,7 +165,6 @@ export interface DB_Appointment {
     Notes:          Array<DB_EmployeeNote>;
 }
 
-// Used in the Lookup
 export interface DB_AppointmentSummary {
     AppointmentID:  string;
     CustomerID:     number;
@@ -195,7 +191,6 @@ export interface DB_AppointmentSummary {
     Notes:          Array<DB_Note>; 
 }
 
-// Used in the Dashboard
 export interface DB_AppointmentOverview {
     AppointmentID:  string;
     CustomerID:     number;

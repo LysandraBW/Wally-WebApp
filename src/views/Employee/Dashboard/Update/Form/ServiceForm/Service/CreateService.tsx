@@ -1,14 +1,15 @@
 import { Text } from "@/components/Input/Export";
-import { DB_AppointmentService, DB_Service } from "@/database/Types";
-import FormStateReducer, { InitialFormState } from "@/hook/FormState/Reducer";
-import { hasValue } from "@/validation/Validation";
-import { useEffect, useReducer, useState } from "react";
+import { DB_AppointmentService } from "@/database/Types";
+import FormStateReducer from "@/hook/State/Reducer";
+import { InitialFormState } from "@/hook/State/Interface";
+import { contains } from "@/validation/Validation";
+import { useReducer, useState } from "react";
 
 interface CreateServiceProps {
     onChange: (name: string, value: any) => any;
 }
 
-const defaultInput: DB_AppointmentService = {
+const defaultValues: DB_AppointmentService = {
     AppointmentID:          '',
     AppointmentServiceID:   0,
     ServiceID:              null,
@@ -18,7 +19,7 @@ const defaultInput: DB_AppointmentService = {
 }
 
 export default function CreateService(props: CreateServiceProps) {
-    const [values, setValues] = useState<DB_AppointmentService>(defaultInput);
+    const [values, setValues] = useState<DB_AppointmentService>(defaultValues);
     const [formState, formStateDispatch] = useReducer(FormStateReducer, InitialFormState);
 
     const inspectInput = async <T,>(
@@ -34,11 +35,11 @@ export default function CreateService(props: CreateServiceProps) {
         return errState;
     }
 
-    const inspectServiceInput = async (): Promise<boolean> => {
-        const classState = await inspectInput('Class', values.Class, hasValue);
-        const serviceState = await inspectInput('Service', values.Service, hasValue);
-        const divisionState = await inspectInput('Division', values.Division, hasValue);
-        return serviceState && divisionState && classState;
+    const inspectService = async (): Promise<boolean> => {
+        const validClass = await inspectInput('Class', values.Class, contains);
+        const validState = await inspectInput('Service', values.Service, contains);
+        const validDivision = await inspectInput('Division', values.Division, contains);
+        return validState && validDivision && validClass;
     }
 
     return (
@@ -47,38 +48,38 @@ export default function CreateService(props: CreateServiceProps) {
                 name={'Service'}
                 label={'Service'}
                 value={values.Service}
-                error={formState.input.Service}
+                state={formState.input.Service}
                 onChange={async (name, value) => {
                     setValues({...values, [`${name}`]: value});
-                    inspectInput('Service', values.Service, hasValue);
+                    inspectInput('Service', values.Service, contains);
                 }}
             />
             <Text
                 name={'Division'}
                 value={values.Division}
-                error={formState.input.Division}
+                state={formState.input.Division}
                 label={'Division'}
                 onChange={async (name, value) => {
                     setValues({...values, [`${name}`]: value});
-                    inspectInput('Division', values.Division, hasValue);
+                    inspectInput('Division', values.Division, contains);
                 }}
             />
             <Text
                 name={'Class'}
                 value={values.Class}
-                error={formState.input.Class}
+                state={formState.input.Class}
                 label={'Class'}
                 onChange={async (name, value) => {
                     setValues({...values, [`${name}`]: value});
-                    inspectInput('Class', values.Class, hasValue);
+                    inspectInput('Class', values.Class, contains);
                 }}
             />
             <button 
                 onClick={async () => {
-                    if (!(await inspectServiceInput()))
+                    if (!(await inspectService()))
                         return;
                     props.onChange('Services', values);
-                    setValues(defaultInput);
+                    setValues(defaultValues);
                 }}
             >
                 Add

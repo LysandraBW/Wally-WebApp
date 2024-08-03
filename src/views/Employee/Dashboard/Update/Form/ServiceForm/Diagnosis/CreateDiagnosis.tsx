@@ -1,21 +1,23 @@
 import { useReducer, useState } from "react";
 import { Text } from "@/components/Input/Export";
 import { DB_Diagnosis } from "@/database/Types";
-import FormStateReducer, { InitialFormState } from "@/hook/FormState/Reducer";
-import { hasValue } from "@/validation/Validation";
+import FormStateReducer from "@/hook/State/Reducer";
+import { InitialFormState } from "@/hook/State/Interface";
+import { contains } from "@/validation/Validation";
+import AddButton from "@/components/Button/Text/Add";
 
 interface CreateDiagnosisProps {
     onChange: (name: string, value: any) => any;
 }
 
-const defaultInput: DB_Diagnosis = {
+const defaultValues: DB_Diagnosis = {
     DiagnosisID:    0,
     Code:           '',
     Message:        '',
 }
 
 export default function CreateDiagnosis(props: CreateDiagnosisProps) {
-    const [values, setValues] = useState<DB_Diagnosis>(defaultInput);
+    const [values, setValues] = useState<DB_Diagnosis>(defaultValues);
     const [formState, formStateDispatch] = useReducer(FormStateReducer, InitialFormState);
 
     const inspectInput = async <T,>(
@@ -32,8 +34,8 @@ export default function CreateDiagnosis(props: CreateDiagnosisProps) {
     }
 
     const inspectDiagnosis = async (): Promise<boolean> => {
-        const codeState = await inspectInput('Code', values.Code, hasValue);
-        const messageState = await inspectInput('Message', values.Message, hasValue);
+        const codeState = await inspectInput('Code', values.Code, contains);
+        const messageState = await inspectInput('Message', values.Message, contains);
         return codeState && messageState;
     }
     
@@ -43,9 +45,9 @@ export default function CreateDiagnosis(props: CreateDiagnosisProps) {
                 name={'Code'}
                 label={'Code'}
                 value={values.Code}
-                error={formState.input.Code}
+                state={formState.input.Code}
                 onChange={async (name, value) => {
-                    inspectInput(name, value, hasValue);
+                    inspectInput(name, value, contains);
                     setValues({...values, [`${name}`]: value});
                 }}
             />
@@ -53,22 +55,20 @@ export default function CreateDiagnosis(props: CreateDiagnosisProps) {
                 name={'Message'}
                 label={'Message'}
                 value={values.Message}
-                error={formState.input.Message}
+                state={formState.input.Message}
                 onChange={async (name, value) => {
-                    inspectInput(name, value, hasValue);
+                    inspectInput(name, value, contains);
                     setValues({...values, [`${name}`]: value});
                 }}
             />
-            <button 
+            <AddButton 
                 onClick={async () => {
                     if (!(await inspectDiagnosis()))
                         return;
                     props.onChange('Diagnoses', values);
-                    setValues(defaultInput);
+                    setValues(defaultValues);
                 }}
-            >
-                Add
-            </button>
+            />
         </div>
     )
 }

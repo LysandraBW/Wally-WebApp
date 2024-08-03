@@ -1,7 +1,7 @@
 import UpdateNote from "./UpdateNote";
 import CreateNote from "./CreateNote";
-import { NoteFormStructure } from "@/process/Employee/Update/Form/Form/Note/Note";
-import { FormType } from "@/process/Employee/Update/Form/UpdateForm";
+import { NoteFormStructure } from "@/submission/Employee/Update/Form/Form/Note/Note";
+import { FormType } from "@/submission/Employee/Update/Form/Form";
 import { useState } from "react";
 
 interface NoteFormProps {

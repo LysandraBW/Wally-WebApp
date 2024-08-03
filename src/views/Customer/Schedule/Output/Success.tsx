@@ -1,4 +1,4 @@
-import Message from "@/components/Message/Message/Message";
+import Message from "@/components/Alert/Message/Message";
 
 interface SuccessProps {
     ID: string;

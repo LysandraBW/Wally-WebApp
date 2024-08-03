@@ -1,8 +1,11 @@
-import { Multiple } from "@/components/Input/Export";
-import FormStateReducer, { InitialFormState } from "@/hook/FormState/Reducer";
+import { Multiple, Text } from "@/components/Input/Export";
+import FormStateReducer from "@/hook/State/Reducer";
+import { InitialFormState } from "@/hook/State/Interface";
 import { useEffect, useReducer, useState } from "react";
-import { UpdatePayment as UpdatePaymentDate } from "@/process/Employee/Update/Form/Form/Payment/Payment";
-import { hasValue } from "@/validation/Validation";
+import { UpdatePayment as UpdatePaymentDate } from "@/submission/Employee/Update/Payment/Form";
+import { contains } from "@/validation/Validation";
+import PaymentCard from "../../Card/Paymen";
+import { toWebDateTime } from "@/lib/Convert/Convert";
 
 interface UpdatePaymentProps {
     payment: UpdatePaymentDate
@@ -36,7 +39,6 @@ export default function UpdatePayment(props: UpdatePaymentProps) {
 
     return (
         <>
-            {/* User can only edit new payments. */}
             {edit &&
                 <Multiple
                     onBlur={() => {
@@ -45,113 +47,101 @@ export default function UpdatePayment(props: UpdatePaymentProps) {
                     }}
                     children={(
                         <div>
-                            <div>
-                                <input 
-                                    value={values.Payment} 
-                                    onChange={async (event) => {
-                                        const value = event.target.value
-                                        setValues({...values, Payment: value});
-                                        inspectInput('Payment', value, hasValue);
-                                    }}
-                                    onBlur={() => {
-                                        if (values.Payment)
-                                            return;
-                                        setValues({...values, Payment: initialValues.Payment});
-                                        inspectInput('Payment', initialValues.Payment, hasValue);
-                                    }}
-                                />
-                                {formState.input.Payment && !formState.input.Payment.state &&
-                                    <span>{formState.input.Payment.message}</span>
-                                }
-                            </div>
-                            <div>
-                                <input 
-                                    value={values.Name} 
-                                    onChange={async (event) => {
-                                        const value = event.target.value
-                                        setValues({...values, Name: value});
-                                        inspectInput('Name', value, hasValue);
-                                    }}
-                                    onBlur={() => {
-                                        if (values.Name)
-                                            return;
-                                        setValues({...values, Name: initialValues.Name});
-                                        inspectInput('Name', initialValues.Name, hasValue);
-                                    }}
-                                />
-                                {formState.input.Name && !formState.input.Name.state &&
-                                    <span>{formState.input.Name.message}</span>
-                                }
-                            </div>
-                            <div>
-                                <input 
-                                    value={values.Type} 
-                                    onChange={async (event) => {
-                                        const value = event.target.value
-                                        setValues({...values, Type: value});
-                                        inspectInput('Type', value, hasValue);
-                                    }}
-                                    onBlur={() => {
-                                        if (values.Type)
-                                            return;
-                                        setValues({...values, Type: initialValues.Type});
-                                        inspectInput('Type',  initialValues.Type, hasValue);
-                                    }}
-                                />
-                                {formState.input.Type && !formState.input.Type.state &&
-                                    <span>{formState.input.Type.message}</span>
-                                }
-                            </div>
-                            <div>
-                                <input 
-                                    value={values.CCN} 
-                                    onChange={async (event) => {
-                                        const value = event.target.value
-                                        setValues({...values, CCN: value});
-                                        inspectInput('CCN', value, hasValue);
-                                    }}
-                                    onBlur={() => {
-                                        if (values.CCN)
-                                            return;
-                                        setValues({...values, CCN: initialValues.CCN});
-                                        inspectInput('Type', initialValues.CCN, hasValue);
-                                    }}
-                                />
-                                {formState.input.CCN && !formState.input.CCN.state &&
-                                    <span>{formState.input.CCN.message}</span>
-                                }
-                            </div>
-                            <div>
-                                <input 
-                                    value={values.EXP} 
-                                    onChange={async (event) => {
-                                        const value = event.target.value
-                                        setValues({...values, EXP: value});
-                                        inspectInput('EXP', value, hasValue);
-                                    }}
-                                    onBlur={() => {
-                                        if (values.EXP)
-                                            return;
-                                        setValues({...values, EXP: initialValues.EXP});
-                                        inspectInput('EXP', initialValues.EXP, hasValue);
-                                    }}
-                                />
-                                {formState.input.EXP && !formState.input.EXP.state &&
-                                    <span>{formState.input.EXP.message}</span>
-                                }
-                            </div>
+                            <Text
+                                name='Payment'
+                                label='Payment'
+                                value={values.Payment} 
+                                state={formState.input.Payment}
+                                onChange={(name, value) => {
+                                    setValues({...values, Payment: value});
+                                    inspectInput('Payment', value, contains);
+                                }}
+                                onBlur={() => {
+                                    if (values.Payment)
+                                        return;
+                                    setValues({...values, Payment: initialValues.Payment});
+                                    inspectInput('Payment', initialValues.Payment, contains);
+                                }}
+                            />
+                            <Text
+                                name={'Name'}
+                                label={'Name'}
+                                value={values.Name}
+                                state={formState.input.Name}
+                                onChange={async (name, value) => {
+                                    inspectInput('Name', value, contains);
+                                    setValues({...values, [`${name}`]: value});
+                                }}
+                                onBlur={() => {
+                                    if (values.Name)
+                                        return;
+                                    setValues({...values, Name: initialValues.Name});
+                                    inspectInput('Name', initialValues.Name, contains);
+                                }}
+                            />
+                            <Text
+                                name={'Type'}
+                                label={'Type'}
+                                value={values.Type}
+                                state={formState.input.Type}
+                                onChange={async (name, value) => {
+                                    inspectInput('Type', value, contains);
+                                    setValues({...values, [`${name}`]: value});
+                                }}
+                                onBlur={() => {
+                                    if (values.Type)
+                                        return;
+                                    setValues({...values, Type: initialValues.Type});
+                                    inspectInput('Type',  initialValues.Type, contains);
+                                }}
+                            />
+                            <Text
+                                name={'CCN'}
+                                label={'Credit Card Number'}
+                                value={values.CCN}
+                                state={formState.input.CCN}
+                                onChange={async (name, value) => {
+                                    inspectInput('CCN', value, contains);
+                                    setValues({...values, [`${name}`]: value});
+                                }}
+                                onBlur={() => {
+                                    if (values.CCN)
+                                        return;
+                                    setValues({...values, CCN: initialValues.CCN});
+                                    inspectInput('Type', initialValues.CCN, contains);
+                                }}
+                            />
+                            <Text
+                                name={'EXP'}
+                                label={'Expiration Date'}
+                                value={values.EXP}
+                                state={formState.input.EXP}
+                                onChange={async (name, value) => {
+                                    inspectInput('EXP', value, contains);
+                                    setValues({...values, [`${name}`]: value});
+                                }}
+                                onBlur={() => {
+                                    if (values.EXP)
+                                        return;
+                                    setValues({...values, EXP: initialValues.EXP});
+                                    inspectInput('EXP', initialValues.EXP, contains);
+                                }}
+                            />
                         </div>
                     )}
                 />
             }
             {!edit && 
-                <div>
-                    <span onClick={() => setEdit(!values.PaymentID)}>
-                        <div>{props.payment.Payment} {props.payment.PaymentDate.toString()}</div>
-                        <div>{props.payment.Type} {props.payment.Name} {props.payment.CCN} {props.payment.EXP}</div>
-                    </span>
-                    <span onClick={() => props.onDelete()}>DELETE</span>
-                </div>
+                <PaymentCard
+                    payment={values.Payment}
+                    ccn={values.CCN}
+                    exp={values.EXP}
+                    type={values.Type}
+                    name={values.Name}
+                    paymentDate={toWebDateTime(values.PaymentDate)}
+                    onEdit={() => setEdit(values.PaymentID === -1)}
+                    onDelete={props.onDelete}
+                />
             }
         </>
     )

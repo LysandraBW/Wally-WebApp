@@ -104,7 +104,7 @@ export default function Search(props: SearchProps<any>) {
             onBlur={props.onBlur}
             onChange={changeHandler}
             getToggle={getSearchToggle}
-            error={props.error}
+            state={props.state}
         />
     )
 }

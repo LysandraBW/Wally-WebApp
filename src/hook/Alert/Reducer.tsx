@@ -1,5 +1,5 @@
-import Confirm from "@/components/Message/Confirm/Confirm";
-import Message, { MessageType } from "@/components/Message/Message/Message";
+import Confirm from "@/components/Alert/Confirm/Confirm";
+import Message, { MessageType } from "@/components/Alert/Message/Message";
 
 export enum AlertActionType {
     RefreshMessages,

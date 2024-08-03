@@ -1,8 +1,8 @@
 import AptRow from "./Row";
 import { UpdateLabel } from "@/database/Export";
 import { useContext } from "react";
-import { PageContext } from "@/app/Employee/Dashboard/Dashboard/page";
-import { toggleValue } from "@/components/Input/Checkbox/Checkbox";
+import { DefaultPageContext } from "@/app/Employee/Dashboard/Dashboard/page";
+import { toggleValue } from "@/lib/Input/Toggle";
 import { DB_AllAppointmentLabels, DB_AppointmentOverview } from "@/database/Types";
 import { updateAppointmentLabel } from "@/database/Appointment/Label/Helper";
 
@@ -18,7 +18,7 @@ interface BodyProps {
 }
 
 export default function Body(props: BodyProps) {
-    const context = useContext(PageContext);
+    const context = useContext(DefaultPageContext);
 
     const updateLabel = async (appointmentID: string, labelName: string) => {
         const updatedLabels = updateAppointmentLabel(

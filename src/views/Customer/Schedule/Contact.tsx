@@ -1,5 +1,5 @@
 import { Text } from '@/components/Input/Export';
-import { ReducerState } from '@/hook/FormState/Reducer';
+import { FormState } from "@/hook/State/Interface";
 import { validEmail, validName, validPhone } from '@/validation/Validation';
 interface ContactFormProps {
     form: {
@@ -8,7 +8,7 @@ interface ContactFormProps {
         email: string;
         phone: string;
     };
-    formState: ReducerState;
+    formState: FormState;
     updateFormState: (updatedInputState: {name: string, state: [boolean, string?]}) => void;
     onChange: (name: string, value: any) => void;
 }
@@ -33,7 +33,7 @@ export default function ContactForm(props: ContactFormProps) {
                 name={'fName'}
                 label={'First Name'}
                 value={props.form.fName}
-                error={props.formState.input.fName}
+                state={props.formState.input.fName}
                 onChange={(name, value) => {
                     inspectInput('fName', value, validName);
                     props.onChange(name, value);
@@ -43,7 +43,7 @@ export default function ContactForm(props: ContactFormProps) {
                 name={'lName'}
                 label={'Last Name'}
                 value={props.form.lName}
-                error={props.formState.input.lName}
+                state={props.formState.input.lName}
                 onChange={(name, value) => {
                     inspectInput('lName', value, validName);
                     props.onChange(name, value);
@@ -53,7 +53,7 @@ export default function ContactForm(props: ContactFormProps) {
                 name={'email'}
                 label={'Email'}
                 value={props.form.email}
-                error={props.formState.input.email}
+                state={props.formState.input.email}
                 onChange={(name, value) => {
                     inspectInput('email', value, validEmail);
                     props.onChange(name, value);
@@ -63,7 +63,7 @@ export default function ContactForm(props: ContactFormProps) {
                 name={'phone'}
                 label={'Phone'}
                 value={props.form.phone}
-                error={props.formState.input.phone}
+                state={props.formState.input.phone}
                 onChange={(name, value) => {
                     inspectInput('phone', value, validPhone);
                     props.onChange(name, value);

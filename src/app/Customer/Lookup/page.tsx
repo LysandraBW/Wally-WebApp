@@ -1,12 +1,12 @@
 "use client";
-import { Form } from "@/process/Customer/Lookup/Form";
+import { Form } from "@/submission/Customer/Lookup/Form";
 import { useReducer, useState } from "react";
-import { submitForm } from "@/process/Customer/Lookup/Submit";
+import { submitForm } from "@/submission/Customer/Lookup/Submit";
 import { DB_AppointmentSummary } from "@/database/Types";
 import Error from "@/views/Customer/Lookup/Output/Error";
 import LookupForm from "@/views/Customer/Lookup/Lookup";
 import AppointmentSummary from "@/views/Customer/Lookup/Output/Summary";
-import FormStateReducer from "@/hook/FormState/Reducer";
+import FormStateReducer from "@/hook/State/Reducer";
 import { InitialLookupFormState } from "@/validation/State/Lookup";
 import { validEmail, validUniqueIdentifier } from "@/validation/Validation";
 

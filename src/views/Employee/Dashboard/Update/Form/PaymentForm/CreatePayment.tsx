@@ -1,14 +1,16 @@
 import { useReducer, useState } from "react";
 import { Text } from "@/components/Input/Export";
-import FormStateReducer, { InitialFormState } from "@/hook/FormState/Reducer";
-import { hasValue } from "@/validation/Validation";
-import { UpdatePayment } from "@/process/Employee/Update/Form/Form/Payment/Payment";
+import FormStateReducer from "@/hook/State/Reducer";
+import { InitialFormState } from "@/hook/State/Interface";
+import { contains } from "@/validation/Validation";
+import { UpdatePayment } from "@/submission/Employee/Update/Payment/Form";
+import AddButton from "@/components/Button/Text/Add";
 
 interface CreatePaymentProps {
     onChange: (name: string, value: any) => any;
 }
 
-const defaultInput: UpdatePayment = {
+const defaultValues: UpdatePayment = {
     AppointmentID:  '',
     PaymentID:      0,
     Payment:        '',
@@ -20,7 +22,7 @@ const defaultInput: UpdatePayment = {
 }
 
 export default function CreatePayment(props: CreatePaymentProps) {
-    const [values, setValues] = useState(defaultInput);
+    const [values, setValues] = useState(defaultValues);
     const [formState, formStateDispatch] = useReducer(FormStateReducer, InitialFormState);
 
     const inspectInput = async <T,>(
@@ -37,11 +39,11 @@ export default function CreatePayment(props: CreatePaymentProps) {
     }
 
     const inspectAll = async () => {
-        const validCCN = await inspectInput('CCN', values.CCN, hasValue);
-        const validEXP = await inspectInput('EXP', values.EXP, hasValue);
-        const validName = await inspectInput('Name', values.Name, hasValue);
-        const validType = await inspectInput('Type', values.Type, hasValue);
-        const validPayment = await inspectInput('Payment', values.Payment, hasValue);
+        const validCCN = await inspectInput('CCN', values.CCN, contains);
+        const validEXP = await inspectInput('EXP', values.EXP, contains);
+        const validName = await inspectInput('Name', values.Name, contains);
+        const validType = await inspectInput('Type', values.Type, contains);
+        const validPayment = await inspectInput('Payment', values.Payment, contains);
         return validType && validCCN && validPayment && validName && validEXP;
     }
 
@@ -49,64 +51,62 @@ export default function CreatePayment(props: CreatePaymentProps) {
         <div>
             <Text
                 name={'Payment'}
-                value={values.Payment}
-                error={formState.input.Payment}
                 label={'Payment'}
+                value={values.Payment}
+                state={formState.input.Payment}
                 onChange={async (name, value) => {
-                    inspectInput('Payment', value, hasValue);
+                    inspectInput('Payment', value, contains);
                     setValues({...values, [`${name}`]: value});
                 }}
             />
             <Text
                 name={'Name'}
-                value={values.Name}
-                error={formState.input.Name}
                 label={'Name'}
+                value={values.Name}
+                state={formState.input.Name}
                 onChange={async (name, value) => {
-                    inspectInput('Name', value, hasValue);
+                    inspectInput('Name', value, contains);
                     setValues({...values, [`${name}`]: value});
                 }}
             />
             <Text
                 name={'Type'}
-                value={values.Type}
-                error={formState.input.Type}
                 label={'Type'}
+                value={values.Type}
+                state={formState.input.Type}
                 onChange={async (name, value) => {
-                    inspectInput('Type', value, hasValue);
+                    inspectInput('Type', value, contains);
                     setValues({...values, [`${name}`]: value});
                 }}
             />
             <Text
                 name={'CCN'}
-                value={values.CCN}
-                error={formState.input.CCN}
                 label={'Credit Card Number'}
+                value={values.CCN}
+                state={formState.input.CCN}
                 onChange={async (name, value) => {
-                    inspectInput('CCN', value, hasValue);
+                    inspectInput('CCN', value, contains);
                     setValues({...values, [`${name}`]: value});
                 }}
             />
             <Text
                 name={'EXP'}
-                value={values.EXP}
-                error={formState.input.EXP}
                 label={'Expiration Date'}
+                value={values.EXP}
+                state={formState.input.EXP}
                 onChange={async (name, value) => {
-                    inspectInput('EXP', value, hasValue);
+                    inspectInput('EXP', value, contains);
                     setValues({...values, [`${name}`]: value});
                 }}
             />            
-            <button 
+            <AddButton 
                 onClick={async () => {
                     if (!(await inspectAll()))
                         return;
                     props.onChange('Payments', {...values, PaymentDate: new Date()});
-                    setValues(defaultInput);
+                    setValues(defaultValues);
                 }}
-            >
-                Add
-            </button>
+            />
         </div>
     )
 }

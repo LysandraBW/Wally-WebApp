@@ -1,4 +1,3 @@
-
 export class MathSet extends Set {
     intersection(B: MathSet) {
         const common = new MathSet();

@@ -25,7 +25,7 @@ export default function TextArea(props: TextAreaProps) {
                     cols={props.cols}
                 />
             }
-            error={props.error || {state: false, message: ''}}
+            state={props.state || {state: false, message: ''}}
         />
     )
 }
