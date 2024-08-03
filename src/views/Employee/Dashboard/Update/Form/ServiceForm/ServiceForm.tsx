@@ -1,5 +1,5 @@
 import { DB_AppointmentService, DB_Diagnosis, DB_Part, DB_Repair } from "@/database/Types";
-import { FormPart } from "@/process/Employee/Update/Form/UpdateForm";
+import { FormType } from "@/process/Employee/Update/Form/UpdateForm";
 import ServiceManager from "./Service/ServiceManager";
 import DiagnosisManager from "./Diagnosis/DiagnosisManager";
 import RepairManager from "./Repair/RepairManager";
@@ -13,7 +13,7 @@ interface ServiceProps {
         Parts:      {[partID: string]:      DB_Part};
     };
     updateFormState: (state: boolean) => void;
-    changeHandler: (formPart: FormPart, name: string, value: any) => void;
+    changeHandler: (formPart: FormType, name: string, value: any) => void;
 }
 
 export default function ServiceForm(props: ServiceProps) {

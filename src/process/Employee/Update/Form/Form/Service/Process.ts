@@ -1,6 +1,7 @@
-import { objectMatch } from "@/lib/Process/Difference";
+import { objectMatch, updatedValue } from "@/lib/Process/Difference";
 import { MathSet } from "@/lib/Process/MathSet";
 import { ServiceFormStructure } from "./Service";
+import { toInteger } from "@/lib/Convert/Convert";
 
 export interface ProcessedServiceFormStructure {
     AppointmentID: string;
@@ -106,9 +107,9 @@ export async function processServiceForm(
 
         processedServicesForm.Update.Services.push({
             ServiceID: serviceID,
-            Class: refService.Class !== curService.Class ? curService.Class : null,
-            Division: refService.Division !== curService.Division ? curService.Division : null,
-            Service: refService.Service !== curService.Service ? curService.Service : null
+            Class: updatedValue(refService.Class, curService.Class),
+            Division: updatedValue(refService.Division, curService.Division),
+            Service: updatedValue(refService.Service, curService.Service),
         });
     });
 
@@ -146,8 +147,8 @@ export async function processServiceForm(
 
         processedServicesForm.Update.Diagnoses.push({
             DiagnosisID: diagnosisID,
-            Code: refDiagnosis.Code !== curDiagnosis.Code ? curDiagnosis.Code : null,
-            Message: refDiagnosis.Message !== curDiagnosis.Message ? curDiagnosis.Message : null
+            Code: updatedValue(refDiagnosis.Code, curDiagnosis.Code),
+            Message: updatedValue(refDiagnosis.Message, curDiagnosis.Message),
         });
     });
 
@@ -184,7 +185,7 @@ export async function processServiceForm(
 
         processedServicesForm.Update.Repairs.push({
             RepairID: repairID,
-            Repair: refRepairs.Repair !== curRepairs.Repair ? curRepairs.Repair : null
+            Repair: updatedValue(refRepairs.Repair, curRepairs.Repair),
         });
     });
 
@@ -220,10 +221,10 @@ export async function processServiceForm(
         
         processedServicesForm.Update.Parts.push({
             PartID: partID,
-            PartName: refParts.PartName !== curParts.PartName ? curParts.PartName : null,
-            PartNumber: refParts.PartNumber !== curParts.PartNumber ? curParts.PartNumber : null,
-            Quantity: refParts.Quantity !== curParts.Quantity ? curParts.Quantity : null,
-            UnitCost: refParts.UnitCost !== curParts.UnitCost ? curParts.UnitCost : null
+            PartName: updatedValue(refParts.PartName, curParts.PartName),
+            PartNumber: updatedValue(refParts.PartNumber, curParts.PartNumber),
+            Quantity: updatedValue(toInteger(refParts.Quantity), toInteger(curParts.Quantity)),
+            UnitCost: updatedValue(toInteger(refParts.UnitCost), toInteger(curParts.UnitCost)),
         });
     });
 
@@ -232,8 +233,8 @@ export async function processServiceForm(
         processedServicesForm.Insert.Parts.push({
             PartName: curParts.PartName,
             PartNumber: curParts.PartNumber,
-            Quantity: curParts.Quantity,
-            UnitCost: curParts.UnitCost
+            Quantity: toInteger(curParts.Quantity),
+            UnitCost: toInteger(curParts.UnitCost)
         });
     });
 

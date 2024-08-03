@@ -2,33 +2,32 @@ import { useEffect, useReducer, useState } from "react";
 import UpdatePayment from "./UpdatePayment";
 import CreatePayment from "./CreatePayment";
 import {Text} from "@/components/Input/Export";
-import { DB_Payment } from "@/database/Types";
-import { FormPart } from "@/process/Employee/Update/Form/UpdateForm";
+import { FormType } from "@/process/Employee/Update/Form/UpdateForm";
 import FormStateReducer, { InitialFormState } from "@/hook/FormState/Reducer";
 import { hasValue } from "@/lib/Inspector/Inspector/Inspect/Inspectors";
+import { UpdatePayment as UpdatePaymentData } from "@/process/Employee/Update/Form/Form/Payment/Payment";
 
 interface PaymentFormProps {
     form: {
-        Cost: number;
-        Payments: {[paymentID: string]: DB_Payment};
+        Cost: string;
+        Payments: {[paymentID: string]: UpdatePaymentData};
     };
     updateFormState: (state: boolean) => void;
-    changeHandler: (formPart: FormPart, name: string, value: any) => void;
+    changeHandler: (formPart: FormType, name: string, value: any) => void;
 }
 
 export default function PaymentForm(props: PaymentFormProps) {
     const initialCost = props.form.Cost;
-    const [costError, costErrorDispatch] = useReducer(FormStateReducer, InitialFormState);
+    const [formState, formStateDispatch] = useReducer(FormStateReducer, InitialFormState);
     const [counter, setCounter] = useState<number>(1);
-
+    
     useEffect(() => {
-        // This is called by the Cost input.
-        props.updateFormState(costError.state);
-    }, [costError.state]);
+        props.updateFormState(formState.state);
+    }, [formState.state]);
 
     const inspectCost = async (cost: string): Promise<boolean> => {
         const [errState, errMessage] = await hasValue().inspect(cost);
-        costErrorDispatch({
+        formStateDispatch({
             name: 'Cost',
             state: [errState, errMessage]
         });
@@ -39,9 +38,9 @@ export default function PaymentForm(props: PaymentFormProps) {
         <>
             <Text
                 name={"Cost"}
-                value={props.form.Cost}
-                error={costError.input.Cost}
                 label={"Cost"}
+                value={props.form.Cost}
+                error={formState.input.Cost}
                 onChange={(name, value) => {
                     props.changeHandler('Payment', name, value);
                     inspectCost(value);
@@ -49,9 +48,8 @@ export default function PaymentForm(props: PaymentFormProps) {
                 onBlur={() => {
                     if (props.form.Cost)
                         return;
-
                     props.changeHandler('Payment', 'Cost', initialCost);
-                    inspectCost(initialCost.toString());
+                    inspectCost(initialCost);
                 }}
             />
             <div>
@@ -70,12 +68,11 @@ export default function PaymentForm(props: PaymentFormProps) {
                                 updatedValue[`${paymentID}`] = part;
                                 props.changeHandler('Payment', 'Payments', updatedValue);
                             }}
-                            updateFormError={(state: boolean) => {
-                                costErrorDispatch({
-                                    name: 'Other',
+                            updateFormState={(state: boolean) => {
+                                formStateDispatch({
+                                    name: `Payment ${i}`,
                                     state: [state, '']
                                 });
-                                props.updateFormState(state);
                             }}
                         />
                     </div>

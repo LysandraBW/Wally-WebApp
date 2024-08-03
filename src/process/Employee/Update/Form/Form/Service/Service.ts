@@ -1,14 +1,21 @@
 import { 
     DB_AppointmentService, 
-    DB_Diagnosis, 
-    DB_Part, 
+    DB_Diagnosis,
     DB_Repair 
 } from "@/database/Types";
 
+export type UpdatePart = {
+    PartID:     number;
+    PartName:   string;
+    PartNumber: string;
+    Quantity: string;
+    UnitCost: string;
+};
+
 export interface ServiceFormStructure {
     AppointmentID:  string;
-    Services:       {[serviceID:    string]:    DB_AppointmentService};
     Diagnoses:      {[diagnosisID:  string]:    DB_Diagnosis};
     Repairs:        {[repairID:     string]:    DB_Repair};
-    Parts:          {[partID:       string]:    DB_Part};
+    Parts:          {[partID:       string]:    UpdatePart};
+    Services:       {[serviceID:    string]:    DB_AppointmentService};
 }

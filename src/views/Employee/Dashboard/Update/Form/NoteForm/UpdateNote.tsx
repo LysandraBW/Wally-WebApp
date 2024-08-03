@@ -2,70 +2,42 @@ import { PageContext } from "@/app/Employee/Dashboard/Update/page";
 import { toggleValue } from "@/components/Input/Checkbox/Checkbox";
 import { File, Multiple, Toggle } from "@/components/Input/Export";
 import { DB_GeneralEmployee } from "@/database/Types";
-import { every, hasValue, inValues } from "@/lib/Inspector/Inspector/Inspect/Inspectors";
-import { ErrorStructure, Regexes } from "@/lib/Inspector/Inspectors";
+import { Regexes } from "@/lib/Inspector/Inspectors";
 import { UpdateNote as UpdateNoteData } from "@/process/Employee/Update/Form/Form/Note/Note";
 import FormStateReducer, { InitialFormState } from "@/hook/FormState/Reducer";
 import { useContext, useEffect, useReducer, useState } from "react";
+import { hasValue } from "@/validation/Validation";
+import { every, inValues } from "@/lib/Inspector/Inspector/Inspect/Inspectors";
 
 interface UpdateNoteProps {
     note: UpdateNoteData;
     onDelete: () => any;
     onUpdate: (note: UpdateNoteData) => any;   
-    updateFormError: (state: boolean) => void;
+    updateFormState: (state: boolean) => void;
 }
 
 export default function UpdateNote(props: UpdateNoteProps) {
     const context = useContext(PageContext);
-    const initialNoteData = {...props.note};
-
-    const [edit, setEdit] = useState(false);
+    const initialValues = {...props.note};
     const [values, setValues] = useState(props.note);
-
-    const [formError, formErrorDispatch] = useReducer(FormStateReducer, InitialFormState);
+    const [edit, setEdit] = useState(false);
+    const [formState, formStateDispatch] = useReducer(FormStateReducer, InitialFormState);
 
     useEffect(() => {
-        props.updateFormError(formError.state);
-    }, [formError.state]);
-
-    const inspectHead = async (head: string = values.Head): Promise<boolean> => {
-        const [headState, headMessage] = await hasValue().inspect(head);
-        formErrorDispatch({
-            name: 'Head',
-            state: [headState, headMessage]
+        props.updateFormState(formState.state);
+    }, [formState.state]);
+    
+    const inspectInput = async <T,>(
+        inputName: string, 
+        input: T, 
+        callback: (value: T) => Promise<[boolean, string?]>
+    ): Promise<boolean> => {
+        const [errState, errMessage] = await callback(input);
+        formStateDispatch({
+            name: inputName,
+            state: [errState, errMessage]
         });
-        return headState;
-    }
-
-    const inspectBody = async (body: string = values.Body): Promise<boolean> => {
-        const [bodyState, bodyMessage] = await hasValue().inspect(body);
-        formErrorDispatch({
-            name: 'Body',
-            state: [bodyState, bodyMessage]
-        });
-        return bodyState;
-    }
-
-    const inspectShowCustomer = async (showCustomer: number = values.ShowCustomer): Promise<boolean> => {
-        const [showCustomerState, showCustomerMessage] = await inValues({
-            values: [0, 1]
-        }).inspect([showCustomer]);
-        formErrorDispatch({
-            name: 'ShowCustomer',
-            state: [showCustomerState, showCustomerMessage]
-        });
-        return showCustomerState;
-    }
-
-    const inspectSharees = async (sharees: Array<string> = values.Sharees): Promise<boolean> => {
-        const [shareesState, shareesMessage] = await every({
-            callback: (v: string) => !!v.match(Regexes.UniqueIdentifier)
-        }).inspect(sharees);
-        formErrorDispatch({
-            name: 'Sharees',
-            state: [shareesState, shareesMessage]
-        });
-        return shareesState;
+        return errState;
     }
 
     const noteOwnerData = (): DB_GeneralEmployee => {
@@ -96,7 +68,8 @@ export default function UpdateNote(props: UpdateNoteProps) {
     }
 
     // Take the filter function out and put it in its own function,
-    // I don't like elements being up here anymore
+    // I don't like elements being up here anymore.
+    // Moreover, more abstraction with the components.
     const getSharedWith = (): React.ReactNode => {
         if (!isOwner())
             return <></>;
@@ -123,18 +96,17 @@ export default function UpdateNote(props: UpdateNoteProps) {
                                     onChange={async (event) => {
                                         const value = event.target.value;
                                         setValues({...values, Head: value});
-                                        inspectHead(value);
+                                        inspectInput('Head', value, hasValue);
                                     }}
                                     onBlur={async () => {
                                         if (values.Head)
                                             return;
-
-                                        setValues({...values, Head: initialNoteData.Head});
-                                        inspectHead(initialNoteData.Head);
+                                        setValues({...values, Head: initialValues.Head});
+                                        inspectInput('Head', initialValues.Head, hasValue);
                                     }}
                                 />
-                                {formError.input.Head && !formError.input.Head.state &&
-                                    <span>{formError.input.Head.message}</span>
+                                {formState.input.Head && !formState.input.Head.state &&
+                                    <span>{formState.input.Head.message}</span>
                                 }
                             </div>
                             <div>
@@ -143,18 +115,17 @@ export default function UpdateNote(props: UpdateNoteProps) {
                                     onChange={async (event) => {
                                         const value = event.target.value;
                                         setValues({...values, Body: value});
-                                        inspectBody(value);
+                                        inspectInput('Body', value, hasValue);
                                     }}
                                     onBlur={async () => {
                                         if (values.Body)
                                             return;
-                                    
-                                        setValues({...values, Body: initialNoteData.Body});
-                                        inspectBody(initialNoteData.Body);
+                                        setValues({...values, Body: initialValues.Body});
+                                        inspectInput('Body', initialValues.Body, hasValue);
                                     }}
                                 />
-                                {formError.input.Body && !formError.input.Body.state &&
-                                    <span>{formError.input.Body.message}</span>
+                                {formState.input.Body && !formState.input.Body.state &&
+                                    <span>{formState.input.Body.message}</span>
                                 }
                             </div>
                             {/* Deleting Existing Attachments */}
@@ -193,15 +164,17 @@ export default function UpdateNote(props: UpdateNoteProps) {
                                         name='ShowCustomer'
                                         label='Show Customer'
                                         value={values.ShowCustomer}
-                                        error={formError.input.ShowCustomer}
+                                        error={formState.input.ShowCustomer}
                                         onChange={async (name, value) => {
                                             setValues({...values, [`${name}`]: value});
-                                            inspectShowCustomer(value);
+                                            inspectInput('ShowCustomer', value, async (v) => await inValues({
+                                                values: [0, 1]
+                                            }).inspect(v));
                                         }}
                                     />   
                                 }
-                                {formError.input.ShowCustomer && !formError.input.ShowCustomer.state &&
-                                    <span>{formError.input.ShowCustomer.message}</span>
+                                {formState.input.ShowCustomer && !formState.input.ShowCustomer.state &&
+                                    <span>{formState.input.ShowCustomer.message}</span>
                                 }
                             </div>
                             <div>
@@ -214,16 +187,18 @@ export default function UpdateNote(props: UpdateNoteProps) {
                                                     name='Sharees'
                                                     label={`Add ${employee.FName} ${employee.LName}`}
                                                     value={values.Sharees.includes(employee.EmployeeID) ? 1 : 0}
-                                                    error={formError.input.Sharees}
+                                                    error={formState.input.Sharees}
                                                     onChange={async (name, value) => {
                                                         const updatedValue = toggleValue(values.Sharees, employee.EmployeeID);
-                                                        inspectSharees(updatedValue);
                                                         setValues({...values, Sharees: updatedValue});
+                                                        inspectInput('Sharees', updatedValue, async (v) => await every({
+                                                            callback: (v: string) => !!v.match(Regexes.UniqueIdentifier)
+                                                        }).inspect(v));
                                                     }}
                                                 />
                                             }
-                                            {formError.input.Sharees && !formError.input.Sharees.state &&
-                                                <span>{formError.input.Sharees.message}</span>
+                                            {formState.input.Sharees && !formState.input.Sharees.state &&
+                                                <span>{formState.input.Sharees.message}</span>
                                             }
                                         </div>
                                     ))
@@ -231,7 +206,7 @@ export default function UpdateNote(props: UpdateNoteProps) {
                             </div>
                             <button 
                                 onClick={() => {
-                                    if (!formError.state)
+                                    if (!formState.state)
                                         return;
                                     setEdit(false);
                                     props.onUpdate(values);

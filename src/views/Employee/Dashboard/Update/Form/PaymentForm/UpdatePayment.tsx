@@ -1,67 +1,34 @@
 import { Multiple } from "@/components/Input/Export";
-import { DB_Payment } from "@/database/Types";
-import { toInteger } from "@/lib/Convert/Convert";
-import { hasValue } from "@/lib/Inspector/Inspector/Inspect/Inspectors";
 import FormStateReducer, { InitialFormState } from "@/hook/FormState/Reducer";
 import { useEffect, useReducer, useState } from "react";
+import { UpdatePayment as UpdatePaymentDate } from "@/process/Employee/Update/Form/Form/Payment/Payment";
+import { hasValue } from "@/validation/Validation";
 
 interface UpdatePaymentProps {
-    payment: DB_Payment
+    payment: UpdatePaymentDate
     onDelete: () => any;
-    onUpdate: (payment: DB_Payment) => any;   
-    updateFormError: (state: boolean) => void; 
+    onUpdate: (payment: UpdatePaymentDate) => any;   
+    updateFormState: (state: boolean) => void; 
 }
 
 export default function UpdatePayment(props: UpdatePaymentProps) {
-    const initialPaymentData = {...props.payment};
-    const [edit, setEdit] = useState(false);
+    const initialValues = {...props.payment};
     const [values, setValues] = useState(props.payment);
-    const [formError, formErrorDispatch] = useReducer(FormStateReducer, InitialFormState);
+    const [edit, setEdit] = useState(false);
+    const [formState, formStateDispatch] = useReducer(FormStateReducer, InitialFormState);
 
     useEffect(() => {
-        props.updateFormError(formError.state);
-    }, [formError.state]);
+        props.updateFormState(formState.state);
+    }, [formState.state]);
     
-    const inspectPayment = async (payment: string = values.Payment.toString()): Promise<boolean> => {
-        const [errState, errMessage] = await hasValue().inspect(payment);
-        formErrorDispatch({
-            name: 'Payment',
-            state: [errState, errMessage]
-        });
-        return errState;
-    }
-
-    const inspectName = async (name: string = values.Name): Promise<boolean> => {
-        const [errState, errMessage] = await hasValue().inspect(name);
-        formErrorDispatch({
-            name: 'Name',
-            state: [errState, errMessage]
-        });
-        return errState;
-    }
-
-    const inspectType = async (type: string = values.Type): Promise<boolean> => {
-        const [errState, errMessage] = await hasValue().inspect(type);
-        formErrorDispatch({
-            name: 'Type',
-            state: [errState, errMessage]
-        });
-        return errState;
-    }
-
-    const inspectCCN = async (ccn: string = values.Type): Promise<boolean> => {
-        const [errState, errMessage] = await hasValue().inspect(ccn);
-        formErrorDispatch({
-            name: 'CCN',
-            state: [errState, errMessage]
-        });
-        return errState;
-    }
-
-    const inspectEXP = async (exp: string = values.EXP): Promise<boolean> => {
-        const [errState, errMessage] = await hasValue().inspect(exp);
-        formErrorDispatch({
-            name: 'EXP',
+    const inspectInput = async <T,>(
+        inputName: string, 
+        input: T, 
+        callback: (value: T) => Promise<[boolean, string?]>
+    ): Promise<boolean> => {
+        const [errState, errMessage] = await callback(input);
+        formStateDispatch({
+            name: inputName,
             state: [errState, errMessage]
         });
         return errState;
@@ -83,19 +50,18 @@ export default function UpdatePayment(props: UpdatePaymentProps) {
                                     value={values.Payment} 
                                     onChange={async (event) => {
                                         const value = event.target.value
-                                        setValues({...values, Payment: toInteger(value)});
-                                        inspectPayment(value);
+                                        setValues({...values, Payment: value});
+                                        inspectInput('Payment', value, hasValue);
                                     }}
                                     onBlur={() => {
                                         if (values.Payment)
                                             return;
-
-                                        setValues({...values, Payment: initialPaymentData.Payment});
-                                        inspectPayment(initialPaymentData.Payment.toString());
+                                        setValues({...values, Payment: initialValues.Payment});
+                                        inspectInput('Payment', initialValues.Payment, hasValue);
                                     }}
                                 />
-                                {formError.input.Payment && !formError.input.Payment.state &&
-                                    <span>{formError.input.Payment.message}</span>
+                                {formState.input.Payment && !formState.input.Payment.state &&
+                                    <span>{formState.input.Payment.message}</span>
                                 }
                             </div>
                             <div>
@@ -104,18 +70,17 @@ export default function UpdatePayment(props: UpdatePaymentProps) {
                                     onChange={async (event) => {
                                         const value = event.target.value
                                         setValues({...values, Name: value});
-                                        inspectName(value);
+                                        inspectInput('Name', value, hasValue);
                                     }}
                                     onBlur={() => {
                                         if (values.Name)
                                             return;
-                                        
-                                        setValues({...values, Name: initialPaymentData.Name});
-                                        inspectName(initialPaymentData.Name);
+                                        setValues({...values, Name: initialValues.Name});
+                                        inspectInput('Name', initialValues.Name, hasValue);
                                     }}
                                 />
-                                {formError.input.Name && !formError.input.Name.state &&
-                                    <span>{formError.input.Name.message}</span>
+                                {formState.input.Name && !formState.input.Name.state &&
+                                    <span>{formState.input.Name.message}</span>
                                 }
                             </div>
                             <div>
@@ -124,18 +89,17 @@ export default function UpdatePayment(props: UpdatePaymentProps) {
                                     onChange={async (event) => {
                                         const value = event.target.value
                                         setValues({...values, Type: value});
-                                        inspectType(value);
+                                        inspectInput('Type', value, hasValue);
                                     }}
                                     onBlur={() => {
                                         if (values.Type)
                                             return;
-
-                                        setValues({...values, Type: initialPaymentData.Type});
-                                        inspectType(initialPaymentData.Type);
+                                        setValues({...values, Type: initialValues.Type});
+                                        inspectInput('Type',  initialValues.Type, hasValue);
                                     }}
                                 />
-                                {formError.input.Type && !formError.input.Type.state &&
-                                    <span>{formError.input.Type.message}</span>
+                                {formState.input.Type && !formState.input.Type.state &&
+                                    <span>{formState.input.Type.message}</span>
                                 }
                             </div>
                             <div>
@@ -144,18 +108,17 @@ export default function UpdatePayment(props: UpdatePaymentProps) {
                                     onChange={async (event) => {
                                         const value = event.target.value
                                         setValues({...values, CCN: value});
-                                        inspectCCN(value);
+                                        inspectInput('CCN', value, hasValue);
                                     }}
                                     onBlur={() => {
                                         if (values.CCN)
                                             return;
-                                        
-                                        setValues({...values, CCN: initialPaymentData.CCN});
-                                        inspectCCN(initialPaymentData.CCN);
+                                        setValues({...values, CCN: initialValues.CCN});
+                                        inspectInput('Type', initialValues.CCN, hasValue);
                                     }}
                                 />
-                                {formError.input.CCN && !formError.input.CCN.state &&
-                                    <span>{formError.input.CCN.message}</span>
+                                {formState.input.CCN && !formState.input.CCN.state &&
+                                    <span>{formState.input.CCN.message}</span>
                                 }
                             </div>
                             <div>
@@ -164,18 +127,17 @@ export default function UpdatePayment(props: UpdatePaymentProps) {
                                     onChange={async (event) => {
                                         const value = event.target.value
                                         setValues({...values, EXP: value});
-                                        inspectEXP(value);
+                                        inspectInput('EXP', value, hasValue);
                                     }}
                                     onBlur={() => {
                                         if (values.EXP)
                                             return;
-
-                                        setValues({...values, EXP: initialPaymentData.EXP});
-                                        inspectEXP(initialPaymentData.EXP);
+                                        setValues({...values, EXP: initialValues.EXP});
+                                        inspectInput('EXP', initialValues.EXP, hasValue);
                                     }}
                                 />
-                                {formError.input.EXP && !formError.input.EXP.state &&
-                                    <span>{formError.input.EXP.message}</span>
+                                {formState.input.EXP && !formState.input.EXP.state &&
+                                    <span>{formState.input.EXP.message}</span>
                                 }
                             </div>
                         </div>

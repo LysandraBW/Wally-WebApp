@@ -1,8 +1,8 @@
-import { FormPart } from "@/process/Employee/Update/Form/UpdateForm"
+import { FormType } from "@/process/Employee/Update/Form/UpdateForm"
 
 interface FormTabsProps {
-    currentForm: FormPart;
-    updateCurrentForm: (formPart: FormPart) => void;
+    currentForm: FormType;
+    updateCurrentForm: (formPart: FormType) => void;
 }
 
 export default function FormTabs(props: FormTabsProps) {

@@ -1,60 +1,37 @@
 import { Multiple } from "@/components/Input/Export";
-import { DB_Part } from "@/database/Types";
-import { hasValue, isNumber } from "@/lib/Inspector/Inspector/Inspect/Inspectors";
 import FormStateReducer, { InitialFormState } from "@/hook/FormState/Reducer";
 import { useEffect, useReducer, useState } from "react";
+import { hasValue, validNumber } from "@/validation/Validation";
+import { UpdatePart as UpdatePartData } from "@/process/Employee/Update/Form/Form/Service/Service";
 
 interface UpdatePartProps {
-    part: DB_Part;
+    part: UpdatePartData;
     onDelete: () => any;
-    onUpdate: (part: DB_Part) => any;   
+    onUpdate: (part: UpdatePartData) => any;   
     updateFormError: (state: boolean) => void;
 }
 
 export default function UpdatePart(props: UpdatePartProps) {
-    const initialPartData = {...props.part};
-    const [edit, setEdit] = useState(false);
+    const initialValues = {...props.part};
     const [values, setValues] = useState(props.part);
-    const [formError, formErrorDispatch] = useReducer(FormStateReducer, InitialFormState);
+    const [edit, setEdit] = useState(false);
+    const [formState, formStateDispatch] = useReducer(FormStateReducer, InitialFormState);
 
     useEffect(() => {
-        props.updateFormError(formError.state);
-    }, [formError.state]);
+        props.updateFormError(formState.state);
+    }, [formState.state]);
 
-    const inspectPartNumber = async (partNumber: string = values.PartNumber): Promise<boolean> => {
-        const [partNumberState, partNumberMessage] = await hasValue().inspect(partNumber);
-        formErrorDispatch({
-            name: 'PartNumber',
-            state: [partNumberState, partNumberMessage]
+    const inspectInput = async <T,>(
+        inputName: string, 
+        input: T, 
+        callback: (value: T) => Promise<[boolean, string?]>
+    ): Promise<boolean> => {
+        const [errState, errMessage] = await callback(input);
+        formStateDispatch({
+            name: inputName,
+            state: [errState, errMessage]
         });
-        return partNumberState;
-    }
-    
-    const inspectPartName = async (partName: string = values.PartName): Promise<boolean> => {
-        const [partNameState, partNameMessage] = await hasValue().inspect(partName);
-        formErrorDispatch({
-            name: 'PartName',
-            state: [partNameState, partNameMessage]
-        });
-        return partNameState;
-    }
-
-    const inspectQuantity = async (quantity: number = values.Quantity): Promise<boolean> => {
-        const [quantityState, quantityMessage] = await isNumber().inspect(quantity);
-        formErrorDispatch({
-            name: 'Quantity',
-            state: [quantityState, quantityMessage]
-        });
-        return quantityState;
-    }
-
-    const inspectUnitCost = async (unitCost: number = values.UnitCost): Promise<boolean> => {
-        const [unitCostState, unitCostMessage] = await isNumber().inspect(unitCost);
-        formErrorDispatch({
-            name: 'UnitCost',
-            state: [unitCostState, unitCostMessage]
-        });
-        return unitCostState;
+        return errState;
     }
 
     return (
@@ -63,10 +40,6 @@ export default function UpdatePart(props: UpdatePartProps) {
                 <Multiple
                     onBlur={() => {
                         setEdit(false);
-                        // Something Wrong Here
-                        // This should update the values, I shouldn't have
-                        // to use values at the bottom. So, why is it not
-                        // updating?
                         props.onUpdate(values);
                     }}
                     children={(
@@ -77,18 +50,17 @@ export default function UpdatePart(props: UpdatePartProps) {
                                     onChange={async (event) => {
                                         const value = event.target.value;
                                         setValues({...values, PartNumber: value});
-                                        inspectPartNumber(value);
+                                        inspectInput('PartNumber', initialValues.PartNumber, hasValue);
                                     }}
                                     onBlur={() => {
                                         if (values.PartNumber)
                                             return;
-
-                                        setValues({...values, PartNumber: initialPartData.PartNumber});
-                                        inspectPartNumber(initialPartData.PartNumber);
+                                        setValues({...values, PartNumber: initialValues.PartNumber});
+                                        inspectInput('PartNumber', initialValues.PartNumber, hasValue);
                                     }}
                                 />
-                                {formError.input.PartNumber && !formError.input.PartNumber.state &&
-                                    <span>{formError.input.PartNumber.message}</span>
+                                {formState.input.PartNumber && !formState.input.PartNumber.state &&
+                                    <span>{formState.input.PartNumber.message}</span>
                                 }
                             </div>
                             <div>
@@ -97,18 +69,17 @@ export default function UpdatePart(props: UpdatePartProps) {
                                     onChange={async (event) => {
                                             const value = event.target.value;
                                             setValues({...values, PartName: value});
-                                            inspectPartName(value);
+                                            inspectInput('PartName', initialValues.PartName, hasValue);
                                         }}
                                     onBlur={() => {
                                         if (values.PartName)
                                             return;
-
-                                        setValues({...values, PartName: initialPartData.PartName});
-                                        inspectPartName(initialPartData.PartName);
+                                        setValues({...values, PartName: initialValues.PartName});
+                                        inspectInput('PartName', initialValues.PartName, hasValue);
                                     }}
                                 />
-                                {formError.input.PartName && !formError.input.PartName.state &&
-                                    <span>{formError.input.PartName.message}</span>
+                                {formState.input.PartName && !formState.input.PartName.state &&
+                                    <span>{formState.input.PartName.message}</span>
                                 }
                             </div>
                             <div>
@@ -116,22 +87,19 @@ export default function UpdatePart(props: UpdatePartProps) {
                                     type='number'
                                     value={values.UnitCost} 
                                     onChange={async (event) => {
-                                        // Causes a 'The Specified Value...' Warning
-                                        // Fix Later
-                                        const value = parseFloat(event.target.value);
+                                        const value = event.target.value;
                                         setValues({...values, UnitCost: value});
-                                        inspectUnitCost(value);
+                                        inspectInput('UnitCost', initialValues.UnitCost, validNumber);
                                     }}
                                     onBlur={() => {
                                         if (values.UnitCost)
                                             return;
-
-                                        setValues({...values, UnitCost: initialPartData.UnitCost});
-                                        inspectUnitCost(initialPartData.UnitCost);
+                                        setValues({...values, UnitCost: initialValues.UnitCost});
+                                        inspectInput('UnitCost', initialValues.UnitCost, validNumber);
                                     }}
                                 />
-                                {formError.input.UnitCost && !formError.input.UnitCost.state &&
-                                    <span>{formError.input.UnitCost.message}</span>
+                                {formState.input.UnitCost && !formState.input.UnitCost.state &&
+                                    <span>{formState.input.UnitCost.message}</span>
                                 }
                             </div>
                             <div>
@@ -139,22 +107,19 @@ export default function UpdatePart(props: UpdatePartProps) {
                                     type='number'
                                     value={values.Quantity} 
                                     onChange={async (event) => {
-                                        // Causes a 'The Specified Value...' Warning
-                                        // Fix Later
-                                        const value = parseInt(event.target.value);
+                                        const value = event.target.value;
                                         setValues({...values, Quantity: value});
-                                        inspectQuantity(value);
+                                        inspectInput('Quantity', initialValues.Quantity, validNumber);
                                     }}
                                     onBlur={() => {
                                         if (values.Quantity)
                                             return;
-
-                                        setValues({...values, Quantity: initialPartData.Quantity});
-                                        inspectQuantity(initialPartData.Quantity)
+                                        setValues({...values, Quantity: initialValues.Quantity});
+                                        inspectInput('Quantity', initialValues.Quantity, validNumber);
                                     }}
                                 />
-                                {formError.input.Quantity && !formError.input.Quantity.state &&
-                                    <span>{formError.input.Quantity.message}</span>
+                                {formState.input.Quantity && !formState.input.Quantity.state &&
+                                    <span>{formState.input.Quantity.message}</span>
                                 }
                             </div>
                         </div>
@@ -166,10 +131,10 @@ export default function UpdatePart(props: UpdatePartProps) {
                     <span 
                         onClick={() => setEdit(true)}
                     >
-                        {values.PartNumber} 
-                        {values.PartName} 
-                        {values.UnitCost} 
-                        {values.Quantity}
+                        {props.part.PartNumber} 
+                        {props.part.PartName} 
+                        {props.part.UnitCost} 
+                        {props.part.Quantity}
                     </span>
                     <span 
                         onClick={() => props.onDelete()}

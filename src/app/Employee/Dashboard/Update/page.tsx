@@ -10,7 +10,7 @@ import { Context, ContextStructure } from "@/process/Employee/Update/Context";
 import SearchAppointment from "@/views/Employee/Dashboard/Update/Gadgets/SearchAppointment";
 import AlertReducer, { AlertActionType, InitialAlert } from "@/hook/Alert/Reducer";
 import { UpdateForm } from "@/process/Employee/Update/Form/Initialize";
-import { FormPart, UpdateFormStructure } from "@/process/Employee/Update/Form/UpdateForm";
+import { FormType, UpdateFormStructure } from "@/process/Employee/Update/Form/UpdateForm";
 import { submitNoteForm } from "@/process/Employee/Update/Form/Form/Note/Submit";
 import { createContext } from "react";
 import { updateMessage } from "@/process/Employee/Update/Form/Helper";
@@ -29,7 +29,7 @@ export default function Update() {
     const [context, setContext] = useState(Context);
     const [updateForm, setUpdateForm] = useState<UpdateFormStructure>();
     const [formStates, setFormStates] = useState<{[formPart: string]: boolean}>({});
-    const [currentForm, setCurrentForm] = useState<FormPart>('General');
+    const [currentForm, setCurrentForm] = useState<FormType>('General');
 
     const [alert, alertDispatch] = useReducer(AlertReducer, InitialAlert);
     const searchParams = useSearchParams();
@@ -155,7 +155,7 @@ export default function Update() {
         setUpdateForm(await UpdateForm(context.Employee.Employee.EmployeeID, appointment));
     }
 
-    const updateFormHandler = (formPart: FormPart, name: string, value: any) => {
+    const updateFormHandler = (formPart: FormType, name: string, value: any) => {
         if (!updateForm)
             return;
 
@@ -174,7 +174,7 @@ export default function Update() {
         });
     }
 
-    const resetFormHandler = (formPart: FormPart) => {
+    const resetFormHandler = (formPart: FormType) => {
         if (!updateForm)
             return;
 
@@ -197,7 +197,7 @@ export default function Update() {
         });
     }
 
-    const saveForm = async <T,> (formPart: FormPart, submitForm: (a: T, b: T) => Promise<boolean>) => {
+    const saveForm = async <T,> (formPart: FormType, submitForm: (a: T, b: T) => Promise<boolean>) => {
         if (!formStates[`${formPart}`] || !updateForm) {
             addMessage(`Could Not Save ${formPart}`, false);
             return;

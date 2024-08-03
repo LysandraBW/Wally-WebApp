@@ -1,7 +1,7 @@
 import { Multiple } from "@/components/Input/Export";
 import { DB_AppointmentService } from "@/database/Types";
-import { hasValue } from "@/lib/Inspector/Inspector/Inspect/Inspectors";
 import FormStateReducer, { InitialFormState } from "@/hook/FormState/Reducer";
+import { hasValue } from "@/validation/Validation";
 import { useEffect, useReducer, useState } from "react";
 
 interface UpdateServiceProps {
@@ -12,15 +12,28 @@ interface UpdateServiceProps {
 }
 
 export default function UpdateService(props: UpdateServiceProps) {
-    const initialServiceData = {...props.service};
-    const [edit, setEdit] = useState(false);
+    const initialValues = {...props.service};
     const [values, setValues] = useState(props.service);
-    const [formError, formErrorDispatch] = useReducer(FormStateReducer, InitialFormState);
+    const [edit, setEdit] = useState(false);
+    const [formState, formStateDispatch] = useReducer(FormStateReducer, InitialFormState);
 
     useEffect(() => {
-        props.updateFormError(formError.state);
-    }, [formError.state]);
+        props.updateFormError(formState.state);
+    }, [formState.state]);
     
+    const inspectInput = async <T,>(
+        inputName: string, 
+        input: T, 
+        callback: (value: T) => Promise<[boolean, string?]>
+    ): Promise<boolean> => {
+        const [errState, errMessage] = await callback(input);
+        formStateDispatch({
+            name: inputName,
+            state: [errState, errMessage]
+        });
+        return errState;
+    }
+
     return (
         <>
             {edit && 
@@ -37,24 +50,17 @@ export default function UpdateService(props: UpdateServiceProps) {
                                     onChange={async (event) => {
                                         const value = event.target.value;
                                         setValues({...values, Class: value});
-                                        formErrorDispatch({
-                                            name: 'Class',
-                                            state: await hasValue().inspect(value)
-                                        });
+                                        inspectInput('Class', value, hasValue);
                                     }}
                                     onBlur={async () => {
                                         if (values.Class)
                                             return;
-
-                                        formErrorDispatch({
-                                            name: 'Class',
-                                            state: await hasValue().inspect(initialServiceData.Class)
-                                        });
-                                        setValues({...values, Class: initialServiceData.Class});
+                                        inspectInput('Class', initialValues.Class, hasValue);
+                                        setValues({...values, Class: initialValues.Class});
                                     }}
                                 />
-                                {formError.input.Class && !formError.input.Class.state && 
-                                    <span>{formError.input.Class.message}</span>
+                                {formState.input.Class && !formState.input.Class.state && 
+                                    <span>{formState.input.Class.message}</span>
                                 }
                             </div>
                             <div>
@@ -63,22 +69,17 @@ export default function UpdateService(props: UpdateServiceProps) {
                                     onChange={async (event) => {
                                         const value = event.target.value;
                                         setValues({...values, Division: value});
-                                        formErrorDispatch({
-                                            name: 'Division',
-                                            state: await hasValue().inspect(value)
-                                        });
+                                        inspectInput('Division', initialValues.Division, hasValue);
                                     }}
                                     onBlur={async () => {
                                         if (values.Division)
                                             return;
-                                        formErrorDispatch({
-                                            name: 'Division',
-                                            state: await hasValue().inspect(initialServiceData.Division)
-                                        });
-                                        setValues({...values, Division: initialServiceData.Division})}}
+                                        inspectInput('Division', initialValues.Division, hasValue);
+                                        setValues({...values, Division: initialValues.Division});
+                                    }}
                                 />
-                                {formError.input.Division && !formError.input.Division.state && 
-                                    <span>{formError.input.Division.message}</span>
+                                {formState.input.Division && !formState.input.Division.state && 
+                                    <span>{formState.input.Division.message}</span>
                                 }
                             </div>
                             <div>
@@ -87,23 +88,17 @@ export default function UpdateService(props: UpdateServiceProps) {
                                     onChange={async (event) => {
                                         const value = event.target.value;
                                         setValues({...values, Service: value});
-                                        formErrorDispatch({
-                                            name: 'Service',
-                                            state: await hasValue().inspect(value)
-                                        });
+                                        inspectInput('Service', initialValues.Service, hasValue);
                                     }}
                                     onBlur={async () => {
                                         if (values.Service)
                                             return;
-                                        formErrorDispatch({
-                                            name: 'Service',
-                                            state: await hasValue().inspect(initialServiceData.Service)
-                                        });
-                                        setValues({...values, Service: initialServiceData.Service});
+                                        inspectInput('Service', initialValues.Service, hasValue);
+                                        setValues({...values, Service: initialValues.Service});
                                     }}
                                 />
-                                {formError.input.Service && !formError.input.Service.state && 
-                                    <span>{formError.input.Service.message}</span>
+                                {formState.input.Service && !formState.input.Service.state && 
+                                    <span>{formState.input.Service.message}</span>
                                 }
                             </div>
                         </div>

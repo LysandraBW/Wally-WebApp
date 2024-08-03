@@ -1,7 +1,7 @@
-import { Multiple, Text } from "@/components/Input/Export";
+import { Multiple } from "@/components/Input/Export";
 import { DB_Diagnosis } from "@/database/Types";
-import { hasValue } from "@/lib/Inspector/Inspector/Inspect/Inspectors";
 import FormStateReducer, { InitialFormState } from "@/hook/FormState/Reducer";
+import { hasValue } from "@/validation/Validation";
 import { useEffect, useReducer, useState } from "react";
 
 interface UpdateDiagnosisProps {
@@ -12,31 +12,26 @@ interface UpdateDiagnosisProps {
 }
 
 export default function UpdateDiagnosis(props: UpdateDiagnosisProps) {
-    const initialData = {...props.diagnosis};
-    const [edit, setEdit] = useState(false);
+    const initialValues = {...props.diagnosis};
     const [values, setValues] = useState(props.diagnosis);
-    const [formError, formErrorDispatch] = useReducer(FormStateReducer, InitialFormState);
+    const [edit, setEdit] = useState(false);
+    const [formState, formStateDispatch] = useReducer(FormStateReducer, InitialFormState);
 
     useEffect(() => {
-        props.updateFormError(formError.state);
-    }, [formError.state]);
+        props.updateFormError(formState.state);
+    }, [formState.state]);
 
-    const inspectCode = async (code: string): Promise<boolean> => {
-        const [codeState, codeMessage] = await hasValue().inspect(code);
-        formErrorDispatch({
-            name: 'Code',
-            state: [codeState, codeMessage]
+    const inspectInput = async <T,>(
+        inputName: string, 
+        input: T, 
+        callback: (value: T) => Promise<[boolean, string?]>
+    ): Promise<boolean> => {
+        const [errState, errMessage] = await callback(input);
+        formStateDispatch({
+            name: inputName,
+            state: [errState, errMessage]
         });
-        return codeState;
-    }
-
-    const inspectMessage = async (message: string): Promise<boolean> => {
-        const [messageState, messageMessage] = await hasValue().inspect(message);
-        formErrorDispatch({
-            name: 'Message',
-            state: [messageState, messageMessage]
-        });
-        return messageState;
+        return errState;
     }
     
     return (
@@ -55,17 +50,17 @@ export default function UpdateDiagnosis(props: UpdateDiagnosisProps) {
                                     onChange={async (event) => {
                                         const value = event.target.value;
                                         setValues({...values, Code: value});
-                                        inspectCode(value);
+                                        inspectInput('Code', value, hasValue);
                                     }}
                                     onBlur={() => {
                                         if (values.Code)
                                             return;
-                                        setValues({...values, Code: initialData.Code});
-                                        inspectCode(initialData.Code);
+                                        setValues({...values, Code: initialValues.Code});
+                                        inspectInput('Code', initialValues.Code, hasValue);
                                     }}
                                 />
-                                {formError.input.Code && !formError.input.Code.state &&
-                                    <span>{formError.input.Code.message}</span>
+                                {formState.input.Code && !formState.input.Code.state &&
+                                    <span>{formState.input.Code.message}</span>
                                 }
                             </div>
                             <div>
@@ -74,18 +69,17 @@ export default function UpdateDiagnosis(props: UpdateDiagnosisProps) {
                                     onChange={async (event) => {
                                         const value = event.target.value;
                                         setValues({...values, Message: value});
-                                        inspectMessage(value);
+                                        inspectInput('Message', value, hasValue);
                                     }}
                                     onBlur={() => {
                                         if (values.Message)
                                             return;
-
-                                        setValues({...values, Message: initialData.Message});
-                                        inspectMessage(initialData.Message);
+                                        setValues({...values, Message: initialValues.Message});
+                                        inspectInput('Message', initialValues.Message, hasValue);
                                     }}
                                 />
-                                {formError.input.Message && !formError.input.Message.state &&
-                                    <span>{formError.input.Message.message}</span>
+                                {formState.input.Message && !formState.input.Message.state &&
+                                    <span>{formState.input.Message.message}</span>
                                 }
                             </div>
                         </div>
@@ -94,15 +88,11 @@ export default function UpdateDiagnosis(props: UpdateDiagnosisProps) {
             }
             {!edit && 
                 <div>
-                    <span 
-                        onClick={() => setEdit(true)}
-                    >
+                    <span  onClick={() => setEdit(true)}>
                         {values.Code} - {values.Message}
                     </span>
-                    <span 
-                        onClick={() => props.onDelete()}
-                    >
-                            DELETE
+                    <span onClick={() => props.onDelete()}>
+                        DELETE
                     </span>
                 </div>
             }

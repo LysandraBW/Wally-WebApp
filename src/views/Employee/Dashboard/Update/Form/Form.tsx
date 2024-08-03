@@ -6,13 +6,13 @@ import { GeneralFormStructure } from "@/process/Employee/Update/Form/Form/Genera
 import { PaymentFormStructure } from "@/process/Employee/Update/Form/Form/Payment/Payment";
 import { ServiceFormStructure } from "@/process/Employee/Update/Form/Form/Service/Service";
 import { VehicleFormStructure } from "@/process/Employee/Update/Form/Form/Vehicle/Vehicle";
-import { FormPart } from "@/process/Employee/Update/Form/UpdateForm";
+import { FormType } from "@/process/Employee/Update/Form/UpdateForm";
 
 interface FormProps {
     form: unknown;
-    currentForm: FormPart;
+    currentForm: FormType;
     updateFormState: (state: boolean) => void;
-    changeHandler: (part: FormPart, name: string, value: any) => void;
+    changeHandler: (part: FormType, name: string, value: any) => void;
 }
 
 export default function Form(props: FormProps) {

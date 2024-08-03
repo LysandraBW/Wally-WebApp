@@ -15,11 +15,11 @@ const defaultInput: DB_Repair = {
 
 export default function CreateRepair(props: CreateRepairProps) {
     const [values, setValues] = useState<DB_Repair>(defaultInput);
-    const [formError, formErrorDispatch] = useReducer(FormStateReducer, InitialFormState);
+    const [formState, formStateDispatch] = useReducer(FormStateReducer, InitialFormState);
 
     const inspectRepair = async (repair: string = values.Repair): Promise<boolean> => {
         const [repairState, repairMessage] = await hasValue().inspect(repair);
-        formErrorDispatch({
+        formStateDispatch({
             name: 'Repair',
             state: [repairState, repairMessage]
         });
@@ -31,7 +31,7 @@ export default function CreateRepair(props: CreateRepairProps) {
             <Text
                 name={'Repair'}
                 value={values.Repair}
-                error={formError.input.Repair}
+                error={formState.input.Repair}
                 label={'Repair'}
                 onChange={async (name, value) => {
                     inspectRepair(value);

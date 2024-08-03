@@ -1,13 +1,13 @@
 import UpdateNote from "./UpdateNote";
 import CreateNote from "./CreateNote";
 import { NoteFormStructure } from "@/process/Employee/Update/Form/Form/Note/Note";
-import { FormPart } from "@/process/Employee/Update/Form/UpdateForm";
+import { FormType } from "@/process/Employee/Update/Form/UpdateForm";
 import { useState } from "react";
 
 interface NoteFormProps {
     form: NoteFormStructure;
     updateFormError: (state: boolean) => void;
-    changeHandler: (part: FormPart, name: string, value: any) => void;
+    changeHandler: (part: FormType, name: string, value: any) => void;
     onSave: () => any;
 }
 
@@ -32,7 +32,7 @@ export default function NoteForm(props: NoteFormProps) {
                                 updatedValue[`${noteID}`] = note;
                                 props.changeHandler('Note', 'Notes', updatedValue);
                             }}
-                            updateFormError={props.updateFormError}
+                            updateFormState={props.updateFormError}
                         />
                     </div>
                 ))}

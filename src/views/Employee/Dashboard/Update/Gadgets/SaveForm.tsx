@@ -3,10 +3,10 @@ import { submitNoteForm } from "@/process/Employee/Update/Form/Form/Note/Submit"
 import { submitPaymentForm } from "@/process/Employee/Update/Form/Form/Payment/Submit";
 import { submitServiceForm } from "@/process/Employee/Update/Form/Form/Service/Submit";
 import { submitVehicleForm } from "@/process/Employee/Update/Form/Form/Vehicle/Submit";
-import { FormPart } from "@/process/Employee/Update/Form/UpdateForm";
+import { FormType } from "@/process/Employee/Update/Form/UpdateForm";
 
 interface SaveFormProps {
-    currentForm: FormPart;
+    currentForm: FormType;
     onSave: <T,> (submitFunction: (a: T, b: T) => Promise<boolean>) => void;
 }
 

@@ -1,11 +1,11 @@
-import { DB_Part } from "@/database/Types";
 import { useState } from "react";
 import UpdatePart from "./UpdatePart";
 import CreatePart from "./CreatePart";
+import { UpdatePart as UpdatePartData } from "@/process/Employee/Update/Form/Form/Service/Service";
 
 interface PartManagerProps {
-    parts: {[partID: string]: DB_Part};
-    onChange: (updatedValue: {[partID: string]: DB_Part}) => void;
+    parts: {[partID: string]: UpdatePartData};
+    onChange: (updatedValue: {[partID: string]: UpdatePartData}) => void;
     updateFormError: (state: boolean) => void;
 }
 

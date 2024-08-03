@@ -15,11 +15,11 @@ export default function UpdateRepair(props: UpdateRepairProps) {
     const initialRepair = props.repair.Repair;
     const [edit, setEdit] = useState(false);
     const [values, setValues] = useState(props.repair);
-    const [formError, formErrorDispatch] = useReducer(FormStateReducer, InitialFormState);
+    const [formState, formStateDispatch] = useReducer(FormStateReducer, InitialFormState);
 
     useEffect(() => {
-        props.updateFormError(formError.state);
-    }, [formError.state]);
+        props.updateFormError(formState.state);
+    }, [formState.state]);
 
     return (
         <>
@@ -37,15 +37,15 @@ export default function UpdateRepair(props: UpdateRepairProps) {
                                     onChange={async (event) => {
                                         const value = event.target.value;
                                         setValues({...values, Repair: value});
-                                        formErrorDispatch({
+                                        formStateDispatch({
                                             name: 'Repair',
                                             state: await hasValue().inspect(value)
                                         });
                                     }}
                                     onBlur={() => !values.Repair && setValues({...values, Repair: initialRepair})}
                                 />
-                                {formError.input.Repair.state &&
-                                    <span>{formError.input.Repair.message}</span>
+                                {formState.input.Repair.state &&
+                                    <span>{formState.input.Repair.message}</span>
                                 }
                             </div>
                         </div>

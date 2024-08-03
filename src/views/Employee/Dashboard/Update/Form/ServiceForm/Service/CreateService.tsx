@@ -1,7 +1,7 @@
 import { Text } from "@/components/Input/Export";
 import { DB_AppointmentService, DB_Service } from "@/database/Types";
-import { hasValue } from "@/lib/Inspector/Inspector/Inspect/Inspectors";
 import FormStateReducer, { InitialFormState } from "@/hook/FormState/Reducer";
+import { hasValue } from "@/validation/Validation";
 import { useEffect, useReducer, useState } from "react";
 
 interface CreateServiceProps {
@@ -19,27 +19,25 @@ const defaultInput: DB_AppointmentService = {
 
 export default function CreateService(props: CreateServiceProps) {
     const [values, setValues] = useState<DB_AppointmentService>(defaultInput);
-    const [formError, formErrorDispatch] = useReducer(FormStateReducer, InitialFormState);
+    const [formState, formStateDispatch] = useReducer(FormStateReducer, InitialFormState);
+
+    const inspectInput = async <T,>(
+        inputName: string, 
+        input: T, 
+        callback: (value: T) => Promise<[boolean, string?]>
+    ): Promise<boolean> => {
+        const [errState, errMessage] = await callback(input);
+        formStateDispatch({
+            name: inputName,
+            state: [errState, errMessage]
+        });
+        return errState;
+    }
 
     const inspectServiceInput = async (): Promise<boolean> => {
-        const [serviceState, serviceMessage] = await hasValue().inspect(values.Service);
-        formErrorDispatch({
-            name: 'Service',
-            state: [serviceState, serviceMessage]
-        });
-
-        const [divisionState, divisionMessage] = await hasValue().inspect(values.Division);
-        formErrorDispatch({
-            name: 'Division',
-            state: [divisionState, divisionMessage]
-        });
-
-        const [classState, classMessage] = await hasValue().inspect(values.Class);
-        formErrorDispatch({
-            name: 'Class',
-            state: [classState, classMessage]
-        });
-
+        const classState = await inspectInput('Class', values.Class, hasValue);
+        const serviceState = await inspectInput('Service', values.Service, hasValue);
+        const divisionState = await inspectInput('Division', values.Division, hasValue);
         return serviceState && divisionState && classState;
     }
 
@@ -47,41 +45,32 @@ export default function CreateService(props: CreateServiceProps) {
         <div>
             <Text
                 name={'Service'}
-                value={values.Service}
-                error={formError.input.Service}
                 label={'Service'}
+                value={values.Service}
+                error={formState.input.Service}
                 onChange={async (name, value) => {
                     setValues({...values, [`${name}`]: value});
-                    formErrorDispatch({
-                        name: 'Service',
-                        state: await hasValue().inspect(value)
-                    });
+                    inspectInput('Service', values.Service, hasValue);
                 }}
             />
             <Text
                 name={'Division'}
                 value={values.Division}
-                error={formError.input.Division}
+                error={formState.input.Division}
                 label={'Division'}
                 onChange={async (name, value) => {
                     setValues({...values, [`${name}`]: value});
-                    formErrorDispatch({
-                        name: 'Division',
-                        state: await hasValue().inspect(value)
-                    });
+                    inspectInput('Division', values.Division, hasValue);
                 }}
             />
             <Text
                 name={'Class'}
                 value={values.Class}
-                error={formError.input.Class}
+                error={formState.input.Class}
                 label={'Class'}
                 onChange={async (name, value) => {
                     setValues({...values, [`${name}`]: value});
-                    formErrorDispatch({
-                        name: 'Class',
-                        state: await hasValue().inspect(value)
-                    });
+                    inspectInput('Class', values.Class, hasValue);
                 }}
             />
             <button 

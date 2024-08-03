@@ -3,13 +3,13 @@ import { toggleValue } from "@/components/Input/Checkbox/Checkbox";
 import { Multiple, Toggle } from "@/components/Input/Export";
 import { DB_GeneralEmployee } from "@/database/Types";
 import { getTimeFromWebDateTime } from "@/lib/Convert/Convert";
-import { every, hasValue } from "@/lib/Inspector/Inspector/Inspect/Inspectors";
-import { Regexes } from "@/lib/Inspector/Inspectors";
 import { goToUpdateApt } from "@/lib/Navigation/Redirect";
 import { UpdateEvent as UpdateEventData } from "@/process/Employee/Calendar/Form/Form";
-import { updatedValue } from "@/lib/Process/Difference";
 import FormStateReducer, { InitialFormState } from "@/hook/FormState/Reducer";
 import { useContext, useEffect, useReducer, useState } from "react";
+import { hasValue, validDate } from "@/validation/Validation";
+import { every } from "@/lib/Inspector/Inspector/Inspect/Inspectors";
+import { Regexes } from "@/lib/Inspector/Inspectors";
 
 interface UpdateEventProps {
     event: UpdateEventData;
@@ -24,11 +24,11 @@ export default function UpdateEvent(props: UpdateEventProps) {
     const initialEventData = {...props.event};
     const [edit, setEdit] = useState(false);
     const [values, setValues] = useState(props.event);
-    const [formError, formErrorDispatch] = useReducer(FormStateReducer, InitialFormState);
+    const [formState, formStateDispatch] = useReducer(FormStateReducer, InitialFormState);
 
     useEffect(() => {
-        props.updateFormError(formError.state);
-    }, [formError.state]);
+        props.updateFormError(formState.state);
+    }, [formState.state]);
 
     useEffect(() => {
         setValues(props.event);
@@ -39,38 +39,14 @@ export default function UpdateEvent(props: UpdateEventProps) {
             props.onUpdate(values);
     }, [values]);
 
-    
-    const inspectName = async (name: string = values.Name): Promise<boolean> => {
-        const [errState, errMessage] = await hasValue().inspect(name);
-        formErrorDispatch({
-            name: 'Name',
-            state: [errState, errMessage]
-        });
-        return errState;
-    }
-
-    const inspectSummary = async (summary: string = values.Summary): Promise<boolean> => {
-        const [errState, errMessage] = await hasValue().inspect(summary);
-        formErrorDispatch({
-            name: 'Summary',
-            state: [errState, errMessage]
-        });
-        return errState;
-    }
-
-    const inspectSharees = async (sharees: Array<string> = values.Sharees): Promise<boolean> => {
-        const [errState, errMessage] = await hasValue().inspect(sharees);
-        formErrorDispatch({
-            name: 'Sharees',
-            state: [errState, errMessage]
-        });
-        return errState;
-    }
-
-    const inspectDate = async (date: string = values.UpdatedEvent): Promise<boolean> => {
-        const [errState, errMessage] = await hasValue().inspect(date);
-        formErrorDispatch({
-            name: 'UpdatedEvent',
+    const inspectInput = async <T,>(
+        inputName: string, 
+        input: T, 
+        callback: (value: T) => Promise<[boolean, string?]>
+    ): Promise<boolean> => {
+        const [errState, errMessage] = await callback(input);
+        formStateDispatch({
+            name: inputName,
             state: [errState, errMessage]
         });
         return errState;
@@ -138,18 +114,17 @@ export default function UpdateEvent(props: UpdateEventProps) {
                                     onChange={async (event) => {
                                         const value = event.target.value;
                                         setValues({...values, Name: value});
-                                        inspectName(value);
+                                        inspectInput('Name', value, hasValue);
                                     }}
                                     onBlur={() => {
                                         if (values.Name)
                                             return;
-                                        
                                         setValues({...values, Name: initialEventData.Name});
-                                        inspectName(initialEventData.Name);
+                                        inspectInput('Name', initialEventData.Name, hasValue);
                                     }}
                                 />
-                                {formError.input.Name && !formError.input.Name.state &&
-                                    <span>{formError.input.Name.message}</span>
+                                {formState.input.Name && !formState.input.Name.state &&
+                                    <span>{formState.input.Name.message}</span>
                                 }
                             </div>
                             <div>
@@ -158,18 +133,17 @@ export default function UpdateEvent(props: UpdateEventProps) {
                                     onChange={async (event) => {
                                         const value = event.target.value;
                                         setValues({...values, Summary: value});
-                                        inspectSummary(value);
+                                        inspectInput('Summary', value, hasValue);
                                     }}
                                     onBlur={() => {
                                         if (values.Summary)
                                             return;
-                                        
                                         setValues({...values, Summary: initialEventData.Summary});
-                                        inspectSummary(initialEventData.Summary);
+                                        inspectInput('Summary', initialEventData.Summary, hasValue);
                                     }}
                                 />
-                                {formError.input.Summary && !formError.input.Summary.state &&
-                                    <span>{formError.input.Summary.message}</span>
+                                {formState.input.Summary && !formState.input.Summary.state &&
+                                    <span>{formState.input.Summary.message}</span>
                                 }
                             </div>
                             <div>
@@ -179,18 +153,17 @@ export default function UpdateEvent(props: UpdateEventProps) {
                                     onChange={async (event) => {
                                         const value = event.target.value;
                                         setValues({...values, UpdatedEvent: value});
-                                        inspectDate(value);
+                                        inspectInput('UpdatedEvent', values.UpdatedEvent, validDate);
                                     }}
                                     onBlur={() => {
-                                        if (values.Date)
+                                        if (values.UpdatedEvent)
                                             return;
-
                                         setValues({...values, UpdatedEvent: initialEventData.UpdatedEvent});
-                                        inspectDate(initialEventData.UpdatedEvent)
+                                        inspectInput('UpdatedEvent', initialEventData.UpdatedEvent, validDate);
                                     }}
                                 />  
-                                {formError.input.UpdatedEvent && !formError.input.UpdatedEvent.state &&
-                                    <span>{formError.input.UpdatedEvent.message}</span>
+                                {formState.input.UpdatedEvent && !formState.input.UpdatedEvent.state &&
+                                    <span>{formState.input.UpdatedEvent.message}</span>
                                 }
                             </div>
                             <div>
@@ -201,23 +174,25 @@ export default function UpdateEvent(props: UpdateEventProps) {
                                                 name='Sharees'
                                                 label={`Add ${employee.FName} ${employee.LName}`}
                                                 value={values.Sharees.includes(employee.EmployeeID) ? 1 : 0}
-                                                error={formError.input.Sharees}
+                                                error={formState.input.Sharees}
                                                 onChange={async (name, value) => {
                                                     const updatedValue = toggleValue(values.Sharees, employee.EmployeeID);
                                                     setValues({...values, Sharees: updatedValue});
-                                                    inspectSharees(updatedValue);
+                                                    inspectInput('Sharees', updatedValue, async (v) => await every({
+                                                        callback: (v: string) => !!v.match(Regexes.UniqueIdentifier)
+                                                    }).inspect(v));
                                                 }}
                                             />
                                         }
                                     </div>
                                 ))}
-                                {formError.input.Sharees && !formError.input.Sharees.state &&
-                                    <span>{formError.input.Sharees.message}</span>
+                                {formState.input.Sharees && !formState.input.Sharees.state &&
+                                    <span>{formState.input.Sharees.message}</span>
                                 }
                             </div>
                             <button 
                                 onClick={() => {
-                                    if (!formError.state)
+                                    if (!formState.state)
                                         return;
                                     setEdit(false);
                                     props.onUpdate(values, true);

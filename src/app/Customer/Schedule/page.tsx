@@ -26,7 +26,7 @@ export default function Schedule() {
 
     useEffect(() => {
         const load = async () => {
-            vehicle.setLoadedVals(
+            vehicle.setLoadedData(
                 await loadMakes(), 
                 await loadModelYears()
             );

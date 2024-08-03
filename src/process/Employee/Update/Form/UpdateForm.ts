@@ -4,7 +4,7 @@ import { ServiceFormStructure } from "./Form/Service/Service";
 import { PaymentFormStructure } from "./Form/Payment/Payment";
 import { NoteFormStructure } from "./Form/Note/Note";
 
-export type FormPart = 'General' | 'Vehicle' | 'Service' | 'Payment' | 'Note';
+export type FormType = 'General' | 'Vehicle' | 'Service' | 'Payment' | 'Note';
 
 export interface UpdateStructure {
     General:    GeneralFormStructure;

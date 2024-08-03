@@ -3,15 +3,15 @@ import {
     DB_Appointment, 
     DB_AppointmentService, 
     DB_Diagnosis, 
-    DB_Repair, 
-    DB_Part, 
-    DB_Payment 
+    DB_Repair
 } from "@/database/Types";
 import { UpdateFormStructure, UpdateStructure } from "./UpdateForm";
 import { UpdateNote } from "./Form/Note/Note";
 import { GetNoteSharees } from "@/database/Export";
 import { getSessionID } from "@/lib/Storage/Storage";
 import { toWebDateTime } from "@/lib/Convert/Convert";
+import { UpdatePart } from "./Form/Service/Service";
+import { UpdatePayment } from "./Form/Payment/Payment";
 
 export async function initializeUpdateForm(employeeID: string, apt: DB_Appointment): Promise<UpdateStructure> {
     let reference: {[k: string]: any} = {};
@@ -55,9 +55,14 @@ export async function initializeUpdateForm(employeeID: string, apt: DB_Appointme
         repairs[repair.RepairID] = repair;
 
     // Parts
-    const parts: {[partID: number]: DB_Part} = {};
-    for (const part of apt.Parts)
-        parts[part.PartID] = part;
+    const parts: {[partID: number]: UpdatePart} = {};
+    for (const part of apt.Parts) {
+        parts[part.PartID] = {
+            ...part, 
+            Quantity: part.Quantity.toString(), 
+            UnitCost: part.UnitCost.toString()
+        };
+    }
 
     // All Services
     reference.Service = {
@@ -69,9 +74,9 @@ export async function initializeUpdateForm(employeeID: string, apt: DB_Appointme
     };
 
     // Payments
-    const payments: {[paymentID: number]: DB_Payment} = {};
+    const payments: {[paymentID: number]: UpdatePayment} = {};
     for (const payment of apt.Payments)
-        payments[payment.PaymentID] = payment;
+        payments[payment.PaymentID] = {...payment, Payment: payment.Payment.toString()};
 
     // Payments
     reference.Payment = {

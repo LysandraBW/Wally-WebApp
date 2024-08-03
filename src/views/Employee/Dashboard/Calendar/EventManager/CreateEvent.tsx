@@ -4,7 +4,9 @@ import { toggleValue } from "@/components/Input/Checkbox/Checkbox";
 import { UpdateEvent } from "@/process/Employee/Calendar/Form/Form";
 import { PageContext } from "@/app/Employee/Dashboard/Calendar/page";
 import FormStateReducer, { InitialFormState } from "@/hook/FormState/Reducer";
-import { hasValue } from "@/lib/Inspector/Inspector/Inspect/Inspectors";
+import { hasValue, validDate } from "@/validation/Validation";
+import { every } from "@/lib/Inspector/Inspector/Inspect/Inspectors";
+import { Regexes } from "@/lib/Inspector/Inspectors";
 
 interface CreateEventProps {
     onClose: () => void;
@@ -25,49 +27,28 @@ const defaultInput: UpdateEvent = {
 export default function CreateEvent(props: CreateEventProps) {
     const context = useContext(PageContext);
     const [values, setValues] = useState<UpdateEvent>(defaultInput);
-    const [formError, formErrorDispatch] = useReducer(FormStateReducer, InitialFormState);
+    const [formState, formStateDispatch] = useReducer(FormStateReducer, InitialFormState);
 
-    const inspectName = async (name: string = values.Name): Promise<boolean> => {
-        const [errState, errMessage] = await hasValue().inspect(name);
-        formErrorDispatch({
-            name: 'Name',
-            state: [errState, errMessage]
-        });
-        return errState;
-    }
-
-    const inspectSummary = async (summary: string = values.Summary): Promise<boolean> => {
-        const [errState, errMessage] = await hasValue().inspect(summary);
-        formErrorDispatch({
-            name: 'Summary',
-            state: [errState, errMessage]
-        });
-        return errState;
-    }
-
-    const inspectSharees = async (sharees: Array<string> = values.Sharees): Promise<boolean> => {
-        const [errState, errMessage] = await hasValue().inspect(sharees);
-        formErrorDispatch({
-            name: 'Sharees',
-            state: [errState, errMessage]
-        });
-        return errState;
-    }
-
-    const inspectDate = async (date: string = values.UpdatedEvent): Promise<boolean> => {
-        const [errState, errMessage] = await hasValue().inspect(date);
-        formErrorDispatch({
-            name: 'UpdatedEvent',
+    const inspectInput = async <T,>(
+        inputName: string, 
+        input: T, 
+        callback: (value: T) => Promise<[boolean, string?]>
+    ): Promise<boolean> => {
+        const [errState, errMessage] = await callback(input);
+        formStateDispatch({
+            name: inputName,
             state: [errState, errMessage]
         });
         return errState;
     }
 
     const inspectEvent = async (): Promise<boolean> => {
-        const name = await inspectName();
-        const summary = await inspectSummary();
-        const sharees = await inspectSharees();
-        const date = await inspectDate();
+        const name = await inspectInput('Name', values.Name, hasValue);
+        const summary = await inspectInput('Summary', values.Summary, hasValue);
+        const sharees = await inspectInput('Sharees', values.Sharees, async (v) => await every({
+            callback: (v: string) => !!v.match(Regexes.UniqueIdentifier)
+        }).inspect(v));
+        const date = await inspectInput('UpdatedEvent', values.UpdatedEvent, validDate);
 
         return name && summary && sharees && date;
     }
@@ -83,33 +64,33 @@ export default function CreateEvent(props: CreateEventProps) {
             </span>
             <TextArea
                 name={'Name'}
-                value={values.Name}
-                error={formError.input.Name}
                 label={'Name'}
+                value={values.Name}
+                error={formState.input.Name}
                 onChange={async (name, value) => {
                     setValues({...values, [`${name}`]: value});
-                    inspectName(value);
+                    inspectInput('Name', values.Name, hasValue);
                 }}
             />
             <TextArea
                 name={'Summary'}
-                value={values.Summary}
-                error={formError.input.Summary}
                 label={'Summary'}
+                value={values.Summary}
+                error={formState.input.Summary}
                 onChange={async (name, value) => {
                     setValues({...values, [`${name}`]: value});
-                    inspectSummary(value);
+                    inspectInput('Summary', values.Summary, hasValue);
                 }}
             />
             <Text
                 type='datetime-local'
                 name='UpdatedEvent'
-                value={values.UpdatedEvent}
-                error={formError.input.UpdatedEvent}
                 label='Date'
+                value={values.UpdatedEvent}
+                error={formState.input.UpdatedEvent}
                 onChange={async (name, value) => {
                     setValues({...values, [`${name}`]: value});
-                    inspectDate(value);
+                    inspectInput('UpdatedEvent', values.UpdatedEvent, validDate);
                 }}
             />
             <div>
@@ -121,10 +102,12 @@ export default function CreateEvent(props: CreateEventProps) {
                                 name='Sharees'
                                 label={`Add ${employee.FName} ${employee.LName}`}
                                 value={values.Sharees.includes(employee.EmployeeID) ? 1 : 0}
-                                error={formError.input.Sharees}
+                                error={formState.input.Sharees}
                                 onChange={async (name, value) => {
                                     const updatedValue = toggleValue(values.Sharees, employee.EmployeeID);
-                                    inspectSharees(updatedValue)
+                                    inspectInput('Sharees', updatedValue, async (v) => await every({
+                                        callback: (v: string) => !!v.match(Regexes.UniqueIdentifier)
+                                    }).inspect(v));
                                     setValues({...values, Sharees: updatedValue});
                                 }}
                             />

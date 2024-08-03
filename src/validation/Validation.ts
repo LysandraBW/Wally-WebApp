@@ -1,4 +1,4 @@
-import { inValues, isDateTime, isEmailAddress, isLicensePlate, isName, isNumber, isPhoneNumber, isUniqueIdentifier, isVIN } from "@/lib/Inspector/Inspector/Inspect/Inspectors";
+import { hasValue as _hasValue, inValues, isDateTime, isEmailAddress, isLicensePlate, isName, isNumber, isPhoneNumber, isUniqueIdentifier, isVIN } from "@/lib/Inspector/Inspector/Inspect/Inspectors";
 
 export const validValue = async <T> (
     value: Array<T>, 
@@ -7,33 +7,6 @@ export const validValue = async <T> (
     return await inValues({
         values: values
     }).inspect(value);
-}
-
-export const validMake = async (
-    make: Array<string>, 
-    makes: Array<string>
-): Promise<[boolean, string?]> => {
-    return await inValues({
-        values: makes
-    }).inspect(make);
-}
-
-export const validModel = async (
-    model: Array<string>, 
-    models: Array<string>
-): Promise<[boolean, string?]> => {
-    return await inValues({
-        values: models
-    }).inspect(model);
-}
-
-export const validModelYear = async (
-    modelYear: Array<number>, 
-    modelYears: Array<number>
-): Promise<[boolean, string?]> => {
-    return await inValues({
-        values: modelYears
-    }).inspect(modelYear);
 }
 
 export const validVIN = async (
@@ -95,4 +68,10 @@ export const validLicensePlate = async (
     licensePlate: string
 ): Promise<[boolean, string?]> => {
     return await isLicensePlate().inspect(licensePlate);
+}
+
+export const hasValue = async (
+    value: string
+): Promise<[boolean, string?]> => {
+    return await _hasValue().inspect(value);
 }

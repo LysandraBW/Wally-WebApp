@@ -2,7 +2,7 @@ import { useReducer, useState } from "react";
 import { Text } from "@/components/Input/Export";
 import { DB_Diagnosis } from "@/database/Types";
 import FormStateReducer, { InitialFormState } from "@/hook/FormState/Reducer";
-import { hasValue } from "@/lib/Inspector/Inspector/Inspect/Inspectors";
+import { hasValue } from "@/validation/Validation";
 
 interface CreateDiagnosisProps {
     onChange: (name: string, value: any) => any;
@@ -16,49 +16,46 @@ const defaultInput: DB_Diagnosis = {
 
 export default function CreateDiagnosis(props: CreateDiagnosisProps) {
     const [values, setValues] = useState<DB_Diagnosis>(defaultInput);
-    const [formError, formErrorDispatch] = useReducer(FormStateReducer, InitialFormState);
+    const [formState, formStateDispatch] = useReducer(FormStateReducer, InitialFormState);
 
-    const inspectCode = async (code: string = values.Code): Promise<boolean> => {
-        const [codeState, codeMessage] = await hasValue().inspect(code);
-        formErrorDispatch({
-            name: 'Code',
-            state: [codeState, codeMessage]
+    const inspectInput = async <T,>(
+        inputName: string, 
+        input: T, 
+        callback: (value: T) => Promise<[boolean, string?]>
+    ): Promise<boolean> => {
+        const [errState, errMessage] = await callback(input);
+        formStateDispatch({
+            name: inputName,
+            state: [errState, errMessage]
         });
-        return codeState;
-    }
-
-    const inspectMessage = async (message: string = values.Message): Promise<boolean> => {
-        const [messageState, messageMessage] = await hasValue().inspect(message);
-        formErrorDispatch({
-            name: 'Message',
-            state: [messageState, messageMessage]
-        });
-        return messageState;
+        return errState;
     }
 
     const inspectDiagnosis = async (): Promise<boolean> => {
-        return await inspectCode() && await inspectMessage()
+        const codeState = await inspectInput('Code', values.Code, hasValue);
+        const messageState = await inspectInput('Message', values.Message, hasValue);
+        return codeState && messageState;
     }
     
     return (
         <div>
             <Text
                 name={'Code'}
-                value={values.Code}
-                error={formError.input.Code}
                 label={'Code'}
+                value={values.Code}
+                error={formState.input.Code}
                 onChange={async (name, value) => {
-                    inspectCode(value);
+                    inspectInput(name, value, hasValue);
                     setValues({...values, [`${name}`]: value});
                 }}
             />
             <Text
                 name={'Message'}
-                value={values.Message}
-                error={formError.input.Message}
                 label={'Message'}
+                value={values.Message}
+                error={formState.input.Message}
                 onChange={async (name, value) => {
-                    inspectMessage(value);
+                    inspectInput(name, value, hasValue);
                     setValues({...values, [`${name}`]: value});
                 }}
             />
