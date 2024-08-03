@@ -74,6 +74,7 @@ export default function Dashboard() {
         if (searchedAptID)
             setOpenAptID(searchedAptID);
         }
+
         if (ran) 
             return;
         load();
@@ -269,12 +270,8 @@ export default function Dashboard() {
     return (
         <PageContext.Provider value={context}>
             <div>
-                {/* Displaying Confirmation */}
                 {alert.confirmation && alert.confirmation}
-
-                {/* Displaying Messages */}
                 {alert.messages.map(([message], i) => <div key={i}>{message}</div>)}
-
                 {context.Loaded && 
                     <>
                         <Action
