@@ -1,3 +1,3 @@
 export const Regexes = {
-    UniqueIdentifier: /^[A-Z0-9-]$/
+    UniqueIdentifier: /[A-Z0-9-]{36}/
 }

@@ -2,13 +2,14 @@ import { LoadModels, LoadVehicle } from "@/lib/Vehicle/Decoder";
 import { validVIN } from "@/validation/Validation";
 import { useState } from "react";
 import { Vehicle, LoadedValues } from "./Interface";
+import { toInteger } from "@/lib/Convert/Convert";
 
 export default function useVehicle() {
     const [vehicle, setVehicle] = useState(Vehicle);
     const [loadedValues, setLoadedValues] = useState(LoadedValues);
 
-    const loadModels = async (modelYear: number, make: string) => {
-        const models = await LoadModels(modelYear, make);
+    const loadModels = async (modelYear: string | number, make: string) => {
+        const models = await LoadModels(toInteger(modelYear), make);
         setLoadedValues({...loadedValues, models});
     }
 
@@ -24,23 +25,23 @@ export default function useVehicle() {
         return {
             make: data.make[0],
             model: data.model[0],
-            modelYear: data.modelYear[0]
+            modelYear: data.modelYear[0],
+            models: data.models
         };
     }
 
     const setLoadedData = async (makes: Array<[string, string]>, modelYears: Array<[number, string]>, models: Array<[string, string]> = []) => {
-        setLoadedValues((state) => ({...state, makes}));
-        setLoadedValues((state) => ({...state, modelYears}));
-        setLoadedValues((state) => ({...state, models}));
+        setLoadedValues((state) => ({
+            ...state, 
+            makes, 
+            modelYears, 
+            models
+        }));
     }
 
     const setMake = async (make: string) => {
         await loadModels(vehicle.modelYear, make);
-        setVehicle((state) => ({
-            ...state,
-            model: '',
-            make: make
-        }));
+        setVehicle((state) => ({...state, model: '', make: make}));
     }
 
     const setModelYear = async (modelYear: number) => {
@@ -77,39 +78,6 @@ export default function useVehicle() {
         }));
     }
 
-    const setMileage = async (mileage: number) => {
-        setVehicle(state => ({
-            ...state,
-            mileage: mileage
-        }));
-    }
-
-    const setLicensePlate = async (licensePlate: string) => {
-        setVehicle(state => ({
-            ...state,
-            licensePlate: licensePlate
-        }));
-    }
-
-    // Used in Update Form
-    const setVehicleData = async (data: {
-        Make: string,
-        Model: string,
-        ModelYear: number,
-        VIN: string,
-        Mileage: number,
-        LicensePlate: string
-    }) => {
-        setVehicle({
-            make: data.Make,
-            model: data.Model,
-            modelYear: data.ModelYear,
-            vin: data.VIN,
-            mileage: data.Mileage,
-            licensePlate: data.LicensePlate
-        });
-    }
-
     return {
         // For Immediate Access
         make: vehicle.make,
@@ -125,7 +93,7 @@ export default function useVehicle() {
         form: {
             make: [vehicle.make],
             model: [vehicle.model],
-            modelYear: [vehicle.modelYear],
+            modelYear: [toInteger(vehicle.modelYear)],
             vin: vehicle.vin
         },
         loadedValues: {
@@ -137,9 +105,6 @@ export default function useVehicle() {
         setModelYear,
         setModel,
         setVIN,
-        setMileage,
-        setLicensePlate,
-        setLoadedData,
-        setVehicleData
+        setLoadedData
     };
 }

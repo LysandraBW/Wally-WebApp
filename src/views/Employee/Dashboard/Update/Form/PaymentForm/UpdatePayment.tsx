@@ -21,6 +21,19 @@ export default function UpdatePayment(props: UpdatePaymentProps) {
     const [formState, formStateDispatch] = useReducer(FormStateReducer, InitialFormState);
 
     useEffect(() => {
+        const inspect = async () => {
+            const validCCN = await inspectInput('CCN', values.CCN, hasLength);
+            const validEXP = await inspectInput('EXP', values.EXP, hasLength);
+            const validName = await inspectInput('Name', values.Name, hasLength);
+            const validType = await inspectInput('Type', values.Type, hasLength);
+            const validPayment = await inspectInput('Payment', values.Payment, hasLength);
+            return validType && validCCN && validPayment && validName && validEXP;
+        }
+        inspect();
+    }, []);
+
+    useEffect(() => {
+        console.log(values);
         props.updateFormState(formState.state);
     }, [formState.state]);
     
@@ -140,7 +153,7 @@ export default function UpdatePayment(props: UpdatePaymentProps) {
                     type={values.Type}
                     name={values.Name}
                     paymentDate={toWebDateTime(values.PaymentDate)}
-                    onEdit={() => setEdit(values.PaymentID === -1)}
+                    onEdit={() => setEdit(!values.PaymentID)}
                     onDelete={props.onDelete}
                 />
             }

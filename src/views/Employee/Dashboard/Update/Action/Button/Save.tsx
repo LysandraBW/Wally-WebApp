@@ -15,14 +15,19 @@ export default function SaveForm(props: SaveFormProps) {
         switch (props.currentForm) {
             case FormType.General:
                 props.onSave(submitGeneralForm);
+                break;
             case FormType.Vehicle:
                 props.onSave(submitVehicleForm);
+                break;
             case FormType.Note:
                 props.onSave(submitNoteForm);
+                break;
             case FormType.Service:
                 props.onSave(submitServiceForm);
+                break;
             case FormType.Payment:
                 props.onSave(submitPaymentForm);
+                break;
         }
     }
 

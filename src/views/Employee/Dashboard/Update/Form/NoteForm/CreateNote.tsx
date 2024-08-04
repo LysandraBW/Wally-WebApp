@@ -48,13 +48,11 @@ export default function CreateNote(props: NoteInputProps) {
     }
 
     const inspectNote = async (): Promise<boolean> => {
-        const head = await inspectInput('Head', values.Head, hasLength);
-        const body = await inspectInput('Body', values.Body, hasLength);
-        const showCustomer = await inspectInput('ShowCustomer', values.ShowCustomer, validBit);
-        const sharees = await inspectInput('Sharees', values.Sharees, await every(async (v) => (
-            !!v.match(Regexes.UniqueIdentifier)
-        )));
-        return head && body && showCustomer && sharees;
+        const validHead = await inspectInput('Head', values.Head, hasLength);
+        const validBody = await inspectInput('Body', values.Body, hasLength);
+        const validShowCustomer = await inspectInput('ShowCustomer', values.ShowCustomer, validBit);
+        const validSharees = await inspectInput('Sharees', values.Sharees, await every(async (v) => await !!v.match(Regexes.UniqueIdentifier)));
+        return validHead && validBody && validShowCustomer && validSharees;
     }
 
     return (

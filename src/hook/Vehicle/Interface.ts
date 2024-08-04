@@ -11,16 +11,16 @@ export const LoadedValues: LoadedValuesStructure = {
 interface VehicleStructure {
     make: string;
     model: string;
-    modelYear: number;
+    modelYear: string | number;
     vin: string;
-    mileage: number;
+    mileage: string | number;
     licensePlate: string;
 }
 export const Vehicle: VehicleStructure = {
     make: '',
     model: '',
-    modelYear: -1,
+    modelYear: '',
     vin: '',
-    mileage: -1,
+    mileage: '',
     licensePlate: ''
 };

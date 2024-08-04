@@ -1,12 +1,12 @@
-import { GeneralFormStructure } from "@/submission/Employee/Update/Form/Form/General/General";
+import { GeneralFormStructure } from "@/submission/Employee/Update/General/Form";
+import { ServiceFormStructure } from "@/submission/Employee/Update/Service/Form";
 import { PaymentFormStructure } from "@/submission/Employee/Update/Payment/Form";
-import { ServiceFormStructure } from "@/submission/Employee/Update/Form/Form/Service/Service";
 import { VehicleFormStructure } from "@/submission/Employee/Update/Vehicle/Form";
-import { FormType } from "@/submission/Employee/Update/Form/Form";
 import GeneralForm from "./GeneralForm";
 import VehicleForm from "./VehicleForm";
 import ServiceForm from "./ServiceForm/ServiceForm";
 import PaymentForm from "./PaymentForm/PaymentForm";
+import { FormType } from "@/submission/Employee/Update/Form";
 
 interface FormProps {
     form: unknown;
@@ -18,28 +18,28 @@ interface FormProps {
 export default function Form(props: FormProps) {
     return (
         <div>
-            {props.currentForm === 'General' &&
+            {props.currentForm === FormType.General &&
                 <GeneralForm
                     form={props.form as GeneralFormStructure}
                     changeHandler={props.changeHandler}
                     updateFormState={props.updateFormState}
                 />
             }
-            {props.currentForm === 'Service' &&
+            {props.currentForm === FormType.Service &&
                 <ServiceForm
                     form={props.form as ServiceFormStructure}
                     changeHandler={props.changeHandler}
                     updateFormState={props.updateFormState}
                 />
             }
-            {props.currentForm === 'Payment' &&
+            {props.currentForm === FormType.Payment &&
                 <PaymentForm
                     form={props.form as PaymentFormStructure}
                     changeHandler={props.changeHandler}
                     updateFormState={props.updateFormState}
                 />
             }
-            {props.currentForm === 'Vehicle' &&
+            {props.currentForm === FormType.Vehicle &&
                 <VehicleForm
                     form={props.form as VehicleFormStructure}
                     changeHandler={props.changeHandler}

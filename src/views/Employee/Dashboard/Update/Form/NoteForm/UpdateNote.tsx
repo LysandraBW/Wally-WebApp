@@ -32,6 +32,13 @@ export default function UpdateNote(props: UpdateNoteProps) {
 
     useEffect(() => {
         setNoteContext(loadNoteContext(context, props.note));
+        const load  = async () => {
+            await inspectInput('Head', values.Head, hasLength);
+            await inspectInput('Body', values.Body, hasLength);
+            await inspectInput('ShowCustomer', values.ShowCustomer, validBit);
+            await inspectInput('Sharees', values.Sharees, await every(async (v) => await !!v.match(Regexes.UniqueIdentifier)));
+        }
+        load();
     }, []);
 
     useEffect(() => {

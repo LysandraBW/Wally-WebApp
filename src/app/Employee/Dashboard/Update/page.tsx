@@ -166,11 +166,15 @@ export default function Update() {
         else
             updatedValue = {...updateForm.current[`${formPart}`], [`${name}`]: value}
         
-        setUpdateForm({
-            ...updateForm,
-            current: {
-                ...updateForm.current,
-                [`${formPart}`]: updatedValue
+        setUpdateForm((state) => {
+            if (!state)
+                throw '';
+            return {
+                ...state,
+                current: {
+                    ...state.current,
+                    [`${formPart}`]: updatedValue
+                }
             }
         });
     }
@@ -178,7 +182,6 @@ export default function Update() {
     const resetFormHandler = (formPart: FormType) => {
         if (!updateForm)
             return;
-
         setUpdateForm({
             ...updateForm,
             current: {
@@ -200,12 +203,14 @@ export default function Update() {
 
     const saveForm = async <T,> (formPart: FormType, submitForm: (a: T, b: T) => Promise<boolean>) => {
         if (!formStates[`${formPart}`] || !updateForm) {
-            addMessage(`Could Not Save ${formPart}`, false);
+            addMessage('Could Not Save', false);
             return;
         }
     
         const current = updateForm.current[`${formPart}`] as unknown;
         const reference = updateForm.reference[`${formPart}`] as unknown;
+
+        console.log(current, reference);
 
         const output = await submitForm(reference as T, current as T);
         if (output)
@@ -220,7 +225,7 @@ export default function Update() {
                 {alert.messages.map(([message], i) => (
                     <div key={i}>{message}</div>
                 ))}
-                {context.Paused && 
+                {context.Paused && context.Loaded &&
                     <SearchAppointment
                         onSearch={() => {}}
                     />
@@ -240,11 +245,18 @@ export default function Update() {
                             currentForm={currentForm}
                             form={updateForm.current[`${currentForm}`]}
                             changeHandler={updateFormHandler}
-                            updateFormState={(state) => setFormStates({...formStates, [`${currentForm}`]: state})}
+                            updateFormState={(state) => {
+                                setFormStates({
+                                    ...formStates, 
+                                    [`${currentForm}`]: state
+                                });
+                            }}
                         />
                         <SaveForm
                             currentForm={currentForm}
-                            onSave={async (submitFunction) => await saveForm(currentForm, submitFunction)}
+                            onSave={async (submitFunction) => {
+                                await saveForm(currentForm, submitFunction);
+                            }}
                         />
                         <ResetForm
                             onReset={() => resetFormHandler(currentForm)}
@@ -252,8 +264,15 @@ export default function Update() {
                         <NoteForm
                             form={updateForm.current[FormType.Note]}
                             changeHandler={updateFormHandler}
-                            onSave={async () => await saveForm(FormType.Note, submitNoteForm)}
-                            updateFormState={(state) => setFormStates({...formStates, Note: state})}
+                            onSave={async () => {
+                                await saveForm(FormType.Note, submitNoteForm);
+                            }}
+                            updateFormState={(state) => {
+                                setFormStates({
+                                    ...formStates, 
+                                    Note: state
+                                });
+                            }}
                         />
                     </div>
                 }

@@ -12,12 +12,12 @@ interface CreatePaymentProps {
 
 const defaultValues: UpdatePayment = {
     AppointmentID:  '',
-    PaymentID:      0,
-    Payment:        '',
-    Name:           '',
-    Type:           '',
-    CCN:            '',
-    EXP:            '',
+    PaymentID: 0,
+    Payment: '',
+    Name: '',
+    Type: '',
+    CCN: '',
+    EXP: '',
     PaymentDate:    new Date(),
 }
 

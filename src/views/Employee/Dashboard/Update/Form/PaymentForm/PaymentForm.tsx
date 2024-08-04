@@ -5,7 +5,7 @@ import {Text} from "@/components/Input/Export";
 import FormStateReducer from "@/hook/State/Reducer";
 import { InitialFormState } from "@/hook/State/Interface";
 import { UpdatePayment as UpdatePaymentData } from "@/submission/Employee/Update/Payment/Form";
-import { hasLength } from "@/validation/Validation";
+import { hasLength, validNumber } from "@/validation/Validation";
 import { FormType } from "@/submission/Employee/Update/Form";
 
 interface PaymentFormProps {
@@ -23,11 +23,16 @@ export default function PaymentForm(props: PaymentFormProps) {
     const [counter, setCounter] = useState<number>(1);
     
     useEffect(() => {
+        inspectCost(props.form.Cost)
+    }, []);
+
+    useEffect(() => {
+        console.log(formState);
         props.updateFormState(formState.state);
     }, [formState.state]);
 
     const inspectCost = async (cost: string): Promise<boolean> => {
-        const [errState, errMessage] = await hasLength(cost);
+        const [errState, errMessage] = await validNumber(cost, true);
         formStateDispatch({
             states: {
                 Cost: [errState, errMessage]

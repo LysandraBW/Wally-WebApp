@@ -1,12 +1,10 @@
 'use server';
-import { 
-    DB_Appointment
-} from "@/database/Types";
+import { DB_Appointment } from "@/database/Types";
 import { GetNoteSharees } from "@/database/Export";
 import { getSessionID } from "@/lib/Storage/Storage";
 import { toWebDateTime } from "@/lib/Convert/Convert";
 import { PaymentsStructure } from "./Payment/Form";
-import { UpdateFormStructure, UpdateStructure } from "./Form";
+import { FormType, UpdateFormStructure, UpdateStructure } from "./Form";
 import { NotesStructure, NoteType } from "./Note/Form";
 import { DiagnosesStructure, PartsStructure, RepairsStructure, ServicesStructure } from "./Service/Form";
 
@@ -14,7 +12,7 @@ export async function prepareUpdateForm(employeeID: string, apt: DB_Appointment)
     let reference: {[k: string]: any} = {};
 
     // General
-    reference.General = {
+    reference[FormType.General] = {
         AppointmentID:  apt.AppointmentID,
         FName:          apt.FName,
         LName:          apt.LName,
@@ -26,7 +24,7 @@ export async function prepareUpdateForm(employeeID: string, apt: DB_Appointment)
     };
 
     // Vehicle
-    reference.Vehicle = {
+    reference[FormType.Vehicle] = {
         AppointmentID:  apt.AppointmentID,
         Make:           apt.Make,
         Model:          apt.Model,
@@ -61,8 +59,8 @@ export async function prepareUpdateForm(employeeID: string, apt: DB_Appointment)
         };
     }
 
-    // All Services
-    reference.Service = {
+    // All Servicing
+    reference[FormType.Service] = {
         AppointmentID:  apt.AppointmentID,
         Services:       services,
         Diagnoses:      diagnoses,
@@ -75,7 +73,7 @@ export async function prepareUpdateForm(employeeID: string, apt: DB_Appointment)
     for (const payment of apt.Payments)
         payments[payment.PaymentID] = {...payment, Payment: payment.Payment.toString()};
 
-    reference.Payment = {
+    reference[FormType.Payment] = {
         AppointmentID:  apt.AppointmentID,
         Cost:           apt.Cost,
         Payments:       payments
@@ -97,7 +95,7 @@ export async function prepareUpdateForm(employeeID: string, apt: DB_Appointment)
         };
     }
 
-    reference.Note = {
+    reference[FormType.Note] = {
         AppointmentID: apt.AppointmentID,
         EmployeeID: employeeID,
         Notes: notes

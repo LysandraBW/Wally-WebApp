@@ -23,8 +23,7 @@ export default function General(props: GeneralProps) {
         const load = async () => {
             let statuses: Array<DB_Status> = await DB_Statuses();
             setStatuses(statuses.map(status => [status.StatusID, status.Status]));
-
-            // Initialize Form State
+            
             formStateDispatch({
                 states: {
                     FName: await validName(props.form.FName),

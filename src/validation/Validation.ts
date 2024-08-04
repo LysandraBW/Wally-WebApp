@@ -60,9 +60,12 @@ export const validDate = async (
 }
 
 export const validNumber = async (
-    number: string | number
+    number: string | number,
+    optional: boolean = false
 ): Promise<InspectionMessageOutput> => {
-    return await Inspector.isNumber().inspect(number);
+    return await Inspector.isNumber({
+        optional: optional
+    }).inspect(number);
 }
 
 export const validLicensePlate = async (
@@ -72,9 +75,12 @@ export const validLicensePlate = async (
 }
 
 export const hasLength = async (
-    value: string
+    value: string,
+    optional: boolean = false
 ): Promise<InspectionMessageOutput> => {
-    return await Inspector.hasValue().inspect(value);
+    return await Inspector.hasValue({
+        optional: optional
+    }).inspect(value);
 }
 
 export const validBit = async (
@@ -82,7 +88,7 @@ export const validBit = async (
 ): Promise<InspectionMessageOutput> => {
     return await Inspector.inValues({
         values: [0, 1]
-    }).inspect(value);
+    }).inspect([value]);
 }
 
 export const inValues = async (
@@ -97,6 +103,6 @@ export const every = async (
     callback: (v: any) => Promise<boolean>
 ) => {
     return async (v: any) => await Inspector.every({
-        callback: callback
+        callback
     }).inspect(v);
 }
