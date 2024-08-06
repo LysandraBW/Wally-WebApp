@@ -8,6 +8,7 @@ import { useReducer, useState } from 'react';
 import FormStateReducer from '@/hook/State/Reducer';
 import { InitialFormState } from "@/hook/State/Interface";
 import { hasLength } from '@/validation/Validation';
+import Logo from '@/components/Nav/Minimal/Logo';
 
 export default function Login() {
     const [form, setForm] = useState(Form);
@@ -49,7 +50,7 @@ export default function Login() {
     }
 
     return (
-        <>
+        <div className='h-full flex flex-col grow'>
             <div>
                 {loginFailed && 
                     <Error
@@ -57,26 +58,42 @@ export default function Login() {
                     />
                 }
             </div>
-            <div>
-                <Text
-                    name='username'
-                    label='Username'
-                    value={form.username}
-                    state={formState.input.username}
-                    onChange={changeHandler}
-                />
-                <Text
-                    name='password'
-                    label='Password'
-                    value={form.password}
-                    state={formState.input.password}
-                    onChange={changeHandler}
-                />
-                <Button
-                    label='Login'
-                    onClick={submitHandler}
-                />
+            <Logo/>
+            {/* inset -1px 1px 54px -22px #121010b3, inset -30px 30px 88px 20px #0000001f */}
+            <div className='flex grow'>
+                <div 
+                    style={{'boxShadow': 'inset -1px 1px 54px -22px #121010b3, inset -30px 30px 88px 20px #0000001f'}}
+                    className="bg-[url('/Images/WhiteBMW.webp')] w-[50%] bg-cover bg-center rounded-tr-[13px]">
+                </div>
+                <div className='flex justify-center items-center w-[50%]'>
+                    <div className='w-[50%] flex flex-col gap-y-[16px]'>
+                        <header className='flex flex-col gap-y-[0px] items-center'>
+                            <h1 className='text-[36px] font-semibold tracking-[-1.5px] leading-[1.125]'>Welcome Back</h1>
+                            <p className='font-[400] text-gray-400'>Please enter your details.</p>
+                        </header>
+                        <div className='w-full flex flex-col gap-y-[16px]'>
+                            <Text
+                                name='username'
+                                label='Username'
+                                value={form.username}
+                                state={formState.input.username}
+                                onChange={changeHandler}
+                            />
+                            <Text
+                                name='password'
+                                label='Password'
+                                value={form.password}
+                                state={formState.input.password}
+                                onChange={changeHandler}
+                            />
+                            <Button
+                                label='Login'
+                                onClick={submitHandler}
+                            />
+                        </div>
+                    </div>
+                </div>
             </div>
-        </>
+        </div>
     )
 }

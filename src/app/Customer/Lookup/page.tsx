@@ -42,32 +42,44 @@ export default function Lookup() {
     }
 
     return (
-        <>
-            <div>
+        <div>
+            <div >
                 {outputError && 
                     <Error
                         close={() => setOutputError(false)}
                     />
                 }
-                <LookupForm
-                    form={form}
-                    formState={formState}
-                    onChange={(name, value) => {
-                        setForm({...form, [`${name}`]: value});
-                    }}
-                    onSubmit={submitHandler}
-                    updateFormState={(action) => {
-                        formStateDispatch(action);
-                    }}
-                />
+                <div>
+                    <div>
+                        <div>
+                            <header>
+                                <h1>Lookup Appointment</h1>
+                                <p>To see your appointment details, please enter your appointment ID and email address.</p>
+                            </header>
+                            <div>
+                                <LookupForm
+                                    form={form}
+                                    formState={formState}
+                                    onChange={(name, value) => {
+                                        setForm({...form, [`${name}`]: value});
+                                    }}
+                                    onSubmit={submitHandler}
+                                    updateFormState={(action) => {
+                                        formStateDispatch(action);
+                                    }}
+                                />
+                            </div>
+                        </div>    
+                        <div>
+                            {output && 
+                                <AppointmentSummary
+                                    info={output}
+                                />
+                            }
+                        </div>
+                    </div>     
+                </div>  
             </div>
-            <div>
-                {output && 
-                    <AppointmentSummary
-                        info={output}
-                    />
-                }
-            </div>
-        </>
+        </div>
     )
 }

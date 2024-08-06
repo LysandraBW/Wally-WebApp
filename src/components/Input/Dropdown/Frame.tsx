@@ -1,4 +1,5 @@
 "use client";
+import Check from "@/components/Icon/Check/Check";
 import { Input, WriteInputProps } from "../Input";
 
 export interface DropdownFrameProps<T> extends WriteInputProps {
@@ -19,27 +20,31 @@ export function DropdownFrame(props: DropdownFrameProps<any>) {
             return <></>
             
         return (
-            <> 
+            <div className='border border-black border-t-0 rounded-b'> 
                 {props.values.map(([value, label], i) => (
-                    <div key={i}>
+                    <div 
+                        key={i}
+                        className='px-[8px] py-[4px] border-b border-b-black last:border-b-0 hover:bg-blue-100'    
+                    >
                         {getOption(value, label)}
                     </div>
                 ))}
-            </>
+            </div>
         )
     }    
 
     const getOption = (value: any, label: string): React.ReactNode => {
         return (
             <div 
+                className='flex justify-between items-center'
                 onClick={() => {
                     changeHandler(value);
                     !props.multiple && props.setOpen(false);
                 }}
             >
-                {props.value.includes(value) ?
-                    <b>{label}</b>:
-                    <>{label}</>
+                <label>{label}</label>
+                {props.value.includes(value) &&
+                    <Check/>
                 }
             </div>
         )
@@ -79,7 +84,7 @@ export function DropdownFrame(props: DropdownFrameProps<any>) {
                     {getList()}
                 </div>
             }
-            state={props.state || {state: false, message: ''}}
+            state={props.state || {state: true, message: ''}}
         />
     )
 }

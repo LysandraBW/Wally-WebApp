@@ -1,6 +1,8 @@
 import { Text } from '@/components/Input/Export';
 import { FormState, FormStateAction } from "@/hook/State/Interface";
 import { validEmail, validName, validPhone } from '@/validation/Validation';
+import { Fragment } from 'react';
+
 interface ContactFormProps {
     form: {
         fName: string;
@@ -29,7 +31,7 @@ export default function ContactForm(props: ContactFormProps) {
     }
 
     return (
-        <div>
+        <Fragment>
             <Text
                 name={'fName'}
                 label={'First Name'}
@@ -70,6 +72,6 @@ export default function ContactForm(props: ContactFormProps) {
                     props.onChange(name, value);
                 }}
             />
-        </div>
+        </Fragment>
     )
 }

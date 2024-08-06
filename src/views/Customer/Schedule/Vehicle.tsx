@@ -3,6 +3,7 @@ import { Text, Search, Checkbox } from '@/components/Input/Export';
 import { validValue, validVIN } from '@/validation/Validation';
 import { getValues } from "@/lib/Vehicle/Value";
 import { flattenValues } from "@/lib/Service/Value";
+import { Fragment } from "react";
 
 interface VehicleFormProps {
     form: {
@@ -39,7 +40,7 @@ export default function VehicleForm(props: VehicleFormProps) {
     }
 
     return (
-        <div>
+        <Fragment>
             <Text
                 name={'vin'}
                 label={'VIN'}
@@ -105,6 +106,6 @@ export default function VehicleForm(props: VehicleFormProps) {
                     props.onChange(name, value);
                 }}
             />
-        </div>
+        </Fragment>
     )
 }

@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { WriteInputProps } from "../../Input";
 import { DropdownFrame } from "../../Dropdown/Frame";
+import ChevronDown from "@/components/Icon/Chevron/Down";
 
 export interface SearchProps<T> extends WriteInputProps {
     value: Array<T>;
@@ -69,8 +70,12 @@ export default function Search(props: SearchProps<any>) {
 
     const getToggle = (): React.ReactNode => {
         return (
-            <div onClick={() => !props.disabled && setOpen(!open)}>
+            <div 
+                className='border rounded border-black px-[8px] py-[4px] bg-white w-full flex justify-between items-center'
+                onClick={() => !props.disabled && setOpen(!open)}
+            >
                 {toggleLabel()}
+                <ChevronDown/>
             </div>
         )
     }
@@ -80,6 +85,7 @@ export default function Search(props: SearchProps<any>) {
             <div>
                 <input 
                     type="text"
+                    className='border rounded-t focus:rounded-t outline-none border-black px-[8px] py-[4px] bg-white w-full flex justify-between items-center'
                     placeholder="Search"
                     onChange={(event) => {
                         const filter = event.target.value.toUpperCase();

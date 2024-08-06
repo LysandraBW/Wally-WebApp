@@ -4,7 +4,9 @@ export default function Error(props: {state: InputState}) {
     return (
         <div>
             {props.state && !props.state.state &&
-                <label>{props.state.message}</label>
+                <label
+                    className='text-[#DA1C1C]'
+                >{props.state.message}</label>
             }
         </div>
     )

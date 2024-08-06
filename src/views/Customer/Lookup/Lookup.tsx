@@ -2,6 +2,7 @@ import { Text, Button } from '@/components/Input/Export';
 import { FormStateAction } from "@/hook/State/Interface";
 import { FormState } from "@/hook/State/Interface";
 import { validUniqueIdentifier, validEmail } from '@/validation/Validation';
+import { Fragment } from 'react';
 
 interface LookupFormProps {
     form: {
@@ -30,7 +31,7 @@ export default function LookupForm(props: LookupFormProps) {
     }
 
     return (
-        <div>
+        <Fragment>
             <Text
                 name={'appointmentID'}
                 label={'Appointment ID'}
@@ -55,6 +56,6 @@ export default function LookupForm(props: LookupFormProps) {
                 label='Submit'
                 onClick={props.onSubmit}
             />
-        </div>
+        </Fragment>
     )
 }

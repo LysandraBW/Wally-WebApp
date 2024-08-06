@@ -16,6 +16,7 @@ import { getValues } from "@/lib/Vehicle/Value";
 import { loadServices } from "@/lib/Service/Load";
 import { flattenValues } from "@/lib/Service/Value";
 import { InitialFormState } from '@/hook/State/Interface';
+import Nav from '@/components/Nav/Default/Default';
 
 export default function Schedule() {
     const [form, setForm] = useState(Form);
@@ -130,6 +131,7 @@ export default function Schedule() {
                     close={() => setCreatedAptID(' ')}
                 />
             }
+            <Nav/>
             <Tracker
                 parts={[
                     {
@@ -166,7 +168,7 @@ export default function Schedule() {
                         ),
                         partHeader: 'Vehicle',
                         onContinue: async () => await inspectVehicleInput() 
-                    }
+                    },
                 ]}
                 onSubmit={submitHandler}
             />

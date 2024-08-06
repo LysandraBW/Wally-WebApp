@@ -26,7 +26,9 @@ export interface InputProps {
 export function Input({label, input, state}: InputProps) {
     return (
         <div>
-            <label>
+            <label
+                className={['font-medium', `${!state.state && 'text-[#DA1C1C]'}`].join(' ')}
+            >
                 {label}
             </label>
             <div>

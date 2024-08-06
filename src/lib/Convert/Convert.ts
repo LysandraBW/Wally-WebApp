@@ -1,3 +1,5 @@
+import moment from "moment";
+
 export function toString(v: any): string {
     if (!v)
         return '';
@@ -8,6 +10,12 @@ export function toWebDateTime(date: Date): string {
     if (!date)
         return '';
     return date.toISOString().slice(0, -1);
+}
+
+export function toDisplayDateTime(date: Date): string {
+    if (!date)
+        return '';
+    return moment(date).format('MMM D, YYYY, h:mm a');
 }
 
 export function toDatabaseDateTime(date: string): string {
