@@ -8,7 +8,7 @@ import { useReducer, useState } from 'react';
 import FormStateReducer from '@/hook/State/Reducer';
 import { InitialFormState } from "@/hook/State/Interface";
 import { hasLength } from '@/validation/Validation';
-import Logo from '@/components/Nav/Minimal/Logo';
+import MinimalNav from '@/components/Nav/Minimal/Minimal';
 
 export default function Login() {
     const [form, setForm] = useState(Form);
@@ -58,8 +58,7 @@ export default function Login() {
                     />
                 }
             </div>
-            <Logo/>
-            {/* inset -1px 1px 54px -22px #121010b3, inset -30px 30px 88px 20px #0000001f */}
+            <MinimalNav/>
             <div className='flex grow'>
                 <div 
                     style={{'boxShadow': 'inset -1px 1px 54px -22px #121010b3, inset -30px 30px 88px 20px #0000001f'}}

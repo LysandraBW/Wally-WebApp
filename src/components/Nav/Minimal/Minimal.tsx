@@ -1,6 +1,6 @@
 import Logo from "@/components/Logo/Logo"
 
-export function MinimalNavBar() {
+export default function MinimalNav() {
     return (
         <div className='relative top-0 h-[64px]'>
             <div className='absolute top-0 z-[-1] h-[64] w-full backdrop-blur-[100px]'></div>
