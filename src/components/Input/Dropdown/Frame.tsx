@@ -1,6 +1,7 @@
 "use client";
 import Check from "@/components/Icon/Check/Check";
 import { Input, WriteInputProps } from "../Input";
+import clsx from "clsx";
 
 export interface DropdownFrameProps<T> extends WriteInputProps {
     open: boolean;
@@ -20,11 +21,11 @@ export function DropdownFrame(props: DropdownFrameProps<any>) {
             return <></>
             
         return (
-            <div className='border border-black border-t-0 rounded-b'> 
+            <div className='border border-gray-300 border-t-0 rounded-b'> 
                 {props.values.map(([value, label], i) => (
                     <div 
                         key={i}
-                        className='px-[8px] py-[4px] border-b border-b-black last:border-b-0 hover:bg-blue-100'    
+                        className='border-b border-b-gray-300 last:border-b-0 hover:bg-blue-100'    
                     >
                         {getOption(value, label)}
                     </div>
@@ -36,15 +37,30 @@ export function DropdownFrame(props: DropdownFrameProps<any>) {
     const getOption = (value: any, label: string): React.ReactNode => {
         return (
             <div 
-                className='flex justify-between items-center'
+                className={clsx(
+                    'inputPadding flex justify-between items-center',
+                    props.value.includes(value) && 'bg-gray-100'
+                )}
                 onClick={() => {
                     changeHandler(value);
                     !props.multiple && props.setOpen(false);
                 }}
             >
-                <label>{label}</label>
+                <label
+                    className={clsx(
+                        'text-gray-500',
+                        props.value.includes(value) && 'text-blue-400'
+                    )}
+                >
+                    {label}
+                </label>
                 {props.value.includes(value) &&
-                    <Check/>
+                    <Check
+                        color='#273B9B'
+                        width='16'
+                        height='16'
+                        strokeWidth="1px"
+                    />
                 }
             </div>
         )

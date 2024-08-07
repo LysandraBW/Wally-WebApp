@@ -1,33 +1,40 @@
 'use client';
+import clsx from 'clsx';
 import { Input, WriteInputProps } from '../Input';
 
 interface TextProps extends WriteInputProps {
-    type?: string;
+    type: string;
 }
 
 export default function Text(props: TextProps) {
+    const blurHandler = () => {
+        if (props.onBlur)
+            props.onBlur();
+    }
+
+    const changeHandler = (event: any) => {
+        const {name, value} = event.target;
+        if (props.onChange)
+            props.onChange(name, value);
+    }
+
     return (
         <Input
             label={props.label}
             input={
                 <input
                     name={props.name}
-                    type={props.type || 'text'}
-                    value={props.value || ''}
-                    onBlur={() => {
-                        props.onBlur && props.onBlur();
-                    }}
-                    onChange={event => {
-                        const {name, value} = event.target;
-                        props.onChange && props.onChange(name, value);
-                    }}
-                    className={[
-                        'border rounded border-gray-300 px-[8px] py-[4px] bg-white w-full',
-                        `${props.state && !props.state.state && '!border-[#DA1C1C] !bg-[#DA1C1C] !bg-opacity-[12%]'}`
-                    ].join(' ')}
+                    type={props.type}
+                    value={props.value}
+                    onBlur={blurHandler}
+                    onChange={changeHandler}
+                    className={clsx(
+                        'w-full',
+                        !props.state.state && '!border-red-300 !text-red-300'
+                    )}
                 />
             }
-            state={props.state || {state: true, message: ''}}
+            state={props.state}
         />
     )
 }

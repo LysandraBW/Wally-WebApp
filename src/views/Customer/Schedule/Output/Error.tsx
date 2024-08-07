@@ -7,7 +7,7 @@ interface ErrorProps {
 export default function Error(props: ErrorProps) {
     return (
         <Message 
-                message={(
+                head={(
                     <>
                         <b>Error</b>
                         <p>Unfortunately, something has gone awry. Please try again.</p>

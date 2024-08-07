@@ -19,3 +19,7 @@ export const InitialFormState: FormState = {
     input: {}
 }
 
+export const DefaultState: InputState = {
+    state: true,
+    message: ''
+}

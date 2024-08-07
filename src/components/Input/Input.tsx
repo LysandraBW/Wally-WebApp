@@ -1,42 +1,53 @@
 'use client';
 import { InputState } from "@/hook/State/Interface";
 import Error from './Error/Error';
+import clsx from "clsx";
 
-// Props for Inputs Only to be Read
-export interface ReadInputProps {
-    name: string;
-    label: string;
-    state?: InputState;
-    onBlur?: () => void;
-    onChange?: (name: string, value: any) => void;   
-}
-
-// Props for Inputs to be Written and Read
-export interface WriteInputProps extends ReadInputProps {
-    value: any;
-}
-
-// Props for Input Component
 export interface InputProps {
     input: React.ReactNode;
     label: string;
     state: InputState;
 }
 
-export function Input({label, input, state}: InputProps) {
+export function Input(props: InputProps) {
     return (
-        <div>
-            <label
-                className={['font-medium', `${!state.state && 'text-[#DA1C1C]'}`].join(' ')}
-            >
-                {label}
-            </label>
-            <div>
-                {input}
-            </div>
+        <div
+            className={clsx(
+                'flex flex-col gap-y-2',
+                'flex-col-reverse'
+            )}
+        >
             <Error
-                state={state}
+                state={props.state}
             />
+            <div 
+                className='peer'
+            >
+                {props.input}
+            </div>
+            <label
+                className={clsx(
+                    'inputLabel',
+                    !props.state.state && '!text-red-300'
+                )}
+            >
+                {props.label}
+            </label>
         </div>
     );
+}
+
+export interface ReadInputProps {
+    name: string;
+    label: string;
+    state: InputState;   
+    onChange: null | ((
+        name: string, 
+        value: any
+    ) => void);
+    onBlur: null | (() => void);
+}
+
+export interface WriteInputProps extends ReadInputProps {
+    value: any;
 }

@@ -1,3 +1,68 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+}
+
+::-webkit-scrollbar-track {
+    background: #00000000;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #BDC0D4;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #BDC0D4;
+}
+
+@layer base {
+    h3 {
+        @apply text-2xl font-[500] 
+        tracking-[-0.0375em] leading-6
+    }
+    h5 {
+        @apply tracking-[-0.0375em]
+    }
+    p {
+        @apply text-gray-500
+    }
+    input {
+        @apply px-4 py-1.5 text-gray-500 
+        rounded border border-gray-300 outline-none 
+        focus:border-blue-400 focus:text-blue-400
+    }
+    button {
+        @apply rounded px-4 py-1.5 font-[600]
+    }
+}
+
+@layer components {
+    .inputLabel {
+        @apply peer-has-[:focus]:text-blue-400
+    }
+
+    .inputBox {
+        @apply px-4 py-1.5 text-gray-500
+        rounded border border-gray-300 outline-none 
+        focus:border-blue-400 focus:text-blue-400
+    }
+
+    .inputFocus {
+        @apply border-blue-400 text-blue-400
+    }
+
+    .inputPadding {
+        @apply px-4 py-1.5
+    }
+}
+
+@layer utilities {
+    .inputLabel {
+        color: #3F4151;
+        font-weight: 400;
+    }
+}

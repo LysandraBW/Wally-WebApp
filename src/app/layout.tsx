@@ -1,5 +1,6 @@
-import { DMSans } from "@/public/Font/Font";
+import { DMSans, Inter } from "@/public/Font/Font";
 import "./globals.css";
+import clsx from "clsx";
 
 export default function RootLayout({
   children,
@@ -8,7 +9,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${DMSans.className} flex flex-col min-h-screen h-full`}>{children}</body>
+      <body className={clsx(
+        ' min-h-screen h-full',
+        'flex flex-col',
+        Inter.className,
+      )}>{children}</body>
     </html>
   );
 }

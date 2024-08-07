@@ -1,8 +1,9 @@
-"use client";
-import { useState, useEffect } from "react";
-import { WriteInputProps } from "../../Input";
-import { DropdownFrame } from "../../Dropdown/Frame";
-import ChevronDown from "@/components/Icon/Chevron/Down";
+'use client';
+import { useState, useEffect } from 'react';
+import { WriteInputProps } from '../../Input';
+import { DropdownFrame } from '../../Dropdown/Frame';
+import ChevronDown from '@/components/Icon/Chevron/Down';
+import clsx from 'clsx';
 
 export interface SearchProps<T> extends WriteInputProps {
     value: Array<T>;
@@ -34,7 +35,7 @@ export default function Search(props: SearchProps<any>) {
         setFiltered(filteredValues());
     }, [open]);
 
-    const filteredValues = (filter: string = ""): Array<[any, string]> => {
+    const filteredValues = (filter: string = ''): Array<[any, string]> => {
         const filtered: Array<[any, string]> = [];
         for (let i = 0; i < props.values.length; i++) {
             const [value, label] = props.values[i];
@@ -71,26 +72,39 @@ export default function Search(props: SearchProps<any>) {
     const getToggle = (): React.ReactNode => {
         return (
             <div 
-                className='border rounded border-black px-[8px] py-[4px] bg-white w-full flex justify-between items-center'
+                className={clsx(
+                    'inputBox w-full flex justify-between items-center',
+                    !open && 'text-gray-500'
+                )}
                 onClick={() => !props.disabled && setOpen(!open)}
             >
                 {toggleLabel()}
-                <ChevronDown/>
+                <ChevronDown
+                    color={'#3F4151'}
+                />
             </div>
         )
     }
 
     const getSearch = (): React.ReactNode => {
         return (
-            <div>
+            <div 
+                className={clsx(
+                    'inputBox flex justify-between items-center',
+                    open && 'rounded-none rounded-t'
+                )}
+            >
                 <input 
-                    type="text"
-                    className='border rounded-t focus:rounded-t outline-none border-black px-[8px] py-[4px] bg-white w-full flex justify-between items-center'
-                    placeholder="Search"
+                    type='text'
+                    className='border-none p-0'
+                    placeholder='Search'
                     onChange={(event) => {
                         const filter = event.target.value.toUpperCase();
                         setFiltered(filteredValues(filter));
                     }}
+                />
+                <ChevronDown
+                    color={'#3F4151'}
                 />
             </div>
         )

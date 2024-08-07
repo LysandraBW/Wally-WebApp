@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useReducer, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Tracker from '@/components/Form/Tracker/Tracker';
 import { Form } from '@/submission/Customer/Schedule/Form';
 import { LoadedServices } from '@/submission/Customer/Schedule/Load';
@@ -8,20 +8,14 @@ import ContactForm from '@/views/Customer/Schedule/Contact';
 import VehicleForm from '@/views/Customer/Schedule/Vehicle';
 import Success from '@/views/Customer/Schedule/Output/Success';
 import Error from '@/views/Customer/Schedule/Output/Error';
-import FormStateReducer from '@/hook/State/Reducer';
-import { validEmail, validName, validPhone, validValue, validVIN } from '@/validation/Validation';
 import useVehicle from '@/hook/Vehicle/Vehicle';
 import { loadMakes, loadModelYears } from '@/lib/Vehicle/Load';
-import { getValues } from "@/lib/Vehicle/Value";
 import { loadServices } from "@/lib/Service/Load";
-import { flattenValues } from "@/lib/Service/Value";
-import { InitialFormState } from '@/hook/State/Interface';
 import Nav from '@/components/Nav/Default/Default';
+import ServiceForm from '@/views/Customer/Schedule/Service';
 
 export default function Schedule() {
     const [form, setForm] = useState(Form);
-    const [contactFormState, contactFormStateDispatch] = useReducer(FormStateReducer, InitialFormState);
-    const [vehicleFormState, vehicleFormStateDispatch] = useReducer(FormStateReducer, InitialFormState);
     const vehicle = useVehicle();
 
     const [loadedServices, setLoadedServices] = useState(LoadedServices);
@@ -34,7 +28,7 @@ export default function Schedule() {
                 await loadModelYears()
             );
             const services = await loadServices();
-            setLoadedServices({services});
+            setLoadedServices(services);
         }
         load();
     }, []);
@@ -59,55 +53,12 @@ export default function Schedule() {
         }
     }
 
-    const inspectContactInput = async (): Promise<boolean> => {
-        if (contactFormState.state)
-            return true;
-
-        const [fNameState, fNameMessage] = await validName(form.fName);
-        const [lNameState, lNameMessage] = await validName(form.lName);
-        const [emailState, emailMessage] = await validEmail(form.email);
-        const [phoneState, phoneMessage] = await validPhone(form.phone);
-
-        contactFormStateDispatch({
-            states: {
-                fName: [fNameState, fNameMessage],
-                lName: [lNameState, lNameMessage],
-                email: [emailState, emailMessage],
-                phone: [phoneState, phoneMessage]
-            }
-        });
-
-        return fNameState && lNameState && emailState && phoneState;
-    }
-
-    const inspectVehicleInput = async (): Promise<boolean> => {
-        if (vehicleFormState.state)
-            return true;
-
-        const [vinState, vinMessage] = await validVIN(vehicle.vin);
-        const [makState, makMessage] = await validValue([vehicle.make], getValues(vehicle.loadedMakes));
-        const [mdlState, mdlMessage] = await validValue([vehicle.model], getValues(vehicle.loadedModels));
-        const [mdyState, mdyMessage] = await validValue([vehicle.modelYear], getValues(vehicle.loadedModelYears));
-        const [serState, serMessage] = await validValue(form.services, flattenValues(loadedServices.services));
-
-        vehicleFormStateDispatch({
-            states: {
-                services:   [serState, serMessage],
-                make:       [makState, makMessage],
-                model:      [mdlState, mdlMessage],
-                modelYear:  [mdyState, mdyMessage],
-                vin:        [vinState, vinMessage]
-            }
-        });
-
-        return mdyState && makState && mdlState && serState && vinState;
-    }
-
     const submitHandler = async (): Promise<boolean> => {
-        if (!contactFormState.state || !vehicleFormState.state)
-            return false;
-
-        const appointmentID = await submitForm({...form, ...vehicle.form});
+        const appointmentID = await submitForm({
+            ...form, 
+            ...vehicle.form
+        });
+        
         if (!appointmentID) {
             setCreatedAptID('');
             return false;
@@ -122,7 +73,7 @@ export default function Schedule() {
         <>
             {createdAptID.length > 1 &&
                 <Success
-                    ID={createdAptID}
+                    aptID={createdAptID}
                     close={() => setCreatedAptID(' ')}
                 />
             }
@@ -138,36 +89,33 @@ export default function Schedule() {
                         part: (
                             <ContactForm
                                 form={form}
-                                formState={contactFormState}
                                 onChange={changeHandler}
-                                updateFormState={(action) => {
-                                    contactFormStateDispatch(action);
-                                }}
                             />
                         ),
                         partHeader: 'Contact',
-                        onContinue: async () => await inspectContactInput()
+                        onContinue: async () => true
                     },
                     {
                         part: (
                             <VehicleForm
-                                form={{
-                                    ...form, 
-                                    ...vehicle.form
-                                }}
-                                formState={vehicleFormState}
-                                loadedValues={{
-                                    ...loadedServices, 
-                                    ...vehicle.loadedValues
-                                }}
+                                form={vehicle.form}
+                                loadedValues={vehicle.loadedValues}
                                 onChange={changeHandler}
-                                updateFormState={(action) => {
-                                    vehicleFormStateDispatch(action);
-                                }}
                             />
                         ),
                         partHeader: 'Vehicle',
-                        onContinue: async () => await inspectVehicleInput() 
+                        onContinue: async () => true
+                    },
+                    {
+                        part: (
+                            <ServiceForm
+                                services={form.services}
+                                loadedServices={loadedServices}
+                                onChange={changeHandler}
+                            />
+                        ),
+                        partHeader: 'Service',
+                        onContinue: async () => true
                     },
                 ]}
                 onSubmit={submitHandler}
