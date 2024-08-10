@@ -21,10 +21,11 @@ export default function Message(props: MessageProps) {
             {visible &&
                 <div
                     className={clsx(
-                        'flex items-start p-4 gap-x-4 max-w-[450px] m-10',
-                        'rounded shadow-[0_4px_4px_0px_rgba(0,0,0,0.07)]',
-                        props.messageType === MessageType.Success && 'bg-green-100 border border-green-300',
-                        props.messageType === MessageType.Error && 'bg-red-100 border border-red-300'
+                        'absolute mt-10 bg-[#FFFFFF] rounded-[0.375rem] left-1/2 translate-x-[-50%]',
+                        'flex items-start px-3 py-3 gap-x-4 min-w-[450px] m-10',
+                        'backdrop-blur-3xl shadow border border-gray-300',
+                        props.messageType === MessageType.Success && 'border-[2px] border-green-300',
+                        props.messageType === MessageType.Error && 'border-[2px] border-red-300'
                     )}
                 >
                     <div
@@ -33,41 +34,27 @@ export default function Message(props: MessageProps) {
                             props.onClose();
                         }}
                         className={clsx('relative top-[4px]')}
-                    >
-                        {props.messageType === MessageType.Success &&                     
-                            <Close  
-                                width='16'
-                                height='16'
-                                color={'#33A140'}
-                            />
-                        }
-                        {props.messageType === MessageType.Error &&                     
-                            <Close  
-                                width='16'
-                                height='16'
-                                color={'#D1393E'}
-                            />
-                        }
+                    >                  
+                        <Close  
+                            width='16'
+                            height='16'
+                            color={props.messageType === MessageType.Success ? '#33A140' : props.messageType === MessageType.Error ? '#D1393E' : '#000'}
+                        />
                     </div>
                     <div>
                         <h5 
                             className={clsx(
-                                `${DMSans.className} text-[17px] font-[500]`,
+                                `${DMSans.className} text-[18px] font-[500]`,
                                 props.messageType === MessageType.Success && 'text-green-300',
                                 props.messageType === MessageType.Error && 'text-red-300'
                             )}
-                        >
-                            {props.head}
-                        </h5>
+                        >{props.head}</h5>
                         <p
                             className={clsx(
-                                'text-sm',
-                                props.messageType === MessageType.Success && 'text-green-200',
-                                props.messageType === MessageType.Error && 'text-red-200'
+                                props.messageType === MessageType.Success && 'text-green-200 text-sm',
+                                props.messageType === MessageType.Error && 'text-red-200 text-sm'
                             )}
-                        >
-                            {props.body}
-                        </p>
+                        >{props.body}</p>
                     </div>
                 </div>
             }

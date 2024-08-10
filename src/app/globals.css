@@ -2,67 +2,73 @@
 @tailwind components;
 @tailwind utilities;
 
-::-webkit-scrollbar {
-    width: 5px;
-    height: 5px;
-}
+@layer base {   
+    h1 {
+        @apply
+            text-[2rem] !font-[500] 
+            tracking-[-0.0375em] leading-6
+    }
 
-::-webkit-scrollbar-track {
-    background: #00000000;
-}
-
-::-webkit-scrollbar-thumb {
-    background: #BDC0D4;
-}
-
-::-webkit-scrollbar-thumb:hover {
-    background: #BDC0D4;
-}
-
-@layer base {
     h3 {
-        @apply text-2xl font-[500] 
-        tracking-[-0.0375em] leading-6
+        @apply 
+            text-2xl font-[500] 
+            tracking-[-0.0375em] leading-6
     }
+
     h5 {
-        @apply tracking-[-0.0375em]
+        @apply 
+            tracking-[-0.0250em]
     }
+
     p {
-        @apply text-gray-500
+        @apply 
+            text-gray-500
     }
+
     input {
-        @apply px-4 py-1.5 text-gray-500 
-        rounded border border-gray-300 outline-none 
-        focus:border-blue-400 focus:text-blue-400
+        @apply 
+            px-4 py-1.5 h-[40px] rounded-[0.375rem]
+            text-gray-500
+            border border-gray-300 outline-none
+            shadow-sm
     }
+
     button {
-        @apply rounded px-4 py-1.5 font-[600]
+        @apply 
+            px-4 py-1.5 h-[40px] rounded-[0.375rem] 
+            font-medium shadow-sm
+    }
+    p, label {
+        @apply 
+            tracking-[-0.4px]
     }
 }
 
 @layer components {
-    .inputLabel {
-        @apply peer-has-[:focus]:text-blue-400
-    }
-
     .inputBox {
-        @apply px-4 py-1.5 text-gray-500
-        rounded border border-gray-300 outline-none 
-        focus:border-blue-400 focus:text-blue-400
-    }
-
-    .inputFocus {
-        @apply border-blue-400 text-blue-400
+        @apply 
+            px-4 py-1.5 rounded-[0.375rem]
+            border border-gray-300 outline-none
+            text-gray-500 shadow-sm h-[40px]
     }
 
     .inputPadding {
-        @apply px-4 py-1.5
+        @apply 
+            px-4 py-1.5
+    }
+
+    .inputLabel {
+        @apply
+            text-[#3F4151] font-[400]
     }
 }
 
 @layer utilities {
-    .inputLabel {
-        color: #3F4151;
-        font-weight: 400;
+    .dark-gradient {
+        @apply bg-black
+    }
+
+    .sub-text {
+        @apply text-sm text-gray-400
     }
 }

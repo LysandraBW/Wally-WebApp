@@ -1,6 +1,8 @@
 import { DefaultState } from "@/hook/State/Interface";
 import { Text, Search } from '@/components/Input/Export';
-import { Fragment } from "react";
+import { Fragment, useEffect } from "react";
+import useVehicle from "@/hook/Vehicle/Vehicle";
+import { loadMakes, loadModelYears } from "@/lib/Vehicle/Load";
 
 interface VehicleFormProps {
     form: {
@@ -9,15 +11,40 @@ interface VehicleFormProps {
         model:      Array<string>;
         modelYear:  Array<number>;
     };
-    loadedValues: {
-        makes:      Array<[string, string]>;
-        models:     Array<[string, string]>;
-        modelYears: Array<[number, string]>;
-    };
     onChange: (name: string, value: any) => void;
 }
 
 export default function VehicleForm(props: VehicleFormProps) {
+    const vehicle = useVehicle();
+
+    useEffect(() => {
+        const load = async () => {
+            vehicle.setLoadedData(
+                await loadMakes(), 
+                await loadModelYears()
+            );
+        }
+        load();
+    }, []);
+
+    const changeHandler = async (name: string, value: any) => {
+        switch (name) {
+            case 'vin':
+                vehicle.setVIN(value);
+                break;
+            case 'make':
+                vehicle.setMake(value[0]);
+                break;
+            case 'model':
+                vehicle.setModel(value[0]);
+                break;
+            case 'modelYear':
+                vehicle.setModelYear(value[0]);
+                break;
+        }
+        props.onChange(name, value);
+    }
+
     return (
         <Fragment>
             <Text
@@ -25,7 +52,7 @@ export default function VehicleForm(props: VehicleFormProps) {
                 name='vin'
                 label='VIN'
                 value={props.form.vin}
-                onChange={(name, value) => props.onChange(name, value)}
+                onChange={(name, value) => changeHandler(name, value)}
                 state={DefaultState}
                 onBlur={null}
             />
@@ -35,8 +62,8 @@ export default function VehicleForm(props: VehicleFormProps) {
                 label='Model Year'
                 defaultLabel='Select a Year'
                 value={props.form.modelYear}
-                values={props.loadedValues.modelYears}
-                onChange={(name, value) => props.onChange(name, value)}
+                values={vehicle.loadedModelYears}
+                onChange={(name, value) => changeHandler(name, value)}
                 state={DefaultState}
                 onBlur={null}
             />
@@ -46,8 +73,8 @@ export default function VehicleForm(props: VehicleFormProps) {
                 label='Make'
                 defaultLabel='Select a Make'
                 value={props.form.make}
-                values={props.loadedValues.makes}
-                onChange={(name, value) => props.onChange(name, value)}
+                values={vehicle.loadedMakes}
+                onChange={(name, value) => changeHandler(name, value)}
                 state={DefaultState}
                 onBlur={null}
             />
@@ -56,8 +83,8 @@ export default function VehicleForm(props: VehicleFormProps) {
                 label='Model'
                 defaultLabel='Select a Model'
                 value={props.form.model}
-                values={props.loadedValues.models}
-                onChange={(name, value) => props.onChange(name, value)}
+                values={vehicle.loadedModels}
+                onChange={(name, value) => changeHandler(name, value)}
                 disabled={!props.form.modelYear[0] || !props.form.make[0]}
                 size={10}
                 state={DefaultState}

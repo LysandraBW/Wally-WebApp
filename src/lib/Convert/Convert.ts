@@ -15,7 +15,7 @@ export function toWebDateTime(date: Date): string {
 export function toDisplayDateTime(date: Date): string {
     if (!date)
         return '';
-    return moment(date).format('MMM D, YYYY, h:mm a');
+    return moment(date).format('MMM D, YYYY, h:mm A');
 }
 
 export function toDatabaseDateTime(date: string): string {

@@ -27,7 +27,7 @@ export default function Checkbox(props: CheckboxProps<any>) {
         <Input
             input={
                 <div className='flex flex-col gap-y-2'>
-                    <div className='border rounded-t border-gray-300'>                        
+                    <div className='border rounded-t-[0.375rem] border-gray-300'>                        
                         <Tabs
                             tab={tab}
                             tabs={tabs}

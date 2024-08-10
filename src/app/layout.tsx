@@ -1,4 +1,4 @@
-import { DMSans, Inter } from "@/public/Font/Font";
+import { DMSans, Rubik, Inter, Lato, Mukta, Nunito_Sans } from "@/public/Font/Font";
 import "./globals.css";
 import clsx from "clsx";
 
@@ -10,7 +10,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={clsx(
-        ' min-h-screen h-full',
+        'bg-white min-h-screen h-full',
         'flex flex-col',
         Inter.className,
       )}>{children}</body>

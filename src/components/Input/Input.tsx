@@ -17,9 +17,11 @@ export function Input(props: InputProps) {
                 'flex-col-reverse'
             )}
         >
-            <Error
-                state={props.state}
-            />
+            {!props.state.state &&
+                <Error
+                    state={props.state}
+                />
+            }
             <div 
                 className='peer'
             >

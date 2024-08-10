@@ -2,6 +2,7 @@
 import { WriteInputProps } from "../../Input";
 import { useState, useEffect } from "react";
 import { DropdownFrame } from "../Frame";
+import { getToggleLabel } from "@/lib/Input/Dropdown/ToggleLabel";
 
 export interface DropdownProps<T> extends WriteInputProps {
     value: Array<T>;
@@ -13,43 +14,35 @@ export interface DropdownProps<T> extends WriteInputProps {
 
 export default function Dropdown(props: DropdownProps<any>) {
     const [open, setOpen] = useState(false);
-    
-    const toggleLabel = () => {
-        if (props.multiple)
-            return props.defaultLabel;
-        
-        for (const [value, label] of props.values) {
-            if (props.value.includes(value)) {
-                return label;
-            }
-        }
-        
-        return props.defaultLabel;
-    }
+    const [toggleLabel, setToggleLabel] = useState(props.defaultLabel);
 
-    const getToggle = (): React.ReactNode => {
-        return (
-            <div onClick={() => !props.disabled && setOpen(!open)}>
-                {toggleLabel()}
-            </div>
-        )
-    }
+    useEffect(() => {
+        setToggleLabel(getToggleLabel({
+            multiple: props.multiple,
+            defaultLabel: props.defaultLabel,
+            value: props.value,
+            values: props.values
+        }));
+    }, [...props.value]);
 
     return (
         <DropdownFrame
-            open={open}
-            setOpen={setOpen}
             name={props.name}
+            state={props.state}
             label={props.label}
+            defaultLabel={props.defaultLabel}
             value={props.value}
             values={props.values}
-            defaultLabel={props.defaultLabel}
+            open={open}
+            toggleDropdown={setOpen}
             multiple={props.multiple}
             disabled={props.disabled}
             onBlur={props.onBlur}
             onChange={props.onChange}
-            getToggle={getToggle}
-            state={props.state}
-        />
+        >
+            <div onClick={() => !props.disabled && setOpen(!open)}>
+                {toggleLabel}
+            </div>
+        </DropdownFrame>
     )
 }

@@ -10,7 +10,7 @@ export default function CloseButton(props: CloseButtonProps) {
                 <Close
                     width='20'
                     height='20'
-                    color='#000'
+                    color='#757890'
                 />
         </div>
     )
