@@ -13,26 +13,20 @@ export default function Action(props: ActionProps) {
                 onClick={async () => {
                     await props.loadAppointments();
                 }}
-            >
-                Reload
-            </span>
+            >Reload</span>
             {!!props.checkedAppointments.length &&
                 <span 
                     onClick={async () => {
                         await props.deleteAppointments(props.checkedAppointments);
                     }}
-                >
-                    Delete
-                </span>
+                >Delete</span>
             }
             {!!props.checkedAppointments.length && props.showingDeleted &&
                 <span 
                     onClick={async () => {
                         await props.restoreAppointments(props.checkedAppointments);
                     }}
-                >
-                    Restore
-                </span>
+                >Restore</span>
             }
         </div>
     )

@@ -2,9 +2,9 @@ import React from "react";
 import { toString } from "@/lib/Convert/Convert";
 import { DB_AppointmentLabels, DB_AppointmentOverview } from "@/database/Types";
 
-interface AptRowProps {
+interface AppointmentProps {
     appointment: DB_AppointmentOverview;
-    labels: DB_AppointmentLabels;
+    appointmentLabels: DB_AppointmentLabels;
     updateLabel: (appointmentID: string, labelName: string) => any;
     isChecked: boolean;
     checkAppointment: (appointmentID: string) => void;
@@ -12,7 +12,7 @@ interface AptRowProps {
     search: string;
 }
 
-export default function AptRow(props: AptRowProps) {
+export default function Appointment(props: AppointmentProps) {
     const updateLabel = async (labelName: string) => {
         props.updateLabel(props.appointment.AppointmentID, labelName);
     }
@@ -54,7 +54,7 @@ export default function AptRow(props: AptRowProps) {
                 <input 
                     type='checkbox'
                     onChange={() => updateLabel('Star')}
-                    checked={!!props.labels.Star.Value}
+                    checked={!!props.appointmentLabels.Star.Value}
                     onClick={(event) => event.stopPropagation()}
                 />
             </td>
@@ -62,7 +62,7 @@ export default function AptRow(props: AptRowProps) {
                 <input 
                     type='checkbox'
                     onChange={() => updateLabel('Flag')}
-                    checked={!!props.labels.Flag.Value}
+                    checked={!!props.appointmentLabels.Flag.Value}
                     onClick={(event) => event.stopPropagation()}
                 />
             </td>

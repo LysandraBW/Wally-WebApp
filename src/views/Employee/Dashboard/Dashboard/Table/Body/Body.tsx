@@ -1,4 +1,4 @@
-import Appointment from "./Row";
+import Appointment from "./Appointment";
 import { UpdateLabel } from "@/database/Export";
 import { useContext } from "react";
 import { toggleValue } from "@/lib/Input/Toggle";
@@ -7,14 +7,14 @@ import { updateAppointmentLabel } from "@/database/Appointment/Label/Helper";
 import { PageContext } from "@/process/Employee/Dashboard/Context";
 
 interface BodyProps {
+    search: string;
+    checked: Array<string>;
+    labels: DB_AllAppointmentLabels;
     current: Array<DB_AppointmentOverview>;
     openAppointment: (appointmentID: string) => void;
     deleteAppointment: (IDs: Array<string>) => void;
-    checked: Array<string>;
     updateChecked: (checked: Array<string>) => any;
-    labels: DB_AllAppointmentLabels;
     updateLabels: (label: DB_AllAppointmentLabels) => void;
-    search: string;
 }
 
 export default function Body(props: BodyProps) {
@@ -27,13 +27,11 @@ export default function Body(props: BodyProps) {
             props.labels
         ); 
 
-        const output = await UpdateLabel({
+        if (!(await UpdateLabel({
             SessionID: context.Employee.SessionID, 
             AppointmentID: appointmentID, 
             LabelID: props.labels[`${appointmentID}`][`${labelName}`].LabelID
-        });
-
-        if (!output)
+        })))
             return;
 
         props.updateLabels(updatedLabels);
@@ -41,7 +39,7 @@ export default function Body(props: BodyProps) {
 
     return (
         <tbody>
-            {props.current.map((appointment, i) => (
+            {props.current.map(appointment => (
                 <tr 
                     key={appointment.AppointmentID}
                     onClick={() => {
@@ -50,15 +48,15 @@ export default function Body(props: BodyProps) {
                     }}
                 >
                     <Appointment
-                        appointment={appointment}
-                        labels={props.labels[`${appointment.AppointmentID}`]}
-                        updateLabel={updateLabel}
-                        isChecked={props.checked.includes(appointment.AppointmentID)}
-                        checkAppointment={(appointmentID: string) => props.updateChecked(toggleValue(props.checked, appointmentID))}
-                        deleteAppointment={props.deleteAppointment}
                         search={props.search}
+                        appointment={appointment}
+                        appointmentLabels={props.labels[`${appointment.AppointmentID}`]}
+                        isChecked={props.checked.includes(appointment.AppointmentID)}
+                        updateLabel={updateLabel}
+                        deleteAppointment={props.deleteAppointment}
+                        checkAppointment={appointmentID => props.updateChecked(toggleValue(props.checked, appointmentID))}
                     />  
-                </tr>                  
+                </tr>
             ))}
         </tbody>
     )
