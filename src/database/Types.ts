@@ -214,7 +214,7 @@ export interface DB_AppointmentOverview {
 }
 
 export interface DB_Appointments {
-    All: Array<DB_AppointmentOverview>;
+    Appointments: Array<DB_AppointmentOverview>;
     Labels: DB_AllAppointmentLabels;
     Count: number;
 }

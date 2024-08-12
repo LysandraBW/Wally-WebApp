@@ -1,4 +1,4 @@
-import { PageContext } from "@/app/Employee/Dashboard/Dashboard/page";
+import { PageContext } from "@/process/Employee/Dashboard/Context";
 import { useContext } from "react";
 
 interface TabsProps {

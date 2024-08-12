@@ -5,38 +5,38 @@ import { toString } from "@/lib/Convert/Convert";
 import { DB_Appointment } from "@/database/Types";
 import { useRouter } from 'next/navigation';
 import Note from "./Note";
-import { PageContext } from "@/app/Employee/Dashboard/Dashboard/page";
+import { PageContext } from "@/process/Employee/Dashboard/Context";
 
-interface OverviewProps {
-    aptID: string;
+interface AppointmentProps {
+    appointmentID: string;
     onClose: () => any;
 }
 
-export default function Overview(props: OverviewProps) {
+export default function Appointment(props: AppointmentProps) {
     const context = useContext(PageContext);
     const [appointment, setAppointment] = useState<DB_Appointment>();
     const { replace } = useRouter();
 
     useEffect(() => {
         const load = async () => {   
-            if (!props.aptID) {
+            if (!props.appointmentID) {
                 replace(`/Employee/Dashboard/Dashboard`);
                 return;
             }
 
             const appointment = await GetAppointment({
                 SessionID: context.Employee.SessionID,
-                AppointmentID: props.aptID
+                AppointmentID: props.appointmentID
             });
 
             if (!appointment)
                 throw 'Appointment Error';
 
-            replace(`/Employee/Dashboard/Dashboard?AptID=${props.aptID}`);
+            replace(`/Employee/Dashboard/Dashboard?AptID=${props.appointmentID}`);
             setAppointment(appointment);
         }
         load();
-    }, [props.aptID]);
+    }, [props.appointmentID]);
 
     return (
         <div>

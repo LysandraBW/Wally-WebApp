@@ -3,6 +3,7 @@ import {
     DB_Label, 
     DB_Status 
 } from "@/database/Types";
+import { createContext } from "react";
 
 export interface PageContextStructure {
     Employee: {        
@@ -16,7 +17,7 @@ export interface PageContextStructure {
     Loaded: boolean;
 }
 
-export const DefaultPageContext: PageContextStructure = {
+export const InitialPageContext: PageContextStructure = {
     Employee: {
         SessionID: '',
         Employee: {
@@ -33,3 +34,5 @@ export const DefaultPageContext: PageContextStructure = {
     },
     Loaded: false,
 };
+
+export const PageContext = createContext(InitialPageContext);

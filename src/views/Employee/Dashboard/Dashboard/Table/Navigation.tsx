@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 
 interface NavigationProps {
-    currentPageIndex: number;
-    currentPageLength: number;
+    pageIndex: number;
+    pageLength: number;
     pageSize: number;
-    allCount: number;
+    count: number;
     goForward: () => any;
     goBackward: () => any;
 }
@@ -14,23 +14,23 @@ export default function Navigation(props: NavigationProps) {
     const [right, setRight] = useState<number>();
 
     useEffect(() => {
-        setLeft(((props.currentPageIndex - 1) * props.pageSize) + 1);
-        setRight((props.currentPageIndex - 1) * props.pageSize + props.currentPageLength);
-    }, [props.currentPageIndex, props.currentPageLength, props.pageSize]);
+        setLeft(((props.pageIndex - 1) * props.pageSize) + 1);
+        setRight((props.pageIndex - 1) * props.pageSize + props.pageLength);
+    }, [props.pageIndex, props.pageLength, props.pageSize]);
 
     return (
         <div>
-            {!props.allCount &&
+            {!props.count &&
                 <span>0 Results</span>
             }
-            {!!props.allCount &&
+            {!!props.count &&
                 <div>
-                    <div>{left} - {right} of {props.allCount} Results</div>
+                    <div>{left} - {right} of {props.count} Results</div>
                     <div>
                         {left !== 1 &&
                             <span onClick={() => props.goBackward()}>Back</span>
                         }
-                        {right !== props.allCount &&
+                        {right !== props.count &&
                             <span onClick={() => props.goForward()}>Next</span>
                         }
                     </div>

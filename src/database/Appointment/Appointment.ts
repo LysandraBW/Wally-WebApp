@@ -114,7 +114,7 @@ export async function GetAll(
         const sortedLabels: DB_AllAppointmentLabels = sortAllAppointmentLabels(labels);
 
         return {
-            All: recordsets[0],
+            Appointments: recordsets[0],
             Count: recordsets[1][0].Count,
             Labels: sortedLabels
         };
@@ -122,7 +122,7 @@ export async function GetAll(
     catch (err) {
         console.error(err);
         return {
-            All: [], 
+            Appointments: [], 
             Count: 0, 
             Labels: {}
         };

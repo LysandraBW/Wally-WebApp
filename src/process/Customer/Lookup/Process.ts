@@ -4,7 +4,7 @@ import { InitialState, StateType } from "./State";
 import { hasLength, validEmail } from "@/validation/Validation";
 import { MessageType } from "@/lib/Inspector/Inspector/Inspect/Inspector";
 import { submitForm } from "@/submission/Customer/Lookup/Submit";
-import { AppointmentType } from "./Interface";
+import { AppointmentType } from "./Type";
 
 export default function useLookup() {
     const [data, setData] = useState<DataType>();

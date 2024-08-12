@@ -71,7 +71,7 @@ export {
 
 export {
     Get as GetAppointment,
-    GetAll as GetAllAppointments,
+    GetAll as GetAppointments,
     GetSummary as GetAppointmentSummary,
 } from "./Appointment/Appointment";
 
