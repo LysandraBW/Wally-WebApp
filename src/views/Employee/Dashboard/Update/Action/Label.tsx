@@ -1,6 +1,6 @@
 import { PageContext } from "@/app/Employee/Dashboard/Update/page";
 import { UpdateLabel } from "@/database/Export";
-import { PageContextStructure } from "@/process/Update/Context";
+import { PageContextStructure } from "@/process/Employee/Update/Context";
 import { useContext } from "react";
 
 interface UpdateAppointmentLabelProps {

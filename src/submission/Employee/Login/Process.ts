@@ -1,13 +1,13 @@
-import { FormStructure } from "./Form";
+import { DataType } from "./Data";
 
-export interface ProcessedFormStructure {
+export interface ProcessedDataStructure {
     Username: string;
     Password: string;
 }
 
-export const processForm = (form: FormStructure): ProcessedFormStructure => {
+export const processData = (data: DataType): ProcessedDataStructure => {
     return {
-        Username: form.username.trim(),
-        Password: form.password.trim()
+        Username: data.Username.trim(),
+        Password: data.Password.trim()
     }
 }

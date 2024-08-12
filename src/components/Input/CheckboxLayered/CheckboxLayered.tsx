@@ -1,5 +1,6 @@
 import { toggleValue } from "@/lib/Input/Toggle";
-import { Input, WriteInputProps } from "../Input";
+import { Input } from "../Input";
+import { WriteInputProps } from '../MutateInput';
 import { useState } from "react";
 
 interface CheckboxLayeredProps<T> extends WriteInputProps {

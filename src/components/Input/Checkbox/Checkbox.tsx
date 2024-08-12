@@ -1,5 +1,6 @@
 import { toggleValue } from "@/lib/Input/Toggle";
-import { Input, WriteInputProps } from "../Input";
+import { Input } from "../Input";
+import { WriteInputProps } from '../MutateInput';
 import { useEffect, useState } from "react";
 import Tabs from "./Tabs";
 import Checkboxes from "./Checkboxes";

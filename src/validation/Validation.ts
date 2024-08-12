@@ -1,10 +1,10 @@
-import { InspectionMessageOutput } from "@/lib/Inspector/Inspector/Inspect/Inspector";
+import { MessageType } from "@/lib/Inspector/Inspector/Inspect/Inspector";
 import * as Inspector from "@/lib/Inspector/Inspector/Inspect/Inspectors";
 
 export const validValue = async <T> (
     value: Array<T>, 
     values: Array<T>
-): Promise<InspectionMessageOutput> => {
+): Promise<MessageType> => {
     return await Inspector.inValues({
         values: values
     }).inspect(value);
@@ -12,7 +12,7 @@ export const validValue = async <T> (
 
 export const validVIN = async (
     vin: string
-): Promise<InspectionMessageOutput> => {
+): Promise<MessageType> => {
     return await Inspector.isVIN({
         optional: true
     }).inspect(vin);
@@ -21,7 +21,7 @@ export const validVIN = async (
 export const validServices = async (
     services: Array<number>,
     allServices: Array<number>
-): Promise<InspectionMessageOutput> => {
+): Promise<MessageType> => {
     return await Inspector.inValues({
         values: allServices
     }).inspect(services);
@@ -29,31 +29,31 @@ export const validServices = async (
 
 export const validName = async (
     name: string
-): Promise<InspectionMessageOutput> => {
+): Promise<MessageType> => {
     return await Inspector.isName().inspect(name);
 }
 
 export const validEmail = async (
     email: string
-): Promise<InspectionMessageOutput> => {
+): Promise<MessageType> => {
     return await Inspector.isEmailAddress().inspect(email);
 }
 
 export const validPhone = async (
     phone: string
-): Promise<InspectionMessageOutput> => {
+): Promise<MessageType> => {
     return await Inspector.isPhoneNumber().inspect(phone);
 }
 
 export const validUniqueIdentifier = async (
     uniqueIdentifier: string
-): Promise<InspectionMessageOutput> => {
+): Promise<MessageType> => {
     return await Inspector.isUniqueIdentifier().inspect(uniqueIdentifier);
 }
 
 export const validDate = async (
     datetime: string
-): Promise<InspectionMessageOutput> => {
+): Promise<MessageType> => {
     return await Inspector.isDateTime({
         optional: true
     }).inspect(datetime);
@@ -62,7 +62,7 @@ export const validDate = async (
 export const validNumber = async (
     number: string | number,
     optional: boolean = false
-): Promise<InspectionMessageOutput> => {
+): Promise<MessageType> => {
     return await Inspector.isNumber({
         optional: optional
     }).inspect(number);
@@ -70,14 +70,14 @@ export const validNumber = async (
 
 export const validLicensePlate = async (
     licensePlate: string
-): Promise<InspectionMessageOutput> => {
+): Promise<MessageType> => {
     return await Inspector.isLicensePlate().inspect(licensePlate);
 }
 
 export const hasLength = async (
     value: string,
     optional: boolean = false
-): Promise<InspectionMessageOutput> => {
+): Promise<MessageType> => {
     return await Inspector.hasValue({
         optional: optional
     }).inspect(value);
@@ -85,7 +85,7 @@ export const hasLength = async (
 
 export const validBit = async (
     value: number
-): Promise<InspectionMessageOutput> => {
+): Promise<MessageType> => {
     return await Inspector.inValues({
         values: [0, 1]
     }).inspect([value]);

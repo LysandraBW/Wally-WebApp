@@ -1,7 +1,7 @@
 import { EventsFormStructure } from "@/submission/Employee/Calendar/Form";
 import { getTime } from "@/lib/Convert/Convert";
 import { goToApt, goToUpdateApt } from "@/lib/Navigation/Navigation";
-import { getDateEvents } from "@/process/Calendar/Helper";
+import { getDateEvents } from "@/process/Employee/Calendar/Helper";
 
 interface DayEvents {
     date: Date;

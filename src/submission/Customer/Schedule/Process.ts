@@ -1,4 +1,4 @@
-import { FormStructure } from "./Form";
+import { DataType } from "./Data";
 
 export interface ProcessedFormStructure {
     Scalar: {
@@ -16,7 +16,7 @@ export interface ProcessedFormStructure {
     }
 }
 
-export const processForm = (form: FormStructure): ProcessedFormStructure => {
+export const processForm = (form: DataType): ProcessedFormStructure => {
     return {
         Scalar: {
             FName:      form.fName.trim(),

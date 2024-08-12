@@ -1,67 +1,68 @@
 import Indicator from "./Indicator";
 import Button from "@/components/Input/Button/Button";
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
+import GoBack from "./GoBack";
 
 interface TrackerProps {
-    parts: Array<{
-        part: React.ReactNode;
-        partHeader: string;
+    forms: Array<{
+        form: React.ReactNode;
+        formHeader: string;
         onContinue: () => Promise<boolean>;
     }>;
     onSubmit: () => Promise<boolean>;
 }
 
 export default function Tracker(props: TrackerProps) {
-    const [part, setPart] = useState(0);
+    const [formIndex, setFormIndex] = useState(0);
+    const [buttonLabel, setButtonLabel] = useState('');
 
-    const getLabel = () => {
-        if (part === props.parts.length - 1)
-            return `Submit`;
-        return `Continue to ${props.parts[part+1].partHeader}`;
-    }
+    useEffect(() => {
+        if (formIndex === props.forms.length - 1) {
+            setButtonLabel('Submit');
+            return;
+        }
+        setButtonLabel(`Continue to ${props.forms[formIndex+1].formHeader}`);
+    }, [formIndex]);
 
     const goForward = async () => {
-        const nextPart = part + 1;
-        const lastPart = props.parts.length - 1;
+        const nextForm = formIndex + 1;
+        const lastForm = props.forms.length - 1;
         
-        if (nextPart > lastPart) {
-            if (await props.parts[part].onContinue() && await props.onSubmit()) {
-                setPart(0);
+        if (nextForm > lastForm) {
+            if (await props.forms[formIndex].onContinue() && await props.onSubmit()) {
+                setFormIndex(0);
                 return;
             }
         }
-        else if (await props.parts[part].onContinue()) {
-            setPart(Math.min(nextPart, lastPart));
+        else if (await props.forms[formIndex].onContinue()) {
+            setFormIndex(Math.min(nextForm, lastForm));
         }
     }
 
     const goBackward = () => {
-        const prevPart = part - 1;
-        setPart(Math.max(0, prevPart));
+        const prevForm = formIndex - 1;
+        setFormIndex(Math.max(0, prevForm));
     }
 
     return (
         <Fragment>
             <Indicator
-                partIndex={part}
-                length={props.parts.length}
+                index={formIndex}
+                length={props.forms.length}
             />
             <div className='flex flex-col gap-y-8'>
                 <div className='flex flex-col gap-y-8 h-min'>
-                    {props.parts[part].part}
+                    {props.forms[formIndex].form}
                 </div>
                 <div className='flex flex-col'>
                     <Button
-                        label={getLabel()}
+                        label={buttonLabel}
                         onClick={goForward}
                     />
-                    {part > 0 && 
-                        <span 
+                    {formIndex > 0 && 
+                        <GoBack
                             onClick={goBackward}
-                            className='text-xs font-medium cursor-pointer !text-gray-500 mt-2'
-                        >
-                            Go Back
-                        </span>
+                        />
                     }
                 </div>
             </div>

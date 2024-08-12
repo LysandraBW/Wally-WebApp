@@ -1,5 +1,6 @@
 "use client";
-import { Input, WriteInputProps } from "../Input";
+import { Input } from "../Input";
+import { WriteInputProps } from '../MutateInput';
 
 interface SegmentProps<T> extends WriteInputProps {
     value: T;

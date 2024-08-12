@@ -1,4 +1,5 @@
-import { Input, ReadInputProps } from "../Input";
+import { Input } from "../Input";
+import { ReadInputProps } from '../MutateInput';
 
 interface FileProps extends ReadInputProps {
     accept?: string;

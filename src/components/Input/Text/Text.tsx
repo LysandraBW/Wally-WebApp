@@ -1,6 +1,7 @@
 'use client';
 import clsx from 'clsx';
-import { Input, WriteInputProps } from '../Input';
+import { Input } from '../Input';
+import { WriteInputProps } from '../MutateInput';
 
 interface TextProps extends WriteInputProps {
     type: string;

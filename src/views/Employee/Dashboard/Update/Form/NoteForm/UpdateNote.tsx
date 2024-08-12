@@ -7,7 +7,7 @@ import { every, hasLength, validBit } from "@/validation/Validation";
 import UpdateAttachment from "./UpdateFile";
 import { fileListToFormData } from "@/lib/Files/FileData";
 import SaveButton from "@/components/Button/Text/Save";
-import { DefaultNoteContext, loadNoteContext } from "@/process/Update/Note/Context";
+import { DefaultNoteContext, loadNoteContext } from "@/process/Employee/Update/Note/Context";
 import { UpdateNote as UpdateNoteData } from "@/submission/Employee/Update/Note/Form";
 import NoteCard from "./NoteCard";
 import { Regexes } from "@/validation/Regexes";

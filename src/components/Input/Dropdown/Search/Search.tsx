@@ -1,6 +1,6 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { WriteInputProps } from '../../Input';
+import { WriteInputProps } from '../../MutateInput';
 import { DropdownFrame } from '../../Dropdown/Frame';
 import CloseToggle from './CloseToggle';
 import OpenToggle from './OpenToggle';

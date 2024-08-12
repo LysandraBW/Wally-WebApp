@@ -1,5 +1,5 @@
 "use client";
-import { WriteInputProps } from "../../Input";
+import { WriteInputProps } from '../../MutateInput';
 import { useState, useEffect } from "react";
 import { DropdownFrame } from "../Frame";
 import { getToggleLabel } from "@/lib/Input/Dropdown/ToggleLabel";

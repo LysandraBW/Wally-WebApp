@@ -6,11 +6,11 @@ import { InitialUpdateForm, UpdateFormStructure, } from "@/submission/Employee/C
 import CreateEvent from "@/views/Employee/Dashboard/Calendar/EventManager/CreateEvent";
 import { createContext, useEffect, useReducer, useState } from "react";
 import Search from "@/views/Employee/Dashboard/Calendar/Calendar/CalendarSearch";
-import { DefaultPageContext } from "@/process/Calendar/Context";
+import { DefaultPageContext } from "@/process/Employee/Calendar/Context";
 import AlertReducer, { AlertActionType, InitialAlert } from "@/hook/Alert/Reducer";
 import UpdateEvent from "@/views/Employee/Dashboard/Calendar/EventManager/UpdateEvent";
 import { submitEventsForm } from "@/submission/Employee/Calendar/Submit";
-import { DefaultController } from "@/process/Calendar/Controller";
+import { DefaultController } from "@/process/Employee/Calendar/Controller";
 import { goToEmployeeLogin } from "@/lib/Navigation/Navigation";
 import { UpdateForm } from "@/submission/Employee/Calendar/Prepare";
 import DayEvents from "@/views/Employee/Dashboard/Calendar/Events/DayEvents";
@@ -185,7 +185,7 @@ export default function Calendar() {
                                 setController({
                                     ...controller,
                                     Date: updatedDate,
-                                    OpenDay: date
+                                    OpenedEvents: date
                                 });
                             }}
                             onShowEvent={(eventID, aptID) => {
@@ -195,37 +195,37 @@ export default function Calendar() {
 
                                 setController({
                                     ...controller,
-                                    OpenEvent: matchingEvent
+                                    OpenedEvent: matchingEvent
                                 });
                             }}
                         />
-                        {!!controller.OpenEvent &&
+                        {!!controller.OpenedEvent &&
                             <UpdateEvent
-                                event={controller.OpenEvent}
+                                event={controller.OpenedEvent}
                                 onClose={() => {
                                     setController({
                                         ...controller,
-                                        OpenEvent: null
+                                        OpenedEvent: null
                                     });
                                 }}
                                 onDelete={() => {
-                                    if (!controller.OpenEvent)
+                                    if (!controller.OpenedEvent)
                                         return;
 
                                     let updatedValue = {...updateForm.current.Events};
-                                    delete updatedValue[`${controller.OpenEvent.EventID}`];
+                                    delete updatedValue[`${controller.OpenedEvent.EventID}`];
                                     changeHandler(updatedValue, true);
                                 
                                     setController({
                                         ...controller,
-                                        OpenEvent: null
+                                        OpenedEvent: null
                                     });
                                 }}
                                 onUpdate={(value: any, finalUpdate: boolean = false) => {
-                                    if (!controller.OpenEvent)
+                                    if (!controller.OpenedEvent)
                                         return;
                                     let updatedValue = {...updateForm.current.Events};
-                                    updatedValue[`${controller.OpenEvent.EventID}`] = value;
+                                    updatedValue[`${controller.OpenedEvent.EventID}`] = value;
                                     changeHandler(updatedValue, finalUpdate);
                                 }}
                                 updateFormState={(state) => {
@@ -236,14 +236,14 @@ export default function Calendar() {
                                 }}
                             />
                         }
-                        {!!controller.OpenDay &&
+                        {!!controller.OpenedEvents &&
                             <DayEvents
                                 date={controller.Date}
                                 events={updateForm.current}
                                 onClose={() => {
                                     setController({
                                         ...controller,
-                                        OpenDay: 0
+                                        OpenedEvents: 0
                                     });
                                 }}
                                 onAddEvent={() => {
@@ -259,7 +259,7 @@ export default function Calendar() {
                                 
                                     setController({
                                         ...controller,
-                                        OpenEvent: matchingEvent
+                                        OpenedEvent: matchingEvent
                                     })
                                 }}
                             />

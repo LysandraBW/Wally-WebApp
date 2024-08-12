@@ -2,14 +2,14 @@ import { UpdateEvent } from "@/submission/Employee/Calendar/Form";
 
 export interface ControllerStructure {
     Date: Date;
-    OpenDay: number;
-    OpenEvent: UpdateEvent | null;
+    OpenedEvents: number;
+    OpenedEvent: UpdateEvent | null;
     AddEvent: boolean;
 }
 
 export const DefaultController: ControllerStructure = {
     Date: new Date(),
-    OpenDay: 0,
-    OpenEvent: null,
+    OpenedEvents: 0,
+    OpenedEvent: null,
     AddEvent: false
 }

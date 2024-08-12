@@ -8,7 +8,7 @@ import { VehicleFormStructure } from '@/submission/Employee/Update/Vehicle/Form'
 import { loadMakes, loadModelYears } from '@/lib/Vehicle/Load';
 import { getValues } from "@/lib/Vehicle/Value";
 import { FormType } from '@/submission/Employee/Update/Form';
-import { LoadedValues } from '@/process/Update/Vehicle/Load';
+import { LoadedValues } from '@/process/Employee/Update/Vehicle/Load';
 
 interface VehicleProps {
     form: VehicleFormStructure;

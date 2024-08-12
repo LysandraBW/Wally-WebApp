@@ -1,11 +1,11 @@
 'use server';
 import { processForm } from './Process';
-import { FormStructure } from './Form';
+import { DataType } from './Data';
 import { AuthenticateAppointmentSession, AuthenticateLookup, GetAppointmentSummary } from '@/database/Export';
 import { DB_AppointmentSummary } from '@/database/Types';
 
 export const submitForm = async (
-    form: FormStructure
+    form: DataType
 ): Promise<DB_AppointmentSummary|null> => {
     const processedForm = processForm(form);
 

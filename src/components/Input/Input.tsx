@@ -1,7 +1,7 @@
 'use client';
-import { InputState } from "@/hook/State/Interface";
 import Error from './Error/Error';
 import clsx from "clsx";
+import { InputState } from './MutateInput';
 
 export interface InputProps {
     input: React.ReactNode;
@@ -37,19 +37,4 @@ export function Input(props: InputProps) {
             </label>
         </div>
     );
-}
-
-export interface ReadInputProps {
-    name: string;
-    label: string;
-    state: InputState;   
-    onChange: null | ((
-        name: string, 
-        value: any
-    ) => void);
-    onBlur: null | (() => void);
-}
-
-export interface WriteInputProps extends ReadInputProps {
-    value: any;
 }

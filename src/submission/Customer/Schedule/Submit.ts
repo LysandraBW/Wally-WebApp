@@ -1,9 +1,9 @@
 "use server";
-import { FormStructure } from "./Form";
+import { DataType } from "./Data";
 import { processForm } from "./Process";
 import { InsertAppointment, InsertDefinedService } from "@/database/Export";
 
-const submitForm = async (form: FormStructure): Promise<string> => {
+const submitForm = async (form: DataType): Promise<string> => {
     let processedForm = processForm(form);
 
     const AppointmentID = await InsertAppointment(processedForm.Scalar);

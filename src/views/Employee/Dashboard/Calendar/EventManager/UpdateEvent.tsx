@@ -10,7 +10,7 @@ import SaveButton from "@/components/Button/Text/Save";
 import EventCard from "./Card/Event";
 import AppointmentCard from "./Card/Appointment";
 import CloseButton from "@/components/Button/Icon/Close";
-import { DefaultEventContext, loadEventContext } from "@/process/Calendar/Event/Context";
+import { DefaultEventContext, loadEventContext } from "@/process/Employee/Calendar/Event/Context";
 import { Regexes } from "@/validation/Regexes";
 
 interface UpdateEventProps {

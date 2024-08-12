@@ -1,5 +1,6 @@
 import { toggleValue } from "@/lib/Input/Toggle";
-import { Input, WriteInputProps } from "../Input";
+import { Input } from "../Input";
+import { WriteInputProps } from '../MutateInput';
 
 interface ToggleGroupProps<T> extends WriteInputProps {
     value: Array<T>;
