@@ -2,7 +2,7 @@ import { FormType } from "@/submission/Employee/Update/Form";
 import { submitGeneralForm } from "@/submission/Employee/Update/General/Submit";
 import { submitNoteForm } from "@/submission/Employee/Update/Note/Submit";
 import { submitPaymentForm } from "@/submission/Employee/Update/Payment/Submit";
-import { submitServiceForm } from "@/submission/Employee/Update/Service/Submit";
+import { submitServiceForm } from "@/submission/Employee/Update/Service000/Submit";
 import { submitVehicleForm } from "@/submission/Employee/Update/Vehicle/Submit";
 
 interface SaveFormProps {

@@ -1,62 +1,23 @@
-import { 
-    DB_Appointment, 
-    DB_AppointmentService, 
-    DB_Diagnosis,
-    DB_Repair 
-} from "@/database/Types";
+import { DB_Appointment, DB_AppointmentService } from "@/database/Types";
 
-export type UpdatePart = {
-    PartID:     number;
-    PartName:   string;
-    PartNumber: string;
-    Quantity:   string;
-    UnitCost:   string;
-};
+export type DataKeys = 'Service' | 'Division' | 'Class';
 
-export interface DiagnosesStructure {
-    [diagnosisID: string]: DB_Diagnosis;
+export interface ServicesStructure {
+    [serviceID: string]: DB_AppointmentService;
 }
 
-export interface RepairsStructure {
-    [repairID: string]: DB_Repair;
+export interface ServicesFormStructure {
+    AppointmentID: string;
+    Services: ServicesStructure;
 }
 
-export interface PartsStructure {
-    [partID: string]: UpdatePart;
-}
-
-export interface ServiceFormStructure {
-    AppointmentID:  string;
-    Parts:          PartsStructure;
-    Repairs:        RepairsStructure;
-    Diagnoses:      DiagnosesStructure;
-}
-
-export const InitialServiceForm = async (appointment: DB_Appointment): Promise<ServiceFormStructure> => {
-    // Diagnoses
-    const diagnoses: DiagnosesStructure = {};
-    for (const diagnosis of appointment.Diagnoses)
-        diagnoses[diagnosis.DiagnosisID] = diagnosis;
-
-    // Repairs
-    const repairs: RepairsStructure = {};
-    for (const repair of appointment.Repairs)
-        repairs[repair.RepairID] = repair;
-
-    // Parts
-    const parts: PartsStructure = {};
-    for (const part of appointment.Parts) {
-        parts[part.PartID] = {
-            ...part, 
-            Quantity: part.Quantity.toString(), 
-            UnitCost: part.UnitCost.toString()
-        };
-    }
+export const InitialServicesForm = async (appointment: DB_Appointment): Promise<ServicesFormStructure> => {
+    const services: ServicesStructure = {};
+    for (const service of appointment.Services)
+        services[service.AppointmentServiceID] = service;
 
     return {
-        AppointmentID:  appointment.AppointmentID,
-        Parts:          parts,
-        Repairs:        repairs,
-        Diagnoses:      diagnoses
-    };
+        AppointmentID: appointment.AppointmentID,
+        Services: services
+    };   
 }

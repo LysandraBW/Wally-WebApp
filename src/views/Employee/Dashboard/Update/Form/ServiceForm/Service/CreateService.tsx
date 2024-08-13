@@ -1,7 +1,7 @@
 import { Text } from "@/components/Input/Export";
 import { Fragment } from "react";
-import useMutateServiceForm from "@/process/Employee/Update/Service/Service/Update/Process";
-import { DefaultValues } from "@/process/Employee/Update/Service/Service/Update/Loaded";
+import useMutateServiceForm from "@/process/Employee/Update/Service/Mutate/Process";
+import { DefaultValues } from "@/process/Employee/Update/Service/Mutate/Loaded";
 
 export interface CreateServiceProps {
     onChange: (name: string, value: any) => any;

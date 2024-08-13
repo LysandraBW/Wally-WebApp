@@ -2,7 +2,6 @@ import ServiceManager from "./Service/ServiceManager";
 import DiagnosisManager from "./Diagnosis/DiagnosisManager";
 import RepairManager from "./Repair/RepairManager";
 import PartManager from "./Part/PartManager";
-import { DiagnosesStructure, PartsStructure, RepairsStructure, ServicesStructure } from "@/submission/Employee/Update/Service/Form";
 import { FormType } from "@/submission/Employee/Update/Form";
 import { DB_Appointment } from "@/database/Types";
 

@@ -2,7 +2,7 @@ import { Fragment } from "react";
 import ServiceCard from "./ServiceCard";
 import { DB_AppointmentService } from "@/database/Types";
 import { Multiple, Text } from "@/components/Input/Export";
-import useMutateServiceForm from "@/process/Employee/Update/Service/Service/Update/Process";
+import useMutateServiceForm from "@/process/Employee/Update/Service/Mutate/Process";
 
 export interface UpdateServiceProps {
     service: DB_AppointmentService
