@@ -2,9 +2,9 @@ import { DB_Appointment, DB_AppointmentService } from "@/database/Types";
 import { useEffect, useState } from "react";
 import { InitialLoaded, LoadedType } from "./Load";
 import { InitialServicesForm, ServicesFormStructure } from "@/submission/Employee/Update/Service/Form";
-import { submitServicesForm } from "@/submission/Employee/Update/Service000/Service/Submit";
+import { submitServicesForm } from "@/submission/Employee/Update/Service/Submit";
 
-export default function useServicesForm(appointment: DB_Appointment) {
+export default function useServiceManager(appointment: DB_Appointment) {
     const [loaded, setLoaded] = useState<LoadedType>();
     const [counter, setCounter] = useState(1);
     const [updated, setUpdated] = useState<ServicesFormStructure>();
@@ -68,10 +68,10 @@ export default function useServicesForm(appointment: DB_Appointment) {
         setUpdated(Object.assign({}, updated, {Services: {...updated.Services, ...updatedServices}}));
     }
 
-    const addService = (service: DB_AppointmentService) => {
+    const createService = (service: DB_AppointmentService) => {
         if (!updated)
             return;
-        setUpdated(Object.assign({}, updated, {Services: {...updated.Services, service}}));
+        setUpdated(Object.assign({}, updated, {Services: {...updated.Services, [`${-counter}`]: service}}));
         setCounter(counter => counter + 1);
     }
 
@@ -92,7 +92,7 @@ export default function useServicesForm(appointment: DB_Appointment) {
         deleteService,
         updateService,
         updateDefinedService,
-        addService,
+        createService,
         resetData,
         submitData
     }

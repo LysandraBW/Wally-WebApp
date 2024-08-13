@@ -17,7 +17,7 @@ export default function UpdateService(props: UpdateServiceProps) {
         <Fragment>
             {updateServiceForm.edit && updateServiceForm.values && updateServiceForm.state &&
                 <Multiple
-                    onBlur={() => updateServiceForm.submitUpdatedData()}
+                    onBlur={() => updateServiceForm.finalizeUpdate()}
                     children={(
                         <div>
                             <Text

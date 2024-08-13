@@ -4,7 +4,7 @@ import useMutateServiceForm from "@/process/Employee/Update/Service/Mutate/Proce
 import { DefaultValues } from "@/process/Employee/Update/Service/Mutate/Loaded";
 
 export interface CreateServiceProps {
-    onChange: (name: string, value: any) => any;
+    onChange: (value: any) => void;
 }
 
 export default function CreateService(props: CreateServiceProps) {
@@ -38,7 +38,7 @@ export default function CreateService(props: CreateServiceProps) {
                         state={mutateServiceForm.state.Class}
                         onChange={async (name, value) => mutateServiceForm.updateData('Class', value)}
                     />
-                    <button onClick={mutateServiceForm.submitNewData}>Add</button>
+                    <button onClick={mutateServiceForm.finalizeCreate}>Add</button>
                 </Fragment>
             }
         </div>

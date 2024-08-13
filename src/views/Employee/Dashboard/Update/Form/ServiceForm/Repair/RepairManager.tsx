@@ -1,49 +1,38 @@
-import { DB_Repair } from "@/database/Types";
-import { useState } from "react";
+import { DB_Appointment } from "@/database/Types";
+import { Fragment } from "react";
 import UpdateRepair from "./UpdateRepair";
 import CreateRepair from "./CreateRepair";
+import useRepairManager from "@/process/Employee/Update/Repair/Process";
 
 interface RepairManagerProps {
-    repairs: {[repairID: string]: DB_Repair};
-    onChange: (updatedValue: {[repairID: string]: DB_Repair}) => void;
-    updateFormState: (state: boolean) => void;
+    appointment: DB_Appointment;
 }
 
 export default function RepairManager(props: RepairManagerProps) {
-    const [counter, setCounter] = useState(1);
+    const repairManager = useRepairManager(props.appointment);
 
     return (
         <div>
-            <div>
-                Current Repairs
-                {Object.entries(props.repairs).map(([repairID, repair], i) => (
-                    <div key={i}>
-                        <UpdateRepair
-                            repair={repair}
-                            onDelete={() => {
-                                let updatedValue = {...props.repairs};
-                                delete updatedValue[`${repairID}`];
-                                props.onChange(updatedValue);
-                            }}
-                            onUpdate={repair => {
-                                let updatedValue = {...props.repairs};
-                                updatedValue[`${repairID}`] = repair;
-                                props.onChange(updatedValue);
-                            }}
-                            updateFormState={props.updateFormState}
-                        />
+            {repairManager.updated &&
+                <Fragment>
+                    <div>
+                        {Object.entries(repairManager.updated).map(([repairID, repair], i) => (
+                            <div key={i}>
+                                <UpdateRepair
+                                    repair={repair}
+                                    onDelete={() => repairManager.deleteRepair(repairID)}
+                                    onUpdate={repair => repairManager.updateRepair(repairID, repair)}
+                                />
+                            </div>
+                        ))}
                     </div>
-                ))}
-            </div>
-            <div>
-                Type in a Repair Here
-                <CreateRepair
-                    onChange={(name, value) => {
-                        props.onChange({...props.repairs, [`${-counter}`]: value});
-                        setCounter(counter+1);
-                    }}
-                />
-            </div> 
+                    <div>
+                        <CreateRepair
+                            onChange={value => repairManager.createRepair(value)}
+                        />
+                    </div>        
+                </Fragment>
+            }
         </div>
     )
 }

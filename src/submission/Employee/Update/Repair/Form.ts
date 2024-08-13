@@ -1,5 +1,7 @@
 import { DB_Appointment, DB_Repair } from "@/database/Types";
 
+export type DataKeys = 'Repair';
+
 export interface RepairsStructure {
     [repairID: string]: DB_Repair;
 }

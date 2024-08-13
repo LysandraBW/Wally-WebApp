@@ -1,96 +1,57 @@
 import { Multiple, Text } from "@/components/Input/Export";
 import { DB_Diagnosis } from "@/database/Types";
-import FormStateReducer from "@/hook/State/Reducer";
-import { InitialFormState } from "@/hook/State/Interface";
-import { hasLength } from "@/validation/Validation";
-import { useEffect, useReducer, useState } from "react";
 import DiagnosisCard from "./DiagnosisCard";
+import useMutateDiagnosis from "@/process/Employee/Update/Diagnosis/Mutate/Process";
 
-interface UpdateDiagnosisProps {
+export interface UpdateDiagnosisProps {
     diagnosis: DB_Diagnosis
     onDelete: () => any;
-    onUpdate: (diagnosis: DB_Diagnosis) => any;   
-    updateFormState: (state: boolean) => void;
+    onUpdate: (diagnosis: DB_Diagnosis) => any;
 }
 
 export default function UpdateDiagnosis(props: UpdateDiagnosisProps) {
-    const initialValues = {...props.diagnosis};
-    const [values, setValues] = useState(props.diagnosis);
-    const [edit, setEdit] = useState(false);
-    const [formState, formStateDispatch] = useReducer(FormStateReducer, InitialFormState);
+    const mutateDiagnosis = useMutateDiagnosis({mutateType: 'Update', initialValues: {...props.diagnosis}, ...props});
 
-    useEffect(() => {
-        props.updateFormState(formState.state);
-    }, [formState.state]);
-
-    const inspectInput = async <T,>(
-        inputName: string, 
-        input: T, 
-        callback: (value: T) => Promise<[boolean, string?]>
-    ): Promise<boolean> => {
-        const [errState, errMessage] = await callback(input);
-        formStateDispatch({
-            states: {
-                [`${inputName}`]: [errState, errMessage]
-            }
-        });
-        return errState;
-    }
-    
     return (
-        <>
-            {edit && 
+        <div>
+            {!!mutateDiagnosis.edit && !!mutateDiagnosis.values && !!mutateDiagnosis.state &&
                 <Multiple
                     onBlur={() => {
-                        setEdit(false);
-                        props.onUpdate(values);
+                        mutateDiagnosis.setEdit(false);
+                        mutateDiagnosis.finalizeUpdate();
                     }}
                     children={(
                         <div>
                             <Text
-                                name={'Code'}
-                                label={'Code'}
-                                value={values.Code}
-                                state={formState.input.Code}
-                                onChange={async (name, value) => {
-                                    inspectInput(name, value, hasLength);
-                                    setValues({...values, [`${name}`]: value});
-                                }}
-                                onBlur={() => {
-                                    if (values.Code)
-                                        return;
-                                    setValues({...values, Code: initialValues.Code});
-                                    inspectInput('Code', initialValues.Code, hasLength);
-                                }}
+                                type='text'
+                                name='Code'
+                                label='Code'
+                                value={mutateDiagnosis.values.Code}
+                                state={mutateDiagnosis.state.Code}
+                                onChange={async (name, value) => mutateDiagnosis.updateData('Code', value)}
+                                onBlur={() => mutateDiagnosis.resetData('Code')}
                             />
                             <Text
-                                name={'Message'}
-                                label={'Message'}
-                                value={values.Message}
-                                state={formState.input.Message}
-                                onChange={async (name, value) => {
-                                    inspectInput(name, value, hasLength);
-                                    setValues({...values, [`${name}`]: value});
-                                }}
-                                onBlur={() => {
-                                    if (values.Code)
-                                        return;
-                                    setValues({...values, Code: initialValues.Code});
-                                    inspectInput('Code', initialValues.Code, hasLength);
-                                }}
+                                type='text'
+                                name='Message'
+                                label='Message'
+                                value={mutateDiagnosis.values.Message}
+                                state={mutateDiagnosis.state.Message}
+                                onChange={async (name, value) => mutateDiagnosis.updateData('Message', value)}
+                                onBlur={() => mutateDiagnosis.resetData('Message')}
                             />
                         </div>
                     )}
                 />
             }
-            {!edit && 
+            {!mutateDiagnosis.edit && 
                 <DiagnosisCard
-                    code={values.Code}
-                    message={values.Message}
-                    onEdit={() => setEdit(true)}
-                    onDelete={() => props.onDelete()}
+                    code={props.diagnosis.Code}
+                    message={props.diagnosis.Message}
+                    onEdit={() => mutateDiagnosis.setEdit(true)}
+                    onDelete={props.onDelete}
                 />
             }
-        </>
+        </div>
     )
 }

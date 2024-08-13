@@ -1,55 +1,33 @@
-import { useReducer, useState } from "react";
+import { Fragment } from "react";
 import { Text } from "@/components/Input/Export";
-import { DB_Repair } from "@/database/Types";
-import FormStateReducer from "@/hook/State/Reducer";
-import { InitialFormState } from "@/hook/State/Interface";
 import AddButton from "@/components/Button/Text/Add";
-import { hasLength } from "@/validation/Validation";
+import useMutateRepair from "@/process/Employee/Update/Repair/Mutate/Process";
+import { DefaultValues } from "@/process/Employee/Update/Repair/Mutate/Loaded";
 
-interface CreateRepairProps {
-    onChange: (name: string, value: any) => any;
-}
-
-const defaultValues: DB_Repair = {
-    RepairID:   0,
-    Repair:     ''
+export interface CreateRepairProps {
+    onChange: (value: any) => any;
 }
 
 export default function CreateRepair(props: CreateRepairProps) {
-    const [values, setValues] = useState<DB_Repair>(defaultValues);
-    const [formState, formStateDispatch] = useReducer(FormStateReducer, InitialFormState);
+    const mutateRepair = useMutateRepair({mutateType: 'Create', initialValues: DefaultValues, ...props});
 
-    const inspectRepair = async (repair: string = values.Repair): Promise<boolean> => {
-        const [repairState, repairMessage] = await hasLength(repair);
-        formStateDispatch({
-            states: {
-                'Repair': [repairState, repairMessage]
-            }
-        });
-
-        return repairState;
-    }
-    
     return (
         <div>
-            <Text
-                name={'Repair'}
-                label={'Repair'}
-                value={values.Repair}
-                state={formState.input.Repair}
-                onChange={async (name, value) => {
-                    inspectRepair(value);
-                    setValues({...values, [`${name}`]: value});
-                }}
-            />
-            <AddButton 
-                onClick={async () => {
-                    if (!(await inspectRepair()))
-                        return;
-                    props.onChange('Repairs', values);
-                    setValues(defaultValues);
-                }}
-            />
+            {!!mutateRepair.values && !!mutateRepair.state &&
+                <Fragment>
+                    <Text
+                        type='text'
+                        name='Repair'
+                        label='Repair'
+                        value={mutateRepair.values.Repair}
+                        state={mutateRepair.state.Repair}
+                        onChange={async (name, value) => mutateRepair.updateData('Repair', value)}
+                    />
+                    <AddButton 
+                        onClick={mutateRepair.finalizeCreate}
+                    />
+                </Fragment>
+            }
         </div>
     )
 }

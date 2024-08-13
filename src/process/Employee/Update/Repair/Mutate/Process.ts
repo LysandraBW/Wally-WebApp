@@ -1,38 +1,38 @@
-import { DB_AppointmentService } from "@/database/Types";
-import { UpdateServiceProps } from "@/views/Employee/Dashboard/Update/Form/ServiceForm/Service/UpdateService";
+import { UpdatePart } from "@/submission/Employee/Update/Part/Form";
+import { CreateRepairProps } from "@/views/Employee/Dashboard/Update/Form/ServiceForm/Repair/CreateRepair";
+import { UpdateRepairProps } from "@/views/Employee/Dashboard/Update/Form/ServiceForm/Repair/UpdateRepair";
 import { useEffect, useState } from "react";
 import { InitialState, StateType } from "./State";
-import { DataKeys } from "@/submission/Employee/Update/Service/Form";
+import { DataKeys } from "@/submission/Employee/Update/Repair/Form";
 import { hasLength } from "@/validation/Validation";
+import { DB_Repair } from "@/database/Types";
 import { MessageType } from "@/lib/Inspector/Inspector/Inspect/Inspector";
-import { CreateServiceProps } from "@/views/Employee/Dashboard/Update/Form/ServiceForm/Service/CreateService";
 
 export type MutateType = 'Update' | 'Create';
 
-export interface UpdateServiceFormProps extends UpdateServiceProps {
+export interface UpdateRepairFormProps extends UpdateRepairProps {
     mutateType: 'Update';
-    initialValues: DB_AppointmentService;
+    initialValues: DB_Repair;
 }
 
-export interface CreateServiceFormProps extends CreateServiceProps {
+export interface CreateRepairFormProps extends CreateRepairProps {
     mutateType: 'Create';
-    initialValues: DB_AppointmentService;
+    initialValues: DB_Repair;
 }
 
-export type MutateServiceFormProps = UpdateServiceFormProps | CreateServiceFormProps;
+export type MutateRepairFormProps = UpdateRepairFormProps | CreateRepairFormProps;
 
-export default function useMutateServiceForm(props: MutateServiceFormProps) {
+export default function useMutateRepair(props: MutateRepairFormProps) {
     const initialValues = {...props.initialValues};
-
     const [edit, setEdit] = useState<boolean>();
     const [state, setState] = useState<StateType>();
-    const [values, setValues] = useState<DB_AppointmentService>();
+    const [values, setValues] = useState<DB_Repair>();
 
     useEffect(() => {
         const load = async () => {
             setEdit(props.mutateType === 'Create');
             setState(await InitialState());
-            setValues({...props.initialValues});
+            setValues({...initialValues});
         }
         load();
     }, []);
@@ -46,13 +46,7 @@ export default function useMutateServiceForm(props: MutateServiceFormProps) {
     const updateData = async (key: DataKeys, value: any) => {
         setValues(data => Object.assign({}, data, {[`${key}`]: value}));
         switch (key) {
-            case 'Class':
-                inspectData(key, value, hasLength);
-                break;
-            case 'Division':
-                inspectData(key, value, hasLength);
-                break;
-            case 'Service':
+            case 'Repair':
                 inspectData(key, value, hasLength);
                 break;
         }
@@ -61,12 +55,7 @@ export default function useMutateServiceForm(props: MutateServiceFormProps) {
     const inspectAll = async (): Promise<boolean> => {
         if (!values)
             return false;
-
-        const v1 = await inspectData('Class', values.Class, hasLength);
-        const v2 = await inspectData('Service', values.Service, hasLength);
-        const v3 = await inspectData('Division', values.Division, hasLength);
-
-        return v1 && v2 && v3;
+        return await inspectData('Repair', values.Repair, hasLength);
     }
 
     const resetData = async (key: DataKeys) => {

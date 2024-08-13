@@ -1,47 +1,35 @@
-import { useState } from "react";
 import UpdatePart from "./UpdatePart";
 import CreatePart from "./CreatePart";
-import { PartsStructure } from "@/submission/Employee/Update/Service/Form";
+import usePartsManager from "@/process/Employee/Update/Part/Process";
+import { DB_Appointment } from "@/database/Types";
 
 interface PartManagerProps {
-    parts: PartsStructure;
-    onChange: (updatedValue: PartsStructure) => void;
-    updateFormState: (state: boolean) => void;
+    appointment: DB_Appointment;
 }
 
 export default function PartManager(props: PartManagerProps) {
-    const [counter, setCounter] = useState(1);
+    const partsManager = usePartsManager(props.appointment);
 
     return (
         <div>
+            {!!partsManager.updated && 
+                <div>
+                    <h5>Current Parts</h5>
+                    {Object.entries(partsManager.updated.Parts).map(([partID, part], i) => (
+                        <div key={i}>
+                            <UpdatePart
+                                part={part}
+                                onDelete={() => partsManager.deletePart(partID)}
+                                onUpdate={(part) => partsManager.updatePart(partID, part)}
+                            />
+                        </div>
+                    ))}
+                </div>
+            }
             <div>
-                Current Parts
-                {Object.entries(props.parts).map(([partID, part], i) => (
-                    <div key={i}>
-                        <UpdatePart
-                            part={part}
-                            onDelete={() => {
-                                let updatedValue = {...props.parts};
-                                delete updatedValue[`${partID}`];
-                                props.onChange(updatedValue);
-                            }}
-                            onUpdate={(part) => {
-                                let updatedValue = {...props.parts};
-                                updatedValue[`${partID}`] = part;
-                                props.onChange(updatedValue);
-                            }}
-                            updateFormState={props.updateFormState}
-                        />
-                    </div>
-                ))}
-            </div>
-            <div>
-                Type in a Part Here
+                <h5>Type in a Part Here</h5>
                 <CreatePart
-                    onChange={(name, value) => {
-                        props.onChange({...props.parts, [`${-counter}`]: value});
-                        setCounter(counter+1);
-                    }}
+                    onChange={value => partsManager.createPart(value)}
                 />
             </div>
         </div>

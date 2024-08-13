@@ -1,5 +1,7 @@
 import { DB_Appointment } from "@/database/Types";
 
+export type DataKeys = 'PartName' | 'PartNumber' | 'Quantity' | 'UnitCost';
+
 export type UpdatePart = {
     PartID:     number;
     PartName:   string;

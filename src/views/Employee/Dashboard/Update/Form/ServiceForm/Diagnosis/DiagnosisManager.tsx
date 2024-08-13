@@ -1,49 +1,38 @@
-import { DB_Diagnosis } from "@/database/Types";
+import { DB_Appointment, DB_Diagnosis } from "@/database/Types";
 import UpdateDiagnosis from "./UpdateDiagnosis";
 import CreateDiagnosis from "./CreateDiagnosis";
-import { useState } from "react";
+import { Fragment, useState } from "react";
+import useDiagnosisManager from "@/process/Employee/Update/Diagnosis/Process";
 
 interface DiagnosisManagerProps {
-    diagnoses: {[diagnosisID: string]: DB_Diagnosis}
-    onChange: (updatedValue: {[diagnosisID: string]: DB_Diagnosis}) => void;
-    updateFormState: (state: boolean) => void;
+    appointment: DB_Appointment;
 }
 
 export default function DiagnosisManager(props: DiagnosisManagerProps) {
-    const [counter, setCounter] = useState<number>(1);
+    const diagnosisManager = useDiagnosisManager(props.appointment);
 
     return (
-        <div>
-            <div>
-                Current Diagnoses
-                {Object.entries(props.diagnoses).map(([diagnosisID, diagnosis], i) => (
-                    <div key={i}>
-                        <UpdateDiagnosis
-                            diagnosis={diagnosis}
-                            onDelete={() => {
-                                let updatedValue = {...props.diagnoses};
-                                delete updatedValue[`${diagnosisID}`];
-                                props.onChange(updatedValue);
-                            }}
-                            onUpdate={(diagnosis) => {
-                                let updatedValue = {...props.diagnoses};
-                                updatedValue[`${diagnosisID}`] = diagnosis;
-                                props.onChange(updatedValue);
-                            }}
-                            updateFormState={props.updateFormState}
+        <Fragment>
+            {!!diagnosisManager.updated &&
+                <Fragment>
+                    <div>
+                        {Object.entries(diagnosisManager.updated).map(([diagnosisID, diagnosis], i) => (
+                            <div key={i}>
+                                <UpdateDiagnosis
+                                    diagnosis={diagnosis}
+                                    onDelete={() => diagnosisManager.deleteDiagnosis(diagnosisID)}
+                                    onUpdate={diagnosis => diagnosisManager.updateDiagnosis(diagnosisID, diagnosis)}
+                                />
+                            </div>
+                        ))}
+                    </div>            
+                    <div>
+                        <CreateDiagnosis
+                            onChange={(value) => diagnosisManager.createDiagnosis(value)}
                         />
                     </div>
-                ))}
-            </div>            
-            <div>
-                Type in a Diagnosis Here
-                <CreateDiagnosis
-                    onChange={(name, value) => {
-                        props.onChange({...props.diagnoses, [`${-counter}`]: value});
-                        setCounter(counter+1);
-                    }}
-                />
-            </div>
-        </div>
+                </Fragment>
+            }
+        </Fragment>
     )
 }

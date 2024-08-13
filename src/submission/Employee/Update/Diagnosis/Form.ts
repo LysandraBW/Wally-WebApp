@@ -1,5 +1,7 @@
 import { DB_Appointment, DB_Diagnosis } from "@/database/Types";
 
+export type DataKeys = 'Code' | 'Message';
+
 export interface DiagnosesStructure {
     [diagnosisID: string]: DB_Diagnosis;
 }
