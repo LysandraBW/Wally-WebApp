@@ -1,12 +1,17 @@
-export interface InputState {
+export interface InputStateType {
     state: boolean;
     message: string;
+}
+
+export const DefaultInputState: InputStateType = {
+    state: true,
+    message: ''
 }
 
 export interface ReadInputProps {
     name: string;
     label: string;
-    state: InputState;
+    state: InputStateType;
     onBlur?: null | (() => void);
     onChange?: (name: string, value: any) => void;
 }

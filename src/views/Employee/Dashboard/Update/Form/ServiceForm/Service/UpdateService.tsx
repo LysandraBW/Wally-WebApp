@@ -1,113 +1,65 @@
-import { Multiple, Text } from "@/components/Input/Export";
-import { DB_AppointmentService } from "@/database/Types";
-import { hasLength } from "@/validation/Validation";
-import FormStateReducer from "@/hook/State/Reducer";
-import { InitialFormState } from "@/hook/State/Interface";
-import { useEffect, useReducer, useState } from "react";
+import { Fragment } from "react";
 import ServiceCard from "./ServiceCard";
+import { DB_AppointmentService } from "@/database/Types";
+import { Multiple, Text } from "@/components/Input/Export";
+import useMutateServiceForm from "@/process/Employee/Update/Service/Service/Update/Process";
 
-interface UpdateServiceProps {
+export interface UpdateServiceProps {
     service: DB_AppointmentService
-    onDelete: () => any;
-    onUpdate: (service: DB_AppointmentService) => any;   
-    updateFormState: (state: boolean) => void;
+    onDelete: () => void;
+    onUpdate: (service: DB_AppointmentService) => void;
 }
 
 export default function UpdateService(props: UpdateServiceProps) {
-    const initialValues = {...props.service};
-    const [values, setValues] = useState(props.service);
-    const [edit, setEdit] = useState(false);
-    const [formState, formStateDispatch] = useReducer(FormStateReducer, InitialFormState);
-
-    useEffect(() => {
-        props.updateFormState(formState.state);
-    }, [formState.state]);
-    
-    const inspectInput = async <T,>(
-        inputName: string, 
-        input: T, 
-        callback: (value: T) => Promise<[boolean, string?]>
-    ): Promise<boolean> => {
-        const [errState, errMessage] = await callback(input);
-        formStateDispatch({
-            states: {
-                [`${inputName}`]: [errState, errMessage]
-            }
-        });
-        return errState;
-    }
+    const updateServiceForm = useMutateServiceForm({...props, mutateType: 'Update', initialValues: {...props.service}});
 
     return (
-        <>
-            {edit && 
+        <Fragment>
+            {updateServiceForm.edit && updateServiceForm.values && updateServiceForm.state &&
                 <Multiple
-                    onBlur={() => {
-                        setEdit(false);
-                        props.onUpdate(values);
-                    }}
+                    onBlur={() => updateServiceForm.submitUpdatedData()}
                     children={(
                         <div>
                             <Text
-                                name={'Service'}
-                                label={'Service'}
-                                value={values.Service}
-                                state={formState.input.Service}
-                                onChange={async (name, value) => {
-                                    setValues({...values, [`${name}`]: value});
-                                    inspectInput('Service', values.Service, hasLength);
-                                }}
-                                onBlur={async () => {
-                                    if (values.Class)
-                                        return;
-                                    inspectInput('Service', initialValues.Service, hasLength);
-                                    setValues({...values, Service: initialValues.Service});
-                                }}
+                                type='text'
+                                name='Service'
+                                label='Service'
+                                value={updateServiceForm.values.Service}
+                                state={updateServiceForm.state.Service}
+                                onChange={async (name, value) => updateServiceForm.updateData('Service', value)}
+                                onBlur={async () => updateServiceForm.resetData('Service')}
                             />
                             <Text
-                                name={'Division'}
-                                value={values.Division}
-                                state={formState.input.Division}
-                                label={'Division'}
-                                onChange={async (name, value) => {
-                                    setValues({...values, [`${name}`]: value});
-                                    inspectInput('Division', values.Division, hasLength);
-                                }}
-                                onBlur={async () => {
-                                    if (values.Class)
-                                        return;
-                                    inspectInput('Division', initialValues.Division, hasLength);
-                                    setValues({...values, Division: initialValues.Division});
-                                }}
+                                type='text'
+                                name='Division'
+                                label='Division'
+                                value={updateServiceForm.values.Division}
+                                state={updateServiceForm.state.Division}
+                                onChange={async (name, value) => updateServiceForm.updateData('Division', value)}
+                                onBlur={async () => updateServiceForm.resetData('Division')}
                             />
                             <Text
-                                name={'Class'}
-                                value={values.Class}
-                                state={formState.input.Class}
-                                label={'Class'}
-                                onChange={async (name, value) => {
-                                    setValues({...values, [`${name}`]: value});
-                                    inspectInput('Class', values.Class, hasLength);
-                                }}
-                                onBlur={async () => {
-                                    if (values.Class)
-                                        return;
-                                    inspectInput('Class', initialValues.Class, hasLength);
-                                    setValues({...values, Class: initialValues.Class});
-                                }}
+                                type='text'
+                                name='Class'
+                                label='Class'
+                                value={updateServiceForm.values.Class}
+                                state={updateServiceForm.state.Class}
+                                onChange={async (name, value) => updateServiceForm.updateData('Class', value)}
+                                onBlur={async () => updateServiceForm.resetData('Class')}
                             />
                         </div>
                     )}
                 />
             }
-            {!edit && 
+            {!updateServiceForm.edit && 
                 <ServiceCard
                     class={props.service.Class}
-                    division={props.service.Division}
                     service={props.service.Service}
-                    onEdit={() => setEdit(true)}
+                    division={props.service.Division}
+                    onEdit={() => updateServiceForm.setEdit(true)}
                     onDelete={() => props.onDelete()}
                 />
             }
-        </>
+        </Fragment>
     )
 }

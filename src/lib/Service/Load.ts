@@ -2,18 +2,18 @@ import { Services } from "@/database/Export";
 import { DB_AppointmentService } from "@/database/Types";
 
 // Stores the Class, Division, and Service of a Defined Service
-export type ServiceType = {[k: string]: DB_AppointmentService};
+export type FlattenedServices = {[k: string]: DB_AppointmentService};
 
 // Stores all the Defined Services, Ordered by Class (k) and Division (j)
-export type ServiceValuesType = {[k: string]: {[j: string]: Array<[number, string]>}};
+export type LayeredServices = {[k: string]: {[j: string]: Array<[number, string]>}};
 
 export const loadLayeredServices = async () => {
-    const serviceValues: ServiceValuesType = {};
-    const services: ServiceType = {};
+    const layered: LayeredServices = {};
+    const flattened: FlattenedServices = {};
 
     const dbServices = await Services();
     dbServices.forEach(service => {
-        services[service.ServiceID] = {
+        flattened[service.ServiceID] = {
             ...service, 
             AppointmentID: '', 
             AppointmentServiceID: 0
@@ -22,16 +22,16 @@ export const loadLayeredServices = async () => {
         if (service.ServiceID === 1)
             return;
 
-        if (!serviceValues[service.Class])
-            serviceValues[service.Class] = {};
-        if (!serviceValues[service.Class][service.Division])
-            serviceValues[service.Class][service.Division] = [];
-        serviceValues[service.Class][service.Division].push([service.ServiceID, service.Service]);
+        if (!layered[service.Class])
+            layered[service.Class] = {};
+        if (!layered[service.Class][service.Division])
+            layered[service.Class][service.Division] = [];
+        layered[service.Class][service.Division].push([service.ServiceID, service.Service]);
     });
 
     return {
-        serviceValues,
-        services
+        layered,
+        flattened
     };
 }
 

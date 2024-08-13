@@ -1,12 +1,12 @@
 'use client';
 import Error from './Error/Error';
 import clsx from "clsx";
-import { InputState } from './MutateInput';
+import { InputStateType } from './MutateInput';
 
 export interface InputProps {
     input: React.ReactNode;
     label: string;
-    state: InputState;
+    state: InputStateType;
 }
 
 export function Input(props: InputProps) {

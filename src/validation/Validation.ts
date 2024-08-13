@@ -68,6 +68,14 @@ export const validNumber = async (
     }).inspect(number);
 }
 
+export const validMileage = async (
+    number: string | number
+): Promise<MessageType> => {
+    return await Inspector.isNumber({
+        optional: true
+    }).inspect(number);
+}
+
 export const validLicensePlate = async (
     licensePlate: string
 ): Promise<MessageType> => {

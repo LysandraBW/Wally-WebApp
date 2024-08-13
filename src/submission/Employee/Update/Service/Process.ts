@@ -90,45 +90,6 @@ export async function processServiceForm(
             Parts: []
         }
     }
-    // Services
-    const refServiceIDs = new MathSet(Object.keys(ref.Services).map(s => parseInt(s)));
-    const curServiceIDs = new MathSet(Object.keys(cur.Services).map(s => parseInt(s)));
-
-    const toUpdateServiceIDs = refServiceIDs.intersection(curServiceIDs);
-    const toInsertServiceIDs = curServiceIDs.difference(refServiceIDs);
-    const toDeleteServiceIDs = refServiceIDs.difference(curServiceIDs);
-
-    toUpdateServiceIDs.forEach((serviceID) => {
-        const refService = ref.Services[`${serviceID}`];
-        const curService = cur.Services[`${serviceID}`];
-
-        if (sameObject(refService, curService, ['Class', 'Division', 'Service']))
-            return false;
-
-        processedServicesForm.Update.Services.push({
-            ServiceID: serviceID,
-            Class: updatedValue(refService.Class, curService.Class),
-            Division: updatedValue(refService.Division, curService.Division),
-            Service: updatedValue(refService.Service, curService.Service),
-        });
-    });
-
-    toInsertServiceIDs.forEach((serviceID) => {
-        const curService = cur.Services[`${serviceID}`];
-        processedServicesForm.Insert.Services.push({
-            Class: curService.Class,
-            Division: curService.Division,
-            Service: curService.Service
-        });
-    });
-
-    toDeleteServiceIDs.forEach((serviceID) => {
-        if (serviceID < 0)
-            return false;
-        processedServicesForm.Delete.Services.push({
-            ServiceID: serviceID
-        });
-    });
 
     // Diagnoses
     const refDiagnosisIDs = new MathSet(Object.keys(ref.Diagnoses).map(s => parseInt(s)));

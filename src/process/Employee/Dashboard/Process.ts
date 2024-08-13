@@ -1,5 +1,5 @@
 import { useEffect, useReducer, useState } from "react";
-import { FilterType, InitialAll, InitialCurrent, InitialFilter } from "./Control";
+import { FilterType, InitialAll, InitialCurrent, InitialFilter } from "./Type";
 import AlertReducer, { AlertActionType, InitialAlert } from "@/hook/Alert/Reducer";
 import { InitialPageContext } from "./Context";
 import { getSessionID } from "@/lib/Storage/Storage";

@@ -4,16 +4,10 @@ import RepairManager from "./Repair/RepairManager";
 import PartManager from "./Part/PartManager";
 import { DiagnosesStructure, PartsStructure, RepairsStructure, ServicesStructure } from "@/submission/Employee/Update/Service/Form";
 import { FormType } from "@/submission/Employee/Update/Form";
+import { DB_Appointment } from "@/database/Types";
 
 interface ServiceProps {
-    form: {
-        Services: ServicesStructure;
-        Diagnoses: DiagnosesStructure;
-        Repairs: RepairsStructure;
-        Parts: PartsStructure;
-    };
-    updateFormState: (state: boolean) => void;
-    changeHandler: (formPart: FormType, name: string, value: any) => void;
+    appointment: DB_Appointment;
 }
 
 export default function ServiceForm(props: ServiceProps) {
@@ -21,9 +15,7 @@ export default function ServiceForm(props: ServiceProps) {
         <>
             <div>
                 <ServiceManager
-                    services={props.form.Services}
-                    updateFormState={props.updateFormState}
-                    onChange={(updatedValue) => props.changeHandler(FormType.Service, 'Services', updatedValue)}
+                    appointment={props.appointment}
                 />
             </div>
             <div>
