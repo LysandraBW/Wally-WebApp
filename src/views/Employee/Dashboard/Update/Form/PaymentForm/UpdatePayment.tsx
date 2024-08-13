@@ -1,162 +1,86 @@
 import { Multiple, Text } from "@/components/Input/Export";
-import FormStateReducer from "@/hook/State/Reducer";
-import { InitialFormState } from "@/hook/State/Interface";
-import { useEffect, useReducer, useState } from "react";
 import { UpdatePayment as UpdatePaymentDate } from "@/submission/Employee/Update/Payment/Form";
-import { hasLength } from "@/validation/Validation";
 import { toWebDateTime } from "@/lib/Convert/Convert";
 import PaymentCard from "./PaymentCard";
+import useMutatePaymentForm from "@/process/Employee/Update/Payment/Mutate/Process";
 
-interface UpdatePaymentProps {
+export interface UpdatePaymentProps {
     payment: UpdatePaymentDate
     onDelete: () => any;
-    onUpdate: (payment: UpdatePaymentDate) => any;   
-    updateFormState: (state: boolean) => void; 
+    onUpdate: (payment: UpdatePaymentDate) => any; 
 }
 
 export default function UpdatePayment(props: UpdatePaymentProps) {
-    const initialValues = {...props.payment};
-    const [values, setValues] = useState(props.payment);
-    const [edit, setEdit] = useState(false);
-    const [formState, formStateDispatch] = useReducer(FormStateReducer, InitialFormState);
-
-    useEffect(() => {
-        const inspect = async () => {
-            const validCCN = await inspectInput('CCN', values.CCN, hasLength);
-            const validEXP = await inspectInput('EXP', values.EXP, hasLength);
-            const validName = await inspectInput('Name', values.Name, hasLength);
-            const validType = await inspectInput('Type', values.Type, hasLength);
-            const validPayment = await inspectInput('Payment', values.Payment, hasLength);
-            return validType && validCCN && validPayment && validName && validEXP;
-        }
-        inspect();
-    }, []);
-
-    useEffect(() => {
-        console.log(values);
-        props.updateFormState(formState.state);
-    }, [formState.state]);
-    
-    const inspectInput = async <T,>(
-        inputName: string, 
-        input: T, 
-        callback: (value: T) => Promise<[boolean, string?]>
-    ): Promise<boolean> => {
-        const [errState, errMessage] = await callback(input);
-        formStateDispatch({
-            states: {
-                [`${inputName}`]: [errState, errMessage]
-            }
-        });
-        return errState;
-    }
+    const mutatePayment = useMutatePaymentForm({mutateType: 'Update', initialValues: {...props.payment}, ...props});
 
     return (
-        <>
-            {edit &&
+        <div>
+            {!!mutatePayment.edit && !!mutatePayment.values && !!mutatePayment.state &&
                 <Multiple
-                    onBlur={() => {
-                        setEdit(false);
-                        props.onUpdate(values);
-                    }}
+                    onBlur={mutatePayment.finalizeUpdate}
                     children={(
                         <div>
                             <Text
+                                type='number'
                                 name='Payment'
                                 label='Payment'
-                                value={values.Payment} 
-                                state={formState.input.Payment}
-                                onChange={(name, value) => {
-                                    setValues({...values, Payment: value});
-                                    inspectInput('Payment', value, hasLength);
-                                }}
-                                onBlur={() => {
-                                    if (values.Payment)
-                                        return;
-                                    setValues({...values, Payment: initialValues.Payment});
-                                    inspectInput('Payment', initialValues.Payment, hasLength);
-                                }}
+                                value={mutatePayment.values.Payment} 
+                                state={mutatePayment.state.Payment}
+                                onChange={(name, value) => mutatePayment.updateData('Payment', value)}
+                                onBlur={() => mutatePayment.resetData('Payment')}
                             />
                             <Text
-                                name={'Name'}
-                                label={'Name'}
-                                value={values.Name}
-                                state={formState.input.Name}
-                                onChange={async (name, value) => {
-                                    inspectInput('Name', value, hasLength);
-                                    setValues({...values, [`${name}`]: value});
-                                }}
-                                onBlur={() => {
-                                    if (values.Name)
-                                        return;
-                                    setValues({...values, Name: initialValues.Name});
-                                    inspectInput('Name', initialValues.Name, hasLength);
-                                }}
+                                type='text'
+                                name='Name'
+                                label='Name'
+                                value={mutatePayment.values.Name}
+                                state={mutatePayment.state.Name}
+                                onChange={async (name, value) => mutatePayment.updateData('Name', value)}
+                                onBlur={() => mutatePayment.resetData('Name')}
                             />
                             <Text
-                                name={'Type'}
-                                label={'Type'}
-                                value={values.Type}
-                                state={formState.input.Type}
-                                onChange={async (name, value) => {
-                                    inspectInput('Type', value, hasLength);
-                                    setValues({...values, [`${name}`]: value});
-                                }}
-                                onBlur={() => {
-                                    if (values.Type)
-                                        return;
-                                    setValues({...values, Type: initialValues.Type});
-                                    inspectInput('Type',  initialValues.Type, hasLength);
-                                }}
+                                type='text'
+                                name='Type'
+                                label='Type'
+                                value={mutatePayment.values.Type}
+                                state={mutatePayment.state.Type}
+                                onChange={async (name, value) => mutatePayment.updateData('Type', value)}
+                                onBlur={() => mutatePayment.resetData('Type')}
                             />
                             <Text
-                                name={'CCN'}
-                                label={'Credit Card Number'}
-                                value={values.CCN}
-                                state={formState.input.CCN}
-                                onChange={async (name, value) => {
-                                    inspectInput('CCN', value, hasLength);
-                                    setValues({...values, [`${name}`]: value});
-                                }}
-                                onBlur={() => {
-                                    if (values.CCN)
-                                        return;
-                                    setValues({...values, CCN: initialValues.CCN});
-                                    inspectInput('Type', initialValues.CCN, hasLength);
-                                }}
+                                type='text'
+                                name='CCN'
+                                label='Credit Card Number'
+                                value={mutatePayment.values.CCN}
+                                state={mutatePayment.state.CCN}
+                                onChange={async (name, value) => mutatePayment.updateData('CCN', value)}
+                                onBlur={() => mutatePayment.resetData('CCN')}
                             />
                             <Text
-                                name={'EXP'}
-                                label={'Expiration Date'}
-                                value={values.EXP}
-                                state={formState.input.EXP}
-                                onChange={async (name, value) => {
-                                    inspectInput('EXP', value, hasLength);
-                                    setValues({...values, [`${name}`]: value});
-                                }}
-                                onBlur={() => {
-                                    if (values.EXP)
-                                        return;
-                                    setValues({...values, EXP: initialValues.EXP});
-                                    inspectInput('EXP', initialValues.EXP, hasLength);
-                                }}
+                                type='text'
+                                name='EXP'
+                                label='Expiration Date'
+                                value={mutatePayment.values.EXP}
+                                state={mutatePayment.state.EXP}
+                                onChange={async (name, value) => mutatePayment.updateData('EXP', value)}
+                                onBlur={() => mutatePayment.resetData('EXP')}
                             />
                         </div>
                     )}
                 />
             }
-            {!edit && 
+            {!mutatePayment.edit && 
                 <PaymentCard
-                    payment={values.Payment}
-                    ccn={values.CCN}
-                    exp={values.EXP}
-                    type={values.Type}
-                    name={values.Name}
-                    paymentDate={toWebDateTime(values.PaymentDate)}
-                    onEdit={() => setEdit(!values.PaymentID)}
+                    payment={props.payment.Payment}
+                    ccn={props.payment.CCN}
+                    exp={props.payment.EXP}
+                    type={props.payment.Type}
+                    name={props.payment.Name}
+                    paymentDate={toWebDateTime(props.payment.PaymentDate)}
+                    onEdit={() => mutatePayment.setEdit(!props.payment.PaymentID)}
                     onDelete={props.onDelete}
                 />
             }
-        </>
+        </div>
     )
 }

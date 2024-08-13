@@ -1,6 +1,8 @@
 import { DB_Appointment } from "@/database/Types";
 import { toString } from "@/lib/Convert/Convert";
 
+export type DataKeys = 'Payment' | 'PaymentDate' | 'Name' | 'Type' | 'CCN' | 'EXP';
+
 export interface UpdatePayment {    
     AppointmentID:  string;
     PaymentID:      number;

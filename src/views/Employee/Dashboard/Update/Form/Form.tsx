@@ -5,7 +5,7 @@ import { VehicleFormStructure } from "@/submission/Employee/Update/Vehicle/Form"
 import GeneralForm from "./GeneralForm";
 import VehicleForm from "./VehicleForm";
 import ServiceForm from "./ServiceForm/ServiceForm";
-import PaymentForm from "./PaymentForm/PaymentForm";
+import PaymentManager from "./PaymentForm/PaymentManager";
 import { FormType } from "@/submission/Employee/Update/Form";
 
 interface FormProps {
@@ -33,7 +33,7 @@ export default function Form(props: FormProps) {
                 />
             }
             {props.currentForm === FormType.Payment &&
-                <PaymentForm
+                <PaymentManager
                     form={props.form as PaymentFormStructure}
                     changeHandler={props.changeHandler}
                     updateFormState={props.updateFormState}
