@@ -2,6 +2,7 @@ import { GetNoteSharees } from "@/database/Export";
 import { DB_Appointment, DB_Note } from "@/database/Types";
 import { getSessionID } from "@/lib/Storage/Storage";
 
+export type DataKeys = 'Head' | 'Body' | 'Sharees' | 'ShowCustomer' | 'Files';
 export enum NoteType {Attachment, File};
 
 export interface UpdateNote extends DB_Note {

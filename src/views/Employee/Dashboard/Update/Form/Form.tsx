@@ -1,49 +1,35 @@
-import { GeneralFormStructure } from "@/submission/Employee/Update/General/Form";
-import { ServiceFormStructure } from "@/submission/Employee/Update/Service/Form";
-import { PaymentFormStructure } from "@/submission/Employee/Update/Payment/Form";
-import { VehicleFormStructure } from "@/submission/Employee/Update/Vehicle/Form";
 import GeneralForm from "./GeneralForm";
 import VehicleForm from "./VehicleForm";
-import ServiceForm from "./ServiceForm/ServiceForm";
+import ServiceManager from "./ServiceForm/ServiceForm";
 import PaymentManager from "./PaymentForm/PaymentManager";
-import { FormType } from "@/submission/Employee/Update/Form";
+import { DB_Appointment } from "@/database/Types";
 
 interface FormProps {
-    form: unknown;
-    currentForm: FormType;
-    updateFormState: (state: boolean) => void;
-    changeHandler: (part: FormType, name: string, value: any) => void;
+    currentForm: string;
+    appointment: DB_Appointment;
 }
 
 export default function Form(props: FormProps) {
     return (
         <div>
-            {props.currentForm === FormType.General &&
+            {props.currentForm === 'General' &&
                 <GeneralForm
-                    form={props.form as GeneralFormStructure}
-                    changeHandler={props.changeHandler}
-                    updateFormState={props.updateFormState}
+                    appointment={props.appointment}
                 />
             }
-            {props.currentForm === FormType.Service &&
-                <ServiceForm
-                    form={props.form as ServiceFormStructure}
-                    changeHandler={props.changeHandler}
-                    updateFormState={props.updateFormState}
+            {props.currentForm === 'Service' &&
+                <ServiceManager
+                    appointment={props.appointment}
                 />
             }
-            {props.currentForm === FormType.Payment &&
+            {props.currentForm === 'Payment' &&
                 <PaymentManager
-                    form={props.form as PaymentFormStructure}
-                    changeHandler={props.changeHandler}
-                    updateFormState={props.updateFormState}
+                    appointment={props.appointment}
                 />
             }
-            {props.currentForm === FormType.Vehicle &&
+            {props.currentForm === 'Vehicle' &&
                 <VehicleForm
-                    form={props.form as VehicleFormStructure}
-                    changeHandler={props.changeHandler}
-                    updateFormState={props.updateFormState}
+                    appointment={props.appointment}
                 />
             }
         </div>

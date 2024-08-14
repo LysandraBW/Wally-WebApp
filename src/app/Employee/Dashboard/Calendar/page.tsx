@@ -274,7 +274,7 @@ export default function Calendar() {
                                 AddEvent: false
                             });
                         }}
-                        onCreate={(value) => {
+                        onChange={(value) => {
                             createHandler(value);
                             setController({
                                 ...controller,

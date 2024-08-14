@@ -2,37 +2,27 @@
 import { useState, useEffect, useReducer } from "react";
 import { useSearchParams } from "next/navigation";
 import { GetAllEmployees, GetAppointment, GetEmployee } from "@/database/Export";
-import NoteForm from "@/views/Employee/Dashboard/Update/Form/NoteForm/NoteForm";
 import { getSessionID } from "@/lib/Storage/Storage";
 import useInterval from "@/hook/Alert/Timer";
 import AlertReducer, { AlertActionType, InitialAlert } from "@/hook/Alert/Reducer";
 import { createContext } from "react";
-import { updateMessage } from "@/process/Employee/Update/Helper";
 import { DefaultPageContext, PageContextStructure } from "@/process/Employee/Update/Context";
-import { UpdateFormStructure } from "@/submission/Employee/Update/Form";
-import { FormType } from "@/submission/Employee/Update/Form";
 import { goToEmployeeLogin } from "@/lib/Navigation/Navigation";
-import { UpdateForm } from "@/submission/Employee/Update/Prepare";
-import { MessageType } from "@/components/Alert/Message/Message";
 import SearchAppointment from "@/views/Employee/Dashboard/Update/Action/Search";
 import BackToDashboard from "@/components/Button/Text/Dash";
 import DeleteAppointment from "@/views/Employee/Dashboard/Update/Action/Button/Delete";
 import UpdateAppointmentLabel from "@/views/Employee/Dashboard/Update/Action/Label";
 import FormTabs from "@/views/Employee/Dashboard/Update/Action/Tabs";
 import Form from "@/views/Employee/Dashboard/Update/Form/Form";
-import SaveForm from "@/views/Employee/Dashboard/Update/Action/Button/Save";
-import ResetForm from "@/views/Employee/Dashboard/Update/Action/Button/Reset";
-import { submitNoteForm } from "@/submission/Employee/Update/Note/Submit";
+import NoteManager from "@/views/Employee/Dashboard/Update/Form/NoteForm/NoteManager";
 
 let ran = false;
 export const PageContext = createContext(DefaultPageContext);
 
 export default function Update() {
     const [context, setContext] = useState(DefaultPageContext);
-    const [updateForm, setUpdateForm] = useState<UpdateFormStructure>();
-    const [formStates, setFormStates] = useState<{[formPart: string]: boolean}>({});
-    const [currentForm, setCurrentForm] = useState(FormType.General);
     const [alert, alertDispatch] = useReducer(AlertReducer, InitialAlert);
+    const [currentForm, setCurrentForm] = useState('');
     const searchParams = useSearchParams();
 
     useEffect(() => {
@@ -63,6 +53,7 @@ export default function Update() {
             const AppointmentID = searchParams.get('AptID');
             if (AppointmentID) {
                 loadedContext.Appointment = {
+                    Appointment: null,
                     AppointmentID,
                     Labels: {}
                 }
@@ -81,10 +72,8 @@ export default function Update() {
     useEffect(() => {
         const load = async () => {
             // No Apt ID or Employee ID or Loading Paused
-            if (!context.Appointment.AppointmentID || !context.Employee.Employee.EmployeeID || context.Paused) {
-                setUpdateForm(undefined);
+            if (!context.Appointment.AppointmentID || !context.Employee.Employee.EmployeeID || context.Paused)
                 return;
-            }
 
             const appointment = await GetAppointment({
                 SessionID: context.Employee.SessionID, 
@@ -92,7 +81,6 @@ export default function Update() {
             });
 
             if (!appointment) {
-                setUpdateForm(undefined);
                 setContext({...context, Paused: true});
                 throw 'Appointment Not Found Error';
             }
@@ -100,123 +88,21 @@ export default function Update() {
             setContext({
                 ...context,
                 Appointment: {
+                    Appointment: appointment,
                     AppointmentID: appointment.AppointmentID,
                     Labels: appointment.Labels
                 }
             });
-
-            setUpdateForm(await UpdateForm(context.Employee.Employee.EmployeeID, appointment));
         }
         if (context.Appointment.AppointmentID)
             load();
     }, [context.Appointment.AppointmentID]);
-
-    useEffect(() => {
-        if (!updateForm)
-            return;
-        setContext({
-            ...context, 
-            Loaded: true
-        });
-    }, [updateForm]);
 
     useInterval(() => {
         alertDispatch({
             type: AlertActionType.RefreshMessages
         });
     }, 1000*1);
-
-    const loadUpdateForm = async () => {
-        // No Apt. ID or Employee ID or Loading Paused
-        if (!context.Appointment.AppointmentID || !context.Employee.Employee.EmployeeID || context.Paused) {
-            setUpdateForm(undefined);
-            return;
-        }
-
-        const appointment = await GetAppointment({
-            SessionID: context.Employee.SessionID, 
-            AppointmentID: context.Appointment.AppointmentID
-        });
-
-        if (!appointment) {
-            setUpdateForm(undefined);
-            setContext({...context, Paused: true});
-            throw 'Appointment Not Found Error';
-        }
-        
-        setContext({
-            ...context,
-            Appointment: {
-                AppointmentID: appointment.AppointmentID,
-                Labels: appointment.Labels
-            }
-        });
-
-        // Context Loading is Finished Here
-        setUpdateForm(await UpdateForm(context.Employee.Employee.EmployeeID, appointment));
-    }
-
-    const updateFormHandler = (formPart: FormType, name: string, value: any) => {
-        if (!updateForm)
-            return;
-
-        let updatedValue = {};
-        if (!name)
-            updatedValue = {...updateForm.current[`${formPart}`], ...value}
-        else
-            updatedValue = {...updateForm.current[`${formPart}`], [`${name}`]: value}
-        
-        setUpdateForm((state) => {
-            if (!state)
-                throw '';
-            return {
-                ...state,
-                current: {
-                    ...state.current,
-                    [`${formPart}`]: updatedValue
-                }
-            }
-        });
-    }
-
-    const resetFormHandler = (formPart: FormType) => {
-        if (!updateForm)
-            return;
-        setUpdateForm({
-            ...updateForm,
-            current: {
-                ...updateForm.current,
-                [`${formPart}`]: updateForm.reference[`${formPart}`]
-            }
-        });
-    }
-
-    const addMessage = (message: string, output: boolean) => {
-        alertDispatch({
-            type: AlertActionType.AddMessage,
-            addMessage: {
-                message,
-                messageType: output ? MessageType.Success : MessageType.Error
-            }
-        });
-    }
-
-    const saveForm = async <T,> (formPart: FormType, submitForm: (a: T, b: T) => Promise<boolean>) => {
-        if (!formStates[`${formPart}`] || !updateForm) {
-            addMessage('Could Not Save', false);
-            return;
-        }
-    
-        const current = updateForm.current[`${formPart}`] as unknown;
-        const reference = updateForm.reference[`${formPart}`] as unknown;
-
-        console.log(current, reference);
-
-        const output = await submitForm(reference as T, current as T);
-        if (output)
-            await loadUpdateForm();         
-        addMessage(updateMessage(output), output);
-    }
 
     return (
         <PageContext.Provider value={context}>
@@ -230,7 +116,7 @@ export default function Update() {
                         onSearch={() => {}}
                     />
                 }
-                {context.Loaded && updateForm &&
+                {context.Loaded &&
                     <div>
                         <BackToDashboard/>
                         <DeleteAppointment/>
@@ -241,39 +127,18 @@ export default function Update() {
                             currentForm={currentForm}
                             updateCurrentForm={setCurrentForm}
                         />
-                        <Form
-                            currentForm={currentForm}
-                            form={updateForm.current[`${currentForm}`]}
-                            changeHandler={updateFormHandler}
-                            updateFormState={(state) => {
-                                setFormStates({
-                                    ...formStates, 
-                                    [`${currentForm}`]: state
-                                });
-                            }}
-                        />
-                        <SaveForm
-                            currentForm={currentForm}
-                            onSave={async (submitFunction) => {
-                                await saveForm(currentForm, submitFunction);
-                            }}
-                        />
-                        <ResetForm
-                            onReset={() => resetFormHandler(currentForm)}
-                        />
-                        <NoteForm
-                            form={updateForm.current[FormType.Note]}
-                            changeHandler={updateFormHandler}
-                            onSave={async () => {
-                                await saveForm(FormType.Note, submitNoteForm);
-                            }}
-                            updateFormState={(state) => {
-                                setFormStates({
-                                    ...formStates, 
-                                    Note: state
-                                });
-                            }}
-                        />
+                        {!!context.Appointment.Appointment &&     
+                            <Form
+                                currentForm={currentForm}
+                                appointment={context.Appointment.Appointment}
+                            />
+                        }
+                        {!!context.Employee.Employee.EmployeeID && !!context.Appointment.Appointment &&  
+                            <NoteManager
+                                employeeId={context.Employee.Employee.EmployeeID}
+                                appointment={context.Appointment.Appointment}
+                            />
+                        }
                     </div>
                 }
             </div>

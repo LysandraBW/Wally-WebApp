@@ -1,5 +1,7 @@
 import { DB_Event } from "@/database/Types";
 
+export type DataKeys = 'Name' | 'Summary' | 'UpdatedDate' | 'Sharees';
+
 export interface UpdateEvent extends DB_Event {
     UpdatedDate: string;
     Sharees: Array<string>;

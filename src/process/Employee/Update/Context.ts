@@ -1,4 +1,5 @@
 import { 
+    DB_Appointment,
     DB_AppointmentLabels, 
     DB_Employee, 
     DB_GeneralEmployee 
@@ -11,6 +12,7 @@ export interface PageContextStructure {
     };
     Employees: Array<DB_GeneralEmployee>;
     Appointment: {
+        Appointment: DB_Appointment | null;
         AppointmentID: string;
         Labels: DB_AppointmentLabels;
     };
@@ -31,6 +33,7 @@ export const DefaultPageContext: PageContextStructure = {
     },
     Employees: [],
     Appointment: {
+        Appointment: null,
         AppointmentID: '',
         Labels: {}
     },
