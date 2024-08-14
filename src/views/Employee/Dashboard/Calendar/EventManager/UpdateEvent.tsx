@@ -14,7 +14,6 @@ export interface UpdateEventProps {
     onClose:  () => void;
     onDelete: () => void;
     onUpdate: (event: UpdateEventData, updateDatabase?: boolean) => void;
-    updateFormState: (state: boolean) => void;
 }
 
 export default function UpdateEvent(props: UpdateEventProps) {

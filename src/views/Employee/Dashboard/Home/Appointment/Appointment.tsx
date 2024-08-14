@@ -5,7 +5,7 @@ import { toDisplayDateTime } from "@/lib/Convert/Convert";
 import { DB_Appointment } from "@/database/Types";
 import { useRouter } from 'next/navigation';
 import Note from "./Note";
-import { PageContext } from "@/process/Employee/Dashboard/Context";
+import { PageContext } from "@/process/Employee/Home/Context";
 import CloseButton from "@/components/Button/Icon/Close";
 
 interface AppointmentProps {

@@ -4,7 +4,7 @@ import { getSessionID } from "@/lib/Storage/Storage";
 import { toWebDateTime } from "@/lib/Convert/Convert";
 import { EventsFormStructure, EventsStructure, UpdateFormStructure } from "./Form";
 
-export async function prepareEventsForm(
+export async function InitializeEventsForm(
     employeeID: string, 
     events: Array<DB_Event>
 ): Promise<EventsFormStructure> {
@@ -30,15 +30,4 @@ export async function prepareEventsForm(
         EmployeeID: employeeID,
         Events: Events
     } as EventsFormStructure;
-}
-
-export const UpdateForm = async (
-    employeeID: string, 
-    events: Array<DB_Event>
-): Promise<UpdateFormStructure> => {
-    const form = await prepareEventsForm(employeeID, events);
-    return {
-        current: form,
-        reference: form,
-    };
 }

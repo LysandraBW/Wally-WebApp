@@ -1,14 +1,14 @@
 'use client';
 import { Fragment } from "react";
-import Head from "@/views/Employee/Dashboard/Dashboard/Table/Head/Head";
-import { PageContext } from "@/process/Employee/Dashboard/Context";
-import Action from "@/views/Employee/Dashboard/Dashboard/Header/Action";
-import Search from "@/views/Employee/Dashboard/Dashboard/Header/Search";
-import Tabs from "@/views/Employee/Dashboard/Dashboard/Header/Tabs";
-import Navigation from "@/views/Employee/Dashboard/Dashboard/Table/Navigation";
-import useDashboard from "@/process/Employee/Dashboard/Process";
-import Appointment from "@/views/Employee/Dashboard/Dashboard/Appointment/Appointment";
-import Body from "@/views/Employee/Dashboard/Dashboard/Table/Body/Body";
+import Head from "@/views/Employee/Dashboard/Home/Table/Head/Head";
+import { PageContext } from "@/process/Employee/Home/Context";
+import Action from "@/views/Employee/Dashboard/Home/Header/Action";
+import Search from "@/views/Employee/Dashboard/Home/Header/Search";
+import Tabs from "@/views/Employee/Dashboard/Home/Header/Tabs";
+import Navigation from "@/views/Employee/Dashboard/Home/Table/Navigation";
+import useDashboard from "@/process/Employee/Home/Process";
+import Appointment from "@/views/Employee/Dashboard/Home/Appointment/Appointment";
+import Body from "@/views/Employee/Dashboard/Home/Table/Body/Body";
 
 export default function Dashboard() {
     const dashboard = useDashboard();

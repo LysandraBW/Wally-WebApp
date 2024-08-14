@@ -4,7 +4,7 @@ import { useContext } from "react";
 import { toggleValue } from "@/lib/Input/Toggle";
 import { DB_AllAppointmentLabels, DB_AppointmentOverview } from "@/database/Types";
 import { updateAppointmentLabel } from "@/database/Appointment/Label/Helper";
-import { PageContext } from "@/process/Employee/Dashboard/Context";
+import { PageContext } from "@/process/Employee/Home/Context";
 
 interface BodyProps {
     search: string;

@@ -1,6 +1,6 @@
 import { DB_AppointmentOverview } from "@/database/Types";
 import { FilterType } from "@/process/Employee/Dashboard/Controller";
-import { updateSortDirection } from "@/process/Employee/Dashboard/Helper";
+import { updateSortDirection } from "@/process/Employee/Home/Helper";
 import ColumnDirection from "./ColumnDirection";
 import HeadCheckbox from "./HeadCheckbox";
 
