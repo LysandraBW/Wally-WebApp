@@ -1,4 +1,4 @@
-import { DB_Appointment, DB_AppointmentService } from "@/database/Types";
+import { DB_Appointment, DB_AppointmentService } from "@/database/interfaces";
 
 export type DataKeys = 'Service' | 'Division' | 'Class';
 

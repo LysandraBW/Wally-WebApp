@@ -1,7 +1,7 @@
-import { getSessionID } from "@/lib/Storage/Storage";
+import { getSessionID } from "@/utils/cookie";
 import { ServicesFormStructure } from "./Form";
 import { ProcessedServicesFormStructure, processServicesForm } from "./Process";
-import { DeleteService, InsertService, UpdateService } from "@/database/Export";
+import { DeleteService, InsertService, UpdateService } from "@/db/export";
 
 export async function submitServicesForm(reference: ServicesFormStructure, updated: ServicesFormStructure): Promise<boolean> {
     const SessionID = await getSessionID();

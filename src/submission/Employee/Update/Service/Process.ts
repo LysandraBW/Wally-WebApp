@@ -1,6 +1,6 @@
-import { MathSet } from "@/lib/Submission/MathSet";
+import { MathSet } from "@/lib/submission/math_set";
 import { ServicesFormStructure } from "./Form";
-import { sameObject, updatedValue } from "@/lib/Submission/Compare";
+import { sameObject, updatedValue } from "@/lib/helper/compare";
 
 export interface ProcessedServicesFormStructure {
     AppointmentID: string;

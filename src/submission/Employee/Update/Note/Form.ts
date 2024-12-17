@@ -1,6 +1,6 @@
-import { GetNoteSharees } from "@/database/Export";
-import { DB_Appointment, DB_Note } from "@/database/Types";
-import { getSessionID } from "@/lib/Storage/Storage";
+import { GetNoteSharees } from "@/db/export";
+import { DB_Appointment, DB_Note } from "@/database/interfaces";
+import { getSessionID } from "@/utils/cookie";
 
 export type DataKeys = 'Head' | 'Body' | 'Sharees' | 'ShowCustomer' | 'Files';
 export enum NoteType {Attachment, File};

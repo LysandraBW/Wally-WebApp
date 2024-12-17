@@ -1,9 +1,9 @@
-import { CreatePartProps } from "@/views/Employee/Dashboard/Update/Form/ServiceForm/Part/CreatePart";
-import { UpdatePartProps } from "@/views/Employee/Dashboard/Update/Form/ServiceForm/Part/UpdatePart";
+import { CreatePartProps } from "@/pages/Employee/Dashboard/Update/Form/ServiceForm/Part/CreatePart";
+import { UpdatePartProps } from "@/pages/Employee/Dashboard/Update/Form/ServiceForm/Part/UpdatePart";
 import { useEffect, useState } from "react";
 import { InitialState, StateType } from "./State";
 import { DataKeys, UpdatePart } from "@/submission/Employee/Update/Part/Form";
-import { MessageType } from "@/lib/Inspector/Inspector/Inspect/Inspector";
+import { MessageType } from "@/lib/inspector/Inspector/Inspect/Inspector";
 import { hasLength, validNumber } from "@/validation/Validation";
 
 export type MutateType = 'Update' | 'Create';

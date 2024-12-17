@@ -1,0 +1,55 @@
+"use server";
+import sql from "mssql";
+import { fetchPool } from "../../authentication/auth";
+import { User } from "../../authentication/user";
+import { InsertCreditCardParameters, InsertPaymentParameters } from "../../define/parameters";
+
+export async function InsertPayment(
+    data: InsertPaymentParameters, 
+    user: User = User.Employee
+): Promise<number> {
+    try {
+        const pool = await fetchPool(user, data);
+        if (!pool)
+            throw 'Undefined Pool';
+
+        const output = await pool.request()
+            .input('SessionID', sql.Char(36), data.SessionID)
+            .input('AppointmentID', sql.UniqueIdentifier, data.AppointmentID)
+            .input('Payment', sql.Money, data.Payment)
+            .execute('Appointment.InsertPayment');
+
+        return output.recordset[0].PaymentID;
+    }   
+    catch (err) {
+        console.error(err);
+        return 0;
+    }
+}
+
+export async function InsertCreditCard(
+    data: InsertCreditCardParameters, 
+    user: User = User.Employee
+): Promise<boolean> {
+    try {
+        const pool = await fetchPool(user, data);
+        if (!pool)
+            throw 'Undefined Pool';
+
+        await pool.request()
+            .input('SessionID', sql.Char(36), data.SessionID)
+            .input('AppointmentID', sql.UniqueIdentifier, data.AppointmentID)
+            .input('PaymentID', sql.Int, data.PaymentID)
+            .input('Name', sql.VarChar(100), data.Name)
+            .input('Type', sql.VarChar(10), data.Type)
+            .input('CCN', sql.VarChar(4), data.CCN)
+            .input('EXP', sql.VarChar(4), data.EXP)
+            .execute('Appointment.InsertCreditCard');
+
+        return true;   
+    }
+    catch (err) {
+        console.error(err);
+        return false;
+    }
+}

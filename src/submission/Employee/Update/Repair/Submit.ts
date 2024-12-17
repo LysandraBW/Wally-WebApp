@@ -1,7 +1,7 @@
-import { getSessionID } from "@/lib/Storage/Storage";
+import { getSessionID } from "@/utils/cookie";
 import { RepairsFormStructure } from "./Form";
 import { processRepairsForm } from "./Process";
-import { DeleteRepair, InsertRepair, UpdateRepair } from "@/database/Export";
+import { DeleteRepair, InsertRepair, UpdateRepair } from "@/db/export";
 
 export async function submitRepairsForm(reference: RepairsFormStructure, current: RepairsFormStructure): Promise<boolean> {
     const SessionID = await getSessionID();

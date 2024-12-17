@@ -1,13 +1,13 @@
-import Close from "@/components/Icon/Close/Close";
+import CloseIcon from "@/components/Icon/close/Close";
 
-interface CloseButtonProps {
+interface CloseProps {
     onClick: () => void;
 }
 
-export default function CloseButton(props: CloseButtonProps) {
+export default function Close(props: CloseProps) {
     return (
         <div onClick={() => props.onClick()}>
-                <Close
+                <CloseIcon
                     width='20'
                     height='20'
                     color='#757890'

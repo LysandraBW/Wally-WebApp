@@ -1,4 +1,4 @@
-import { DefaultInputState, InputStateType } from "@/components/Input/MutateInput";
+import { DefaultInputState, InputStateType } from "@/components/input/mutateInput";
 
 export type StateType = {
     Head: InputStateType;

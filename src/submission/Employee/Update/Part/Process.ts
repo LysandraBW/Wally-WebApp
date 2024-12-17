@@ -1,7 +1,7 @@
-import { MathSet } from "@/lib/Submission/MathSet";
+import { MathSet } from "@/lib/submission/math_set";
 import { PartsFormStructure } from "./Form";
-import { sameObject, updatedValue } from "@/lib/Submission/Compare";
-import { toInteger } from "@/lib/Convert/Convert";
+import { sameObject, updatedValue } from "@/lib/helper/compare";
+import { toInteger } from "@/lib/Convert/convert";
 
 export interface ProcessedPartsFormStructure {
     AppointmentID: string;

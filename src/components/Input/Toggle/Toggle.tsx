@@ -1,5 +1,5 @@
 'use client';
-import { WriteInputProps } from '../MutateInput';
+import { WriteInputProps } from '../mutateInput';
 
 interface ToggleProps extends WriteInputProps {
     value: number;

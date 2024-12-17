@@ -1,11 +1,11 @@
-import { DB_AppointmentService } from "@/database/Types";
-import { UpdateServiceProps } from "@/views/Employee/Dashboard/Update/Form/ServiceForm/Service/UpdateService";
+import { DB_AppointmentService } from "@/database/interfaces";
+import { UpdateServiceProps } from "@/pages/Employee/Dashboard/Update/Form/ServiceForm/Service/UpdateService";
 import { useEffect, useState } from "react";
 import { InitialState, StateType } from "./State";
 import { DataKeys } from "@/submission/Employee/Update/Service/Form";
 import { hasLength } from "@/validation/Validation";
-import { MessageType } from "@/lib/Inspector/Inspector/Inspect/Inspector";
-import { CreateServiceProps } from "@/views/Employee/Dashboard/Update/Form/ServiceForm/Service/CreateService";
+import { MessageType } from "@/lib/inspector/Inspector/Inspect/Inspector";
+import { CreateServiceProps } from "@/pages/Employee/Dashboard/Update/Form/ServiceForm/Service/CreateService";
 
 export type MutateType = 'Update' | 'Create';
 

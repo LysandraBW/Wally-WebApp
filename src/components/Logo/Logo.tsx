@@ -1,4 +1,4 @@
-import { DMSans } from "@/public/Font/Font";
+import { DMSans } from "@/public/font/Font";
 import clsx from "clsx";
 
 interface LogoProps {
@@ -13,6 +13,8 @@ export default function Logo(props: LogoProps) {
                 DMSans.className,
                 'font-semibold text-[24px]'
             )}
-        >WALTRONICS</div>
+        >
+            WALTRONICS
+        </div>
     )
 }

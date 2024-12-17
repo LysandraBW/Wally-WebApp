@@ -1,4 +1,4 @@
-import { DB_Appointment, DB_Repair } from "@/database/Types";
+import { DB_Appointment, DB_Repair } from "@/database/interfaces";
 import { InitialRepairsForm, RepairsFormStructure } from "@/submission/Employee/Update/Repair/Form";
 import { submitRepairsForm } from "@/submission/Employee/Update/Repair/Submit";
 import { useEffect, useState } from "react";

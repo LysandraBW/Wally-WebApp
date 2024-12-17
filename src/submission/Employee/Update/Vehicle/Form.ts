@@ -1,4 +1,4 @@
-import { DB_Appointment } from "@/database/Types";
+import { DB_Appointment } from "@/database/interfaces";
 
 export type DataKeys = 'Make' | 'Model' | 'ModelYear' | 'VIN' | 'Mileage' | 'LicensePlate';
 

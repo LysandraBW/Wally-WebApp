@@ -1,4 +1,4 @@
-import ChevronDown from "@/components/Icon/Chevron/Down";
+import ChevronDown from "@/components/Icon/chevron/Down";
 import { getToggleLabel } from "@/lib/Input/Dropdown/ToggleLabel";
 import clsx from "clsx";
 import { useEffect, useState } from "react";

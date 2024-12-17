@@ -1,7 +1,7 @@
-import { getSessionID } from "@/lib/Storage/Storage";
+import { getSessionID } from "@/utils/cookie";
 import { DiagnosesFormStructure } from "./Form";
 import { processDiagnosesForm } from "./Process";
-import { DeleteDiagnosis, InsertDiagnosis, UpdateDiagnosis } from "@/database/Export";
+import { DeleteDiagnosis, InsertDiagnosis, UpdateDiagnosis } from "@/db/export";
 
 export async function submitDiagnosesForm(reference: DiagnosesFormStructure, current: DiagnosesFormStructure): Promise<boolean> {
     const SessionID = await getSessionID();

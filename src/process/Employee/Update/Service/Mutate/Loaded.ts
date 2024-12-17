@@ -1,4 +1,4 @@
-import { DB_AppointmentService } from "@/database/Types";
+import { DB_AppointmentService } from "@/database/interfaces";
 
 export const DefaultValues: DB_AppointmentService = {
     AppointmentID: '',

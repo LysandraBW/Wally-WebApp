@@ -1,11 +1,11 @@
-import { DB_Appointment } from "@/database/Types";
+import { DB_Appointment } from "@/database/interfaces";
 import { useEffect, useState } from "react";
 import { InitialState, StateType } from "./State";
 import { InitialLoaded, LoadedType } from "./Loaded";
 import { DataKeys, InitialVehicleForm, VehicleFormStructure } from "@/submission/Employee/Update/Vehicle/Form";
-import { MessageType } from "@/lib/Inspector/Inspector/Inspect/Inspector";
+import { MessageType } from "@/lib/inspector/Inspector/Inspect/Inspector";
 import { inValues, validLicensePlate, validMileage, validNumber, validVIN } from "@/validation/Validation";
-import { getValues } from "@/lib/Vehicle/Value";
+import { getValues } from "@/lib/vehicle/value";
 import { submitVehicleForm } from "@/submission/Employee/Update/Vehicle/Submit";
 
 export default function useVehicleForm(appointment: DB_Appointment) {

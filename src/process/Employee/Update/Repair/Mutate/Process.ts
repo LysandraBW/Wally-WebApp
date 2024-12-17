@@ -1,12 +1,12 @@
 import { UpdatePart } from "@/submission/Employee/Update/Part/Form";
-import { CreateRepairProps } from "@/views/Employee/Dashboard/Update/Form/ServiceForm/Repair/CreateRepair";
-import { UpdateRepairProps } from "@/views/Employee/Dashboard/Update/Form/ServiceForm/Repair/UpdateRepair";
+import { CreateRepairProps } from "@/pages/Employee/Dashboard/Update/Form/ServiceForm/Repair/CreateRepair";
+import { UpdateRepairProps } from "@/pages/Employee/Dashboard/Update/Form/ServiceForm/Repair/UpdateRepair";
 import { useEffect, useState } from "react";
 import { InitialState, StateType } from "./State";
 import { DataKeys } from "@/submission/Employee/Update/Repair/Form";
 import { hasLength } from "@/validation/Validation";
-import { DB_Repair } from "@/database/Types";
-import { MessageType } from "@/lib/Inspector/Inspector/Inspect/Inspector";
+import { DB_Repair } from "@/database/interfaces";
+import { MessageType } from "@/lib/inspector/Inspector/Inspect/Inspector";
 
 export type MutateType = 'Update' | 'Create';
 

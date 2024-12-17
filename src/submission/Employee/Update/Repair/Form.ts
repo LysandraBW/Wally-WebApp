@@ -1,4 +1,4 @@
-import { DB_Appointment, DB_Repair } from "@/database/Types";
+import { DB_Appointment, DB_Repair } from "@/database/interfaces";
 
 export type DataKeys = 'Repair';
 

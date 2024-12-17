@@ -1,4 +1,4 @@
-import { updatedValue } from "@/lib/Submission/Compare";
+import { updatedValue } from "@/lib/helper/compare";
 import { VehicleFormStructure } from "./Form";
 
 export interface ProcessedVehicleFormStructure {

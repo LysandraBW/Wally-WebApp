@@ -1,7 +1,7 @@
 'use client';
 import clsx from 'clsx';
 import { Input } from '../Input';
-import { WriteInputProps } from '../MutateInput';
+import { WriteInputProps } from '../../mutate_input';
 
 interface TextProps extends WriteInputProps {
     type: string;
@@ -26,7 +26,7 @@ export default function Text(props: TextProps) {
                 <input
                     name={props.name}
                     type={props.type}
-                    value={props.value}
+                    value={props.selectedValues}
                     onBlur={blurHandler}
                     onChange={changeHandler}
                     className={clsx(

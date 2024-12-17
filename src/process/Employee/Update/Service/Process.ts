@@ -1,4 +1,4 @@
-import { DB_Appointment, DB_AppointmentService } from "@/database/Types";
+import { DB_Appointment, DB_AppointmentService } from "@/database/interfaces";
 import { useEffect, useState } from "react";
 import { InitialLoaded, LoadedType } from "./Load";
 import { InitialServicesForm, ServicesFormStructure } from "@/submission/Employee/Update/Service/Form";

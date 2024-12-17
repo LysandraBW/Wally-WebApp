@@ -1,7 +1,7 @@
-import { updatedValue } from "@/lib/Submission/Compare";
-import { MathSet } from "@/lib/Submission/MathSet";
+import { updatedValue } from "@/lib/helper/compare";
+import { MathSet } from "@/lib/submission/math_set";
 import { PaymentFormStructure } from "./Form";
-import { toInteger } from "@/lib/Convert/Convert";
+import { toInteger } from "@/lib/Convert/convert";
 
 export interface ProcessedPaymentFormStructure {
     AppointmentID: string;

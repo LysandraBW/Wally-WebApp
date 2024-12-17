@@ -1,4 +1,4 @@
-import { DB_Appointment, DB_Diagnosis } from "@/database/Types";
+import { DB_Appointment, DB_Diagnosis } from "@/database/interfaces";
 
 export type DataKeys = 'Code' | 'Message';
 

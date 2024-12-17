@@ -1,4 +1,4 @@
-import { DMSans, Inter } from "@/public/Font/Font";
+import { Inter } from "@/public/font/Font";
 import clsx from "clsx";
 
 interface ButtonProps {
@@ -14,6 +14,8 @@ export default function Button(props: ButtonProps) {
                 Inter.className,
                 'dark-gradient text-white'
             )}
-        >{props.label}</button>
+        >
+            {props.label}
+        </button>
     )
 }

@@ -1,10 +1,10 @@
 'use client';
-import Error from '@/views/Employee/Login/Error';
-import MinimalNav from '@/components/Nav/Minimal/Minimal';
-import Header from '@/views/Employee/Login/Header/Header';
-import useLogin from '@/process/Employee/Login/Process';
-import LoginForm from '@/views/Employee/Login/Form/LoginForm';
-import Image from '@/views/Employee/Login/Image/Image';
+import Error from '@/pages/Employee/Login/Error';
+import MinimalNav from '@/components/nav/Minimal/Minimal';
+import Header from '@/pages/Employee/Login/Header';
+import useLogin from '@/process/Employee/Login/useLogin';
+import LoginForm from '@/pages/Employee/Login/LoginForm';
+import Image from '@/pages/Employee/Login/Image';
 
 export default function Login() {
     const login = useLogin();

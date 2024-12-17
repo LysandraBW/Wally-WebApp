@@ -1,5 +1,5 @@
-import ChevronDown from "@/components/Icon/Chevron/Down";
-import { getFilteredValues } from "@/lib/Input/Filter";
+import ChevronDown from "@/components/Icon/chevron/Down";
+import { getFilteredValues } from "@/lib/input/filter";
 import clsx from "clsx";
 
 interface OpenToggleProps<T> {

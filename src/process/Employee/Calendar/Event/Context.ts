@@ -1,5 +1,5 @@
-import { DB_GeneralEmployee } from "@/database/Types";
-import { PageContextStructure } from "../Context";
+import { DB_GeneralEmployee } from "@/database/interfaces";
+import { PageContextStructure } from "../../../../context/event";
 import { UpdateEvent } from "@/submission/Employee/Calendar/Form";
 
 export interface EventContextStructure {

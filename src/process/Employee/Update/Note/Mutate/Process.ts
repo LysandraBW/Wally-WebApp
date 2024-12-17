@@ -1,12 +1,12 @@
 import { DataKeys, UpdateNote } from "@/submission/Employee/Update/Note/Form";
-import { CreateNoteProps } from "@/views/Employee/Dashboard/Update/Form/NoteForm/CreateNote";
-import { UpdateNoteProps } from "@/views/Employee/Dashboard/Update/Form/NoteForm/UpdateNote";
+import { CreateNoteProps } from "@/pages/Employee/Dashboard/Update/Form/NoteForm/CreateNote";
+import { UpdateNoteProps } from "@/pages/Employee/Dashboard/Update/Form/NoteForm/UpdateNote";
 import { useContext, useEffect, useState } from "react";
 import { InitialState, StateType } from "./State";
 import { every, hasLength, validBit } from "@/validation/Validation";
-import { Regexes } from "@/validation/Regexes";
-import { MessageType } from "@/lib/Inspector/Inspector/Inspect/Inspector";
-import { PageContext } from "@/app/Employee/Dashboard/Update/page";
+import { Regexes } from "@/lib/inspector/regexes";
+import { MessageType } from "@/lib/inspector/Inspector/Inspect/Inspector";
+import { PageContext } from "@/app/employee/Dashboard/update/page";
 
 export interface UpdateNoteFormProps extends UpdateNoteProps {
     mutateType: 'Update';

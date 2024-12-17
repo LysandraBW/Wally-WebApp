@@ -1,4 +1,4 @@
-import { DMSans, Rubik, Inter, Lato, Mukta, Nunito_Sans } from "@/public/Font/Font";
+import { DMSans, Rubik, Inter, Lato, Mukta, Nunito_Sans } from "@/public/font/Font";
 import "./globals.css";
 import clsx from "clsx";
 

@@ -3,7 +3,7 @@ import {
     DB_AppointmentLabels, 
     DB_Employee, 
     DB_GeneralEmployee 
-} from "@/database/Types";
+} from "@/database/interfaces";
 
 export interface PageContextStructure {
     Employee: {

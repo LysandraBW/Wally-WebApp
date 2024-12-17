@@ -1,10 +1,10 @@
 'use server';
-import { getSessionID } from "@/lib/Storage/Storage";
+import { getSessionID } from "@/utils/cookie";
 import { NoteFormStructure } from "./Form";
-import { DeleteNote, DeleteNoteAttachment, InsertNote, InsertNoteAttachment, InsertNoteSharee, UpdateNote } from "@/database/Export";
-import DeleteNoteSharee from "@/database/Appointment/SharedNote/Delete";
+import { DeleteNote, DeleteNoteAttachment, InsertNote, InsertNoteAttachment, InsertNoteSharee, UpdateNote } from "@/db/export";
+import DeleteNoteSharee from "@/db/appointment/shared-note/delete";
 import { ProcessedNoteFormStructure, processNoteForm } from "./Process";
-import { generateURL, uploadFile } from "@/lib/Files/Upload";
+import { generateURL, uploadFile } from "@/utils/upload";
 
 async function uploadAttachments(data: {
     SessionID: string,

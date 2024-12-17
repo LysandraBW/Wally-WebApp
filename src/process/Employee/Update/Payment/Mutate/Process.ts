@@ -1,10 +1,10 @@
 import { DataKeys, UpdatePayment } from "@/submission/Employee/Update/Payment/Form";
-import { CreatePaymentProps } from "@/views/Employee/Dashboard/Update/Form/PaymentForm/CreatePayment";
-import { UpdatePaymentProps } from "@/views/Employee/Dashboard/Update/Form/PaymentForm/UpdatePayment";
+import { CreatePaymentProps } from "@/pages/Employee/Dashboard/Update/Form/PaymentForm/CreatePayment";
+import { UpdatePaymentProps } from "@/pages/Employee/Dashboard/Update/Form/PaymentForm/UpdatePayment";
 import { useEffect, useState } from "react";
 import { InitialState, StateType } from "./State";
 import { hasLength } from "@/validation/Validation";
-import { MessageType } from "@/lib/Inspector/Inspector/Inspect/Inspector";
+import { MessageType } from "@/lib/inspector/Inspector/Inspect/Inspector";
 
 export type MutateType = 'Update' | 'Create';
 

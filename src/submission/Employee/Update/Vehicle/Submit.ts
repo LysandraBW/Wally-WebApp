@@ -1,7 +1,7 @@
-import { getSessionID } from "@/lib/Storage/Storage";
+import { getSessionID } from "@/utils/cookie";
 import { processVehicleForm } from "./Process";
 import { VehicleFormStructure } from "./Form";
-import { UpdateVehicle } from "@/database/Export";
+import { UpdateVehicle } from "@/db/export";
 
 export async function submitVehicleForm(reference: VehicleFormStructure, current: VehicleFormStructure): Promise<boolean> {
     console.log(reference, current);

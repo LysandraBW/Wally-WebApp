@@ -1,8 +1,8 @@
 "use client";
-import LookupForm from "@/views/Customer/Lookup/LookupForm";
-import Nav from "@/components/Nav/Default/Nav";
-import Image from "@/views/Customer/Lookup/Image/Image";
-import Header from "@/views/Customer/Lookup/Header/Header";
+import LookupForm from "@/pages/Customer/Lookup/LookupForm";
+import Nav from "@/layout/Nav";
+import Image from "@/pages/Customer/Lookup/Image";
+import Header from "@/pages/Customer/Lookup/Header";
 import useLookup from "@/process/Customer/Lookup/Process";
 import clsx from "clsx";
 

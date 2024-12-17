@@ -1,7 +1,7 @@
-import { getSessionID } from "@/lib/Storage/Storage";
+import { getSessionID } from "@/utils/cookie";
 import { GeneralFormStructure } from "./Form";
 import { ProcessedGeneralFormStructure, processGeneralForm } from "./Process";
-import { UpdateCustomer, UpdateDate, UpdateStatus } from "@/database/Export";
+import { UpdateCustomer, UpdateDate, UpdateStatus } from "@/db/export";
 
 export async function submitGeneralForm(reference: GeneralFormStructure, current: GeneralFormStructure): Promise<boolean> {
     const processedForm: ProcessedGeneralFormStructure = await processGeneralForm(reference, current);

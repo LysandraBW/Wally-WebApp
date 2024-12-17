@@ -1,5 +1,5 @@
-import { DB_Appointment } from "@/database/Types";
-import { toWebDateTime } from "@/lib/Convert/Convert";
+import { DB_Appointment } from "@/database/interfaces";
+import { toWebDateTime } from "@/lib/Convert/convert";
 
 export type DataKeys = 'FName' | 'LName' | 'Email' | 'Phone' | 'StartDate' | 'EndDate' | 'StatusID';
 

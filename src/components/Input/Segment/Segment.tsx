@@ -1,9 +1,9 @@
 "use client";
 import { Input } from "../Input";
-import { WriteInputProps } from '../MutateInput';
+import { WriteInputProps } from '../mutate_input';
 
 interface SegmentProps<T> extends WriteInputProps {
-    value: T;
+    selectedValues: T;
     values: Array<[T, string]>;
 }
 
@@ -19,7 +19,7 @@ export default function Segment(props: SegmentProps<any>) {
                             onClick={() => {
                                 props.onChange && props.onChange(props.name, value);
                             }}>
-                            {value === props.value ? label.toUpperCase() : label.toLowerCase()}
+                            {value === props.selectedValues ? label.toUpperCase() : label.toLowerCase()}
                         </div>
                     ))}
                 </>

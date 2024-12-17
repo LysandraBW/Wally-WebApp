@@ -1,5 +1,5 @@
-import { DB_Appointment } from "@/database/Types";
-import { toString } from "@/lib/Convert/Convert";
+import { DB_Appointment } from "@/database/interfaces";
+import { toString } from "@/lib/Convert/convert";
 
 export type DataKeys = 'Payment' | 'PaymentDate' | 'Name' | 'Type' | 'CCN' | 'EXP';
 

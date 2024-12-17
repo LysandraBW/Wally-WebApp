@@ -1,12 +1,12 @@
-import { PageContext } from "@/app/Employee/Dashboard/Calendar/page";
+import { PageContext } from "@/app/employee/Dashboard/calendar/page";
 import { DataKeys, UpdateEvent } from "@/submission/Employee/Calendar/Form";
-import { CreateEventProps } from "@/views/Employee/Dashboard/Calendar/EventManager/CreateEvent";
-import { UpdateEventProps } from "@/views/Employee/Dashboard/Calendar/EventManager/UpdateEvent";
+import { CreateEventProps } from "@/pages/Employee/Dashboard/Calendar/EventManager/CreateEvent";
+import { UpdateEventProps } from "@/pages/Employee/Dashboard/Calendar/EventManager/UpdateEvent";
 import { useContext, useEffect, useState } from "react";
 import { InitialState, StateType } from "./State";
 import { every, hasLength, validDate } from "@/validation/Validation";
-import { Regexes } from "@/validation/Regexes";
-import { MessageType } from "@/lib/Inspector/Inspector/Inspect/Inspector";
+import { Regexes } from "@/lib/inspector/regexes";
+import { MessageType } from "@/lib/inspector/Inspector/Inspect/Inspector";
 
 export interface UpdateEventFormProps extends UpdateEventProps {
     mutateType: 'Update';

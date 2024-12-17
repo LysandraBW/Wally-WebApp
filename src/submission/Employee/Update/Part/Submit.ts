@@ -1,7 +1,7 @@
-import { getSessionID } from "@/lib/Storage/Storage";
+import { getSessionID } from "@/utils/cookie";
 import { PartsFormStructure } from "./Form";
 import { processPartsForm } from "./Process";
-import { DeletePart, InsertPart, UpdatePart } from "@/database/Export";
+import { DeletePart, InsertPart, UpdatePart } from "@/db/export";
 
 export async function submitPartsForm(reference: PartsFormStructure, updated: PartsFormStructure): Promise<boolean> {
     const SessionID = await getSessionID();

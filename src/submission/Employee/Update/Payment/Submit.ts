@@ -1,8 +1,8 @@
-import { getSessionID } from "@/lib/Storage/Storage";
+import { getSessionID } from "@/utils/cookie";
 import { PaymentFormStructure } from "./Form";
 import { ProcessedPaymentFormStructure, processPaymentForm } from "./Process";
-import { DeletePayment, InsertCreditCard, InsertPayment, UpdateCost } from "@/database/Export";
-import { toFloat } from "@/lib/Convert/Convert";
+import { DeletePayment, InsertCreditCard, InsertPayment, UpdateCost } from "@/db/export";
+import { toFloat } from "@/lib/Convert/convert";
 
 export async function submitPaymentForm(reference: PaymentFormStructure, current: PaymentFormStructure): Promise<boolean> {
     const SessionID = await getSessionID();

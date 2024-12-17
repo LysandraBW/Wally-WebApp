@@ -1,4 +1,4 @@
-import { DB_Event } from "@/database/Types";
+import { DB_Event } from "@/database/interfaces";
 
 export type DataKeys = 'Name' | 'Summary' | 'UpdatedDate' | 'Sharees';
 

@@ -1,4 +1,4 @@
-import { DB_GeneralEmployee } from "@/database/Types";
+import { DB_GeneralEmployee } from "@/database/interfaces";
 import { PageContextStructure } from "../Context";
 import { UpdateNote } from "@/submission/Employee/Update/Note/Form";
 

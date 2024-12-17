@@ -1,4 +1,4 @@
-import { loadMakes, loadModelYears } from "@/lib/Vehicle/Load";
+import { loadMakes, loadModelYears } from "@/lib/vehicle/load";
 
 export type LoadedKeys = 'Makes' | 'Models' | 'ModelYears' | 'Services';
 

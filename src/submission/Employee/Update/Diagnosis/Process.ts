@@ -1,5 +1,5 @@
-import { MathSet } from "@/lib/Submission/MathSet";
-import { sameObject, updatedValue } from "@/lib/Submission/Compare";
+import { MathSet } from "@/lib/submission/math_set";
+import { sameObject, updatedValue } from "@/lib/helper/compare";
 import { DiagnosesFormStructure } from "./Form";
 
 export interface ProcessedDiagnosesFormStructure {

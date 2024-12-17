@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
-import { DefaultPageContext } from "./Context";
+import { DefaultPageContext } from "../../../context/event";
 import { DefaultController } from "./Controller";
 import { EventsFormStructure, UpdateEvent } from "@/submission/Employee/Calendar/Form";
-import { GetAllEmployees, GetEmployee, GetEvents } from "@/database/Export";
+import { GetAllEmployees, GetEmployee, GetEvents } from "@/db/export";
 import { InitializeEventsForm } from "@/submission/Employee/Calendar/Prepare";
 import { submitEventsForm } from "@/submission/Employee/Calendar/Submit";
-import { getSessionID } from "@/lib/Storage/Storage";
-import { goToEmployeeLogin } from "@/lib/Navigation/Navigation";
+import { getSessionID } from "@/utils/cookie";
+import { goToEmployeeLogin } from "@/lib/navigation/navigation";
 
 let ran = false;
 

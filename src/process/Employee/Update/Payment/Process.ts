@@ -1,5 +1,5 @@
-import { DefaultInputState } from "@/components/Input/MutateInput";
-import { DB_Appointment } from "@/database/Types";
+import { DefaultInputState } from "@/components/input/mutateInput";
+import { DB_Appointment } from "@/database/interfaces";
 import { InitialPaymentForm, PaymentFormStructure, UpdatePayment } from "@/submission/Employee/Update/Payment/Form";
 import { submitPaymentForm } from "@/submission/Employee/Update/Payment/Submit";
 import { validNumber } from "@/validation/Validation";

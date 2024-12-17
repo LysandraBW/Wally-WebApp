@@ -1,0 +1,20 @@
+import Message, { MessageType } from "@/components/modal/Message";
+
+interface ErrorProps {
+    close: () => void;
+}
+
+export default function Error(props: ErrorProps) {
+    return (
+        <Message
+            head={(
+                <>
+                    <div><b>No Matching Login</b></div>
+                    <div>We could not find a login with your username or password. Please try again.</div>
+                </>
+            )}
+            messageType={MessageType.Error}
+            onClose={() => props.close()}
+        />
+    )
+}

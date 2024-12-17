@@ -1,9 +1,9 @@
-import { DB_Appointment } from "@/database/Types";
+import { DB_Appointment } from "@/database/interfaces";
 import { useEffect, useState } from "react";
 import { InitialState, StateType } from "./State";
-import loadStatuses, { Statuses } from "@/lib/Status/Load";
+import loadStatuses, { Statuses } from "@/lib/database/Load";
 import { DataKeys, GeneralFormStructure, InitialGeneralForm } from "@/submission/Employee/Update/General/Form";
-import { MessageType } from "@/lib/Inspector/Inspector/Inspect/Inspector";
+import { MessageType } from "@/lib/inspector/Inspector/Inspect/Inspector";
 import { inValues, validDate, validEmail, validName, validPhone } from "@/validation/Validation";
 import { submitGeneralForm } from "@/submission/Employee/Update/General/Submit";
 

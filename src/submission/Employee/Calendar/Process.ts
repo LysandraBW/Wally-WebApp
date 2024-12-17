@@ -1,6 +1,6 @@
-import { toDatabaseDateTime } from "@/lib/Convert/Convert";
-import { sameObject, updatedValue } from "@/lib/Submission/Compare";
-import { MathSet } from "@/lib/Submission/MathSet";
+import { toDatabaseDateTime } from "@/lib/Convert/convert";
+import { sameObject, updatedValue } from "@/lib/helper/compare";
+import { MathSet } from "@/lib/submission/math_set";
 import { EventsFormStructure } from "./Form";
 
 export interface ProcessedEventsFormStructure {

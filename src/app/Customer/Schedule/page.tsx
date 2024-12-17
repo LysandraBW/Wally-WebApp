@@ -1,11 +1,11 @@
 'use client';
-import Nav from '@/components/Nav/Default/Nav';
-import Tracker from '@/components/Form/Tracker/Tracker';
+import Nav from '@/layout/Nav';
+import MultiPageFormProps from '@/components/form/tracker/MultiPageForm';
 import ContactForm from '@/views/Customer/Schedule/ContactForm';
 import VehicleForm from '@/views/Customer/Schedule/VehicleForm';
 import ServiceForm from '@/views/Customer/Schedule/ServiceForm';
-import Header from '@/views/Customer/Schedule/Header/Header';
-import Image from '@/views/Customer/Schedule/Image/Image';
+import Header from '@/pages/Customer/Schedule/Header';
+import Image from '@/pages/Customer/Schedule/Image';
 import useSchedule from '@/process/Customer/Schedule/Process';
 
 export default function Schedule() {
@@ -21,7 +21,7 @@ export default function Schedule() {
                 <div className='px-32 py-20 flex flex-col gap-y-[40px]'>
                     <Header/>
                     {!!schedule.data && !!schedule.state && !!schedule.loaded &&
-                        <Tracker
+                        <MultiPageFormProps
                             forms={[
                                 {
                                     form: (

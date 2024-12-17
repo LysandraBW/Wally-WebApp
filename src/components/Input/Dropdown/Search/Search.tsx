@@ -1,13 +1,13 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { WriteInputProps } from '../../MutateInput';
-import { DropdownFrame } from '../../Dropdown/Frame';
+import { WriteInputProps } from '../../mutate_input';
+import { DropdownFrame } from '../DropdownFrame';
 import CloseToggle from './CloseToggle';
 import OpenToggle from './OpenToggle';
-import { getFilteredValues } from '@/lib/Input/Filter';
+import { getFilteredValues } from '@/lib/input/filter';
 
 export interface SearchProps<T> extends WriteInputProps {
-    value: Array<T>;
+    selectedValues: Array<T>;
     values: Array<[T, string]>;
     defaultLabel: string;
     multiple?: boolean;
@@ -23,7 +23,7 @@ export default function Search(props: SearchProps<any>) {
         setFiltered(getFilteredValues({
             filter: '',
             size: props.size,
-            value: props.value,
+            value: props.selectedValues,
             values: props.values
         }));
     }, [open]);
@@ -40,7 +40,7 @@ export default function Search(props: SearchProps<any>) {
             label={props.label}
             defaultLabel={props.defaultLabel}
             state={props.state}
-            value={props.value}
+            selectedValues={props.selectedValues}
             values={filtered}
             open={open}
             toggleDropdown={setOpen}
@@ -54,7 +54,7 @@ export default function Search(props: SearchProps<any>) {
                     open={open}
                     closeToggle={() => setOpen(false)}
                     size={props.size}  
-                    value={props.value}
+                    value={props.selectedValues}
                     values={props.values}
                     setFilteredList={(value) => setFiltered(value)}
                 />
@@ -63,7 +63,7 @@ export default function Search(props: SearchProps<any>) {
                 <CloseToggle
                     open={open}
                     openToggle={() => setOpen(true)}
-                    value={props.value}
+                    value={props.selectedValues}
                     values={props.values}
                     defaultLabel={props.defaultLabel}
                     disabled={props.disabled}
