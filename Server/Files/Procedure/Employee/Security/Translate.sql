@@ -1,0 +1,32 @@
+USE WALTRONICS;
+GO
+
+DROP PROCEDURE Employee.TranslateSessionID;
+GO
+
+CREATE PROCEDURE Employee.TranslateSessionID (
+	@SessionID 		CHAR(36),
+	@EmployeeID		UNIQUEIDENTIFIER OUTPUT
+)
+AS
+BEGIN
+	SET NOCOUNT ON;
+	SET XACT_ABORT ON;
+	BEGIN TRANSACTION;
+
+	DECLARE @_EmployeeID UNIQUEIDENTIFIER = (
+		SELECT	EmployeeID
+		FROM	Employee.Session
+		WHERE	SessionID = @SessionID
+	);
+
+	IF (@_EmployeeID IS NULL)
+	BEGIN
+		;THROW 50000, 'UNAUTHENTICATED SESSION', 1;
+	END;
+
+	SELECT @EmployeeID = @_EmployeeID;
+
+	COMMIT TRANSACTION;
+END;
+GO

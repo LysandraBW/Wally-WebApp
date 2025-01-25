@@ -1,0 +1,12 @@
+USE WALTRONICS;
+GO
+
+DROP TABLE Employee.Login;
+
+CREATE TABLE Employee.Login (
+	EmployeeID	UNIQUEIDENTIFIER	NOT NULL,
+	Username	VARCHAR(50)			NOT NULL UNIQUE,
+	Password	VARCHAR(255)		NOT NULL
+	PRIMARY KEY (EmployeeID),
+	FOREIGN KEY (EmployeeID) REFERENCES	Employee.Employee (EmployeeID) ON DELETE CASCADE
+);

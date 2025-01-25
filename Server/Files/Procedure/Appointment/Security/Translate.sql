@@ -1,0 +1,31 @@
+USE WALTRONICS;
+GO
+
+DROP PROCEDURE Appointment.TranslateSessionID;
+GO
+
+CREATE PROCEDURE Appointment.TranslateSessionID (
+	@SessionID		CHAR(36),
+	@AppointmentID	UNIQUEIDENTIFIER OUTPUT
+)
+AS
+BEGIN
+	SET NOCOUNT ON;
+	SET XACT_ABORT ON;
+	BEGIN TRANSACTION;
+
+	DECLARE @_AppointmentID UNIQUEIDENTIFIER = (
+		SELECT	AppointmentID
+		FROM	Appointment.Session
+		WHERE	SessionID = @SessionID
+	);
+
+	IF (@_AppointmentID IS NULL)
+	BEGIN
+		;THROW 50000, 'UNAUTHENTICATED SESSION', 1;
+	END;
+
+	SELECT @AppointmentID = @_AppointmentID;
+	COMMIT TRANSACTION;
+END;
+GO

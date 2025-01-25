@@ -1,0 +1,12 @@
+USE WALTRONICS;
+GO
+
+DROP TABLE Appointment.Session;
+
+CREATE TABLE Appointment.Session (
+	AppointmentID UNIQUEIDENTIFIER	NOT NULL,
+	SessionID	CHAR(36)			NOT NULL UNIQUE,
+	LoginDate	DATETIME			NOT NULL DEFAULT GETDATE(),
+	PRIMARY KEY (AppointmentID, SessionID),
+	FOREIGN KEY (AppointmentID) REFERENCES Appointment.ID (AppointmentID) ON DELETE CASCADE
+);
