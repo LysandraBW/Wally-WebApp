@@ -27,8 +27,6 @@ export default function MultipleSearch(props: SelectProps) {
     }, [open, search]);
 
     const openList = () => {
-        if (open || props.disabled)
-            return;
         setOpen(true);
     }
 

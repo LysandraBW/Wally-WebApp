@@ -59,9 +59,11 @@ export default function useForm(fName: string, startForm: Form = {data: {}, test
             return;
         let state: InputState = [true, ""];
         const output = form.test.safeParse({[name]: data});
+        // console.log(output);
         if (!output.success)
             state = processTestResults(output.error.issues)[name];
         form.data[name] = {data, state};
+        // console.log(form.data);
         setForceUpdate(f => f + 1);
     }
 

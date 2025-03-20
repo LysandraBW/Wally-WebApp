@@ -1,3 +1,4 @@
+import useInterval from "@/features/Alert/useInterval";
 import { cubicBezier, stagger } from "motion";
 import { useAnimate, useAnimation, motion, easeInOut } from "motion/react";
 import { useEffect, useState } from "react";
@@ -91,6 +92,10 @@ export default function Loop2(props: LoopProps) {
     useEffect(() => {
         animation();
     }, []);
+
+    // useInterval(() => {
+    //     animation();
+    // }, (1 / 0.001) * 0.01 * 1000)
 
     return (
         <motion.div

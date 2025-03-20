@@ -9,6 +9,7 @@ import { UseForm } from "@/features/Form/useForm/useForm";
 import { Options } from "@/features/Form/DEF";
 import getValues from "@/features/Form/helpers/getValues";
 import TextField from "@/component/Form/Text/TextField";
+import MultipleSearch from "@/component/Form/Select/Search/MultipleSearch";
 
 interface VehicleFormProps {
     form: UseForm;
@@ -88,7 +89,7 @@ export default function VehicleForm(props: VehicleFormProps) {
                 state={props.form.getInput("vin").state}
                 onChange={updateValue}
             />
-            <Search
+            <MultipleSearch
                 name="modelYear"
                 label="Model Year"
                 toggleLabel="Select Model Year"

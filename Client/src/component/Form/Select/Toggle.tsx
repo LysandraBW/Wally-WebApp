@@ -11,7 +11,8 @@ interface ToggleProps {
 
 export default function Toggle(props: ToggleProps) {
     return (
-        <button 
+        <div 
+            // tabIndex={0}
             className={clsx(
                 "field grid grid-cols-[auto_13px]",
                 "gap-3 justify-between items-center p-1 pr-3",
@@ -24,6 +25,6 @@ export default function Toggle(props: ToggleProps) {
             <ExpandIcon
                 stroke="#1F2937"
             />
-        </button>
+        </div>
     )
 }

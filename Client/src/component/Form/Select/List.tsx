@@ -14,11 +14,15 @@ interface ListProps extends Pick<ReadWriteArrayInputProps, "values"> {
 
 export default function List(props: ListProps) {
     return (
-        <ul className="px-0 absolute top-[calc(100%+0.25rem)] z-40 field bg-white max-h-[200px] overflow-y-scroll w-max">
+        <ul 
+            className="px-0 relative top-[calc(100%+0.25rem)] field bg-white max-h-[200px] overflow-y-scroll w-full scroll-hide"
+        >
             {props.options.map(([value, label, node], i) => (
                 <li
                     key={i}
-                    onClick={() => props.selectValue(value)}
+                    onClick={(event) => {
+                        props.selectValue(value);
+                    }}
                 >
                     <ListElement
                         multiple={props.multiple}
@@ -34,10 +38,14 @@ export default function List(props: ListProps) {
                         {node && node}
                         {!node &&
                             <Fragment>
-                                <span className={clsx(
-                                    "text-gray-600",
-                                    props.values.includes(value) && "font-medium text-gray-950"
-                                )}>{label}</span>
+                                <span 
+                                    className={clsx(
+                                        "text-gray-600",
+                                        props.values.includes(value) && "font-medium text-gray-950"
+                                    )}
+                                >
+                                    {label}
+                                </span>
                             </Fragment>
                         }
                         {!props.multiple && props.values.includes(value) &&

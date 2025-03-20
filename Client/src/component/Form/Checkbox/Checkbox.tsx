@@ -9,8 +9,9 @@ export interface CheckboxProps extends ReadWriteInputProps {
 
 export default function Checkbox(props: CheckboxProps) {
     const onClick = (event: any) => {
-        event.stopPropagation(); 
-        props.onChange(props.name, props.value)
+        // event.preventDefault();
+        event.stopPropagation();
+        props.onChange(props.name, props.value);
     }
 
     return (

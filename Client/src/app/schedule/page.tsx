@@ -153,8 +153,8 @@ export default function Page() {
                             onSubmit={(e) => e.preventDefault()}
                             className="flex flex-col py-4 gap-8 w-full"
                         >
-                            {step === 0 && <ContactForm form={contactForm}/>}
-                            {step === 1 && <VehicleForm form={vehicleForm}/>}
+                            {step === 1 && <ContactForm form={contactForm}/>}
+                            {step === 0 && <VehicleForm form={vehicleForm}/>}
                             {step === 2 && <ServiceForm form={serviceForm}/>}
                             <div className="flex gap-4">
                                 {step !== 0 &&

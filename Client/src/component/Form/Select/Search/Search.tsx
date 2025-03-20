@@ -1,5 +1,5 @@
 "use client";
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useCallback, useEffect, useState } from "react";
 import { SelectProps } from "../DEF";
 import { OptionMap, Value } from "@/features/Form/DEF";
 import getValuesToLabels from "@/features/Form/helpers/getValuesToLabels";
@@ -8,17 +8,20 @@ import Toggle from "../Toggle";
 import TextField from "../../Text/TextField";
 import List from "../List";
 import { Field } from "../../Field";
+import clsx from "clsx";
 
 export default function Search(props: SelectProps) {
     const [open, setOpen] = useState(false);
     const [search, setSearch] = useState("");
     const [matched, setMatched] = useState(props.options.slice(0, 10));
-    const [valueToLabel, setValueToLabel] = useState<OptionMap>({});
 
     useEffect(() => {
-        setValueToLabel(getValuesToLabels(props.options));
-    }, [props.options]);
-
+        if (props.values[0]) {
+            console.log("Close");
+            setOpen(false);
+        }
+    }, [props.values]);
+    
     useEffect(() => {
         const matched = searchLabels(search, props.options);
         setMatched(matched);
@@ -30,16 +33,13 @@ export default function Search(props: SelectProps) {
         setOpen(!open);
     }
 
-    const closeList = (event: any): void => {
-        if (event.currentTarget.contains(event.relatedTarget))
-            return;
+    const closeList = (): void => {
         setOpen(false);
         setSearch("");
     }
 
     const selectValue = (value: Value) => {
         props.onChange(props.name, [value]);
-        setOpen(false);
     }
     
     return (
@@ -49,35 +49,58 @@ export default function Search(props: SelectProps) {
             input={
                 <div
                     tabIndex={0}
-                    onBlur={closeList}
-                    className="flex flex-col gap-y-1 w-full relative"
+                    onBlur={(event) => {
+                        if (event.currentTarget.contains(event.relatedTarget))
+                            return;
+                        console.log("Close");
+                        setOpen(false);
+                    }}
+                    className="h-10"
                 >
-                    {!open &&
-                        <div onClick={openList}>
-                            <Toggle
-                                open={open}
-                                multiple={false}
-                                label={<p className="px-2 py-1">{valueToLabel[props.values[0]] || props.toggleLabel}</p>}
-                            />
-                        </div>
-                    }
-                    {open &&
-                        <Fragment>
-                            <TextField
-                                type="text"
-                                name="search"
-                                value={search}
-                                placeholder="Search"
-                                onChange={(name: string, value: Value) => setSearch(value)}
-                            />
-                            <List
-                                values={props.values}
-                                options={matched}
-                                multiple={false}
-                                selectValue={selectValue}
-                            />
-                        </Fragment>
-                    }
+                    <div
+                        className={clsx(   
+                            open && "hidden",       
+                            "field grid grid-cols-[auto_13px] h-full shadow-sm",
+                            "gap-3 justify-between items-center pr-3"
+                        )}
+                        onMouseDown={(e) => {
+                            e.preventDefault();
+                            console.log("Open");
+                            setOpen(true);
+                        }}
+                    >
+                        {props.values[0] ? props.values[0] : props.toggleLabel}
+                    </div>
+                
+                {open &&
+                    <>
+                        <input 
+                            className="field" 
+                            value={search} 
+                            placeholder="Search" 
+                            onChange={(event) => {
+                                setSearch(event.target.value);
+                            }}
+                        />
+                        <ul className="px-0 relative top-[0.25rem] field bg-white max-h-[200px] overflow-y-scroll w-full scroll-hide">
+                            {matched.map(([value, label], i) => (
+                                <li
+                                    key={i}
+                                    onClick={(event) => {
+                                        selectValue(value);
+                                    }}
+                                    className={clsx(
+                                        "px-3 py-1.5 flex justify-between items-center gap-2",
+                                        "hover:bg-gray-100 hover:cursor-pointer",
+                                    )}
+                                >
+                                    {label}
+                                    
+                                </li>
+                            ))}
+                        </ul>
+                    </>
+                }
                 </div>
             }
         />
