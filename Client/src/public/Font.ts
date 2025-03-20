@@ -1,4 +1,4 @@
-import { DM_Sans as _DM_Sans, Inter as _Inter, Rubik as _Rubik, Be_Vietnam_Pro, Hanken_Grotesk, Host_Grotesk, Libre_Franklin, Manrope, Poppins, Schibsted_Grotesk, Space_Grotesk} from "next/font/google";
+import { DM_Sans as _DM_Sans, Inter as _Inter, Rubik as _Rubik, Be_Vietnam_Pro, Hanken_Grotesk, Host_Grotesk, IBM_Plex_Sans, Instrument_Sans, Libre_Franklin, Manrope, Poppins, Schibsted_Grotesk, Space_Grotesk} from "next/font/google";
 import localFont from 'next/font/local';
 import { Plus_Jakarta_Sans } from "next/font/google";
 
@@ -11,6 +11,16 @@ export const Inter = _Inter({
     subsets: ["latin"],
     weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900']
 });
+
+export const Instrumental = Instrument_Sans({
+  subsets: ["latin"],
+  weight: ['400', '500', '600', '700']
+});
+
+export const IBM = IBM_Plex_Sans({
+  subsets: ["latin"],
+  weight: ['100', '200', '300', '400', '500', '600', '700']
+})
 
 export const Rubik = _Rubik({
     subsets: ["latin"],
