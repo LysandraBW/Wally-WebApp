@@ -89,9 +89,9 @@ export default function VehicleForm(props: VehicleFormProps) {
                 state={props.form.getInput("vin").state}
                 onChange={updateValue}
             />
-            <MultipleSearch
+            <Search
                 name="modelYear"
-                label="Model Year"
+                label="Year"
                 toggleLabel="Select Model Year"
                 state={props.form.getInput("modelYear").state}
                 values={props.form.getInput("modelYear").data}

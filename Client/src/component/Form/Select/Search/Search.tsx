@@ -61,7 +61,7 @@ export default function Search(props: SelectProps) {
                         className={clsx(   
                             open && "hidden",       
                             "field grid grid-cols-[auto_13px] h-full shadow-sm",
-                            "gap-3 justify-between items-center pr-3"
+                            "gap-3 justify-between items-center pr-3 !text-gray-400 text-[0.9rem]"
                         )}
                         onMouseDown={(e) => {
                             e.preventDefault();

@@ -5,6 +5,7 @@ import { subsetOf } from "@/lib/Zod/InputTest";
 import { T1Services } from "@/services/DB/Procedure/Pairs/T1Services";
 import { Fragment, useEffect, useState } from "react";
 import SearchServices from "./SearchServices";
+import SearchServicesSimple from "./SearchServicesSimple";
 
 interface ServiceFormProps {
     form: UseForm;
@@ -25,7 +26,7 @@ export default function ServiceForm(props: ServiceFormProps) {
     return (
         <Fragment>
             {services &&
-                <SearchServices
+                <SearchServicesSimple
                     name="services"
                     state={props.form.getInput("services").state}
                     values={props.form.getInput("services").data}

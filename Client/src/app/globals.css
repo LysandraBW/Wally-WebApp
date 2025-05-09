@@ -45,9 +45,12 @@
             py-2 px-3
             border border-gray-200
             rounded-md
-            text-03
+            text-[0.9rem]
             font-normal
-            text-gray-600;
+            text-gray-400
+            bg-white
+            shadow-sm
+            ;
     }
 
     .error .field {
@@ -206,7 +209,7 @@
             py-2 px-3
             bg-transparent
             border
-            border-gray-950
+            border-gray-200
             rounded-md
     }
 

@@ -15,7 +15,7 @@ export default function Copy(props: CopyProps) {
         <div 
             onClick={copyValue}
             className={clsx(
-                "w-min flex justify-between items-center gap-2 py-1 px-2",
+                "w-min flex justify-between items-center gap-2 py-1 px-2 shadow-sm",
                 "border border-gray-200 rounded-md hover:bg-gray-50 cursor-pointer"
             )}
         >

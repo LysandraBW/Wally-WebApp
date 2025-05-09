@@ -15,7 +15,7 @@ export function Field(props: FieldProps) {
             {/* Input Label */}
             {props.label &&
                 <span className={clsx(
-                    "text-01 text-gray-950 font-normal",
+                    " text-gray-950 font-normal",
                     "whitespace-nowrap"
                 )}>{props.label}</span>
             }

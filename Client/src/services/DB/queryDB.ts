@@ -6,6 +6,7 @@ const headers = new Headers({
 });
 
 export async function queryDB(route: string, body: Body, method: string = "POST") {
+    console.log(body);
     const URL = `${baseURL}/${route}`;
 
     let response;

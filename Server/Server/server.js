@@ -82,8 +82,10 @@ server.use(cors(corsOptions));
 const defaultRouteHandler = async (req, res, action) => {
     const input = action.test(req.body);
     console.log(input);
-    if (!input.success)
+    if (!input.success){
+        console.log(input.error);
         return res.status(400).send(INVALID_BODY);
+    }
     const output = await action.exec(input.data);
     return res.send({output});
 }

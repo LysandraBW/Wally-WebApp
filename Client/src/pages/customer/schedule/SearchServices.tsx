@@ -33,6 +33,7 @@ export default function SearchServices(props: SearchSortedProps) {
     }, [props.options]);
 
     useEffect(() => {
+        // console.log("Tab: '", tab, "'");
         if (!tab)
             return;
         const matched = searchLabels(search, props.options[tab]);
@@ -48,11 +49,11 @@ export default function SearchServices(props: SearchSortedProps) {
     }
 
     const closeList = (event: any): void => {
-        if (event.currentTarget.contains(event.relatedTarget))
-            return;
-        setTab("");
-        setSearch("");
-        setOpen(false);
+        // if (event.currentTarget.contains(event.relatedTarget))
+        //     return;
+        // setTab("");
+        // setSearch("");
+        // setOpen(false);
     }
     
     return (
@@ -61,9 +62,9 @@ export default function SearchServices(props: SearchSortedProps) {
             state={props.state}
             input={
                 <div
-                    tabIndex={0}
-                    onBlur={closeList}
-                    onClick={openList}
+                    onClick={() => {
+                        openList();
+                    }}
                 >
                     <Toggle
                         open={open}
@@ -78,20 +79,23 @@ export default function SearchServices(props: SearchSortedProps) {
                             />
                         )}
                     />
-                    {open && !tab &&
-                        <div className="relative">
-                            <List
-                                values={[tab]}
-                                multiple={false}
-                                options={tabs.map(t => [t, t])}
-                                selectValue={(value: Value) => setTab(value)}
-                            />
-                        </div>
+                    {open && tab === "" &&
+                        <List
+                            values={[tab]}
+                            multiple={false}
+                            options={tabs.map(t => [t, t])}
+                            selectValue={(value: Value) => {
+                                // console.log(value);
+                                setTab(value);
+                            }}
+                        />
                     }
-                    {open && tab &&
-                        <div className="relative">
-                            <ListWrapper>
-                                <li><Back goBack={() => setTab("")}/></li>
+                    {open && tab !== "" &&
+                        <div className="relative h-[500px] bg-red-500">
+                            <div className="px-0 top-[calc(100%+0.25rem)] z-10 field bg-white max-h-[200px] overflow-y-scroll">
+                                <div onClick={() => console.log("Hello?")}>
+                                    <Back/>
+                                </div>
                                 <li className="border-b">
                                     <InlineText
                                         name=""
@@ -103,7 +107,9 @@ export default function SearchServices(props: SearchSortedProps) {
                                 {matched.map(([value, label], i) => (
                                     <li
                                         key={i}
-                                        onClick={() => selectValue(value)}
+                                        onClick={(e) => {
+                                            selectValue(value);
+                                        }}
                                     >
                                         <ListElement
                                             multiple={true}
@@ -118,7 +124,7 @@ export default function SearchServices(props: SearchSortedProps) {
                                         </ListElement>
                                     </li>
                                 ))}
-                            </ListWrapper>
+                            </div>
                         </div>
                     }
                 </div>

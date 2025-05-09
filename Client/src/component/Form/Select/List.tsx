@@ -21,6 +21,7 @@ export default function List(props: ListProps) {
                 <li
                     key={i}
                     onClick={(event) => {
+                        event.stopPropagation();
                         props.selectValue(value);
                     }}
                 >

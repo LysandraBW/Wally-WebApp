@@ -50,7 +50,7 @@ export default function MultipleSearch(props: SelectProps) {
                     tabIndex={0}
                     onBlur={closeList}
                     onClick={openList}
-                    className="flex flex-col gap-y-1 w-full relative"
+                    className="flex flex-col gap-y-1 w-full relative min-h-10"
                 >
                     {!open &&
                         <Toggle

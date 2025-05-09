@@ -10,7 +10,7 @@ interface ResultsProps {
 
 export default function Results(props: ResultsProps) {
     return (
-        <div className="flex flex-col">
+        <div className="flex flex-col items-center">
             {props.output[0] === "" &&
                 <Fragment>
                     <Header
@@ -45,6 +45,11 @@ export default function Results(props: ResultsProps) {
                             us at Waltronics.
                         `}
                     />
+                    <p className="mt-4 w-[440px] text-center text-gray-700 text-[1rem]">We have successfully received your request. 
+                            Use the ID and email below to check on your
+                            appointment. Your appointment will be officially
+                            scheduled in 1-2 days. Thank you for trusting 
+                            us at Waltronics.</p>
                     {/* 
                     The user can click these buttons to 
                     copy their ID and email address.

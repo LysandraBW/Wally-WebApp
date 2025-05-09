@@ -14,7 +14,7 @@ export default function Toggle(props: ToggleProps) {
         <div 
             // tabIndex={0}
             className={clsx(
-                "field grid grid-cols-[auto_13px]",
+                "field grid grid-cols-[auto_13px] min-h-10",
                 "gap-3 justify-between items-center p-1 pr-3",
                 props.style
             )}
