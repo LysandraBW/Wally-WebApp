@@ -8,11 +8,6 @@ const config: Config = {
     "./features/**/*.{js,ts,jsx,tsx,mdx}",
     "./component/**/*.{js,ts,jsx,tsx,mdx}",
   ],
-  safelist: [
-    'w-[33%]',
-    'w-[66%]',
-    'w-[100%]'
-  ],
   theme: {
     extend: {  
       fontSize: {
