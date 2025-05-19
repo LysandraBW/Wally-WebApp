@@ -3,7 +3,7 @@ import LoginForm from "../../../pages/employee/login/LoginForm";
 import { useEffect, useState } from "react";
 import { setCookie } from "@/utils/cookies/setCookie";
 import { goToHome } from "@/utils/redirect/goToDashboard";
-import Header from "@/views/Header/Header";
+import Header from "@/pages/customer/schedule/Header";
 import InlineMessage, { Style } from "@/component/Alert/InlineMessage";
 import StandardNavigation from "@/views/Layout/Default/StandardNavigation";
 import clsx from "clsx";

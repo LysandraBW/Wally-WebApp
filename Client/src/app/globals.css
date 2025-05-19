@@ -46,8 +46,8 @@
             border border-gray-200
             rounded-md
             text-[0.9rem]
-            font-normal
             text-gray-600
+            font-normal
             bg-white
             shadow-sm
             tracking-wide
@@ -62,9 +62,9 @@
     .field:focus {
         @apply
             outline-none
-            border-blue-500
-            shadow-[0px_0px_0px_2px_#000000]
-            shadow-blue-100;
+            border-gray-400
+            ring-2
+            ring-gray-200
     }
 
     /* Small Pieces of Text */
@@ -88,66 +88,6 @@
     }
 
     /* Buttons  */
-    button.dark {
-        @apply
-            w-full
-            py-2 px-3
-            bg-gradient-to-b
-            from-gray-900
-            to-black
-            bg-gray-950
-            border
-            border-gray-950
-            rounded-md
-            shadow-[0px_1px_3px_0px_rgb(0_0_0_/_5%),inset_0px_1.5px_0px_0_rgb(255_255_255_/20%)]
-    }
-
-    button.dark > span {
-        @apply
-            text-white
-            whitespace-nowrap
-            font-medium
-    }
-
-    button.darkBoring {
-        @apply
-            w-full
-            py-2 px-3
-            bg-gradient-to-b
-            from-gray-900
-            to-black
-            bg-gray-950
-            border
-            border-gray-950
-            rounded-md
-            shadow-[0px_1px_3px_0px_rgb(0_0_0_/_5%)]
-    }
-
-    button.darkBoring > span {
-        @apply
-            text-white
-            whitespace-nowrap
-            font-medium
-    }
-
-    button.flat {
-        @apply
-            w-full
-            py-2 px-3
-            bg-gray-100
-            border
-            border-gray-200
-            rounded-md
-            shadow-[0px_1px_1px_0px_rgb(0_0_0_/_5%)]
-    }
-
-    button.flat > span {
-        @apply
-            text-gray-400
-            whitespace-nowrap
-            font-medium
-    }
-
     button.icon {
         @apply
             p-1
@@ -167,60 +107,4 @@
             !text-inherit
             !cursor-pointer;
     }
-
-    button.boring {
-        @apply
-            w-full
-            py-2 px-3
-            bg-white
-            border
-            border-gray-200
-            rounded-md
-            shadow-[0px_1px_1px_0px_rgb(0_0_0_/_5%)]
-    }
-
-    button.boring > span {
-        @apply
-            text-gray-400
-            whitespace-nowrap
-            font-medium
-    }
-
-    button.small > span {
-        @apply
-            !text-03;
-    }
-
-    button.boringBlack {
-        @apply
-            border-blue-600
-            bg-blue-500
-            shadow;
-    }
-
-    button.boringBlack > span {
-        @apply
-            text-04
-            text-white;
-    }
-
-    button.outlineBlack {
-        @apply
-            w-full
-            py-2 px-3
-            bg-transparent
-            border
-            border-gray-200
-            rounded-md
-    }
-
-    button.outlineBlack > span {
-        @apply
-            text-gray-950
-            whitespace-nowrap
-            font-medium
-    }
-}
-
-@layer utilties {
 }

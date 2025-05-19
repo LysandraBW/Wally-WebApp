@@ -1,11 +1,5 @@
-import List from "@/component/Form/Select/List";
-import Log from "@/component/Form/Select/Log";
-import Toggle from "@/component/Form/Select/Toggle";
 import { useEffect, useState } from "react";
 import Back from "./Back";
-import InlineText from "@/component/Form/Text/InlineText";
-import ListWrapper from "@/component/Form/Select/List/ListWrapper";
-import ListElement from "@/component/Form/Select/List/ListElement";
 import clsx from "clsx";
 import Checkbox from "@/component/Form/Checkbox/Checkbox";
 import { ReadWriteArrayInputProps } from "@/features/Form/DEF";
@@ -14,7 +8,7 @@ import getValuesToLabels from "@/features/Form/helpers/getValuesToLabels";
 import searchLabels from "@/features/Form/helpers/searchLabels";
 import toggleValue from "@/features/Form/helpers/toggleValue";
 import { Field } from "@/component/Form/Field";
-import ExpandIcon from "@/component/Icon/Expand";
+import CrossIcon from "@/component/Icon/Cross";
 
 interface SearchSortedProps extends Omit<ReadWriteArrayInputProps, "options"> {
     options: {[serviceClass: string]: Options};
@@ -49,96 +43,123 @@ export default function SearchServicesSimple(props: SearchSortedProps) {
             label={"Select Services"}
             state={props.state}
             input={
-                <div
-                    tabIndex={0}
-                    onBlur={(e) => {
-                        if (e.currentTarget.contains(e.relatedTarget))
-                            return;
-                        setOpen(false);
-                        setTab("");
-                        setSearch("");
-                    }}
-                    className="h-10 overflow-x-clip"
-                >
-                    <div 
-                        className={clsx(
-                            "field grid grid-cols-[95%_5%] min-h-10 w-full",
-                            "gap-1 justify-between items-center p-1 pr-2",
-                            props.values.length ? "pl-1" : ""
-                        )}
-                        onClick={() => setOpen(true)}
+                <div className="flex flex-col gap-2">
+                    <div
+                        tabIndex={0}
+                        onBlur={(e) => {
+                            if (e.currentTarget.contains(e.relatedTarget))
+                                return;
+                            setTab("");
+                            setSearch("");
+                            setOpen(false);
+                        }}
+                        className="h-10 overflow-x-clip"
                     >
-                        <Log
-                            values={props.values}
-                            valueToLabel={valueToLabel}
-                            deleteValue={selectValue}
-                            defaultLabel={"Select Services"}
-                        />
-                        <div className="flex justify-center items-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="black" className="size-6">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 15 12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9" />
-                            </svg>
-                        </div>
-                    </div>
-                    {open && tab === "" &&
-                        <div
-                            className="px-0 relative top-[calc(0.25rem)] field bg-white max-h-[200px] overflow-y-scroll w-full scroll-hide"
+                        {/* Dropdown Box */}
+                        <div 
+                            onClick={() => setOpen(true)}
+                            className={clsx(
+                                "field grid grid-cols-[95%_5%] min-h-10 w-full gap-1 justify-between items-center"
+                            )}
                         >
-                            {tabs.map((t, i) => (
-                                <div 
-                                    key={i} 
-                                    onClick={() => setTab(t)}
-                                    className={clsx(
-                                        "px-3 py-1.5 flex justify-between items-center gap-2",
-                                        "!justify-normal",
-                                        "hover:bg-gray-100 hover:cursor-pointer",
-                                    )}
-                                >
+                            <label className="">Click to View Services</label>
+                            <div className="flex justify-center items-center cursor-pointer rounded hover:bg-gray-50">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="black" className="size-6">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 15 12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9" />
+                                </svg>
+                            </div>
+                        </div>
+                        {/* Service Type */}
+                        {open && tab === "" &&
+                            <div
+                                className="px-0 relative z-10 top-[calc(0.25rem)] field bg-white max-h-[200px] overflow-y-scroll w-full scroll-hide shadow-lg"
+                            >
+                                {tabs.map((t, i) => (
+                                    <div 
+                                        key={i} 
+                                        onClick={() => setTab(t)}
+                                        className={clsx(
+                                            "px-3 py-1.5 flex justify-normal items-center gap-2",
+                                            "hover:bg-gray-100 hover:cursor-pointer",
+                                        )}
+                                    >
                                         {t}
-                                </div>
-                            ))}
-                        </div>
-                    }
-                    {open && tab !== "" &&
-                        <div
-                            className="px-0 relative top-[calc(0.25rem)] field bg-white max-h-[200px] overflow-y-scroll w-full"
-                        >
-                            <div onClick={() => setTab("")}>
-                                <Back/>
+                                    </div>
+                                ))}
                             </div>
-                            <div className="border-b">
-                                <input
-                                    name={props.name}
-                                    value={search}
-                                    onChange={(e: any) => setSearch(e.target.value)}
-                                    placeholder={`Search ${tab}`}
-                                    className={clsx(
-                                        "field !shadow-none !rounded-none",
-                                        "!border-none !outline-none"
-                                    )}
-                                />
-                            </div>
-                            {matched.map((m, i) => (
-                                <div 
-                                    key={i} 
-                                    onClick={() => selectValue(m[0])}
-                                    className={clsx(
-                                        "px-3 py-1.5 flex justify-between items-center gap-2",
-                                        "!justify-normal",
-                                        "hover:bg-gray-100 hover:cursor-pointer",
-                                    )}
-                                >
-                                    <Checkbox
-                                        name=""
-                                        value={m[0]}
-                                        checked={props.values.includes(m[0])}
-                                        onChange={() => selectValue(m[0])}
-                                    />
-                                    {m[1]}
+                        }
+                        {/* Services for Type */}
+                        {open && tab !== "" &&
+                            <div className="pb-4 relative z-10">
+                                <div className="px-0 relative top-[calc(0.25rem)] field bg-white overflow-y-scroll w-full">
+                                    <div onClick={() => setTab("")}>
+                                        <Back/>
+                                    </div>
+                                    <div className="border-b border-b-gray-200">
+                                        <input
+                                            name={props.name}
+                                            value={search}
+                                            onChange={(e: any) => setSearch(e.target.value)}
+                                            placeholder={`Search ${tab}`}
+                                            className={clsx(
+                                                "field !shadow-none !rounded-none",
+                                                "!border-none !ring-0 !outline-none"
+                                            )}
+                                        />
+                                    </div>
+                                    <div className="max-h-[100px]">
+                                        {matched.map((m, i) => (
+                                            <div 
+                                                key={i} 
+                                                onClick={() => selectValue(m[0])}
+                                                className={clsx(
+                                                    "px-3 py-1.5 flex justify-between items-center gap-2",
+                                                    "!justify-normal",
+                                                    "hover:bg-gray-100 hover:cursor-pointer",
+                                                )}
+                                            >
+                                                <Checkbox
+                                                    name=""
+                                                    value={m[0]}
+                                                    checked={props.values.includes(m[0])}
+                                                    onChange={() => selectValue(m[0])}
+                                                />
+                                                {m[1]}
+                                            </div>
+                                        ))}
+                                    </div>
                                 </div>
-                            ))}
-                        </div>
-                    }
+                            </div>
+                        }
+                    </div>
+                    <div className="rounded-md bg-gray-100 p-2 w-full">
+                        {props.values.length !== 0 &&
+                            <ul className="w-full flex flex-wrap gap-1">
+                                {props.values.map((value, i) => (
+                                    <li
+                                        key={i}
+                                        onClick={(e) => selectValue(value)}
+                                        className="field flex justify-between items-center gap-1 py-1 pr-1 pl-2 bg-white shadow-sm whitespace-nowrap hover:bg-gray-50 cursor-pointer w-min"
+                                    >
+                                        <span className="text-01 tracking-wider">{valueToLabel[value]}</span>
+                                        <CrossIcon
+                                            top="0.05px"
+                                            width="13"
+                                            height="13"
+                                            fill="#9CA3AF"
+                                            color="#9CA3AF"
+                                            stroke="#9CA3AF"
+                                            strokeWidth="0.5"
+                                            cursor="pointer"
+                                        />
+                                    </li>
+                                ))}
+                            </ul>
+                        }
+                        {props.values.length === 0 &&
+                            <p className="px-2 py-1 justify-self-center self-center block w-full text-center text-01 uppercase font-medium">No Services Selected</p>
+                        }
+                    </div>
                 </div>
             }
         />

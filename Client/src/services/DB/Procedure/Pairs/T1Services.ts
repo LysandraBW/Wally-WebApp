@@ -1,11 +1,11 @@
-import { Options } from "@/features/Inputs/ValueLabelPairs";
-import { queryDB } from "../../queryDB";
+import { Options } from "@/features/Form/DEF";
+import { fetchDB } from "../../fetchDB";
 
 // Stores the Defined Services, Ordered by Class and Division
 export type ServiceT1Pairs = {[serviceClass: string]: Options};
 
 export async function T1Services() {
-    const output = await queryDB("info/service", {}, "GET");
+    const output = await fetchDB("GET", "services");
 
     const servicesT1: {[serviceClass: string]: Options} = {};
     for (const service of output) {

@@ -1,11 +1,9 @@
 "use client";
-
-import { IBM, Instrumental } from "@/public/Font";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import ConfettiGenerator from "confetti-js";
 import ServiceCard from "@/pages/landing/ServiceCard";
-import NavBar from "@/component/NavBar";
+import NavBar from "@/component/NavBar/NavBar";
 import StepCard from "@/pages/landing/StepCard";
 
 export default function Page() {
@@ -50,6 +48,7 @@ export default function Page() {
             { "type": "Maintenance", "name": "Drive Belt Replacement", "low": "100", "high": "400" }
 		]
 	});
+	const logoScale = 0.45;
 
 	useEffect(() => {
 		const confettiSettings = { 
@@ -64,10 +63,8 @@ export default function Page() {
 
 	return (
 		<>
-			<NavBar
-				sticky={false}
-			/>
-			<section className="snap-center snap-proximity grid grid-cols-[40%_60%] h-[calc(100vh-54px)]">
+			<NavBar sticky={false}/>
+			<section className="grid grid-cols-[40%_60%] h-[calc(100vh-54px)]">
 				<header className="p-12 border-t border-b-gray-200 flex flex-col gap-8 justify-center">
 					<h1 className="leading-[4.5rem] whitespace-nowrap font-medium">The Local<br/>Mechanic</h1>
 					<div>
@@ -82,31 +79,33 @@ export default function Page() {
 					</div>
 					<button className="bg-black text-white px-4 py-2 rounded-md font-medium w-min whitespace-nowrap">Learn More</button>
 				</header>
-				<div className="bg-black grid grid-cols-2 bg-[url('../public/Sparks.jpg')] bg-cover bg-center"></div>
+				<div className="bg-black grid grid-cols-2 bg-[url('../public/Pouring_Oil.jpg')] bg-cover bg-center"></div>
 			</section>
-			<section className="snap-center snap-proximity relative px-4 py-12 flex flex-col items-center gap-8 bg-white border-t border-t-gray-200">
-				<p className="text-center text-black text-[1.25rem] font-medium">Experienced with both American and European vehicles.</p>
+			<section className="relative px-4 py-24 flex flex-col items-center gap-8 bg-white border-t border-t-gray-200">
+				<p className="text-center text-gray-600 text-[1.25rem] tracking-tight font-normal">Experienced with both <b className="font-medium text-blue-700">American</b> and <b className="font-medium text-blue-700">European</b> vehicles</p>
 				<div className="">
-					<div className="gap-6 flex items-center">
+					<div className="gap-6 flex flex-wrap items-center">
 						{
 							[
-								{src: "/Audi.png", length: 136},
-								{src: "/Benz.svg.png", length: 136},
-								{src: "/BMW.png", length: 136},
-								// {src: "/Ford4.png", length: 148},
-								// {src: "/Honda.png", length: 136},
-								// {src: "/Hyundai2.png", length: 136},
-								{src: "/Kia3.png", length: 136},
-								{src: "/Nissan.webp", length: 136},
-								// {src: "/VK.png", length: 136},
-								// {src: "/Toyota.png", length: 136}
+								{src: "/Audi.png", length: 136 * logoScale},
+								{src: "/Benz.png", length: 136 * logoScale},
+								{src: "/BMW.png", length: 136 * logoScale},
+								{src: "/Ford.png", length: 148 * logoScale},
+								{src: "/Honda.png", length: 130 * logoScale},
+								{src: "/Chevrolet.png", length: 130 * logoScale},
+								{src: "/Hyundai.png", length: 136 * logoScale},
+								{src: "/Kia.png", length: 136 * logoScale},
+								{src: "/Nissan.webp", length: 136 * logoScale},
+								{src: "/Volkswagen.png", length: 140 * logoScale},
+								{src: "/Toyota.png", length: 136 * logoScale}
 							].map((img, i) => (
-								<div key={i} className="bg-gray-100 w-[250px] h-[250px] rounded-full flex justify-center items-center hover:bg-white hover:scale-110 hover:border hover:border-gray-200 transition-all">
+								<div key={i} className="bg-white shadow border border-gray-200 w-[100px] h-[100px] rounded-full flex justify-center items-center hover:bg-white hover:shadow-lg hover:scale-110 hover:border hover:border-gray-200 transition-all">
 									<Image
 										src={img.src}
 										width={img.length}
 										height={img.length}
 										alt=""
+										className=""
 									/>
 								</div>
 							))
@@ -114,7 +113,7 @@ export default function Page() {
 					</div>
 				</div>
 			</section>
-			<section className="snap-center snap-proximity min-h-screen overflow-clip grid grid grid-rows-[auto_auto] grid-cols-3 relative border-b border-b-gray-200 border-t border-t-gray-200">
+			<section className="min-h-screen overflow-clip grid grid grid-rows-[auto_auto] grid-cols-3 relative border-b border-b-gray-200 border-t border-t-gray-200">
 				{/* Top Left */}
 				<div className="col-start-1 col-span-1">
 					<StepCard
@@ -187,100 +186,40 @@ export default function Page() {
 					/>
                 </div>
             </section>
-			<section className="snap-center snap-proximity min-h-screen max-h-screen h-screen overflow-clip grid grid-cols-[60%_40%] relative">
-				<div className="grid grid-rows-3 grid-cols-3 gap-8 p-8 relative">
-					{services[serviceType].map((service, i) => (
-						<div key={i}>
-							<ServiceCard
-								low={service.low}
-								type={service.type}
-								name={service.name}
-								high={service.high}
-								index={i}
-								color={serviceColors[serviceType]}
-							/>
-						</div>
-					))}
-				</div>
-				<header className="flex flex-col w-full justify-center items-center p-8">
-					<h3 className="font-medium">We Have Many Services</h3>
-					<p className="tracking-wide max-w-[440px] text-center">See some of the services we offer in the categories above by clicking the buttons below. If you're not sure whether we'll be able to do a job, call us!</p>
-					<div className="flex flex-wrap gap-4 mt-4">
-						<button onClick={() => setServiceType("Electrical")} className="transition-all hover:bg-red-500 hover:border-transparent hover:text-white group flex items-center gap-1 w-min p-1 px-2 rounded-md border border-gray-200 shadow-sm text-xs"><div className="w-1 h-1 bg-red-500 rounded-full transition-all group-hover:bg-white"></div>Electrical</button>
-						<button onClick={() => setServiceType("Mechanical")} className="transition-all hover:bg-blue-500 hover:border-transparent hover:text-white group flex items-center gap-1 w-min p-1 px-2 rounded-md border border-gray-200 shadow-sm text-xs"><div className="w-1 h-1 bg-blue-500 rounded-full transition-all group-hover:bg-white"></div>Mechanical</button>
-						<button onClick={() => setServiceType("Maintenance")} className="transition-all hover:bg-yellow-500 hover:border-transparent hover:text-white group flex items-center gap-1 w-min p-1 px-2 rounded-md border border-gray-200 shadow-sm text-xs"><div className="w-1 h-1 bg-yellow-500 rounded-full transition-all group-hover:bg-white"></div>Maintenance</button>
+			<section className="py-24">
+				<div className="snap-center- snap-proximity- min-h-screen h-screen overflow-clip grid grid-cols-[60%_40%] relative">
+					<div className="grid grid-rows-3 grid-cols-3 gap-8 p-8 relative">
+						{services[serviceType].map((service, i) => (
+							<div key={i}>
+								<ServiceCard
+									low={service.low}
+									type={service.type}
+									name={service.name}
+									high={service.high}
+									index={i}
+									color={serviceColors[serviceType]}
+								/>
+							</div>
+						))}
 					</div>
-				</header>
-			</section>
-			<section className="snap-center min-h-screen max-h-screen h-screen grid grid-rows-4 grid-cols-5 gap-4 p-8 relative">
-				<header className="row-start-1 col-start-1 col-span-3 flex flex-col self-center justify-self-center">
-                    <h3 className="text-center font-medium text-[3.5rem] text-black">But, Why <span className="text-[3.5rem] font-medium text-black">Waltronics</span>?</h3>
-				</header>
-				<div className="row-start-2 row-span-2 col-start-1 col-span=1 bg-white ring-0 ring-gray-50 p-4 rounded-none border border-gray-200 border-solid shadow-sm relative hover:-translate-y-1 transition-all">
-					<h6 className="font-medium mb-1">Transparency</h6>
-					<p className="tracking-wide">At Waltronics, we tell you the honest truth upfront. We want you to be able to make the decision that's right for you.</p>
-				</div>
-				<div className="row-start-2 row-span-2 col-start-2 col-span=1 bg-white ring-0 ring-gray-50 p-4 rounded-none border border-gray-200 border-solid shadow-sm relative hover:-translate-y-1 transition-all">
-					<h6 className="font-medium mb-1">Local Business</h6>
-					<p className="tracking-wide">We can provide you much more attention and care than a dealership who prioritizes profit over the wellbeing of their customers.</p>
-				</div>
-				<div className="row-start-2 row-span-2 col-start-3 col-span=1 bg-white ring-0 ring-gray-50 p-4 rounded-none border border-gray-200 border-solid shadow-sm relative hover:-translate-y-1 transition-all">
-					<h6 className="font-medium mb-1">Skilled Hands</h6>
-					<p className="tracking-wide">Our mechanics have worked on a variety of vehicles for decades. We are certified and prepared to conquer any issue.</p>
-				</div>
-				<div className="row-start-4 row-span-1 col-start-1 col-span-3 bg-white ring-0 ring-gray-50 p-4 rounded-none border border-gray-200 border-solid shadow-sm relative hover:-translate-y-1 transition-all">
-					<h6 className="font-medium mb-1">Quality Control</h6>
-					<p className="tracking-wide">It is one of our upmost priorities to ensure that your vehicle is serviced well. As a result, we extensively test and examine our repairs and services to keep you safe and happy.</p>
-				</div>
-				<div className="row-start-1 row-span-2 col-start-4 col-span=1">
-					<Image
-						width={500}
-						height={500}
-						src="/hands_sparks.jpg"
-						alt=""
-						className="w-full h-full object-cover rounded-none"
-					/>
-				</div>
-				<div className="row-start-3 row-span-2 col-start-4 col-span=1">
-					<Image
-						width={500}
-						height={500}
-						src="/hands_oil.jpg"
-						alt=""
-						className="w-full h-full object-cover rounded-none"
-					/>
-				</div>
-				<div className="row-start-1 row-span-4 col-start-5 col-span=1">
-					<Image
-						width={500}
-						height={500}
-						src="/local.jpg"
-						alt=""
-						className="w-full h-full object-cover rounded-none"
-					/>
+					<header className="flex flex-col w-full justify-center items-center p-8">
+						<h3 className="font-medium text-[3.5rem] text-center">Many Services</h3>
+						<p className="tracking-wide max-w-[440px] text-center">See some of the services we offer in the categories above by clicking the buttons below. If you're not sure whether we'll be able to do a job, call us!</p>
+						<div className="flex flex-wrap gap-4 mt-4">
+							<button onClick={() => setServiceType("Electrical")} className="transition-all hover:bg-red-500 hover:border-transparent hover:text-white group flex items-center gap-1 w-min p-1 px-2 rounded-md border border-gray-200 shadow-sm text-xs"><div className="w-1 h-1 bg-red-500 rounded-full transition-all group-hover:bg-white"></div>Electrical</button>
+							<button onClick={() => setServiceType("Mechanical")} className="transition-all hover:bg-blue-500 hover:border-transparent hover:text-white group flex items-center gap-1 w-min p-1 px-2 rounded-md border border-gray-200 shadow-sm text-xs"><div className="w-1 h-1 bg-blue-500 rounded-full transition-all group-hover:bg-white"></div>Mechanical</button>
+							<button onClick={() => setServiceType("Maintenance")} className="transition-all hover:bg-yellow-500 hover:border-transparent hover:text-white group flex items-center gap-1 w-min p-1 px-2 rounded-md border border-gray-200 shadow-sm text-xs"><div className="w-1 h-1 bg-yellow-500 rounded-full transition-all group-hover:bg-white"></div>Maintenance</button>
+						</div>
+					</header>
 				</div>
 			</section>
-			<section className="snap-center grid grid-cols-2 p-8 py-16 bg-black">
-				<div className="border-r border-r-white/10">
+			<section className="grid grid-cols-2 p-8 py-16 bg-black">
+				<div className="border-r border-r-white/10 flex items-center">
 					<h2 className="font-medium text-white text-left">So, Let Us Help.</h2>
-					<div className="flex gap-4 mt-2">
-						<div className="flex items-center gap-1">
-							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" className="size-3 text-white stroke-gray-500">
-								<path strokeLinecap="round" strokeLinejoin="round" d="M10.5 1.5H8.25A2.25 2.25 0 0 0 6 3.75v16.5a2.25 2.25 0 0 0 2.25 2.25h7.5A2.25 2.25 0 0 0 18 20.25V3.75a2.25 2.25 0 0 0-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3" />
-							</svg>
-							<span className="block text-white font-medium relative text-xs top-[0px] tracking-wide">000-000-0000</span>
-						</div>
-						<div className="flex items-center gap-1">
-							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="size-3 stroke-gray-500">
-								<path strokeLinecap="round" strokeLinejoin="round" d="M8.25 18.75a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 0 1-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 0 0-3.213-9.193 2.056 2.056 0 0 0-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 0 0-10.026 0 1.106 1.106 0 0 0-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12" />
-							</svg>
-							<span className="block text-white font-medium relative text-xs top-[0px] tracking-wide">123 Happy Street</span>
-						</div>
-					</div>
 				</div>
 				<div className="mx-4">
-					<p className="max-w-[440px] text-gray-500 tracking-wider text-sm text-white text-left">You can start by scheduling your appointment today. If you have any questions, please call us at 000-000-0000.</p>
-					<button className="mt-4 py-2 px-4 rounded-lg text-black font-medium shadow bg-white">Schedule Appointment</button>
+					<p className="max-w-[440px] text-gray-500 tracking-wide text-sm text-white text-left">You can start by scheduling your appointment today.<br/>If you have any questions, please call us at <b className="font-medium">000-000-0000</b>.</p>
+					<button className="mt-4 py-2 px-4 rounded-lg text-black font-medium shadow bg-white shadow shadow-white/30">Schedule Appointment</button>
 				</div>
 			</section>
 			<footer className="bg-black">

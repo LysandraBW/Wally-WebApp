@@ -1,9 +1,9 @@
 "use server";
 import { DB_Make } from "@/services/DB/Interface/Information";
-import { Options } from "@/features/Inputs/ValueLabelPairs";
-import { queryDB } from "../../queryDB";
+import { Options } from "@/features/Form/DEF";
+import { fetchDB } from "../../fetchDB";
 
 export default async function VehicleMakePairs(): Promise<Options> {
-    const output = await queryDB("info/make", {}, "GET");
-    return output.map((make: DB_Make) => [make.Make, make.Make]);
+    const makes = await fetchDB("GET", "makes");
+    return makes.map((make: DB_Make) => [make.Make, make.Make]);
 }

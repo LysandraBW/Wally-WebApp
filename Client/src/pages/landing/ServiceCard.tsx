@@ -1,5 +1,4 @@
-import useInterval from "@/features/Alert/useInterval";
-import { motion, useAnimate, useAnimationControls } from "motion/react";
+import { motion, useAnimationControls } from "motion/react";
 import { useEffect, useState } from "react";
 
 interface ServiceCardProps {
@@ -26,21 +25,6 @@ export default function ServiceCard(props: ServiceCardProps) {
 
     const controlLeave = useAnimationControls();
     const controlEnter = useAnimationControls();
-
-    const opacity: {[n: number]: string} = {
-        0: "opacity-100",
-        1: "opacity-100",
-        2: "opacity-100",
-        3: "opacity-100",
-        4: "opacity-100",
-        5: "opacity-100",
-        6: "opacity-100",
-        7: "opacity-100",
-        8: "opacity-100",
-        9: "opacity-100",
-        10: "opacity-100",
-        11: "opacity-100"
-    }
 
     const colors: {[k: string]: {[n: number]: string}} = {
         "red": {
@@ -125,15 +109,15 @@ export default function ServiceCard(props: ServiceCardProps) {
     }, [props.name]);
 
     return (
-        <div className={`${colors[prevColor][props.index]} ${opacity[props.index]} rounded-none shadow-sm relative overflow-clip h-full`}>
+        <div className={`${colors[prevColor][props.index]} rounded-none shadow-sm relative overflow-clip h-full`}>
             <motion.div 
                 key={props.index}
                 variants={wrapperVariants}
                 initial="middle"
                 animate={controlLeave}
                 exit="top"
-                transition={{ duration: 0.5 }}
-                className={`${colors[prevColor][props.index]} ${opacity[props.index]} pt-4 pl-4 pr-2 pb-2 w-full h-full flex flex-col justify-between absolute top-0 left-0 pt-4 pl-4 pr-2 pb-2`}>
+                transition={{ duration: 0.5, delay: props.index * 0.1 }}
+                className={`${colors[prevColor][props.index]} pt-4 pl-4 pr-2 pb-2 w-full h-full flex flex-col justify-between absolute top-0 left-0 pt-4 pl-4 pr-2 pb-2`}>
                 <div>
                     <span className="text-white opacity-50">{prevType}</span>
                     <h6 className="text-white text-[1.125rem] font-medium transition-all">{prevName}</h6>
@@ -149,9 +133,9 @@ export default function ServiceCard(props: ServiceCardProps) {
                 initial="bottom"
                 exit="middle"
                 animate={controlEnter}
-                transition={{ duration: 0.5 }}
+                transition={{ duration: 0.5, delay: props.index * 0.1 }}
                 style={{backgroundColor: ``}}
-                className={`${colors[color][props.index]} ${opacity[props.index]} pt-4 pl-4 pr-2 pb-2  w-full h-full flex flex-col justify-between`}>		
+                className={`${colors[color][props.index]} pt-4 pl-4 pr-2 pb-2  w-full h-full flex flex-col justify-between`}>		
                 <div>
                     <span className="text-white opacity-50">{type}</span>
                     <h6 className="text-white text-[1.125rem] font-medium transition-all">{name}</h6>
