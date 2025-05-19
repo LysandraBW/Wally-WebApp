@@ -2,7 +2,8 @@ import { startLoginForm } from "./_DEF";
 import { LoginEmployee } from "@/services/DB/Procedure/Employee/LoginEmployee";
 import useForm from "@/features/Form/useForm/useForm";
 import TextField from "@/component/Form/Text/TextField";
-import Button from "@/component/Form/Button/Button";
+import { Fragment } from "react";
+import ButtonTwo from "@/component/Form/Button/ButtonTwo";
 
 interface LoginFormProps {
     setSessionID: (sessionID: string) => void;
@@ -21,10 +22,7 @@ export default function LoginForm(props: LoginFormProps) {
     }
 
     return (
-        <form
-            onSubmit={e => e.preventDefault()}
-            className="flex flex-col gap-8"
-        >
+        <Fragment>
             <TextField
                 type="text"
                 name="username"
@@ -41,11 +39,11 @@ export default function LoginForm(props: LoginFormProps) {
                 state={form.getInput("password").state}
                 onChange={form.updateInputData}
             />
-            <Button
+            <ButtonTwo
+                id="errorPopup"
                 label="Login"
-                style="dark"
                 onClick={submitForm}
             />
-        </form>
+        </Fragment>
     )
 }

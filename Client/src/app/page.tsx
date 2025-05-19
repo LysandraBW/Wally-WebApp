@@ -5,6 +5,7 @@ import ConfettiGenerator from "confetti-js";
 import ServiceCard from "@/pages/landing/ServiceCard";
 import NavBar from "@/component/NavBar/NavBar";
 import StepCard from "@/pages/landing/StepCard";
+import clsx from "clsx";
 
 export default function Page() {
 	const [serviceType, setServiceType] = useState<"Mechanical"|"Electrical"|"Maintenance">("Mechanical");
@@ -15,40 +16,49 @@ export default function Page() {
 	});
 	const [services] = useState({
 		"Mechanical": [
-			{ "type": "Mechanical", "name": "Engine Repair", "low": "500", "high": "5000" },
-            { "type": "Mechanical", "name": "Transmission Repair", "low": "800", "high": "6000" },
-            { "type": "Mechanical", "name": "Brake Pad Replacement", "low": "150", "high": "500" },
-            { "type": "Mechanical", "name": "Suspension Repair", "low": "300", "high": "2000" },
-            { "type": "Mechanical", "name": "Steering System Repair", "low": "400", "high": "2500" },
-            { "type": "Mechanical", "name": "Radiator Replacement", "low": "250", "high": "1500" },
-            { "type": "Mechanical", "name": "Fuel System Cleaning", "low": "100", "high": "400" },
-            { "type": "Mechanical", "name": "Timing Belt Replacement", "low": "300", "high": "1200" },
-            { "type": "Mechanical", "name": "Exhaust System Repair", "low": "200", "high": "1500" }
+			{ "type": "Mechanical", "name": "Engine Repair", "low": "5", "high": "15" },
+            { "type": "Mechanical", "name": "Transmission Repair", "low": "6", "high": "8" },
+            { "type": "Mechanical", "name": "Brake Pad Replacement", "low": "15", "high": "50" },
+            { "type": "Mechanical", "name": "Suspension Repair", "low": "20", "high": "30" },
+            { "type": "Mechanical", "name": "Steering System Repair", "low": "4", "high": "25" },
+            { "type": "Mechanical", "name": "Radiator Replacement", "low": "25", "high": "35" },
+            { "type": "Mechanical", "name": "Fuel System Cleaning", "low": "10", "high": "40" },
+            { "type": "Mechanical", "name": "Timing Belt Replacement", "low": "30", "high": "120" },
+            { "type": "Mechanical", "name": "Exhaust System Repair", "low": "2", "high": "15" },
+			{ "type": "Mechanical", "name": "Engine Repair", "low": "5", "high": "15" },
+            { "type": "Mechanical", "name": "Transmission Repair", "low": "6", "high": "8" },
+            { "type": "Mechanical", "name": "Brake Pad Replacement", "low": "15", "high": "50" }
 		],
 		"Electrical": [
-			{ "type": "Electrical", "name": "Battery Replacement", "low": "100", "high": "300" },
-            { "type": "Electrical", "name": "Alternator Repair", "low": "200", "high": "800" },
-            { "type": "Electrical", "name": "Starter Motor Replacement", "low": "250", "high": "900" },
-            { "type": "Electrical", "name": "Headlight Wiring Repair", "low": "75", "high": "300" },
-            { "type": "Electrical", "name": "Power Window Motor Repair", "low": "150", "high": "500" },
-            { "type": "Electrical", "name": "Ignition Coil Replacement", "low": "100", "high": "400" },
-            { "type": "Electrical", "name": "Fuse Box Repair", "low": "80", "high": "350" },
-            { "type": "Electrical", "name": "Sensor Replacement", "low": "120", "high": "600" },
-            { "type": "Electrical", "name": "ECU Diagnostic & Repair", "low": "150", "high": "1000" }
+			{ "type": "Electrical", "name": "Battery Replacement", "low": "1", "high": "3" },
+            { "type": "Electrical", "name": "Alternator Repair", "low": "2", "high": "8" },
+            { "type": "Electrical", "name": "Starter Motor Replacement", "low": "2", "high": "9" },
+            { "type": "Electrical", "name": "Headlight Wiring Repair", "low": "7", "high": "30" },
+            { "type": "Electrical", "name": "Power Window Motor Repair", "low": "15", "high": "50" },
+            { "type": "Electrical", "name": "Ignition Coil Replacement", "low": "10", "high": "40" },
+            { "type": "Electrical", "name": "Fuse Box Repair", "low": "8", "high": "35" },
+            { "type": "Electrical", "name": "Sensor Replacement", "low": "12", "high": "60" },
+            { "type": "Electrical", "name": "ECU Diagnostic & Repair", "low": "15", "high": "100" },
+            { "type": "Electrical", "name": "Fuse Box Repair", "low": "8", "high": "35" },
+            { "type": "Electrical", "name": "Sensor Replacement", "low": "12", "high": "60" },
+            { "type": "Electrical", "name": "ECU Diagnostic & Repair", "low": "15", "high": "100" }
 		],
 		"Maintenance": [
-			{ "type": "Maintenance", "name": "Oil Change", "low": "40", "high": "150" },
-            { "type": "Maintenance", "name": "Tire Rotation", "low": "30", "high": "100" },
-            { "type": "Maintenance", "name": "Wheel Alignment", "low": "80", "high": "250" },
-            { "type": "Maintenance", "name": "Brake Fluid Replacement", "low": "50", "high": "200" },
-            { "type": "Maintenance", "name": "Coolant Flush", "low": "80", "high": "300" },
-            { "type": "Maintenance", "name": "Transmission Fluid Change", "low": "100", "high": "500" },
-            { "type": "Maintenance", "name": "Spark Plug Replacement", "low": "75", "high": "250" },
-            { "type": "Maintenance", "name": "Air Filter Replacement", "low": "30", "high": "100" },
-            { "type": "Maintenance", "name": "Drive Belt Replacement", "low": "100", "high": "400" }
+			{ "type": "Maintenance", "name": "Oil Change", "low": "0", "high": "0" },
+            { "type": "Maintenance", "name": "Tire Rotation", "low": "0", "high": "2" },
+            { "type": "Maintenance", "name": "Wheel Alignment", "low": "0", "high": "0" },
+            { "type": "Maintenance", "name": "Brake Fluid Replacement", "low": "0", "high": "1" },
+            { "type": "Maintenance", "name": "Coolant Flush", "low": "0", "high": "2" },
+            { "type": "Maintenance", "name": "Transmission Fluid Change", "low": "0", "high": "3" },
+            { "type": "Maintenance", "name": "Spark Plug Replacement", "low": "0", "high": "3" },
+            { "type": "Maintenance", "name": "Air Filter Replacement", "low": "0", "high": "1" },
+            { "type": "Maintenance", "name": "Drive Belt Replacement", "low": "1", "high": "4" },
+            { "type": "Maintenance", "name": "Spark Plug Replacement", "low": "0", "high": "3" },
+            { "type": "Maintenance", "name": "Air Filter Replacement", "low": "0", "high": "1" },
+            { "type": "Maintenance", "name": "Drive Belt Replacement", "low": "1", "high": "4" }
 		]
 	});
-	const logoScale = 0.45;
+	const logoScale = 0.35;
 
 	useEffect(() => {
 		const confettiSettings = { 
@@ -68,7 +78,7 @@ export default function Page() {
 				<header className="p-12 border-t border-b-gray-200 flex flex-col gap-8 justify-center">
 					<h1 className="leading-[4.5rem] whitespace-nowrap font-medium">The Local<br/>Mechanic</h1>
 					<div>
-						<div className={`block w-min p-1 px-2 pr-2.5 rounded-md border border-gray-300 border-solid ring-1.5 ring-gray-200 shadow-sm flex items-center gap-0.5`}>
+						<div className={`block w-min p-1 px-2 pr-2.5 rounded-md border border-gray-200 border-solid ring-1.5 ring-gray-200 shadow-sm flex items-center gap-0.5`}>
 							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-3.5 text-black stroke-black top-[-2px]">
 								<path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
 								<path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
@@ -81,31 +91,29 @@ export default function Page() {
 				</header>
 				<div className="bg-black grid grid-cols-2 bg-[url('../public/Pouring_Oil.jpg')] bg-cover bg-center"></div>
 			</section>
-			<section className="relative px-4 py-24 flex flex-col items-center gap-8 bg-white border-t border-t-gray-200">
-				<p className="text-center text-gray-600 text-[1.25rem] tracking-tight font-normal">Experienced with both <b className="font-medium text-blue-700">American</b> and <b className="font-medium text-blue-700">European</b> vehicles</p>
-				<div className="">
-					<div className="gap-6 flex flex-wrap items-center">
+			<section className="relative px-4 py-4 flex flex-col items-center gap-16 bg-gray-100 border-t border-t-gray-200">
+				<div className="w-full">
+					<div className="flex justify-around items-center">
 						{
 							[
 								{src: "/Audi.png", length: 136 * logoScale},
 								{src: "/Benz.png", length: 136 * logoScale},
 								{src: "/BMW.png", length: 136 * logoScale},
-								{src: "/Ford.png", length: 148 * logoScale},
 								{src: "/Honda.png", length: 130 * logoScale},
 								{src: "/Chevrolet.png", length: 130 * logoScale},
-								{src: "/Hyundai.png", length: 136 * logoScale},
 								{src: "/Kia.png", length: 136 * logoScale},
-								{src: "/Nissan.webp", length: 136 * logoScale},
+								{src: "/Hyundai.png", length: 136 * logoScale},
+								{src: "/Ford.svg", length: 148 * logoScale},
 								{src: "/Volkswagen.png", length: 140 * logoScale},
+								{src: "/Nissan.webp", length: 136 * logoScale},
 								{src: "/Toyota.png", length: 136 * logoScale}
 							].map((img, i) => (
-								<div key={i} className="bg-white shadow border border-gray-200 w-[100px] h-[100px] rounded-full flex justify-center items-center hover:bg-white hover:shadow-lg hover:scale-110 hover:border hover:border-gray-200 transition-all">
+								<div key={i} className="bg-white shadow-sm border border-gray-200 w-[75px] h-[75px] rounded-none flex justify-center items-center hover:bg-white hover:shadow-lg hover:scale-110 hover:border hover:border-gray-200 transition-all">
 									<Image
 										src={img.src}
 										width={img.length}
 										height={img.length}
 										alt=""
-										className=""
 									/>
 								</div>
 							))
@@ -113,7 +121,7 @@ export default function Page() {
 					</div>
 				</div>
 			</section>
-			<section className="min-h-screen overflow-clip grid grid grid-rows-[auto_auto] grid-cols-3 relative border-b border-b-gray-200 border-t border-t-gray-200">
+			<section className="min-h-screen h-screen overflow-clip grid grid grid-rows-[auto_auto] grid-cols-3 relative border-b border-b-gray-200 border-t border-t-gray-200">
 				{/* Top Left */}
 				<div className="col-start-1 col-span-1">
 					<StepCard
@@ -128,8 +136,8 @@ export default function Page() {
 						addBorders={[false, true, false, true]}
 					>
 						<header className="pt-16">
-							<h5 className="text-center font-normal text-sm tracking-wide font-medium text-gray-400">The Process</h5>
-                    		<h3 className="text-center font-medium text-[3.5rem] leading-10 mt-1 text-black drop-shadow-sm">What To Expect<span className="text-[4rem] font-medium text-blue-700"></span></h3>
+							<h5 className="text-center text-04 tracking-wide font-medium text-gray-400 mb-1">The Process</h5>
+                    		<h3 className="text-center font-medium text-[3.5rem] leading-10 mt-1 text-gray-900 drop-shadow-sm">What To Expect<span className="text-[4rem] font-medium text-blue-700"></span></h3>
 						</header>
 					</StepCard>
 				</div>
@@ -186,47 +194,51 @@ export default function Page() {
 					/>
                 </div>
             </section>
-			<section className="py-24">
-				<div className="snap-center- snap-proximity- min-h-screen h-screen overflow-clip grid grid-cols-[60%_40%] relative">
-					<div className="grid grid-rows-3 grid-cols-3 gap-8 p-8 relative">
-						{services[serviceType].map((service, i) => (
-							<div key={i}>
-								<ServiceCard
-									low={service.low}
-									type={service.type}
-									name={service.name}
-									high={service.high}
-									index={i}
-									color={serviceColors[serviceType]}
-								/>
-							</div>
-						))}
+			<section className="bg-gray-50">
+				<div className="snap-center- snap-proximity- min-h-screen overflow-clip grid grid-cols-[60%_40%] relative">
+					<div className={clsx("bg-gray-50 py-24 transition-all")}>
+						<div className="grid grid-cols-3 gap-6 p-6 h-screen relative">
+							{services[serviceType].map((service, i) => (
+								<div key={i}>
+									<ServiceCard
+										low={service.low}
+										type={service.type}
+										name={service.name}
+										high={service.high}
+										index={i}
+										color={serviceColors[serviceType]}
+									/>
+								</div>
+							))}
+						</div>
 					</div>
-					<header className="flex flex-col w-full justify-center items-center p-8">
-						<h3 className="font-medium text-[3.5rem] text-center">Many Services</h3>
-						<p className="tracking-wide max-w-[440px] text-center">See some of the services we offer in the categories above by clicking the buttons below. If you're not sure whether we'll be able to do a job, call us!</p>
-						<div className="flex flex-wrap gap-4 mt-4">
-							<button onClick={() => setServiceType("Electrical")} className="transition-all hover:bg-red-500 hover:border-transparent hover:text-white group flex items-center gap-1 w-min p-1 px-2 rounded-md border border-gray-200 shadow-sm text-xs"><div className="w-1 h-1 bg-red-500 rounded-full transition-all group-hover:bg-white"></div>Electrical</button>
-							<button onClick={() => setServiceType("Mechanical")} className="transition-all hover:bg-blue-500 hover:border-transparent hover:text-white group flex items-center gap-1 w-min p-1 px-2 rounded-md border border-gray-200 shadow-sm text-xs"><div className="w-1 h-1 bg-blue-500 rounded-full transition-all group-hover:bg-white"></div>Mechanical</button>
-							<button onClick={() => setServiceType("Maintenance")} className="transition-all hover:bg-yellow-500 hover:border-transparent hover:text-white group flex items-center gap-1 w-min p-1 px-2 rounded-md border border-gray-200 shadow-sm text-xs"><div className="w-1 h-1 bg-yellow-500 rounded-full transition-all group-hover:bg-white"></div>Maintenance</button>
+					<header className={clsx("bg-white border-l border-l-gray-200 flex flex-col w-full justify-center items-center p-8")}>
+						<h3 className="font-medium text-[3.5rem] text-center">Available Services</h3>
+						<p className={clsx("tracking-wide text-gray-500 max-w-[440px] text-center")}>View some of the services we offer in the categories above by clicking the buttons below. If you're not sure whether we'll be able to do a job, call us!</p>
+						<div className="flex flex-wrap gap-4 mt-8">
+							<button onClick={() => setServiceType("Electrical")} className="text-gray-500 transition-all hover:bg-red-500 hover:border-transparent hover:text-white group flex items-center gap-1 w-min p-1 px-2 rounded-md border border-gray-200 shadow-sm text-xs bg-white tracking-wide font-medium"><div className="w-1 h-1 bg-red-500 rounded-full transition-all group-hover:bg-white"></div>Electrical</button>
+							<button onClick={() => setServiceType("Mechanical")} className="text-gray-500 transition-all hover:bg-blue-500 hover:border-transparent hover:text-white group flex items-center gap-1 w-min p-1 px-2 rounded-md border border-gray-200 shadow-sm text-xs bg-white tracking-wide font-medium"><div className="w-1 h-1 bg-blue-500 rounded-full transition-all group-hover:bg-white"></div>Mechanical</button>
+							<button onClick={() => setServiceType("Maintenance")} className="text-gray-500 transition-all hover:bg-yellow-500 hover:border-transparent hover:text-white group flex items-center gap-1 w-min p-1 px-2 rounded-md border border-gray-200 shadow-sm text-xs bg-white tracking-wide font-medium"><div className="w-1 h-1 bg-yellow-500 rounded-full transition-all group-hover:bg-white"></div>Maintenance</button>
 						</div>
 					</header>
 				</div>
 			</section>
-			<section className="grid grid-cols-2 p-8 py-16 bg-black">
-				<div className="border-r border-r-white/10 flex items-center">
-					<h2 className="font-medium text-white text-left">So, Let Us Help.</h2>
-				</div>
-				<div className="mx-4">
-					<p className="max-w-[440px] text-gray-500 tracking-wide text-sm text-white text-left">You can start by scheduling your appointment today.<br/>If you have any questions, please call us at <b className="font-medium">000-000-0000</b>.</p>
-					<button className="mt-4 py-2 px-4 rounded-lg text-black font-medium shadow bg-white shadow shadow-white/30">Schedule Appointment</button>
+			<section className="">
+				<div className="grid grid-rows-[auto_min-content] grid-cols-[auto_min-content_auto] min-h-[100px]">
+					<div className="row-start-1 row-span-1 col-start-1 col-span-1 bg-black/0 backdrop-blur"></div>
+					<div className="row-start-1 row-span-1 col-start-3 col-span-1 bg-black/0 backdrop-blur"></div>
+					<div className="row-start-1 row-span-1 col-start-2 col-span-0 flex flex-col items-center justify-end p-8 py-16 z-10 bg-black/0 backdrop-blur border-l border-l-gray-50/10 border-r border-r-gray-50/10">
+						<h2 className="font-medium text-white text-left text-5xl whitespace-nowrap text-center">So, Let Us <span className="font-medium text-5xl text-white">Help</span>.</h2>
+						{/* <button className="mt-8 w-min whitespace-nowrap py-2 px-4 rounded-lg bg-white text-gray-500 border border-gray-200 tracking-wide font-medium shadow">Schedule Appointment</button> */}
+					</div>
+					<div className="row-start-1 row-span-2 col-start-1 col-span-3 bg-black bg-[url('../public/Gloves.jpg')]" style={{backgroundPosition: "center", backgroundSize: "cover"}}></div>
+					<footer className="border-t border-t-gray-50/10 bg-black/0 backdrop-blur col-start-1 col-span-3 row-start-2 row-span-1">
+						<div className="py-4 px-1 mx-8">
+							<span className="block text-center text-xs text-gray-100 tracking-wide font-medium">© Waltronics 2025</span>
+						</div>
+					</footer>
 				</div>
 			</section>
-			<footer className="bg-black">
-				<div className="py-4 px-1 border-t border-t-white/10 mx-8">
-					<span className="block text-center text-xs text-white font-medium">© Waltronics 2025. All rights reserved.</span>
-				</div>
-			</footer>
 		</>
 	)
 }

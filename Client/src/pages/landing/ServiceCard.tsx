@@ -1,3 +1,4 @@
+import clsx from "clsx";
 import { motion, useAnimationControls } from "motion/react";
 import { useEffect, useState } from "react";
 
@@ -28,48 +29,94 @@ export default function ServiceCard(props: ServiceCardProps) {
 
     const colors: {[k: string]: {[n: number]: string}} = {
         "red": {
-            0: "bg-red-500",
-            1: "bg-red-600",
-            2: "bg-red-800",
-            3: "bg-red-900",
-            4: "bg-red-700",
-            5: "bg-red-600",
-            6: "bg-red-600",
-            7: "bg-red-600",
-            8: "bg-red-600/90",
-            9: "bg-red-700",
-            10: "bg-red-500",
-            11: "bg-red-800"
+            0: "border-red-500",
+            1: "border-red-600",
+            2: "border-red-800",
+            3: "border-red-900",
+            4: "border-red-700",
+            5: "border-red-600",
+            6: "border-red-600",
+            7: "border-red-600",
+            8: "border-red-600/90",
+            9: "border-red-700",
+            10: "border-red-500",
+            11: "border-red-800"
         },
         "blue": {
-            0: "bg-blue-600",
-            1: "bg-blue-500",
-            2: "bg-blue-800",
-            3: "bg-blue-800",
-            4: "bg-blue-400",
-            5: "bg-blue-600",
-            6: "bg-blue-400",
-            7: "bg-blue-900",
-            8: "bg-blue-500",
-            9: "bg-blue-600",
-            10: "bg-blue-800",
-            11: "bg-blue-900"
+            0: "border-blue-600",
+            1: "border-blue-500",
+            2: "border-blue-800",
+            3: "border-blue-800",
+            4: "border-blue-400",
+            5: "border-blue-600",
+            6: "border-blue-400",
+            7: "border-blue-900",
+            8: "border-blue-500",
+            9: "border-blue-600",
+            10: "border-blue-800",
+            11: "border-blue-900"
         },
         "yellow": {
-            0: "bg-yellow-400",
-            1: "bg-yellow-500",
-            2: "bg-orange-300",
-            3: "bg-yellow-300",
-            4: "bg-yellow-400",
-            5: "bg-yellow-300",
-            6: "bg-yellow-400",
-            7: "bg-yellow-500",
-            8: "bg-yellow-300",
-            9: "bg-yellow-500",
-            10: "bg-orange-300",
-            11: "bg-yellow-400"
+            0: "border-yellow-400",
+            1: "border-yellow-500",
+            2: "border-orange-300",
+            3: "border-yellow-300",
+            4: "border-yellow-400",
+            5: "border-yellow-300",
+            6: "border-yellow-400",
+            7: "border-yellow-500",
+            8: "border-yellow-300",
+            9: "border-yellow-500",
+            10: "border-orange-300",
+            11: "border-yellow-400"
         }
     }
+
+    const colorText: {[k: string]: {[n: number]: string}} = {
+        "red": {
+            0: "text-red-500",
+            1: "text-red-600",
+            2: "text-red-800",
+            3: "text-red-900",
+            4: "text-red-700",
+            5: "text-red-600",
+            6: "text-red-600",
+            7: "text-red-600",
+            8: "text-red-600/90",
+            9: "text-red-700",
+            10: "text-red-500",
+            11: "text-red-800"
+        },
+        "blue": {
+            0: "text-blue-600",
+            1: "text-blue-500",
+            2: "text-blue-800",
+            3: "text-blue-800",
+            4: "text-blue-400",
+            5: "text-blue-600",
+            6: "text-blue-400",
+            7: "text-blue-900",
+            8: "text-blue-500",
+            9: "text-blue-600",
+            10: "text-blue-800",
+            11: "text-blue-900"
+        },
+        "yellow": {
+            0: "text-yellow-400",
+            1: "text-yellow-500",
+            2: "text-orange-300",
+            3: "text-yellow-300",
+            4: "text-yellow-400",
+            5: "text-yellow-300",
+            6: "text-yellow-400",
+            7: "text-yellow-500",
+            8: "text-yellow-300",
+            9: "text-yellow-500",
+            10: "text-orange-300",
+            11: "text-yellow-400"
+        }
+    }
+
 
     const wrapperVariants = {
         middle: {
@@ -109,23 +156,18 @@ export default function ServiceCard(props: ServiceCardProps) {
     }, [props.name]);
 
     return (
-        <div className={`${colors[prevColor][props.index]} rounded-none shadow-sm relative overflow-clip h-full`}>
+        <div className={`${colors[color][props.index]}-- bg-white shadow-sm border border-gray-200 relative overflow-clip h-full`} style={{outlineWidth: "1px"}}>
             <motion.div 
                 key={props.index}
                 variants={wrapperVariants}
                 initial="middle"
                 animate={controlLeave}
                 exit="top"
-                transition={{ duration: 0.5, delay: props.index * 0.1 }}
-                className={`${colors[prevColor][props.index]} pt-4 pl-4 pr-2 pb-2 w-full h-full flex flex-col justify-between absolute top-0 left-0 pt-4 pl-4 pr-2 pb-2`}>
-                <div>
-                    <span className="text-white opacity-50">{prevType}</span>
-                    <h6 className="text-white text-[1.125rem] font-medium transition-all">{prevName}</h6>
-                </div>
-                <div className="flex justify-end items-center gap-1">
-                    <span className="text-white opacity-50">avg.</span>
-                    <span className="text-white font-medium text-black text-[1rem]">${prevLow} - ${prevHigh}</span>
-                </div>
+                transition={{ duration: 0.5, delay: props.index * 0.05 }}
+                className={`bg-white p-2 w-full h-full flex flex-col items-center justify-center gap-1 absolute top-0 left-0`}
+            >
+                <h6 className="text-black text-[1rem] tracking-wide font-medium">{prevName}</h6>
+                <span className="text-gray-400 uppercase text-01 font-medium">TEXT</span>
             </motion.div>
             <motion.div 
                 key={props.index + 1}
@@ -133,17 +175,12 @@ export default function ServiceCard(props: ServiceCardProps) {
                 initial="bottom"
                 exit="middle"
                 animate={controlEnter}
-                transition={{ duration: 0.5, delay: props.index * 0.1 }}
+                transition={{ duration: 0.5, delay: props.index * 0.05 }}
                 style={{backgroundColor: ``}}
-                className={`${colors[color][props.index]} pt-4 pl-4 pr-2 pb-2  w-full h-full flex flex-col justify-between`}>		
-                <div>
-                    <span className="text-white opacity-50">{type}</span>
-                    <h6 className="text-white text-[1.125rem] font-medium transition-all">{name}</h6>
-                </div>
-                <div className="flex justify-end items-center gap-1">
-                    <span className="text-white opacity-50">avg.</span>
-                    <span className="text-white font-medium text-black text-[1rem]">${low} - ${high}</span>
-                </div>
+                className={`bg-white p-2 w-full h-full flex flex-col items-center justify-center gap-1 absolute top-0`}
+            >
+                <h6 className={clsx(`text-black text-[1rem] tracking-wide font-medium`)}>{name}</h6>
+                <span className="text-gray-400 uppercase text-01 font-medium">TEXT</span>
             </motion.div>
         </div>
     )
