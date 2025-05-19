@@ -5,6 +5,7 @@ import LookupAppointment from "@/services/DB/Procedure/Appointment/LookupAppoint
 import TextField from "@/component/Form/Text/TextField";
 import useForm from "@/features/Form/useForm/useForm";
 import { ID } from "@/app/lookup/page";
+import ButtonTwo from "@/component/Form/Button/ButtonTwo";
 
 interface LookupFormProps {
     setPerson: (person: ID | null) => void;
@@ -41,9 +42,8 @@ export default function LookupForm(props: LookupFormProps) {
                 onChange={form.updateInputData}
                 onBlur={undefined}
             />
-            <Button
-                style="dark"
-                type="submit"
+            <ButtonTwo
+                id="errorPopup"
                 label="Search"
                 onClick={submitForm}
             />

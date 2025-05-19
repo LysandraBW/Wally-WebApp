@@ -18,7 +18,7 @@ export default function Button(props: ButtonProps) {
             >
                 {props.label &&
                     <span 
-                        className="whitespace-nowrap"
+                        className="whitespace-nowrap tracking-wide text-lg"
                     >
                         {props.label}
                     </span>

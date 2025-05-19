@@ -1,9 +1,6 @@
 import { Body, queryDB } from "../../queryDB";
 
 export default async function SelectAppointmentSummary(body: Body) {
-    const output = await queryDB("appointment/selectSummary", {
-        sessionID: body.sessionID,
-        appointmentID: body.appointmentID
-    });
-    return output;
+     const appointment = await queryDB(`appointment/${body.appointmentID}?type=Protected&role=Appointment`, {}, "GET");
+    return appointment;
 }

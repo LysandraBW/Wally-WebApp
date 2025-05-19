@@ -17,14 +17,14 @@ export default function CardData(props: CardDataProps) {
             {/* Key */}
             <div 
                 className={clsx(
-                    "py-2 pl-6 align-top",
-                    "border-b border-gray-200",
-                    props.lastRow && "border-none"
+                    "py-2 pl-4 align-top",
+                    "border-b border-gray-200 border-r border-r-gray-200",
+                    props.lastRow && ""
                 )}
             >
                 <p 
                     className={clsx(
-                        "text-02",
+                        "text-02 tracking-wide",
                         "whitespace-nowrap"
                     )}
                 >
@@ -34,14 +34,14 @@ export default function CardData(props: CardDataProps) {
             {/* Value */}
             <div 
                 className={clsx(
-                    "py-2 align-top",
+                    "py-2 pl-4 align-top",
                     "border-b border-gray-200",
-                    props.lastRow && "border-none"
+                    props.lastRow && ""
                 )}
             >
                 <p 
                     className={clsx(
-                        "text-02",
+                        "text-02 tracking-wide",
                         "font-medium text-gray-950"
                     )}
                 >

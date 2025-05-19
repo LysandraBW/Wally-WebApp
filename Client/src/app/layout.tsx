@@ -8,7 +8,7 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang="en" className="snap-y snap-mandatory scroll-hide">
-			<body className={`${Satoshi.className} snap-y snap-mandatory overflow-y-auto h-100vh`}>
+			<body className={`${Instrumental.className} snap-y snap-mandatory overflow-y-auto h-100vh`}>
 				{children}
 			</body>
 		</html>

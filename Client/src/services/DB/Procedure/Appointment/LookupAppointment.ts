@@ -2,11 +2,7 @@ import { Body, queryDB } from "../../queryDB";
 
 export default async function LookupAppointment(body: Body) {
     try {
-        const output = await queryDB("appointment/lookup", {
-            email: body.email,
-            appointmentID: body.appointmentID
-        });
-    
+        const output = await queryDB("appointment/lookup", {email: body.email, appointmentID: body.appointmentID}, "POST");
         if (!output)
             return null;
         

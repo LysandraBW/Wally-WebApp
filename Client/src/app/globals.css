@@ -47,9 +47,10 @@
             rounded-md
             text-[0.9rem]
             font-normal
-            text-gray-400
+            text-gray-600
             bg-white
             shadow-sm
+            tracking-wide
             ;
     }
 

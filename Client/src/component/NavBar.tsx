@@ -2,12 +2,13 @@ import { Instrumental } from "@/public/Font";
 import Logo from "./Logo";
 
 interface NavBarProps {
-    sticky: boolean;
+    sticky?: boolean;
+    border?: boolean;
 }
 
 export default function NavBar(props: NavBarProps) {
     return (
-        <nav className={`${props.sticky ? "sticky top-0" : "snap-start"} h-min flex justify-between items-center px-4 py-2 bg-white`}>
+        <nav className={`${props.border ? "border-b border-b-gray-200" : ""} ${props.sticky ? "sticky top-0" : "snap-start"} h-[54px] flex justify-between items-center px-4 py-2 bg-white z-[90]`}>
             <Logo
                 svgClassName=""
                 textClassName=""

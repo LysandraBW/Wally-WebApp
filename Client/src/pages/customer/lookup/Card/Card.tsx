@@ -22,12 +22,12 @@ export default function Card(props: CardProps) {
         <div 
             className={clsx(
                 "relative z-20 min-w-[400px] w-fit h-[500px] overflow-y-auto",
-                "shadow-xl bg-white"
+                "shadow-xl bg-white flex flex-col"
             )}
         >
             <div 
                 className={clsx(
-                    "p-4 border-b border-b-gray-200",
+                    "p-4 border-b- border-b-gray-200-",
                     "flex justify-between"
                 )}>
                 {/* Title */}
@@ -52,7 +52,8 @@ export default function Card(props: CardProps) {
                 selectTab={setTab}
             />
             {/* Data */}
-            <div className="bg-white ">
+            <div className="bg-white grow">
+                <h4 className="bg-gray-50 pt-2 pl-4 pb-2 border-b border-b-gray-200 text-05 font-medium">Showing {tab} {tab !== "Notes" && "Information"}</h4>
                 <div className="w-full grid grid-cols-[33%_66%]">
                     {tab === "General" &&
                         <ContactTab

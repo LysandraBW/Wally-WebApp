@@ -12,27 +12,28 @@ interface InlineMessageProps {
 export default function InlineMessage(props: InlineMessageProps) {
     const style = {
         [Style.Error]: {
-            "container": "bg-red-200",
+            "container": "bg-red-100/0 border border-red-300",
             "closeButton": `
                 !fill-red-500 
                 !stroke-red-500 
-                hover:!bg-red-300
+                bg-none
+                hover:!bg-red-100
             `,
-            "text": "text-red-500"
+            "text": "text-red-500 border-l-red-400"
         }
     };
 
     return (
         <div 
             className={clsx(
-                "rounded flex gap-1 items-center p-1", 
+                "rounded-lg flex gap-1 items-center p-1", 
                 style[props.style].container
             )}
         >
             <button
                 onClick={props.closeMessage}
                 className={clsx(
-                    "icon !bg-transparent",
+                    "icon !bg-transparent !rounded-md",
                     style[props.style].closeButton
                 )}
             >
@@ -47,9 +48,10 @@ export default function InlineMessage(props: InlineMessageProps) {
             </button>
             <span 
                 className={clsx(
-                    "font-medium",
+                    "text-03 font-medium tracking-wide border-l pl-2",
                     style[props.style].text
                 )}
+                // style={{lineHeight: "1.25rem"}}
             >
                 {props.message}
             </span>
