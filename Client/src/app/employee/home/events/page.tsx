@@ -1,6 +1,6 @@
 "use client";
 import Events from "@/pages/employee/events/Events";
-import authenticatedSession from "@/utils/authenticatedSession";
+import AuthenticatedEmployee from "@/services/DB/Procedure/Employee/AuthenticatedEmployee";
 import EmployeeLayout from "@/views/Layout/Employee/EmployeeLayout";
 import { Pages } from "@/views/Layout/Employee/VerticalNavigation";
 import { useEffect, useState } from "react";
@@ -10,7 +10,7 @@ export default function Page() {
 
     useEffect(() => {
         const load = async () => {
-            const sessionID = await authenticatedSession();
+            const sessionID = await AuthenticatedEmployee();
             setSessionID(sessionID);
         }
         load();

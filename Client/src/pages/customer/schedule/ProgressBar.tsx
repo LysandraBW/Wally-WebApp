@@ -17,13 +17,13 @@ export default function ProgressBar(props: ProgressBarProps) {
                 id={props.id} 
                 data-tooltip-place="bottom"
                 className={clsx(
-                    "bg-white shadow-sm border border-gray-200",
+                    "bg-white shadow-sm border border-white",
                     "w-full h-full flex justify-center items-center rounded shadow-sm group",
-                    props.step >= props.rank && "!bg-gray-900 border border-gray-900",
+                    props.step >= props.rank && "!bg-blue-700 border !border-blue-700",
                     props.canShowTooltip && "cursor-pointer hover:bg-black hover:border-black transition-all"
                 )}
             >
-                <div className={clsx("w-1 h-1 rounded-full bg-gray-200", props.step >= props.rank && "bg-white")}></div>    
+                <div className={clsx("w-1 h-1 rounded-full bg-gray-300", props.step >= props.rank && "bg-white")}></div>    
             </div>
             {
                 props.canShowTooltip &&

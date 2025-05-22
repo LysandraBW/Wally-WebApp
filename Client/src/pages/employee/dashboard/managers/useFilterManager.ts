@@ -1,5 +1,5 @@
 import { Options } from "@/features/Form/DEF";
-import StatusPairs from "@/services/DB/Procedure/Pairs/StatusPairs";
+import GetStatusPairs from "@/services/DB/Information/GetStatusPairs";
 import { useEffect, useState } from "react";
 
 export type Bit = "0"|"1";
@@ -19,7 +19,7 @@ export default function useFilterManager() {
     
     useEffect(() => {
         const load = async () => {
-            const statuses = await StatusPairs();
+            const statuses = await GetStatusPairs();
             console.log(statuses);
             setStatuses([[null, "All"], ...statuses, ["-1", "Deleted"]]);
         }

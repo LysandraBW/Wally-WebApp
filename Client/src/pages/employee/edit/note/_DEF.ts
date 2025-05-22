@@ -1,6 +1,6 @@
 import { DB_Note } from "@/services/DB/Interface/Employee";
 import { z } from "zod";
-import { toString } from "@/utils/format/toString";
+import { toString } from "@/utils/convert";
 import { subsetOf } from "@/lib/Zod/InputTest";
 import { NOTE } from "../_DEF";
 import { Define } from "@/features/ItemManager/Define";

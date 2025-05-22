@@ -1,7 +1,7 @@
 import { DB_AppointmentPart } from "@/services/DB/Interface/Appointment";
 import { Part } from "../edit/service/part/_DEF";
 import Item from "@/features/ItemManager/Item/Item";
-import { toInteger } from "@/utils/format/toInteger";
+import { toInteger } from "@/utils/convert";
 import { useEffect, useState } from "react";
 
 interface PartIemProps {

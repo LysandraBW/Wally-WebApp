@@ -4,14 +4,14 @@ import { Events, Months } from "../events/_DEF";
 import CloseButton from "@/component/Button/CloseButton";
 import UpdateItem from "@/features/ItemManager/Item/UpdateItem";
 import Person from "@/component/Icon/Person";
-import { toDisplayDate } from "@/utils/format/toDisplayDate";
+import { toDisplayDate } from "@/utils/convert";
 import { Fragment, useEffect, useState } from "react";
 import { OptionMap } from "@/features/Form/DEF";
 import { getCookie } from "@/utils/cookies/getCookie";
-import EmployeeNamePairs from "@/services/DB/Procedure/Pairs/EmployeeNamePairs";
+import GetEmployeeNamePairs from "@/services/DB/Procedure/Employee/GetEmployeeNamePairs";
 import getValuesToLabels from "@/features/Form/helpers/getValuesToLabels";
 import Item from "@/features/ItemManager/Item/Item";
-import { toInteger } from "@/utils/format/toInteger";
+import { toInteger } from "@/utils/convert";
 
 interface EventDisplayProps<Items> extends  DisplayProps<Items> {
     onClose: () => void;
@@ -26,7 +26,7 @@ export default function EventDisplay(props: EventDisplayProps<Events>) {
     useEffect(() => {
         const load = async () => {
             const sessionID = await getCookie("sessionID");
-            const employees = await EmployeeNamePairs(sessionID);
+            const employees = await GetEmployeeNamePairs(sessionID);
             setIDToName(getValuesToLabels(employees));
         }
         load();

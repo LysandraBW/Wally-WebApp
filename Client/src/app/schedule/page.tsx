@@ -6,7 +6,7 @@ import { startContactForm, startVehicleForm, startServiceForm } from "@/pages/cu
 import ContactForm from "@/pages/customer/schedule/ContactForm";
 import ServiceForm from "@/pages/customer/schedule/ServiceForm";
 import VehicleForm from "@/pages/customer/schedule/VehicleForm";
-import ScheduleAppointment from "@/services/DB/Procedure/Appointment/ScheduleAppointment";
+import ScheduleAppointment from "@/services/DB/Appointment/ScheduleAppointment";
 import clsx from "clsx";
 import { useState } from "react";
 import ProgressBar from "../../pages/customer/schedule/ProgressBar";
@@ -124,23 +124,23 @@ export default function Page() {
                         */}
                         <header className="flex flex-col items-center w-min">
                             <h3 className="text-center font-medium whitespace-nowrap">Schedule Appointment</h3>
-                            <p className="text-center text-md tracking-wide max-w-[440px] text-gray-400">To schedule an appointment, fill out the short form below.<br/>After completion, your appointment will be shortly confirmed.</p>
+                            <p className="text-center text-md tracking-wide max-w-[440px] text-gray-600">To schedule an appointment, complete the form below.<br/>After completion, your appointment will be shortly confirmed.</p>
                         </header>    
                         {/* 
                             Tracker:
                             This just shows the current step
                             that the user is on.
                         */}
-                        <div className="bg-gray-100 rounded-lg px-4 py-4 pb-5 flex flex-col gap-2 w-1/3">
+                        <div className="bg-black rounded-lg px-4 py-4 pb-5 flex flex-col gap-2 w-[350px] border border-black">
                             <div>
                                 <span 
-                                className="text-01 font-medium" 
+                                className="text-01 font-medium text-gray-500" 
                                 style={{lineHeight: "0.72rem"}}
                                 >
                                     STEP {step + 1}
                                 </span>
                                 <h6 
-                                    className={clsx("mb-2 tracking-wide !text-05 font-medium")}
+                                    className={clsx("mb-2 tracking-wide !text-05 font-medium text-white")}
                                     style={{lineHeight: "1.125rem"}}
                                 >
                                     {stepData[step].header}
@@ -175,8 +175,7 @@ export default function Page() {
                         */}
                         <form 
                             onSubmit={(e) => e.preventDefault()}
-                            className="w-full flex flex-col gap-4 w-1/3"
-                            style={{width: "33%"}}
+                            className="w-full flex flex-col gap-4 w-[350px]"
                         >
                             {step === 0 && <ContactForm form={contactForm}/>}
                             {step === 1 && <VehicleForm form={vehicleForm}/>}

@@ -1,7 +1,7 @@
 import { DB_AppointmentPayment } from "@/services/DB/Interface/Appointment";
 import { Payment } from "../edit/finance/payment/_DEF";
 import { ReactNode, useEffect, useState } from "react";
-import { toDisplayDate } from "@/utils/format/toDisplayDate";
+import { toDisplayDate } from "@/utils/convert";
 import Item from "@/features/ItemManager/Item/Item";
 
 interface PaymentItemProps {

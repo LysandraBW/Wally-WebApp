@@ -1,7 +1,7 @@
 import { ReadInputProps } from "@/features/Form/DEF";
 import { Field } from "../Field";
 import { useState } from "react";
-import bytesForHuman from "@/utils/bytesForHumans";
+import bytesForHuman from "@/utils/convert";
 import UploadIcon from "@/component/Icon/Upload";
 import clsx from "clsx";
 import CrossIcon from "@/component/Icon/Cross";

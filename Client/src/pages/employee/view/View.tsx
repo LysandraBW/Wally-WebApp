@@ -1,6 +1,6 @@
 import { DB_Appointment } from "@/services/DB/Interface/Appointment";
-import SelectAppointment from "@/services/DB/Procedure/Appointment/SelectAppointment";
-import { toDisplayDate } from "@/utils/format/toDisplayDate";
+import SelectAppointment from "@/services/DB/Appointment/SelectAppointment";
+import { toDisplayDate } from "@/utils/convert";
 import { useEffect, useState } from "react";
 import PaymentDisplay from "../edit/finance/payment/PaymentDisplay";
 import { Payments } from "../edit/finance/payment/_DEF";

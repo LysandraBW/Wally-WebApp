@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { toString } from "@/utils/format/toString";
+import { toString } from "@/utils/convert";
 import { DB_AppointmentDiagnosis } from "@/services/DB/Interface/Appointment";
 import { Define } from "@/features/ItemManager/Define";
 import { DIAGNOSIS } from "../../_DEF";

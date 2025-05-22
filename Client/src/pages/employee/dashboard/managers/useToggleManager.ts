@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { AppointmentManager } from "./useAppointmentManager";
-import UpdateAppointmentLabel from "@/services/DB/Procedure/Appointment/UpdateAppointmentLabel";
+import UpdateAppointmentLabel from "@/services/DB/Appointment/UpdateAppointmentLabel";
 
 export type ToggleManager = ReturnType<typeof useToggleManager>;
 
-export default function useToggleManager(sessionID: string, appointmentManager: AppointmentManager) {
+export default function useToggleManager(appointmentManager: AppointmentManager) {
     const [allSelected, setAllSelected] = useState(false);
     const [selectedAppointments, setSelectedAppointments] = useState<Array<string>>([]);
 
@@ -71,7 +71,7 @@ export default function useToggleManager(sessionID: string, appointmentManager: 
 
         // Here, we query the database to update the appointment label.
         // If something bad happened, we don't actually update the label (early return).
-        if (!(await UpdateAppointmentLabel({labelID, sessionID, appointmentID})))
+        if (!(await UpdateAppointmentLabel({labelID, appointmentID})))
             return;
 
         // Here, we update the label on the client's end.

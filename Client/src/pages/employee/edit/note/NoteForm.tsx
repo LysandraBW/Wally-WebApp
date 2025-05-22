@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import FileManager from "./FileManager";
 import { getCookie } from "@/utils/cookies/getCookie";
-import EmployeeNamePairs from "@/services/DB/Procedure/Pairs/EmployeeNamePairs";
+import GetEmployeeNamePairs from "@/services/DB/Procedure/Employee/GetEmployeeNamePairs";
 import useItemForm from "@/features/ItemManager/useItemForm";
 import { FormProps } from "@/features/ItemManager/ItemManager";
 import { Options } from "@/features/Form/DEF";
@@ -20,7 +20,7 @@ export default function NoteForm<DB_Note, Note, Notes>(props: FormProps<DB_Note,
     useEffect(() => {
         const load = async () => {
             const sessionID = await getCookie("sessionID");
-            const employees = await EmployeeNamePairs(sessionID);
+            const employees = await GetEmployeeNamePairs(sessionID);
             console.log(employees);
             setEmployees(employees);
         }

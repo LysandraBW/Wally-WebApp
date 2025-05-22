@@ -1,7 +1,7 @@
 import { DB_Appointment } from "@/services/DB/Interface/Appointment";
 import { contactTest, Contact, makeContact } from "./_DEF";
 import { useEffect, useState } from "react";
-import StatusPairs from "@/services/DB/Procedure/Pairs/StatusPairs";
+import GetStatusPairs from "@/services/DB/Information/GetStatusPairs";
 import { CONTACT } from "../_DEF";
 import { Options } from "@/features/Form/DEF";
 import useForm, { UseForm } from "@/features/Form/useForm/useForm";
@@ -27,7 +27,7 @@ export default function ContactForm(props: ContactFormProps) {
     useEffect(() => {
         const load = async () => {
             resetForm();
-            const statuses = await StatusPairs();
+            const statuses = await GetStatusPairs();
             setStatuses(statuses);
         }
         load();

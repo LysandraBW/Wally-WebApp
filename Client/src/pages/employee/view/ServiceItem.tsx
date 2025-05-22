@@ -2,7 +2,7 @@ import { DB_AppointmentService } from "@/services/DB/Interface/Appointment";
 import { ReactNode, useEffect, useState } from "react";
 import { Service } from "../edit/service/service/_DEF";
 import Item from "@/features/ItemManager/Item/Item";
-import { toInteger } from "@/utils/format/toInteger";
+import { toInteger } from "@/utils/convert";
 
 interface ServiceItemProps {
     service: DB_AppointmentService | Service;

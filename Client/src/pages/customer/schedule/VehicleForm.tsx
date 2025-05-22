@@ -2,7 +2,7 @@ import { Fragment, useEffect, useState } from "react";
 import { subsetOf } from "@/lib/Zod/InputTest";
 import { fetchModels } from "@/services/NHTSA/fetchModels";
 import { fetchVehicle } from "@/services/NHTSA/fetchVehicle";
-import VehicleMakePairs from "@/services/DB/Procedure/Pairs/VehicleMakePairs";
+import VehicleMakePairs from "@/services/DB/Information/SelectVehicleMakePairs";
 import { loadModelYears } from "@/services/NHTSA/loadModelYears";
 import Search from "@/component/Form/Select/Search/Search";
 import { UseForm } from "@/features/Form/useForm/useForm";

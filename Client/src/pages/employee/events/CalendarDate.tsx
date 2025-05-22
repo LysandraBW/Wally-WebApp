@@ -1,4 +1,4 @@
-import { getTimeFromDateString } from "@/utils/format/getTimeFromDateString";
+import { getTimeFromDateString } from "@/utils/extract";
 import { Events } from "./_DEF";
 import { useEffect, useState } from "react";
 import ClockIcon from "@/component/Icon/Clock";

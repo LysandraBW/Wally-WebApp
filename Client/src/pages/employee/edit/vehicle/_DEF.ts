@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { DB_Appointment } from "@/services/DB/Interface/Appointment";
-import { toString } from "@/utils/format/toString";
+import { toString } from "@/utils/convert";
 import { isVIN, subsetOf } from "@/lib/Zod/InputTest";
 
 export interface Vehicle {

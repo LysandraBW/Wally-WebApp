@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { DB_AppointmentSummary } from "@/services/DB/Interface/Appointment";
-import SelectAppointmentSummary from "@/services/DB/Procedure/Appointment/SelectAppointmentSummary";
+import SelectProtectedAppointment from "@/services/DB/Procedure/Appointment/SelectAppointmentSummary";
 import InlineMessage, { Style } from "@/component/Alert/InlineMessage";
 import Cover from "@/views/Absolute/Cover";
 import Header from "@/pages/customer/schedule/Header";
@@ -13,7 +13,7 @@ import NavBar from "@/component/NavBar/NavBar";
 import { Tooltip } from "react-tooltip";
 import { startForm } from "@/pages/customer/lookup/_DEF";
 import useForm from "@/features/Form/useForm/useForm";
-import LookupAppointment from "@/services/DB/Procedure/Appointment/LookupAppointment";
+import LookupAppointment from "@/services/DB/Appointment/LookupAppointment";
 
 export interface ID {
     sessionID: string;
@@ -30,7 +30,7 @@ export default function Page() {
         const load = async () => {
             if (!person)
                 return;
-            const summary = await SelectAppointmentSummary(person);
+            const summary = await SelectProtectedAppointment(person);
             setAppointment(summary);
         }
         load();
@@ -47,10 +47,10 @@ export default function Page() {
             <div className="relative py-16 px-16 flex flex-col items-center gap-8">
                 <header className="flex flex-col items-center w-min">
                     <h3 className="text-center font-medium whitespace-nowrap">Lookup Appointment</h3>
-                    <p className="text-center text-md tracking-wide max-w-[440px] text-gray-400">Find any updates about your appointment by entering the appointment's ID and associated email address.</p>
+                    <p className="text-center text-md tracking-wide max-w-[440px] text-gray-600">Learn more about your appointment by entering the appointment's ID and associated email address.</p>
                 </header>
                 {/* Form */}
-                <div className={"flex flex-col w-1/3"}>
+                <div className={"flex flex-col w-[350px]"}>
                     {/* 
                         The output of this form consists of 2
                         IDs: an appointment ID and a session ID.

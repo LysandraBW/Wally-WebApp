@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import View from "@/pages/employee/view/View";
 import { useRouter, useSearchParams } from "next/navigation";
-import authenticatedSession from "@/utils/authenticatedSession";
+import AuthenticatedEmployee from "@/services/DB/Procedure/Employee/AuthenticatedEmployee";
 import useForm from "@/features/Form/useForm/useForm";
 import TextField from "@/component/Form/Text/TextField";
 import EmployeeLayout from "@/views/Layout/Employee/EmployeeLayout";
@@ -22,7 +22,7 @@ export default function Page() {
 
     useEffect(() => {
         const load = async () => {
-            const sessionID = await authenticatedSession();
+            const sessionID = await AuthenticatedEmployee();
             setSessionID(sessionID);
 
             if (searchParams) {

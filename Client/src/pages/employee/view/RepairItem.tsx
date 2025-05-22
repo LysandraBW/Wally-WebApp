@@ -1,7 +1,7 @@
 import { DB_AppointmentRepair } from "@/services/DB/Interface/Appointment";
 import { Repair } from "../edit/service/repair/_DEF";
 import Item from "@/features/ItemManager/Item/Item";
-import { toInteger } from "@/utils/format/toInteger";
+import { toInteger } from "@/utils/convert";
 
 interface RepairItemProps {
     repair: DB_AppointmentRepair | Repair;

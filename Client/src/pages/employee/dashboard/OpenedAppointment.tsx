@@ -1,16 +1,15 @@
 import Button from "@/component/Form/Button/Button";
 import { DB_Appointment } from "@/services/DB/Interface/Appointment";
-import SelectAppointment from "@/services/DB/Procedure/Appointment/SelectAppointment";
+import SelectAppointment from "@/services/DB/Appointment/SelectAppointment";
 import { goToUpdateAppointment } from "@/utils/redirect/goToUpdateAppointment";
 import { goToViewAppointment } from "@/utils/redirect/goToViewAppointment";
 import { Fragment, useEffect, useState } from "react";
 import CloseButton from "@/component/Button/CloseButton";
 import Hash from "@/component/Icon/Hash";
-import { toDisplayDate } from "@/utils/format/toDisplayDate";
+import { toDisplayDate } from "@/utils/convert";
 import clsx from "clsx";
 
 interface OpenedAppointmentProps {
-    sessionID: string;
     appointmentID: string;
     closeAppointment: () => void;
 }
@@ -56,7 +55,6 @@ export default function OpenedAppointment(props: OpenedAppointmentProps) {
     useEffect(() => {
         const load = async () => {
             const appointment: DB_Appointment = await SelectAppointment({
-                sessionID: props.sessionID, 
                 appointmentID: props.appointmentID
             });
             setAppointment(appointment);

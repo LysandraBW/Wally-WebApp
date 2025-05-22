@@ -6,20 +6,20 @@ import deleteTDispatch from "../dispatch/deleteTDispatch";
 import { AppointmentManager } from "./useAppointmentManager";
 import undeleteTDispatch from "../dispatch/undeleteTDispatch";
 import undeleteFDispatch from "../dispatch/undeleteFDispatch";
-import DeleteAppointments from "@/services/DB/Procedure/Appointment/DeleteAppointments";
-import UndeleteAppointments from "@/services/DB/Procedure/Appointment/UndeleteAppointments";
+import DeleteAppointments from "@/services/DB/Appointment/DeleteAppointments";
+import RecoverAppointments from "@/services/DB/Appointment/UndeleteAppointments";
 import deleteConfirmationDispatch from "../dispatch/deleteConfirmationDispatch";
 import { ToggleManager } from "./useToggleManager";
 import randomKey from "@/features/Alert/randomKey";
 
 export type DeleteManager = ReturnType<typeof useDeleteManager>;
 
-export default function useDeleteManager(sessionID: string, alertDispatch: Dispatch<AlertAction>, toggleManager: ToggleManager, filterManager: FilterManager, appointmentManager: AppointmentManager) {
+export default function useDeleteManager(alertDispatch: Dispatch<AlertAction>, toggleManager: ToggleManager, filterManager: FilterManager, appointmentManager: AppointmentManager) {
     const undeleteAppointments = async (appointmentIDs: Array<string>) => {
         if (!appointmentIDs.length)
             return;
 
-        if (await UndeleteAppointments({sessionID, appointmentIDs})) 
+        if (await RecoverAppointments({appointmentIDs})) 
             alertDispatch(undeleteTDispatch(randomKey(), alertDispatch));
         else 
             alertDispatch(undeleteFDispatch(randomKey(), alertDispatch));
@@ -31,7 +31,7 @@ export default function useDeleteManager(sessionID: string, alertDispatch: Dispa
             return;
 
         const permanent = filterManager.deleted === "1";
-        if (await DeleteAppointments({sessionID, appointmentIDs}, permanent, true))
+        if (await DeleteAppointments({appointmentIDs}, permanent, true))
             alertDispatch(deleteTDispatch(randomKey(), alertDispatch));
         else
             alertDispatch(deleteFDispatch(randomKey(), alertDispatch));

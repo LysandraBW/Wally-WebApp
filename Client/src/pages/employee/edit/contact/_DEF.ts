@@ -1,7 +1,7 @@
 import { z } from "zod";
-import { toString } from "@/utils/format/toString";
+import { toString } from "@/utils/convert";
 import { DB_Appointment } from "@/services/DB/Interface/Appointment";
-import toInputDate from "@/utils/format/toInputDate";
+import toInputDate from "@/utils/convert";
 import { strictSubsetOf, subsetOf } from "@/lib/Zod/InputTest";
 
 export interface Contact {

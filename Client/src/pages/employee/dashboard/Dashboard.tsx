@@ -17,15 +17,14 @@ import Table from "./Table/Table";
 import clsx from "clsx";
 
 interface DashboardProps {
-    sessionID: string;
 }
 
 export default function Dashboard(props: DashboardProps) {
     const [alert, alertDispatch] =  useReducer(alertReducer, startAlert);
     const filterManager = useFilterManager();
-    const appointmentManager = useAppointmentManager(props.sessionID, filterManager);
-    const toggleManager = useToggleManager(props.sessionID, appointmentManager);
-    const deleteManager = useDeleteManager(props.sessionID, alertDispatch, toggleManager, filterManager, appointmentManager);
+    const appointmentManager = useAppointmentManager(filterManager);
+    const toggleManager = useToggleManager(appointmentManager);
+    const deleteManager = useDeleteManager(alertDispatch, toggleManager, filterManager, appointmentManager);
 
     useInterval(() => {
         // Every second, the alerts will be refreshed,
@@ -73,7 +72,6 @@ export default function Dashboard(props: DashboardProps) {
                 </div>                 
                 {appointmentManager.openedAppointment &&
                     <OpenedAppointment
-                        sessionID={props.sessionID}
                         appointmentID={appointmentManager.openedAppointment}
                         closeAppointment={appointmentManager.closeAppointment}
                     />

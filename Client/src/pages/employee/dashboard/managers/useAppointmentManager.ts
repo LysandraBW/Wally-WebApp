@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import SelectAllAppointments from "@/services/DB/Procedure/Appointment/SelectAllAppointments";
+import SelectAllAppointments from "@/services/DB/Appointment/SelectAllAppointments";
 import { DB_AppointmentOverview, DB_AppointmentOverviews, DB_SingleAppointmentLabel } from "@/services/DB/Interface/Appointment";
 import { FilterManager } from "./useFilterManager";
 
@@ -8,7 +8,7 @@ export interface Appointment extends DB_AppointmentOverview {Labels: DB_SingleAp
 export interface Appointments {[appointmentID: string]: Appointment}
 export type AppointmentManager = ReturnType<typeof useAppointmentManager>;
 
-export default function useAppointmentManager(sessionID: string, filterManager: FilterManager) {
+export default function useAppointmentManager(filterManager: FilterManager) {
     const router = useRouter();
     const searchParams = useSearchParams();
     const [appointments, setAppointments] = useState<Array<Appointment>>();
@@ -55,10 +55,7 @@ export default function useAppointmentManager(sessionID: string, filterManager: 
 
     const loadAppointments = async () => {
         const filter = filterManager.filter();
-        const appointments = await SelectAllAppointments({
-            ...filter,
-            sessionID
-        }) as DB_AppointmentOverviews;
+        const appointments = await SelectAllAppointments(filter) as DB_AppointmentOverviews;
         setAppointments(formatAppointments(appointments));
         filterManager.updateMaxPageIndex(appointments.Count);
     }
@@ -85,10 +82,7 @@ export default function useAppointmentManager(sessionID: string, filterManager: 
 
     const reloadAppointments = async () => {
         const filter = filterManager.filter();
-        const appointments = await SelectAllAppointments({
-            ...filter,
-            sessionID
-        }) as DB_AppointmentOverviews;
+        const appointments = await SelectAllAppointments(filter) as DB_AppointmentOverviews;
         setAppointments(formatAppointments(appointments));
         filterManager.updateMaxPageIndex(appointments.Count);
     }

@@ -3,11 +3,11 @@ import { Event } from "./_DEF";
 import { goToViewAppointment } from "@/utils/redirect/goToViewAppointment";
 import CloseButton from "@/component/Button/CloseButton";
 import Button from "@/component/Form/Button/Button";
-import { toDisplayDate } from "@/utils/format/toDisplayDate";
+import { toDisplayDate } from "@/utils/convert";
 import { useEffect, useState } from "react";
 import { OptionMap } from "@/features/Form/DEF";
 import { getCookie } from "@/utils/cookies/getCookie";
-import EmployeeNamePairs from "@/services/DB/Procedure/Pairs/EmployeeNamePairs";
+import GetEmployeeNamePairs from "@/services/DB/Procedure/Employee/GetEmployeeNamePairs";
 import getValuesToLabels from "@/features/Form/helpers/getValuesToLabels";
 import Person from "@/component/Icon/Person";
 import EditButton from "@/pages/employee/events/EditButton";
@@ -27,7 +27,7 @@ export default function EventModal(props: EventModalProps) {
     useEffect(() => {
         const load = async () => {
             const sessionID = await getCookie("sessionID");
-            const employees = await EmployeeNamePairs(sessionID);
+            const employees = await GetEmployeeNamePairs(sessionID);
             setIDToName(getValuesToLabels(employees));
         }
         load();

@@ -1,7 +1,7 @@
 import { Fragment } from "react";
 import CardData from "./CardData";
 import { DB_AppointmentSummary } from "@/services/DB/Interface/Appointment";
-import { toDisplayDate } from "@/utils/format/toDisplayDate";
+import { toDisplayDate } from "@/utils/convert";
 
 interface ContactTabProps {
     appointment: DB_AppointmentSummary;

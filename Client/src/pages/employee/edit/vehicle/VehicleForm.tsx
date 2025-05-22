@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { makeVehicle, vehicleTest, Vehicle } from "./_DEF";
 import { VEHICLE } from "../_DEF";
 import { fetchModels } from "@/services/NHTSA/fetchModels";
-import VehicleMakePairs from "@/services/DB/Procedure/Pairs/VehicleMakePairs";
+import VehicleMakePairs from "@/services/DB/Information/SelectVehicleMakePairs";
 import { loadModelYears } from "@/services/NHTSA/loadModelYears";
 import { fetchVehicle } from "@/services/NHTSA/fetchVehicle";
 import { subsetOf } from "@/lib/Zod/InputTest";

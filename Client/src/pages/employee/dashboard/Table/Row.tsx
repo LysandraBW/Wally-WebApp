@@ -8,8 +8,8 @@ import { FilterManager } from "../managers/useFilterManager";
 import { DeleteManager } from "../managers/useDeleteManager";
 import { Appointment, AppointmentManager } from "../managers/useAppointmentManager";
 import { ToggleManager } from "../managers/useToggleManager";
-import { toDisplayDate } from "@/utils/format/toDisplayDate";
-import { toString } from "@/utils/format/toString";
+import { toDisplayDate } from "@/utils/convert";
+import { toString } from "@/utils/convert";
 import { Fragment } from "react";
 import clsx from "clsx";
 

@@ -1,4 +1,4 @@
-import { ServiceMap, ServiceT2Pairs as ServiceDeep, T2Services as DeepServices } from "@/services/DB/Procedure/Pairs/T2Services";
+import { ServiceMap, ServiceT2Pairs as ServiceDeep, GetT2Services as DeepServices } from "@/services/DB/Information/GetT2Services";
 import { useEffect, useState } from "react";
 import { Service, Services } from "./_DEF";
 import { DB_AppointmentService } from "@/services/DB/Interface/Appointment";

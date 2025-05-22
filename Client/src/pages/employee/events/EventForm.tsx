@@ -1,7 +1,7 @@
 import { Fragment, useEffect, useState } from "react";
 import Button from "@/component/Form/Button/Button";
 import { getCookie } from "@/utils/cookies/getCookie";
-import EmployeeNamePairs from "@/services/DB/Procedure/Pairs/EmployeeNamePairs";
+import GetEmployeeNamePairs from "@/services/DB/Procedure/Employee/GetEmployeeNamePairs";
 import useItemForm from "@/features/ItemManager/useItemForm";
 import { FormProps } from "@/features/ItemManager/ItemManager";
 import { Options } from "@/features/Form/DEF";
@@ -19,7 +19,7 @@ export default function EventForm<DB_Event, Event, Events>(props: FormProps<DB_E
     useEffect(() => {
         const load = async () => {
             const sessionID = await getCookie("sessionID");
-            const employees = await EmployeeNamePairs(sessionID);
+            const employees = await GetEmployeeNamePairs(sessionID);
             setEmployees(employees);
             onReset();
         }
