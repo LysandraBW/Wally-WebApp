@@ -1,12 +1,5 @@
 "use client";
 import { useEffect, useState } from "react";
-import { DB_AppointmentSummary } from "@/services/DB/Interface/Appointment";
-import SelectProtectedAppointment from "@/services/DB/Procedure/Appointment/SelectAppointmentSummary";
-import InlineMessage, { Style } from "@/component/Alert/InlineMessage";
-import Cover from "@/views/Absolute/Cover";
-import Header from "@/pages/customer/schedule/Header";
-import StandardNavigation from "@/views/Layout/Default/StandardNavigation";
-import clsx from "clsx";
 import LookupForm from "@/pages/customer/lookup/LookupForm";
 import Card from "@/pages/customer/lookup/Card/Card";
 import NavBar from "@/component/NavBar/NavBar";
@@ -14,6 +7,8 @@ import { Tooltip } from "react-tooltip";
 import { startForm } from "@/pages/customer/lookup/_DEF";
 import useForm from "@/features/Form/useForm/useForm";
 import LookupAppointment from "@/services/DB/Appointment/LookupAppointment";
+import { ProtectedAppointment as DB_ProtectedAppointment } from "waltronics-types";
+import SelectProtectedAppointment, { ROLE_APPOINTMENT } from "@/services/DB/Appointment/SelectProtectedAppointment";
 
 export interface ID {
     sessionID: string;
@@ -22,7 +17,7 @@ export interface ID {
 
 export default function Page() {
     const [person, setPerson] = useState<ID|null>();
-    const [appointment, setAppointment] = useState<DB_AppointmentSummary|null>();
+    const [appointment, setAppointment] = useState<DB_ProtectedAppointment|null>();
     
     const form = useForm("Lookup", startForm());
 
@@ -30,7 +25,7 @@ export default function Page() {
         const load = async () => {
             if (!person)
                 return;
-            const summary = await SelectProtectedAppointment(person);
+            const summary = await SelectProtectedAppointment(person.appointmentID, ROLE_APPOINTMENT);
             setAppointment(summary);
         }
         load();

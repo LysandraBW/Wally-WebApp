@@ -1,10 +1,10 @@
-import { DB_Note } from "@/services/DB/Interface/Employee";
 import { z } from "zod";
 import { toString } from "@/utils/convert";
 import { subsetOf } from "@/lib/Zod/InputTest";
 import { NOTE } from "../_DEF";
 import { Define } from "@/features/ItemManager/Define";
 import { FormTest } from "@/features/Form/useForm/Form";
+import { Note as DB_Note } from "waltronics-types";
 
 export interface Note extends Omit<DB_Note, "Sharees" | "UpdationDate" | "CreationDate" | "ShowCustomer"> {
     UploadedAttachments: FileList | null;

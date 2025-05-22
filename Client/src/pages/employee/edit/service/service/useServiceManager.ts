@@ -1,7 +1,7 @@
 import { ServiceMap, ServiceT2Pairs as ServiceDeep, GetT2Services as DeepServices } from "@/services/DB/Information/GetT2Services";
 import { useEffect, useState } from "react";
 import { Service, Services } from "./_DEF";
-import { DB_AppointmentService } from "@/services/DB/Interface/Appointment";
+import { Service as DB_AppointmentService } from "waltronics-types";
 import useItemManager, { UseItemManagerProps } from "@/features/ItemManager/useItemManager";
 import { sameMap } from "@/features/ItemManager/helpers/sameMap";
 import { Options } from "@/features/Form/DEF";

@@ -1,4 +1,4 @@
-import { request, Body } from "../../request";
+import { request, Body } from "../request";
 
 export async function LoginEmployee(body: Body) {
     try {

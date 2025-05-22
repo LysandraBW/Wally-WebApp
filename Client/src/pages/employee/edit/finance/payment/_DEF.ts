@@ -1,11 +1,11 @@
 import { z } from "zod";
-import { DB_AppointmentPayment } from "@/services/DB/Interface/Appointment";
 import { toString } from "@/utils/convert";
 import { Define } from "@/features/ItemManager/Define";
 import { PAYMENT } from "../../_DEF";
 import { FormTest } from "@/features/Form/useForm/Form";
+import { Payment as DB_Payment } from "waltronics-types";
 
-export interface Payment extends Omit<DB_AppointmentPayment, "Payment" | "PaymentID" | "PaymentDate" | "AppointmentID"> {
+export interface Payment extends Omit<DB_Payment, "Payment" | "PaymentID" | "PaymentDate" | "AppointmentID"> {
     Payment: string;
     PaymentID: string;
     PaymentDate: string;
@@ -28,7 +28,7 @@ export interface PaymentUpdates {
     }>
 }
 
-export class DefinePayment extends Define<DB_AppointmentPayment, Payment, Payments> {
+export class DefinePayment extends Define<DB_Payment, Payment, Payments> {
     formID = PAYMENT;
     itemID = "PaymentID";
     itemName = "Payment";
@@ -44,7 +44,7 @@ export class DefinePayment extends Define<DB_AppointmentPayment, Payment, Paymen
         });
     }
 
-    buildItem(baseItem: DB_AppointmentPayment | null): Payment {
+    buildItem(baseItem: DB_Payment | null): Payment {
         console.log("Base Item", baseItem);
         return {
             CCN: baseItem?.CCN || "",
@@ -57,7 +57,7 @@ export class DefinePayment extends Define<DB_AppointmentPayment, Payment, Paymen
         };
     }
 
-    buildItems(baseItems: DB_AppointmentPayment[]): Payments {
+    buildItems(baseItems: DB_Payment[]): Payments {
         const payments: Payments = {};
         for (const payment of baseItems)
             payments[toString(payment.PaymentID)] = this.buildItem(payment);

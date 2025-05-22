@@ -1,4 +1,4 @@
-import { DB_AppointmentDiagnosis } from "@/services/DB/Interface/Appointment";
+import { Diagnosis as DB_AppointmentDiagnosis } from "waltronics-types";
 import { Diagnosis } from "../edit/service/diagnosis/_DEF";
 import Item from "@/features/ItemManager/Item/Item";
 

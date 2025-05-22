@@ -1,8 +1,8 @@
-import { DB_Appointment } from "@/services/DB/Interface/Appointment";
 import { Contact, ContactUpdates } from "./_DEF";
 import ContactForm from "./ContactForm";
 import { updatedValue } from "@/features/ItemManager/helpers/updatedValue";
 import { UseForm } from "@/features/Form/useForm/useForm";
+import { Appointment as DB_Appointment } from "waltronics-types";
 
 interface ContactManagerProps {
     parentForm: UseForm;

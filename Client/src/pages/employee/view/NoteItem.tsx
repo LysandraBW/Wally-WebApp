@@ -1,12 +1,12 @@
-import { DB_EmployeeNote } from "@/services/DB/Interface/Employee";
+import { EmployeeNote as DB_EmployeeNote } from "waltronics-types";
 import { Note } from "../edit/note/_DEF";
 import Person from "@/component/Icon/Person";
 import { Fragment, ReactNode, useEffect, useState } from "react";
 import { getCookie } from "@/utils/cookies/getCookie";
-import GetEmployeeNamePairs from "@/services/DB/Procedure/Employee/GetEmployeeNamePairs";
 import getValuesToLabels from "@/features/Form/helpers/getValuesToLabels";
 import Paperclip from "@/component/Icon/Paperclip";
 import Item from "@/features/ItemManager/Item/Item";
+import GetEmployeeNamePairs from "@/services/DB/Employee/GetEmployeeNamePairs";
 
 interface NoteItemProps {
     note: DB_EmployeeNote|Note;
@@ -19,7 +19,7 @@ export default function NoteItem(props: NoteItemProps) {
     useEffect(() => {
         const load = async () => {
             const sessionID = await getCookie("sessionID");
-            const employees = await GetEmployeeNamePairs(sessionID);
+            const employees = await GetEmployeeNamePairs();
 
             const tags = [];
 

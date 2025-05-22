@@ -1,4 +1,4 @@
-import { DB_Service } from "@/services/DB/Interface/Information";
+import { InfoService as DB_Service } from "waltronics-types";
 import { request } from "../request";
 import { Options } from "@/features/Form/DEF";
 

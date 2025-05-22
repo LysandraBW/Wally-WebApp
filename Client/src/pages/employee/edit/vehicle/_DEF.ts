@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { DB_Appointment } from "@/services/DB/Interface/Appointment";
+import { Appointment as DB_Appointment } from "waltronics-types";
 import { toString } from "@/utils/convert";
 import { isVIN, subsetOf } from "@/lib/Zod/InputTest";
 

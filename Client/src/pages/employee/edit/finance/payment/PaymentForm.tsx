@@ -1,15 +1,14 @@
 import { useEffect, useState } from "react";
 import { Payment, Payments } from "./_DEF";
-import { DB_AppointmentPayment } from "@/services/DB/Interface/Appointment";
 import useItemForm from "@/features/ItemManager/useItemForm";
 import { FormProps } from "@/features/ItemManager/ItemManager";
 import TextField from "@/component/Form/Text/TextField";
 import Radio from "@/component/Form/Radio/Radio";
 import ItemForm from "@/features/ItemManager/Form/ItemForm";
-import clsx from "clsx";
 import ItemFormGroup from "@/features/ItemManager/Form/ItemFormGroup";
+import { Payment as DB_Payment} from "waltronics-types"
 
-export default function PaymentForm(props: FormProps<DB_AppointmentPayment, Payment, Payments>) {
+export default function PaymentForm(props: FormProps<DB_Payment, Payment, Payments>) {
     const form = useItemForm(props);
     const [addCard, setAddCard] = useState(false);
 

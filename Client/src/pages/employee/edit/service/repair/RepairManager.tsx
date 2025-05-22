@@ -1,6 +1,6 @@
 import RepairDisplay from "./RepairDisplay";
 import buildUpdate from "@/features/ItemManager/buildUpdate";
-import { DB_AppointmentRepair } from "@/services/DB/Interface/Appointment";
+import { Repair as DB_AppointmentRepair } from "waltronics-types"
 import { DefineRepair, Repairs, RepairUpdates } from "./_DEF";
 import RepairForm from "./RepairForm";
 import ItemManager from "@/features/ItemManager/ItemManager";

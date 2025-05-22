@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import SelectAllAppointments from "@/services/DB/Appointment/SelectAllAppointments";
-import { DB_AppointmentOverview, DB_AppointmentOverviews, DB_SingleAppointmentLabel } from "@/services/DB/Interface/Appointment";
 import { FilterManager } from "./useFilterManager";
+import { AppointmentLabels, AppointmentList, AppointmentEntry } from "waltronics-types";
 
-export interface Appointment extends DB_AppointmentOverview {Labels: DB_SingleAppointmentLabel}
+export interface Appointment extends AppointmentEntry {Labels: AppointmentLabels}
 export interface Appointments {[appointmentID: string]: Appointment}
 export type AppointmentManager = ReturnType<typeof useAppointmentManager>;
 
@@ -31,15 +31,9 @@ export default function useAppointmentManager(filterManager: FilterManager) {
         updateTableAppointments();
     }, [appointments, filterManager.pageIndex]);
 
-    const formatAppointments = (appointments: DB_AppointmentOverviews) => {
-        const apps: Array<Appointment> = [];
-        for (const appointment of appointments.Appointments) {
-            apps.push({
-                ...appointment,
-                Labels: appointments.Labels[appointment.AppointmentID]
-            });
-        }
-        return apps;
+    const formatAppointments = (appointments: AppointmentList) => {
+        // Not sure if this is going to cause issues
+        return appointments.Appointments;
     }
 
     const updateTableAppointments = () => {
@@ -55,7 +49,7 @@ export default function useAppointmentManager(filterManager: FilterManager) {
 
     const loadAppointments = async () => {
         const filter = filterManager.filter();
-        const appointments = await SelectAllAppointments(filter) as DB_AppointmentOverviews;
+        const appointments = await SelectAllAppointments(filter) as AppointmentList;
         setAppointments(formatAppointments(appointments));
         filterManager.updateMaxPageIndex(appointments.Count);
     }
@@ -82,12 +76,12 @@ export default function useAppointmentManager(filterManager: FilterManager) {
 
     const reloadAppointments = async () => {
         const filter = filterManager.filter();
-        const appointments = await SelectAllAppointments(filter) as DB_AppointmentOverviews;
+        const appointments = await SelectAllAppointments(filter) as AppointmentList;
         setAppointments(formatAppointments(appointments));
         filterManager.updateMaxPageIndex(appointments.Count);
     }
 
-    const updateAppointmentLabel = (appointmentID: string, labels: DB_SingleAppointmentLabel) => {
+    const updateAppointmentLabel = (appointmentID: string, labels: AppointmentLabels) => {
         if (!tableAppointments)
             return;
         const index = tableAppointments.findIndex(app => app.AppointmentID === appointmentID);

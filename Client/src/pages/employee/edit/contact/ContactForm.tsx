@@ -1,4 +1,3 @@
-import { DB_Appointment } from "@/services/DB/Interface/Appointment";
 import { contactTest, Contact, makeContact } from "./_DEF";
 import { useEffect, useState } from "react";
 import GetStatusPairs from "@/services/DB/Information/GetStatusPairs";
@@ -7,11 +6,11 @@ import { Options } from "@/features/Form/DEF";
 import useForm, { UseForm } from "@/features/Form/useForm/useForm";
 import makeForm from "@/features/Form/useForm/makeForm";
 import TextField from "@/component/Form/Text/TextField";
-import Segment from "@/component/Form/Segment/Segment";
 import PhoneNumber from "@/component/Form/Text/PhoneNumber/PhoneNumber";
 import SaveResetButtons from "@/features/ItemManager/Form/SaveResetButtons";
 import Select from "@/component/Form/Select/Select/Select";
 import clsx from "clsx";
+import { Appointment as DB_Appointment } from "waltronics-types";
 
 interface ContactFormProps {
     parent: UseForm;

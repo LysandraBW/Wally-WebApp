@@ -1,11 +1,11 @@
 import { Define } from "@/features/ItemManager/Define";
-import { DB_AppointmentService } from "@/services/DB/Interface/Appointment";
 import { toString } from "@/utils/convert";
 import { z } from "zod";
 import { SERVICE } from "../../_DEF";
 import { FormTest } from "@/features/Form/useForm/Form";
+import { Service as DB_Service } from "waltronics-types";
 
-export interface Service extends Omit<DB_AppointmentService, "AppointmentServiceID" | "ServiceID"> {
+export interface Service extends Omit<DB_Service, "AppointmentServiceID" | "ServiceID"> {
     AppointmentServiceID: string;
     ServiceID: string;
 };
@@ -31,7 +31,7 @@ export interface ServiceUpdates {
     }>;
 }
 
-export class DefineService extends Define<DB_AppointmentService, Service, Services> {
+export class DefineService extends Define<DB_Service, Service, Services> {
     formID = SERVICE;
     itemID = "AppointmentServiceID";
     itemName = "Service";
@@ -44,7 +44,7 @@ export class DefineService extends Define<DB_AppointmentService, Service, Servic
         });
     }
 
-    buildItem(baseItem: DB_AppointmentService | null): Service {
+    buildItem(baseItem: DB_Service | null): Service {
         return {
             AppointmentServiceID: toString(baseItem?.AppointmentServiceID),
             AppointmentID: toString(baseItem?.AppointmentID),
@@ -55,7 +55,7 @@ export class DefineService extends Define<DB_AppointmentService, Service, Servic
         }
     }
 
-    buildItems(baseItems: DB_AppointmentService[]): Services {
+    buildItems(baseItems: DB_Service[]): Services {
         const services: Services = {};
         for (const service of baseItems)
             services[service.AppointmentServiceID] = this.buildItem(service);

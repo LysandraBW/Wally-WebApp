@@ -1,4 +1,4 @@
-import { DB_Note } from "@/services/DB/Interface/Employee";
+import { Note as DB_Note } from "waltronics-types";
 import { DefineNote, Notes, NoteUpdates } from "./_DEF";
 import NoteDisplay from "./NoteDisplay";
 import NoteForm from "./NoteForm";

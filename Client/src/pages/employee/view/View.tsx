@@ -1,17 +1,13 @@
-import { DB_Appointment } from "@/services/DB/Interface/Appointment";
+import { Appointment as DB_Appointment } from "waltronics-types";
 import SelectAppointment from "@/services/DB/Appointment/SelectAppointment";
 import { toDisplayDate } from "@/utils/convert";
 import { useEffect, useState } from "react";
-import PaymentDisplay from "../edit/finance/payment/PaymentDisplay";
-import { Payments } from "../edit/finance/payment/_DEF";
 import ShowPayment from "./PaymentItem";
 import ShowPart from "./PartItem";
 import ServiceItem from "./ServiceItem";
 import RepairItem from "./RepairItem";
 import DiagnosisItem from "./DiagnosisItem";
 import NoteItem from "./NoteItem";
-import EmployeeLayout from "@/views/Layout/Employee/EmployeeLayout";
-import HashIcon from "@/component/Icon/Hash";
 import { NonScalarViewSection, ScalarViewSection } from "./ViewSection";
 import Tabs from "@/component/Tabs/Tabs";
 

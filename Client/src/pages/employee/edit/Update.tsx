@@ -5,7 +5,6 @@ import PartManager from "./service/part/PartManager";
 import RepairManager from "./service/repair/RepairManager";
 import ServiceManager from "./service/service/ServiceManager";
 import { MasterForm, tabs } from "./_DEF";
-import { DB_Appointment } from "@/services/DB/Interface/Appointment";
 import SelectAppointment from "@/services/DB/Appointment/SelectAppointment";
 import { ContactUpdates } from "./contact/_DEF";
 import { VehicleUpdates } from "./vehicle/_DEF";
@@ -23,7 +22,6 @@ import { toString } from "@/utils/convert";
 import PaymentManager from "./finance/payment/PaymentManager";
 import Tabs from "@/component/Tabs/Tabs";
 import { UpdateAppointmentContact } from "@/services/DB/Appointment/UpdateAppointmentContact";
-import { UpdateEmployeeNotes } from "@/services/DB/Procedure/Employee/UpdateEmployeeNotes";
 import { UpdateAppointmentParts } from "@/services/DB/Appointment/UpdateAppointmentParts";
 import { UpdateAppointmentServices } from "@/services/DB/Appointment/UpdateAppointmentServices";
 import { UpdateAppointmentRepairs } from "@/services/DB/Appointment/UpdateAppointmentRepairs";
@@ -37,6 +35,8 @@ import randomKey from "@/features/Alert/randomKey";
 import saveFDispatch from "../../../features/Alert/saveFDispatch";
 import Alert from "@/features/Alert/Alert";
 import useForm from "@/features/Form/useForm/useForm";
+import { Appointment as DB_Appointment } from "waltronics-types";
+import { UpdateEmployeeNotes } from "@/services/DB/Employee/UpdateEmployeeNotes";
 
 interface UpdatePros {
     sessionID: string;
@@ -74,55 +74,55 @@ export default function Update(props: UpdatePros) {
 
     const saveContact = async (updates: ContactUpdates) => {
         console.log(updates);
-        const output = await UpdateAppointmentContact(props.sessionID, props.appointmentID, updates);
+        const output = await UpdateAppointmentContact(props.appointmentID, updates);
         alertOutput(output);
     }
 
     const saveVehicle = async (updates: VehicleUpdates) => {
         console.log(updates);
-        const output = await UpdateAppointmentVehicle(props.sessionID, props.appointmentID, updates);
+        const output = await UpdateAppointmentVehicle(props.appointmentID, updates);
         alertOutput(output);
     }
 
     const saveCost = async (updates: CostUpdates) => {
         console.log(updates);
-        const output = await UpdateAppointmentCost(props.sessionID, props.appointmentID, updates);
+        const output = await UpdateAppointmentCost(props.appointmentID, updates);
         alertOutput(output);
     }
 
     const savePayment = async (updates: PaymentUpdates) => {
         console.log(updates);
-        const output = await UpdateAppointmentPayments(props.sessionID, props.appointmentID, updates);
+        const output = await UpdateAppointmentPayments(props.appointmentID, updates);
         alertOutput(output);
     }
 
     const saveDiagnoses = async (updates: DiagnosisUpdates) => {
         console.log(updates);
-        const output = await UpdateAppointmentDiagnoses(props.sessionID, props.appointmentID, updates);
+        const output = await UpdateAppointmentDiagnoses(props.appointmentID, updates);
         alertOutput(output);
     }
 
     const saveRepairs = async (updates: RepairUpdates) => {
         console.log(updates);
-        const output = await UpdateAppointmentRepairs(props.sessionID, props.appointmentID, updates);
+        const output = await UpdateAppointmentRepairs(props.appointmentID, updates);
         alertOutput(output);
     }
 
     const saveServices = async (updates: ServiceUpdates) => {
         console.log(updates);
-        const output = await UpdateAppointmentServices(props.sessionID, props.appointmentID, updates);
+        const output = await UpdateAppointmentServices(props.appointmentID, updates);
         alertOutput(output);
     }
 
     const saveParts = async (updates: PartUpdates) => {
         console.log(updates);
-        const output = await UpdateAppointmentParts(props.sessionID, props.appointmentID, updates);
+        const output = await UpdateAppointmentParts(props.appointmentID, updates);
         alertOutput(output);
     }
 
     const saveNotes = async (updates: NoteUpdates) => {
         console.log(updates);
-        const output = await UpdateEmployeeNotes(props.sessionID, updates);
+        const output = await UpdateEmployeeNotes(updates);
         alertOutput(output);
     }
 

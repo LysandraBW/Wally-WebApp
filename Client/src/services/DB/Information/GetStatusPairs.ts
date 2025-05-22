@@ -1,6 +1,6 @@
 "use server";
 import { Options } from "@/features/Form/DEF";
-import { DB_Status } from "@/services/DB/Interface/Information";
+import { InfoStatus as DB_Status } from "waltronics-types";
 import { request } from "../request";
 
 export default async function GetStatusPairs(): Promise<Options> {

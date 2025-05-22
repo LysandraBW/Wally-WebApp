@@ -1,4 +1,3 @@
-import { DB_AppointmentSummary } from "@/services/DB/Interface/Appointment";
 import { useState } from "react";
 import Tabs from "./CardTabs";
 import CloseButton from "@/component/Button/CloseButton";
@@ -7,10 +6,10 @@ import ContactTab from "./ContactTab";
 import VehicleTab from "./VehicleTab";
 import PaymentTab from "./PaymentTab";
 import NotesTab from "./Note/NotesTab";
-import { Satoshi } from "@/public/Font";
+import { ProtectedAppointment as DB_ProtectedAppointment } from "waltronics-types";
 
 interface CardProps {
-    appointment: DB_AppointmentSummary;
+    appointment: DB_ProtectedAppointment;
     closeAppointment: () => void;
 }
 

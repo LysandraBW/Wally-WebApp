@@ -1,8 +1,8 @@
 "use client";
-import { DB_Employee } from "@/services/DB/Interface/Employee";
-import AuthenticatedEmployee from "@/services/DB/Procedure/Employee/AuthenticatedEmployee";
-import { goToEmployeeLogin } from "@/utils/redirect/goToEmployeeLogin";
+import AuthenticatedEmployee from "@/services/DB/Employee/AuthenticatedEmployee";
+import { navigate, PAGE_EMPLOYEE_LOGIN } from "@/utils/navigate";
 import { useEffect, createContext, useState } from "react";
+import { Employee as DB_Employee } from "waltronics-types";
 
 export const EmployeeContext = createContext({});
 
@@ -14,7 +14,7 @@ export default function Page({children}: Readonly<{children: React.ReactNode}>) 
             const employee = await AuthenticatedEmployee();
             console.log("Employee: " + employee);
             if (!employee) {
-                goToEmployeeLogin();
+                navigate(PAGE_EMPLOYEE_LOGIN);
                 return;
             }
             setEmployee(employee);

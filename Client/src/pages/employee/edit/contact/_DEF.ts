@@ -1,8 +1,6 @@
 import { z } from "zod";
-import { toString } from "@/utils/convert";
-import { DB_Appointment } from "@/services/DB/Interface/Appointment";
-import toInputDate from "@/utils/convert";
-import { strictSubsetOf, subsetOf } from "@/lib/Zod/InputTest";
+import { toInputDate, toString } from "@/utils/convert";
+import { Appointment as DB_Appointment } from "waltronics-types";
 
 export interface Contact {
     FName: string

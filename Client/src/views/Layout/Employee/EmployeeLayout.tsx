@@ -1,10 +1,9 @@
 import { Fragment, ReactNode, useEffect, useState } from "react";
 import VerticalNavigation, { Pages } from "./VerticalNavigation";
-import { DB_Employee } from "@/services/DB/Interface/Employee";
-import SelectEmployee from "@/services/DB/Procedure/Employee/SelectEmployee";
-import { getCookie } from "@/utils/cookies/getCookie";
+import { Employee as DB_Employee } from "waltronics-types";
 import BreadCrumb from "./BreadCrumb";
 import clsx from "clsx";
+import SelectEmployee from "@/services/DB/Employee/SelectEmployee";
 
 interface EmployeeLayoutProps {
     page: Pages;
@@ -16,9 +15,8 @@ export default function EmployeeLayout(props: EmployeeLayoutProps) {
     const [employee, setEmployee] = useState<DB_Employee>();
 
     useEffect(() => {
-        const load = async () => {       
-            const sessionID = await getCookie("sessionID");
-            const employee = await SelectEmployee({sessionID});
+        const load = async () => {
+            const employee = await SelectEmployee();
             if (!employee)
                 return;
             setEmployee(employee);

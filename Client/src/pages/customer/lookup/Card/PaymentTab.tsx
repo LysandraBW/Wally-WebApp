@@ -1,10 +1,9 @@
 import { Fragment } from "react";
 import CardData from "./CardData";
-import { DB_AppointmentSummary } from "@/services/DB/Interface/Appointment";
-import { toDisplayDate } from "@/utils/convert";
+import { ProtectedAppointment as DB_ProtectedAppointment } from "waltronics-types";
 
 interface PaymentTabProps {
-    appointment: DB_AppointmentSummary;
+    appointment: DB_ProtectedAppointment;
 }
 
 export default function PaymentTab(props: PaymentTabProps) {

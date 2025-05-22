@@ -1,9 +1,9 @@
 import { NoteUpdates } from "@/pages/employee/edit/note/_DEF";
-import { request } from "../../request";
+import { request } from "../request";
 import { uploadFile } from "@/services/Cloud/uploadFile";
 import { generateURL } from "@/services/Cloud/generateURL";
 
-export async function UpdateEmployeeNotes(sessionID: string, updates: NoteUpdates) {
+export async function UpdateEmployeeNotes(updates: NoteUpdates) {
     try {
         for (const UPDATE of updates.Update) {
             request("POST", `/appointment/${UPDATE.AppointmentID}/note/${UPDATE.NoteID}`, {

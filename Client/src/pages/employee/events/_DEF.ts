@@ -1,8 +1,7 @@
 import { Define } from "@/features/ItemManager/Define";
-import { DB_Event } from "@/services/DB/Interface/Employee";
+import { Event as DB_Event } from "waltronics-types";
 import { z } from "zod";
-import { toString } from "@/utils/convert";
-import toInputDate from "@/utils/convert";
+import { toString, toInputDate } from "@/utils/convert";
 import { subsetOf } from "@/lib/Zod/InputTest";
 import { MathSet } from "@/features/ItemManager/helpers/MathSet";
 import { sameMap } from "@/features/ItemManager/helpers/sameMap";

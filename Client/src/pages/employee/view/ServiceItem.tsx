@@ -1,4 +1,4 @@
-import { DB_AppointmentService } from "@/services/DB/Interface/Appointment";
+import { Service as DB_AppointmentService } from "waltronics-types";
 import { ReactNode, useEffect, useState } from "react";
 import { Service } from "../edit/service/service/_DEF";
 import Item from "@/features/ItemManager/Item/Item";

@@ -1,12 +1,12 @@
 import { Fragment, useState } from "react";
-import { DB_AppointmentSummary } from "@/services/DB/Interface/Appointment";
 import clsx from "clsx";
 import LeftButton from "./LeftButton";
 import Note from "./Note";
 import RightButton from "./RightButton";
+import { ProtectedAppointment as DB_ProtectedAppointment } from "waltronics-types";
 
 interface NotesTabProps {
-    appointment: DB_AppointmentSummary;
+    appointment: DB_ProtectedAppointment;
 }
 
 export default function NotesTab(props: NotesTabProps) {

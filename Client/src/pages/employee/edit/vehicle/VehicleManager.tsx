@@ -1,4 +1,4 @@
-import { DB_Appointment } from "@/services/DB/Interface/Appointment";
+import { Appointment as DB_Appointment } from "waltronics-types";
 import { Vehicle, VehicleUpdates } from "./_DEF";
 import VehicleForm from "./VehicleForm";
 import { updatedValue } from "@/features/ItemManager/helpers/updatedValue";

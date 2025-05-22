@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { toString } from "@/utils/convert";
-import { DB_AppointmentDiagnosis } from "@/services/DB/Interface/Appointment";
+import { Diagnosis as DB_AppointmentDiagnosis } from "waltronics-types";
 import { Define } from "@/features/ItemManager/Define";
 import { DIAGNOSIS } from "../../_DEF";
 import { FormTest } from "@/features/Form/useForm/Form";

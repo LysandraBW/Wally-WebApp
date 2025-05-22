@@ -1,5 +1,5 @@
 import File from "@/component/Form/File/File";
-import { DB_NoteAttachment } from "@/services/DB/Interface/Employee";
+import { NoteAttachment as DB_NoteAttachment } from "waltronics-types";
 
 interface FileManagerProps {
     files: Array<DB_NoteAttachment>;

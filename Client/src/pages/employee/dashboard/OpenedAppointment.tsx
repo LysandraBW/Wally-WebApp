@@ -1,13 +1,12 @@
 import Button from "@/component/Form/Button/Button";
-import { DB_Appointment } from "@/services/DB/Interface/Appointment";
 import SelectAppointment from "@/services/DB/Appointment/SelectAppointment";
-import { goToUpdateAppointment } from "@/utils/redirect/goToUpdateAppointment";
-import { goToViewAppointment } from "@/utils/redirect/goToViewAppointment";
 import { Fragment, useEffect, useState } from "react";
 import CloseButton from "@/component/Button/CloseButton";
 import Hash from "@/component/Icon/Hash";
 import { toDisplayDate } from "@/utils/convert";
 import clsx from "clsx";
+import { Appointment as DB_Appointment } from "waltronics-types";
+import { navigate, PAGE_EDIT_APPOINTMENT, PAGE_VIEW_APPOINTMENT } from "@/utils/navigate";
 
 interface OpenedAppointmentProps {
     appointmentID: string;
@@ -194,14 +193,14 @@ export default function OpenedAppointment(props: OpenedAppointmentProps) {
                     label="View Appointment"
                     style="boring small"
                     onClick={() => {
-                        goToViewAppointment(props.appointmentID);
+                        navigate(PAGE_VIEW_APPOINTMENT, {appointmentID: props.appointmentID});
                     }}
                 />
                 <Button
                     label="Edit Appointment"
                     style="boring small"
                     onClick={() => {
-                        goToUpdateAppointment(props.appointmentID);
+                        navigate(PAGE_EDIT_APPOINTMENT, {appointmentID: props.appointmentID});
                     }}
                 />
             </div>

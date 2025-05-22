@@ -1,4 +1,4 @@
-import { request, Body } from "../../request";
+import { request, Body } from "../request";
 
 export default async function SelectEvents() {
     const {output} = await request("GET", "/employee/events");

@@ -1,5 +1,5 @@
 "use server";
-import { DB_Make } from "@/services/DB/Interface/Information";
+import { InfoMake as DB_Make } from "waltronics-types";
 import { Options } from "@/features/Form/DEF";
 import { request } from "../request";
 

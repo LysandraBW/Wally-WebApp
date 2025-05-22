@@ -1,4 +1,4 @@
-import { DB_Appointment } from "@/services/DB/Interface/Appointment";
+import { Appointment as DB_Appointment } from "waltronics-types";
 import { useEffect, useState } from "react";
 import { makeVehicle, vehicleTest, Vehicle } from "./_DEF";
 import { VEHICLE } from "../_DEF";

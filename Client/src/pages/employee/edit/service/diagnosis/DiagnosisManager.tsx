@@ -1,5 +1,5 @@
 import DiagnosisDisplay from "./DiagnosisDisplay";
-import { DB_AppointmentDiagnosis } from "@/services/DB/Interface/Appointment";
+import { Diagnosis as DB_AppointmentDiagnosis } from "waltronics-types";
 import { Diagnoses, DiagnosisUpdates, DefineDiagnosis } from "./_DEF";
 import buildUpdate from "@/features/ItemManager/buildUpdate";
 import ItemManager from "@/features/ItemManager/ItemManager";

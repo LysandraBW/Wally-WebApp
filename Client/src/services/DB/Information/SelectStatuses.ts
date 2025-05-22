@@ -1,4 +1,4 @@
-import { DB_Status } from "../../Interface/Information";
+import { InfoStatus as DB_Status } from "waltronics-types";
 import { request } from "../request";
 
 export default async function SelectStatuses() {

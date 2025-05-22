@@ -1,5 +1,5 @@
 import { Define } from "@/features/ItemManager/Define";
-import { DB_AppointmentPart } from "@/services/DB/Interface/Appointment";
+import { Part as DB_AppointmentPart } from "waltronics-types";
 import { toString } from "@/utils/convert";
 import { z } from "zod";
 import { PART } from "../../_DEF";

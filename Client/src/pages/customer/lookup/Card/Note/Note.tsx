@@ -1,6 +1,5 @@
 import File from "@/component/Icon/File";
-import { DB_Note } from "@/services/DB/Interface/Employee"
-import { toDisplayDate } from "@/utils/convert";
+import { Note as DB_Note } from "waltronics-types";
 
 interface NoteProps {
     note: DB_Note;

@@ -1,10 +1,9 @@
-import { DB_Event } from "@/services/DB/Interface/Employee";
+import { Event as DB_Event } from "waltronics-types";
 import Calendar from "./Calendar";
 import { DefineEvent, Events, makeEventUpdates } from "./_DEF";
 import EventModal from "./EventModal";
 import EventForm from "./EventForm";
 import CalendarSearch from "./CalendarSearch";
-import Button from "@/component/Form/Button/Button";
 import CreateItemButton from "@/features/ItemManager/Form/CreateItemButton";
 import useEventsManager from "./useEventsManager";
 import EventDisplay from "./EventDisplay";

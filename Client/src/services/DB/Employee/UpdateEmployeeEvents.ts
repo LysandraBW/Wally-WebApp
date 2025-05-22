@@ -1,7 +1,7 @@
-import { request, Body } from "../../request";
+import { request, Body } from "../request";
 import { EventUpdates } from "@/pages/employee/events/_DEF";
 
-export async function UpdateEmployeeEvents(sessionID: string, updates: EventUpdates) {
+export async function UpdateEmployeeEvents(updates: EventUpdates) {
     try {
         for (const UPDATE of updates.Update) {
             request("POST", `/employee/event/${UPDATE.EventID}`, {
@@ -13,7 +13,6 @@ export async function UpdateEmployeeEvents(sessionID: string, updates: EventUpda
 
         for (const INSERT of updates.Insert.Event) {
             const output = await request("PUT", `/employee/event`, {
-                sessionID,
                 name: INSERT.Name,
                 date: INSERT.Date,
                 summary: INSERT.Summary

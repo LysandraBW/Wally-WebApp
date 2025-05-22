@@ -1,5 +1,5 @@
 import ServiceDisplay from "./ServiceDisplay";
-import { DB_AppointmentService } from "@/services/DB/Interface/Appointment";
+import { Service as DB_AppointmentService } from "waltronics-types";
 import { Services, ServiceUpdates, DefineService } from "./_DEF";
 import buildUpdate from "@/features/ItemManager/buildUpdate";
 import CreateItemButton from "@/features/ItemManager/Form/CreateItemButton";

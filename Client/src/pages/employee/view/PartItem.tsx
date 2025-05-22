@@ -1,4 +1,4 @@
-import { DB_AppointmentPart } from "@/services/DB/Interface/Appointment";
+import { Part as DB_AppointmentPart } from "waltronics-types";
 import { Part } from "../edit/service/part/_DEF";
 import Item from "@/features/ItemManager/Item/Item";
 import { toInteger } from "@/utils/convert";

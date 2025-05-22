@@ -1,17 +1,17 @@
 import PaymentDisplay from "./PaymentDisplay";
 import PaymentForm from "./PaymentForm";
 import { DefinePayment, Payments, PaymentUpdates } from "./_DEF";
-import { DB_AppointmentPayment } from "@/services/DB/Interface/Appointment";
 import buildUpdate from "@/features/ItemManager/buildUpdate";
 import useItemManager from "@/features/ItemManager/useItemManager";
 import CreateItemButton from "@/features/ItemManager/Form/CreateItemButton";
 import { UseForm } from "@/features/Form/useForm/useForm";
 import Cover from "@/views/Absolute/Cover";
 import SaveResetButtons from "@/features/ItemManager/Form/SaveResetButtons";
+import { Payment as DB_Payment} from "waltronics-types"
 
 interface PaymentManagerProps {
     parentForm: UseForm;
-    paymentList: Array<DB_AppointmentPayment>;
+    paymentList: Array<DB_Payment>;
     onSaveUpdates: (updates: PaymentUpdates) => void;
 }
 

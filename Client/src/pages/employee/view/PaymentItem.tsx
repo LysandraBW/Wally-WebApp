@@ -1,4 +1,4 @@
-import { DB_AppointmentPayment } from "@/services/DB/Interface/Appointment";
+import { Payment as DB_AppointmentPayment } from "waltronics-types";
 import { Payment } from "../edit/finance/payment/_DEF";
 import { ReactNode, useEffect, useState } from "react";
 import { toDisplayDate } from "@/utils/convert";

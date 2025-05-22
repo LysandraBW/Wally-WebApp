@@ -1,5 +1,5 @@
 import { Define } from "@/features/ItemManager/Define";
-import { DB_AppointmentRepair } from "@/services/DB/Interface/Appointment";
+import { Repair as DB_AppointmentRepair } from "waltronics-types";
 import { toString } from "@/utils/convert";
 import { z } from "zod";
 import { REPAIR } from "../../_DEF";
