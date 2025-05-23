@@ -27,7 +27,7 @@ export default function TableRow(props: TableRowProps) {
             <td 
                 className={clsx(
                     "p-2 !border-l-0",
-                    "border-r border-r-gray-200"
+                    "border-r border-r-gray-200 group-hover:border-r-blue-300",
                 )}
             >
                 <Checkbox

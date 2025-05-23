@@ -1,15 +1,15 @@
 import { Options } from "@/features/Form/DEF";
 import GetStatusPairs from "@/services/DB/Information/GetStatusPairs";
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
 export type Bit = "0"|"1";
 export type FilterManager = ReturnType<typeof useFilterManager>;
 export interface ColumnDirections {[columnName: string]: Bit|null;};
 
-export default function useFilterManager() {
+export default function useFilterManager(setLoadedTable: Dispatch<SetStateAction<{[k: string]: boolean}>>) {
     const [search, setSearch] = useState("");
     const [deleted, setDeleted] = useState<Bit>("0");
-    const [statusID, setStatusID] = useState<string|null>(null);
+    const [statusID, setStatusID] = useState<string>("");
     const [statuses, setStatuses] = useState<Options>([]);
     const [pageIndex, setPageIndex] = useState(0);
     const [pageLength, setPageLength] = useState(10);
@@ -20,8 +20,7 @@ export default function useFilterManager() {
     useEffect(() => {
         const load = async () => {
             const statuses = await GetStatusPairs();
-            console.log(statuses);
-            setStatuses([[null, "All"], ...statuses, ["-1", "Deleted"]]);
+            setStatuses([["", "All"], ...statuses, ["-1", "Deleted"]]);
         }
         load();
     }, []);
@@ -86,7 +85,7 @@ export default function useFilterManager() {
         setColumnDirections(updatedColumnDirections);
     }
 
-    const updateStatus = (statusID: null|string) => {
+    const updateStatus = (statusID: string) => {
         // Deleted Status
         if (statusID === "-1")
             setDeleted("1");
@@ -100,10 +99,9 @@ export default function useFilterManager() {
             search,
             deleted,
             statusID: 
-                statusID === "-1" || statusID === null ? null : statusID,
-            ...columnDirections,
+                statusID === "-1" || statusID === null ? "" : statusID,
             pageSize: pageLength,
-            pageNumber: pageIndex
+            pageNumber: pageIndex + 1
         }
     }
 

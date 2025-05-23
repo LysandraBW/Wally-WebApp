@@ -6,7 +6,8 @@ import Hash from "@/component/Icon/Hash";
 import { toDisplayDate } from "@/utils/convert";
 import clsx from "clsx";
 import { Appointment as DB_Appointment } from "waltronics-types";
-import { navigate, PAGE_EDIT_APPOINTMENT, PAGE_VIEW_APPOINTMENT } from "@/utils/navigate";
+import { navigate } from "@/utils/navigate";
+import { PAGE_EDIT_APPOINTMENT, PAGE_VIEW_APPOINTMENT } from '@/utils/constants';
 
 interface OpenedAppointmentProps {
     appointmentID: string;

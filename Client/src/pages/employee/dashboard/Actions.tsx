@@ -5,6 +5,7 @@ import { DeleteManager } from "./managers/useDeleteManager";
 import Navigation from "./Navigation";
 import { FilterManager } from "./managers/useFilterManager";
 import clsx from "clsx";
+import ArrowUpOnSquareStack from "@/component/Icon/ArrowUpOnSquareStack";
 
 interface ActionsProps {
     deleteManager: DeleteManager;
@@ -46,7 +47,7 @@ export default function Actions(props: ActionsProps) {
                         "hover:fill-blue-500 hover:!border-blue-300",
                         "hover:stroke-blue-500"
                     )}
-                    onClick={props.appointmentManager.reloadAppointments}
+                    onClick={props.appointmentManager.loadAppointments}
                 >
                     <ArrowClockwiseIcon
                         width="14"
@@ -54,6 +55,24 @@ export default function Actions(props: ActionsProps) {
                         strokeWidth="0.5"
                     />
                 </button>
+                {/* Restore Button */}
+                {props.filterManager.statusID === "-1" &&
+                    <button
+                        className={clsx(
+                            "flex justify-center items-center",
+                            "border border-gray-200 shadow-sm",
+                            "!bg-transparent icon aspect-square !fill-none",
+                            "hover:fill-blue-500 hover:!border-blue-300",
+                            "hover:stroke-blue-500"
+                        )}
+                        onClick={props.deleteManager.undeleteSelectedAppointments}
+                    >
+                        <ArrowUpOnSquareStack
+                            className="w-[16px] h-[16px]"
+                            strokeWidth="2"
+                        />
+                    </button>
+                }
             </div>
             {/* Navigation */}
             <Navigation

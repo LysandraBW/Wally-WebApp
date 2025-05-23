@@ -16,7 +16,8 @@ interface TableProps {
 export default function Table(props: TableProps) {
     const markSeen = (appointment: Appointment) => {
         const {AppointmentID} = appointment;
-        if (!appointment.Labels.Seen.Value)
+        console.log(appointment, AppointmentID);
+        if (!appointment.Labels.Seen || !appointment.Labels.Seen.Value)
             props.toggleManager.toggleAppointmentLabel(AppointmentID, "Seen");
         props.appointmentManager.openAppointment(AppointmentID);
     }
@@ -37,7 +38,8 @@ export default function Table(props: TableProps) {
                                 className={clsx(
                                     "border-b border-b-gray-200",
                                     "last:!border-b-0",
-                                    "cursor-pointer hover:bg-gray-50",
+                                    "cursor-pointer group hover:!bg-blue-500",
+                                    (appointment.Labels.Seen && appointment.Labels.Seen.Value === 1) && "!bg-gray-50"
                                 )}
                             >
                                 <TableRow

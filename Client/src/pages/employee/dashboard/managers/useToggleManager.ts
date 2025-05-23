@@ -1,17 +1,24 @@
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { AppointmentManager } from "./useAppointmentManager";
 import UpdateAppointmentLabel from "@/services/DB/Appointment/UpdateAppointmentLabel";
 
 export type ToggleManager = ReturnType<typeof useToggleManager>;
 
-export default function useToggleManager(appointmentManager: AppointmentManager) {
+export default function useToggleManager(appointmentManager: AppointmentManager, setLoadedTable: Dispatch<SetStateAction<{[k: string]: boolean}>>) {
     const [allSelected, setAllSelected] = useState(false);
     const [selectedAppointments, setSelectedAppointments] = useState<Array<string>>([]);
 
     useEffect(() => {
         if (!appointmentManager.appointments)
             return;
-        setAllSelected(selectedAppointments.length === appointmentManager.appointments.length);
+        console.log(selectedAppointments.length, appointmentManager.appointments.length);
+        if (appointmentManager.appointments.length === 0) {
+            setAllSelected(false)
+        }
+        else {
+            setAllSelected(selectedAppointments.length === appointmentManager.appointments.length);
+        }
+        setLoadedTable(loadingTable => ({...loadingTable, "toggleManager": true}));
     }, [selectedAppointments]);
 
     useEffect(() => {
@@ -66,8 +73,8 @@ export default function useToggleManager(appointmentManager: AppointmentManager)
 
         const labels = appointment.Labels;
         const label = labels[labelName];
-        const labelID = label.LabelID;
-        const labelValue = label.Value || 0;
+        const labelID = labelName === "Seen" ? 1 : (labelName === "Flag") ? 2 : (labelName === "Star") ? 3 : -1;
+        const labelValue = !label ? 0 : (label.Value || 0);
 
         // Here, we query the database to update the appointment label.
         // If something bad happened, we don't actually update the label (early return).
@@ -76,6 +83,14 @@ export default function useToggleManager(appointmentManager: AppointmentManager)
 
         // Here, we update the label on the client's end.
         const updatedLabels = {...labels};
+        if (!label) {
+            updatedLabels[labelName] = {
+                AppointmentID: appointmentID,
+                Label: labelName,
+                LabelID: labelID,
+                Value: labelValue
+            }
+        }
         updatedLabels[labelName].Value = 1 - labelValue;
         appointmentManager.updateAppointmentLabel(appointmentID, updatedLabels);
     }

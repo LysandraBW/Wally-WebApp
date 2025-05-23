@@ -1,24 +1,13 @@
 import { request, Body } from "../request";
 
 export default async function SelectAllAppointments(body: Body) {
-    const {output} = await request("GET", "/appointments", {
-        sessionID: body.sessionID,
-        pageNumber: body.pageNumber,
-        pageSize: body.pageSize,
-        lookAhead: body.lookAhead,
-        search: body.search,
-        deleted: body.deleted,
-        labelID: body.labelID,
-        statusID: body.statusID,
-        fName: body.fName,
-        lName: body.lName,
-        make: body.make,
-        model: body.model,
-        modelYear: body.modelYear,
-        creationDate: body.creationDate,
-        startDate: body.startDate,
-        endDate: body.endDate,
-        cost: body.cost
-    });
+    console.log(body);
+    let url = "/appointments?";
+    for (const entry of Object.entries(body)) {
+        if (entry[1] === null)
+            continue;
+        url += `${entry[0]}=${entry[1]}&`
+    }
+    const {output} = await request("GET", url);
     return output;
 }

@@ -20,8 +20,8 @@ export default function Checkbox(props: CheckboxProps) {
                 onClick={onClick}
                 className={clsx(
                     "w-4 h-4 bg-white",
-                    "flex items-center justify-center",
-                    "border shadow-sm rounded",
+                    "flex items-center justify-center hover:bg-gray-100",
+                    "border shadow-sm rounded cursor-pointer",
                     props.checked && `
                         !bg-blue-600 
                         border-blue-500 

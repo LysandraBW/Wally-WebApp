@@ -2,9 +2,10 @@
 import LoginForm from "../../../pages/employee/login/LoginForm";
 import { useEffect, useState } from "react";
 import { setCookie } from "@/utils/cookies/setCookie";
-import { goToHome } from "@/utils/redirect/goToDashboard";
 import NavBar from "@/component/NavBar/NavBar";
 import { Tooltip } from "react-tooltip";
+import { navigate } from "@/utils/navigate";
+import { PAGE_DASHBOARD } from "@/utils/constants";
 
 export default function Page() {
     const [sessionID, setSessionID] = useState<string>();
@@ -13,7 +14,7 @@ export default function Page() {
         if (!sessionID)
             return;
         setCookie("sessionID", sessionID);
-        goToHome();
+        navigate(PAGE_DASHBOARD);
     }, [sessionID]);
 
     return (
@@ -25,7 +26,7 @@ export default function Page() {
                         <h3 className="font-medium whitespace-nowrap">Log In</h3>
                         <p className="text-md tracking-wide max-w-[440px] text-gray-600 font-medium">Welcome back!</p>
                     </header>
-                    <div className="w-full w-[350px] flex justify-center">
+                    <div className="w-full min-w-[350px] flex justify-center">
                         <form
                             onSubmit={(e) => e.preventDefault()}
                             className="w-full flex flex-col gap-4"

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import SelectAllAppointments from "@/services/DB/Appointment/SelectAllAppointments";
 import { FilterManager } from "./useFilterManager";
@@ -8,7 +8,7 @@ export interface Appointment extends AppointmentEntry {Labels: AppointmentLabels
 export interface Appointments {[appointmentID: string]: Appointment}
 export type AppointmentManager = ReturnType<typeof useAppointmentManager>;
 
-export default function useAppointmentManager(filterManager: FilterManager) {
+export default function useAppointmentManager(filterManager: FilterManager, setLoadedTable: Dispatch<SetStateAction<{[k: string]: boolean}>>) {
     const router = useRouter();
     const searchParams = useSearchParams();
     const [appointments, setAppointments] = useState<Array<Appointment>>();
@@ -24,15 +24,47 @@ export default function useAppointmentManager(filterManager: FilterManager) {
     }, []);
 
     useEffect(() => {
-        reloadAppointments();
-    }, [filterManager.search, filterManager.statusID, filterManager.deleted, filterManager.columnDirections]);
+        setLoadedTable(loadingTable => ({...loadingTable, "toggleManager": false}));
+        loadAppointments();
+    }, [filterManager.search, filterManager.statusID, filterManager.deleted]);
+
+    useEffect(() => {
+        if (!appointments || appointments.length === 0)
+            return;
+        // Sort by Creation Date (Default)
+        const sortedAppointments = [...appointments];
+        sortedAppointments.sort((b, a) => new Date(a.CreationDate).getTime() - new Date(b.CreationDate).getTime());
+
+        // More Sorting
+        for (const [column, direction] of Object.entries(filterManager.columnDirections)) {
+            if (column === null || direction === null)
+                continue;
+            
+            const isNumber = typeof (sortedAppointments[0] as any)[`${column}`] === "number";
+            if (isNumber) {
+                sortedAppointments.sort((a, b) => {
+                    return (a as any)[`${column}`] - (b as any)[`${column}`];
+                });
+            }
+            else {
+                sortedAppointments.sort((a, b) => {
+                    return ((a as any)[`${column}`] as string).localeCompare((b as any)[`${column}`] as string);
+                });
+            }
+            
+            if (direction === "0")
+                sortedAppointments.reverse();
+        }
+        setAppointments(sortedAppointments);
+    }, [filterManager.columnDirections]);
 
     useEffect(() => {
         updateTableAppointments();
     }, [appointments, filterManager.pageIndex]);
 
     const formatAppointments = (appointments: AppointmentList) => {
-        // Not sure if this is going to cause issues
+        if (!appointments)
+            return [];
         return appointments.Appointments;
     }
 
@@ -50,6 +82,7 @@ export default function useAppointmentManager(filterManager: FilterManager) {
     const loadAppointments = async () => {
         const filter = filterManager.filter();
         const appointments = await SelectAllAppointments(filter) as AppointmentList;
+        console.log(`Appointments: `, appointments);
         setAppointments(formatAppointments(appointments));
         filterManager.updateMaxPageIndex(appointments.Count);
     }
@@ -74,13 +107,6 @@ export default function useAppointmentManager(filterManager: FilterManager) {
         setOpenedAppointment("");
     }
 
-    const reloadAppointments = async () => {
-        const filter = filterManager.filter();
-        const appointments = await SelectAllAppointments(filter) as AppointmentList;
-        setAppointments(formatAppointments(appointments));
-        filterManager.updateMaxPageIndex(appointments.Count);
-    }
-
     const updateAppointmentLabel = (appointmentID: string, labels: AppointmentLabels) => {
         if (!tableAppointments)
             return;
@@ -97,7 +123,7 @@ export default function useAppointmentManager(filterManager: FilterManager) {
         openedAppointment,
         openAppointment,
         closeAppointment,
-        reloadAppointments,
+        loadAppointments,
         updateAppointmentLabel
     }
 }

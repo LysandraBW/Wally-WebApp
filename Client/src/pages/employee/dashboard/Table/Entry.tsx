@@ -49,11 +49,11 @@ export default function TableEntry(props: TableEntryProps) {
             className={clsx(
                 "px-2 py-0 min-w-[200px]",
                 "whitespace-nowrap",
-                "border-r border-r-gray-200", 
+                "border-r border-r-gray-200 group-hover:border-r-blue-300", 
                 props.style
             )}
         >
-            <p className="text-gray-700 text-02">
+            <p className="text-gray-700 text-02 group-hover:text-white group-hover:font-medium">
                 {stringL}
                 <b>{stringM}</b>
                 {stringR}
