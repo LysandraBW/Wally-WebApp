@@ -27,7 +27,7 @@ export default function Page({children}: Readonly<{children: React.ReactNode}>) 
     }, [authenticated]);
 
     return (
-        <div>
+        <div className="min-h-screen flex flex-col">
             {authenticated &&
                 <EmployeeContext value={{employee}}>
                     {children}

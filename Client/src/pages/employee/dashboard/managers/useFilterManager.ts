@@ -15,6 +15,7 @@ export default function useFilterManager(setLoadedTable: Dispatch<SetStateAction
     const [pageLength, setPageLength] = useState(10);
     const [maxPageIndex, setMaxPageIndex] = useState(0);
     const [stringPageIndex, setStringPageIndex] = useState("");
+    const [category, setCategory] = useState("General");
     const [columnDirections, setColumnDirections] = useState<ColumnDirections>({});
     
     useEffect(() => {
@@ -41,6 +42,7 @@ export default function useFilterManager(setLoadedTable: Dispatch<SetStateAction
         if (pageIndex < 0 || pageIndex > maxPageIndex)
             return;
         setPageIndex(pageIndex);
+        setStringPageIndex((pageIndex + 1).toString());
     }
 
     const fixStringPageIndex = () => {
@@ -107,6 +109,7 @@ export default function useFilterManager(setLoadedTable: Dispatch<SetStateAction
 
     return {
         search,
+        category,
         deleted,
         statusID,
         statuses,
@@ -124,6 +127,7 @@ export default function useFilterManager(setLoadedTable: Dispatch<SetStateAction
         updateColumnDirection,
         setSearch,
         setDeleted,
-        setStatusID: updateStatus
+        setStatusID: updateStatus,
+        setCategory
     }
 }

@@ -5,6 +5,7 @@ import { FilterManager } from "../managers/useFilterManager";
 import { ToggleManager } from "../managers/useToggleManager";
 import TableHead from "./Head";
 import TableRow from "./Row";
+import { Fragment } from "react";
 
 interface TableProps {
     filterManager: FilterManager;
@@ -14,13 +15,7 @@ interface TableProps {
 }
 
 export default function Table(props: TableProps) {
-    const markSeen = (appointment: Appointment) => {
-        const {AppointmentID} = appointment;
-        console.log(appointment, AppointmentID);
-        if (!appointment.Labels.Seen || !appointment.Labels.Seen.Value)
-            props.toggleManager.toggleAppointmentLabel(AppointmentID, "Seen");
-        props.appointmentManager.openAppointment(AppointmentID);
-    }
+    
 
     return (
         <div>
@@ -32,15 +27,8 @@ export default function Table(props: TableProps) {
                     />
                     <tbody>
                         {props.appointmentManager.appointments && props.appointmentManager.appointments.map((appointment, i) => (
-                            <tr 
+                            <Fragment
                                 key={i}
-                                onClick={() => markSeen(appointment)}
-                                className={clsx(
-                                    "border-b border-b-gray-200",
-                                    "last:!border-b-0",
-                                    "cursor-pointer group hover:!bg-blue-500",
-                                    (appointment.Labels.Seen && appointment.Labels.Seen.Value === 1) && "!bg-gray-50"
-                                )}
                             >
                                 <TableRow
                                     appointment={appointment}
@@ -49,7 +37,7 @@ export default function Table(props: TableProps) {
                                     deleteManager={props.deleteManager}
                                     appointmentManager={props.appointmentManager}
                                 />
-                            </tr>
+                            </Fragment>
                         ))}
                     </tbody>
                 </table>

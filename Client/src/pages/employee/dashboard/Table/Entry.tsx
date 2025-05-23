@@ -6,16 +6,17 @@ interface TableEntryProps {
     entry: string;
     search: string;
     style?: string;
+    isNew?: boolean;
 }
 
 export default function TableEntry(props: TableEntryProps) {
-    const [stringL, setStringL] = useState(props.entry);
+    const [stringL, setStringL] = useState(props.entry || "N/A");
     const [stringM, setStringM] = useState("");
     const [stringR, setStringR] = useState("");
 
     useEffect(() => {
-        if (!props.search) {
-            setStringL(props.entry);
+        if (!props.search || !props.entry) {
+            setStringL(props.entry || "N/A");
             return;
         }
         
@@ -47,17 +48,21 @@ export default function TableEntry(props: TableEntryProps) {
     return (
         <td 
             className={clsx(
-                "px-2 py-0 min-w-[200px]",
-                "whitespace-nowrap",
-                "border-r border-r-gray-200 group-hover:border-r-blue-300", 
+                "px-2 py-0 min-w-[200px] max-w-[200px]",
+                "border-r border-r-gray-200",
                 props.style
             )}
         >
-            <p className="text-gray-700 text-02 group-hover:text-white group-hover:font-medium">
-                {stringL}
-                <b>{stringM}</b>
-                {stringR}
-            </p>
+            <div className="w-full h-full whitespace-nowrap flex gap-2 items-center overflow-clip">
+                {props.isNew &&
+                    <span className="bg-blue-50 text-blue-500 border border-blue-300 shadow-sm tracking-wider font-semibold text-[0.5rem] py-[1px] px-[4px] rounded">NEW</span>
+                }
+                <p className="w-min text-gray-700 tracking-wider text-02 whitespace-nowrap group-hover:text-blue-500 overflow-hidden text-ellipsis">
+                    {stringL}
+                    <b>{stringM}</b>
+                    {stringR}
+                </p>
+            </div>
         </td>
     )
 }

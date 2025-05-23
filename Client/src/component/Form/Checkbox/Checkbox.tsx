@@ -19,9 +19,9 @@ export default function Checkbox(props: CheckboxProps) {
             <span
                 onClick={onClick}
                 className={clsx(
-                    "w-4 h-4 bg-white",
+                    "w-[14px] h-[14px] bg-white",
                     "flex items-center justify-center hover:bg-gray-100",
-                    "border shadow-sm rounded cursor-pointer",
+                    "border border-gray-300 shadow-sm rounded-[2.5px] cursor-pointer",
                     props.checked && `
                         !bg-blue-600 
                         border-blue-500 

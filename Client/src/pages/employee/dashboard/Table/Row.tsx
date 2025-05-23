@@ -10,7 +10,7 @@ import { Appointment, AppointmentManager } from "../managers/useAppointmentManag
 import { ToggleManager } from "../managers/useToggleManager";
 import { toDisplayDate } from "@/utils/convert";
 import { toString } from "@/utils/convert";
-import { Fragment } from "react";
+import { Fragment, useState } from "react";
 import clsx from "clsx";
 
 interface TableRowProps {
@@ -22,14 +22,35 @@ interface TableRowProps {
 }
 
 export default function TableRow(props: TableRowProps) {
+    const [seen, setSeen] = useState(props.appointment.Labels.Seen && props.appointment.Labels.Seen.Value === 1);
+    const [flagged, setFlagged] = useState(props.appointment.Labels.Flag && props.appointment.Labels.Flag.Value === 1);
+
+    const markAsSeen = () => {
+        const {AppointmentID} = props.appointment;
+        if (!seen) {
+            props.toggleManager.toggleAppointmentLabel(AppointmentID, "Seen");
+            setSeen(true);
+        }
+        props.appointmentManager.openAppointment(AppointmentID);
+    }
+
+    const markAsFlagged = () => {
+        const {AppointmentID} = props.appointment;
+        props.toggleManager.toggleAppointmentLabel(AppointmentID, "Flag");
+        setFlagged(!flagged);
+    }
+
     return (
-        <Fragment>
-            <td 
-                className={clsx(
-                    "p-2 !border-l-0",
-                    "border-r border-r-gray-200 group-hover:border-r-blue-300",
-                )}
-            >
+        <tr
+            onClick={markAsSeen}
+            className={clsx(
+                "border-b border-b-gray-200 last:!border-b-0",
+                "cursor-pointer group hover:!bg-white",
+                seen && "!bg-gray-50"
+            )}
+        >
+            {/* Check */}
+            <td className="p-2 !border-l-0 border-r border-r-gray-200">
                 <Checkbox
                     name=""
                     value=""
@@ -37,12 +58,33 @@ export default function TableRow(props: TableRowProps) {
                     onChange={() => props.toggleManager.toggleAppointmentSelection(props.appointment.AppointmentID)}
                 />
             </td>
+            {/* Flag */}
+            <td 
+                className="p-2 !border-l-0 border-r border-r-gray-200"
+                onClick={markAsFlagged}
+            >
+                {!flagged &&
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="16" strokeWidth="1.25" fill="currentColor" className="w-[14px] h-[16px] bi bi-bookmark-fill fill-white stroke stroke-gray-300" viewBox="0 0 16 16">
+                        <path d="M2 2v13.5a.5.5 0 0 0 .74.439L8 13.069l5.26 2.87A.5.5 0 0 0 14 15.5V2a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2"/>
+                    </svg>
+                }
+                {flagged &&
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="16" fill="currentColor" className="w-[14px] h-[16px] bi bi-bookmark-fill fill-black" viewBox="0 0 16 16">
+                        <path d="M2 2v13.5a.5.5 0 0 0 .74.439L8 13.069l5.26 2.87A.5.5 0 0 0 14 15.5V2a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2"/>
+                    </svg>
+                }
+            </td>
             <TableEntry
                 entry={props.appointment.FName}
                 search={props.filterManager.search}
+                isNew={!seen}
             />
             <TableEntry
                 entry={props.appointment.LName}
+                search={props.filterManager.search}
+            />
+            <TableEntry
+                entry={toString(props.appointment.Status)}
                 search={props.filterManager.search}
             />
             <TableEntry
@@ -84,12 +126,8 @@ export default function TableRow(props: TableRowProps) {
             <TableEntry
                 entry={props.appointment.LicensePlate}
                 search={props.filterManager.search}
-            />
-            <TableEntry
-                entry={toString(props.appointment.Status)}
-                search={props.filterManager.search}
                 style="!border-r-0"
             />
-        </Fragment>
+        </tr>
     )
 }

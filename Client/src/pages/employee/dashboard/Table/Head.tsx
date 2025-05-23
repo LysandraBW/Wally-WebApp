@@ -12,7 +12,8 @@ import { ToggleManager } from "../managers/useToggleManager";
 // now.
 const columns = [
     ["FName","First Name"], 
-    ["LName", "Last Name"], 
+    ["LName", "Last Name"],
+    [null, "Status"],
     ["Make", "Make"], 
     ["Model", "Model"], 
     ["ModelYear", "Model Year"], 
@@ -22,8 +23,7 @@ const columns = [
     ["Cost", "Cost"], 
     [null, "VIN"], 
     [null, "Mileage"], 
-    [null, "License Plate"], 
-    [null, "Status"]
+    [null, "License Plate"]
 ];
 
 interface TableHeadProps {
@@ -32,15 +32,16 @@ interface TableHeadProps {
 }
 
 export default function TableHead(props: TableHeadProps) {
+    const updateColumnDirection = (columnName: string|null) => {
+        if (columnName === null)
+            return;
+        props.filterManager.updateColumnDirection(columnName);
+    }
+
     return (
         <thead className="border-b border-gray-200">
             <tr>
-                <th
-                    className={clsx(
-                        "px-2 !border-l-0",
-                        "border-r border-r-gray-200"
-                    )}
-                >
+                <th className="px-2 !border-l-0 border-r border-r-gray-200">
                     <Checkbox
                         name=""
                         value=""
@@ -48,32 +49,19 @@ export default function TableHead(props: TableHeadProps) {
                         onChange={props.toggleManager.toggleAllSelections}
                     />
                 </th>
+                <th className="border-r border-r-gray-20"></th>
                 {columns.map((col, i) => (
                     <th 
                         key={i}
-                        onClick={() => {
-                            if (col[0] === null)
-                                return;
-                            props.filterManager.updateColumnDirection(col[0]);
-                        }}
-                        className={clsx(
-                            "p-2 whitespace-nowrap",
-                            "border-r border-r-gray-200",
-                            i == columns.length - 1 && "!border-r-0"
-                        )}
+                        className={clsx("p-2 whitespace-nowrap", "border-r border-r-gray-200", i == columns.length - 1 && "!border-r-0")}
                     >
-                        <div 
-                            className={clsx(
-                                "flex gap-2",
-                                "justify-between items-center"
-                            )}
-                        >
-                            <span className="text-02 font-medium">
-                                {col[1]}
-                            </span>
+                        <div className={clsx("flex gap-2", "justify-between items-center")}>
+                            <span className="text-02 font-medium tracking-wide">{col[1]}</span>
+                            {/* Sort Direction */}
                             {col[0] !== null &&
-                                <Direction
+                                <Direction 
                                     direction={props.filterManager.columnDirections[col[0]]}
+                                    updateDirection={() => updateColumnDirection(col[0])}
                                 />
                             }
                         </div>
