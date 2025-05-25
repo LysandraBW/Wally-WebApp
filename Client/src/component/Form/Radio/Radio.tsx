@@ -22,9 +22,9 @@ export default function Radio(props: RadioProps) {
                                 "rounded-md border border-gray-200",
                                 "shadow-sm",
                                 props.values.includes(option[0]) && `
-                                    !border-blue-600 
-                                    !shadow-[0px_0px_0px_2px_black] 
-                                    !shadow-blue-200
+                                    !border-blue-500 
+                                    !shadow-[0px_0px_0px_2px_black]
+                                    !shadow-blue-100
                                 `
                             )}
                             onClick={() => {

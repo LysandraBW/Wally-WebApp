@@ -3,30 +3,36 @@ import { z } from "zod";
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Update from "@/pages/employee/edit/Update";
-import AuthenticatedEmployee from "@/services/DB/Procedure/Employee/AuthenticatedEmployee";
 import useForm from "@/features/Form/useForm/useForm";
 import makeForm from "@/features/Form/useForm/makeForm";
-import EmployeeLayout from "@/views/Layout/Employee/EmployeeLayout";
-import { AppointmentTag } from "@/views/Layout/Employee/BreadCrumb";
-import { Pages } from "@/views/Layout/Employee/VerticalNavigation";
+import { Appointment as DB_Appointment } from "waltronics-types";
 import LoadAppointment from "@/features/LoadAppointment/LoadAppointment";
+import SelectAppointment from "@/services/DB/Appointment/SelectAppointment";
 
 export default function Page() {
     const form = useForm("ID");
     const router = useRouter();
     const searchParams = useSearchParams();
-    const [sessionID, setSessionID] = useState("");
+    const [appointment, setAppointment] = useState<DB_Appointment>();
     const [appointmentID, setAppointmentID] = useState("");
+    const [appointmentNotFound, setAppointmentNotFound] = useState(false);
 
     useEffect(() => {
         const load = async () => {
-            const sessionID = await AuthenticatedEmployee();
-            setSessionID(sessionID);
-
             // Loading Appointment, if Any
             if (searchParams) {
-                const appointmentID = searchParams.get("ApptID") || "";
-                setAppointmentID(appointmentID);
+                const appointmentID = searchParams.get("appointmentID") || "";
+                const appointment = await SelectAppointment({appointmentID});
+                
+                // Appointment Does Exist
+                if (appointment && appointment.FName) {
+                    setAppointment(appointment);
+                    setAppointmentID(appointmentID);
+                }
+                // Appointment Does Not Exist
+                else {
+                    setAppointmentNotFound(true);
+                }
             }
 
             // Preparing Input for Manual Appointment ID
@@ -36,48 +42,48 @@ export default function Page() {
         load();
     }, []);
 
-    const loadManualAppointment = () => {
+    const loadAppointment = async () => {
         if (!form.getState())
             return;
         const ID = form.getInput("id").data;
-        const URL = "/employee/home/update?ApptID=" + ID;
+
+        const appointment = await SelectAppointment({appointmentID: ID});
+        console.log(appointment);
+        // Appointment Does Not Exist
+        if (!appointment || !appointment.FName) {
+            setAppointmentNotFound(true);
+            return;
+        }
+
+        const URL = "/employee/home/edit?appointmentID=" + ID;
         router.replace(URL);
         setAppointmentID(ID);
+        setAppointment(appointment);
     }
     
     return (
-        <div>
-            <EmployeeLayout
-                page={Pages.Update}
-                path={!appointmentID ? 
-                    [
-                        ["/employee/home/dashboard", "Dashboard"], 
-                        ["/employee/home/update", "Update"]
-                    ] : 
-                    [
-                        ["/employee/home/dashboard", "Dashboard"], 
-                        ["/employee/home/update", "Update"], 
-                        [`/employee/home/view?ApptID=${appointmentID}`, (
-                            <AppointmentTag id={appointmentID}/>
-                        )]
-                    ]
-                }
-                        
-            >
-                {sessionID && appointmentID &&
-                    <Update
-                        sessionID={sessionID}
-                        appointmentID={appointmentID}
-                    />
-                }
-                {sessionID && !appointmentID &&
-                    <LoadAppointment
-                        head="Update Appointment"
-                        form={form}
-                        loadAppointment={loadManualAppointment}
-                    />
-                }
-            </EmployeeLayout>
+        <div className="flex flex-col overflow-x-clip grow">
+            <div className="p-8 pb-0 flex flex-col grow">
+                <h5 className="font-medium pb-4">Update Appointment</h5>
+                <div className="flex flex-col bg-white w-full h-full grow">
+                    {(appointment && appointmentID) &&
+                        <Update
+                            appointment={appointment}
+                            appointmentID={appointmentID}
+                        />
+                    }
+                    {!appointmentID &&
+                        <LoadAppointment
+                            head="Load Appointment"
+                            paragraph="To update an appointment, enter its ID below."
+                            form={form}
+                            loadAppointment={loadAppointment}
+                            appointmentNotFound={appointmentNotFound}
+                            setAppointmentNotFound={setAppointmentNotFound}
+                        />
+                    }
+                </div>
+            </div>
         </div>
     )
 }

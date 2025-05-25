@@ -1,5 +1,5 @@
 import { Appointment as DB_Appointment } from "waltronics-types";
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { makeVehicle, vehicleTest, Vehicle } from "./_DEF";
 import { VEHICLE } from "../_DEF";
 import { fetchModels } from "@/services/NHTSA/fetchModels";
@@ -11,9 +11,9 @@ import useForm, { UseForm } from "@/features/Form/useForm/useForm";
 import { Options } from "@/features/Form/DEF";
 import getValues from "@/features/Form/helpers/getValues";
 import makeForm from "@/features/Form/useForm/makeForm";
-import TextField from "@/component/Form/Text/TextField";
-import Search from "@/component/Form/Select/Search/Search";
 import SaveResetButtons from "@/features/ItemManager/Form/SaveResetButtons";
+import TextFieldGrid from "../TextFieldGrid";
+import SearchGrid from "../SearchGrid";
 
 interface VehicleFormProps {
     parent: UseForm;
@@ -111,70 +111,76 @@ export default function VehicleForm(props: VehicleFormProps) {
     }
     
     return (
-        <div className="flex flex-col gap-1 relative">
-            <div className="flex flex-col px-6 py-6 gap-6 max-w-[500px]">
-                <TextField
-                    name="VIN"
-                    type="text"
-                    label="VIN"
-                    value={form.getInput("VIN").data || ""}
-                    state={form.getInput("VIN").state}
-                    onChange={updateValue}
-                    onBlur={undefined}
-                />
-                <Search
-                    name="ModelYear"
-                    label="Model Year"
-                    toggleLabel="Select Model Year"
-                    values={form.getInput("ModelYear").data || []}
-                    state={form.getInput("ModelYear").state}
-                    options={modelYears}
-                    onChange={updateValue}
-                    disabled={false}
-                />
-                <Search
-                    name="Make"
-                    label="Make"
-                    toggleLabel="Select Make"
-                    values={form.getInput("Make").data || []}
-                    state={form.getInput("Make").state}
-                    options={makes}
-                    onChange={updateValue}
-                    disabled={false}
-                />
-                <Search
-                    name="Model"
-                    label="Model"
-                    toggleLabel="Select Model"
-                    values={form.getInput("Model").data || []}
-                    state={form.getInput("Model").state}
-                    options={models}
-                    onChange={updateValue}
-                    disabled={false}
-                />
-                <TextField
-                    name="Mileage"
-                    type="text"
-                    label="Mileage"
-                    value={form.getInput("Mileage").data || ""}
-                    state={form.getInput("Mileage").state}
-                    onChange={updateValue}
-                    onBlur={undefined}
-                />
-                <TextField
-                    name="LicensePlate"
-                    type="text"
-                    label="License Plate"
-                    value={form.getInput("LicensePlate").data || ""}
-                    state={form.getInput("LicensePlate").state}
-                    onChange={updateValue}
-                    onBlur={undefined}
+        <Fragment>
+            <div className="row-start-3 row-span-1 col-start-1 col-span-1 grow relative flex flex-col">
+                <div className="bg-white relative after:absolute after:w-[1px] after:h-full after:top-0 after:left-[0px] after:bg-gray-300 before:absolute before:w-[1px] before:h-full after:top-0 before:right-[0px] before:bg-gray-300 h-full grow">
+                    <table className="grow w-full border-collapse">
+                        <tbody>
+                            <TextFieldGrid
+                                name="VIN"
+                                type="text"
+                                label="VIN"
+                                value={form.getInput("VIN").data || ""}
+                                state={form.getInput("VIN").state}
+                                onChange={updateValue}
+                                onBlur={undefined}
+                            />
+                            <SearchGrid
+                                name="ModelYear"
+                                label="Model Year"
+                                toggleLabel="Select Model Year"
+                                values={form.getInput("ModelYear").data || []}
+                                state={form.getInput("ModelYear").state}
+                                options={modelYears}
+                                onChange={updateValue}
+                                disabled={false}
+                            />
+                            <SearchGrid
+                                name="Make"
+                                label="Make"
+                                toggleLabel="Select Make"
+                                values={form.getInput("Make").data || []}
+                                state={form.getInput("Make").state}
+                                options={makes}
+                                onChange={updateValue}
+                                disabled={false}
+                            />
+                            <SearchGrid
+                                name="Model"
+                                label="Model"
+                                toggleLabel="Select Model"
+                                values={form.getInput("Model").data || []}
+                                state={form.getInput("Model").state}
+                                options={models}
+                                onChange={updateValue}
+                                disabled={false}
+                            />
+                            <TextFieldGrid
+                                name="Mileage"
+                                type="text"
+                                label="Mileage"
+                                value={form.getInput("Mileage").data || ""}
+                                state={form.getInput("Mileage").state}
+                                onChange={updateValue}
+                                onBlur={undefined}
+                            />
+                            <TextFieldGrid
+                                name="LicensePlate"
+                                type="text"
+                                label="License Plate"
+                                value={form.getInput("LicensePlate").data || ""}
+                                state={form.getInput("LicensePlate").state}
+                                onChange={updateValue}
+                                onBlur={undefined}
+                            />
+                        </tbody>
+                    </table>
+                </div>
+                <SaveResetButtons
+                    onSave={saveForm}
+                    onReset={resetForm}
                 />
             </div>
-            <SaveResetButtons
-                onSave={saveForm}
-                onReset={resetForm}
-            />
-        </div>
+        </Fragment>
     )
 }

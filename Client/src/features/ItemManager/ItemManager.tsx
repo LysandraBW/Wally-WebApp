@@ -3,6 +3,7 @@ import useItemManager, { UseItemManagerProps } from "./useItemManager";
 import { UseItemFormProps } from "./useItemForm";
 import Cover from "@/views/Absolute/Cover";
 import SaveResetButtons from "./Form/SaveResetButtons";
+import { JSX } from "react";
 
 export interface DisplayProps<Items> {
     items: Items;
@@ -13,6 +14,9 @@ export interface DisplayProps<Items> {
 export interface FormProps<BaseItem, Item, Items> extends UseItemFormProps<BaseItem, Item, Items> {
     onCancel: () => void;
     onDelete: () => void;
+    onExpand: () => void;
+    onMinimize: () => void;
+    expanded: boolean;
 }
 
 export interface ItemManagerProps<BaseItem, Item, Items> extends UseItemManagerProps<BaseItem, Item, Items> {
@@ -47,9 +51,10 @@ export default function ItemManager<BaseItem, Item, Items>(props: ItemManagerPro
                             parentForm={itemManager.form}
                             onCancel={itemManager.cancelCreate}
                             onMutate={itemManager.createItem}
-                            onDelete={() => {
-                                itemManager.deleteItem(itemManager.createID);
-                            }}
+                            onDelete={() =>  itemManager.deleteItem(itemManager.createID)}
+                            onExpand={() => null}
+                            onMinimize={() => null}
+                            expanded={false}
                         />
                     </Cover>
                 }
@@ -62,9 +67,10 @@ export default function ItemManager<BaseItem, Item, Items>(props: ItemManagerPro
                             parentForm={itemManager.form}
                             onCancel={itemManager.cancelUpdate}
                             onMutate={itemManager.updateItem}
-                            onDelete={() => {
-                                itemManager.deleteItem(itemManager.updateID);
-                            }}
+                            onDelete={() => itemManager.deleteItem(itemManager.updateID)}
+                            onExpand={() => null}
+                            onMinimize={() => null}
+                            expanded={false}
                         />
                     </Cover>
                 }

@@ -18,12 +18,10 @@ export default function CostManager(props: CostManagerProps) {
     }
 
     return (
-        <div>
-            <CostForm
-                parent={props.parentForm}
-                cost={props.cost}
-                onSaveUpdates={processUpdates}
-            />
-        </div>
+        <CostForm
+            parent={props.parentForm}
+            cost={props.cost}
+            onSaveUpdates={processUpdates}
+        />
     )
 }

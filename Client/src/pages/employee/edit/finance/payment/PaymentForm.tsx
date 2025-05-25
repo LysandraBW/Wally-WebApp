@@ -7,6 +7,7 @@ import Radio from "@/component/Form/Radio/Radio";
 import ItemForm from "@/features/ItemManager/Form/ItemForm";
 import ItemFormGroup from "@/features/ItemManager/Form/ItemFormGroup";
 import { Payment as DB_Payment} from "waltronics-types"
+import clsx from "clsx";
 
 export default function PaymentForm(props: FormProps<DB_Payment, Payment, Payments>) {
     const form = useItemForm(props);
@@ -23,12 +24,15 @@ export default function PaymentForm(props: FormProps<DB_Payment, Payment, Paymen
 
     return (
         <ItemForm
-            header={props.mode === "Create" ? "Create Payment" : `Edit Payment #${(props.mutateItem as any).PaymentID}`}
+            header={props.mode === "Create" ? "Add Payment" : `Edit Payment #${(props.mutateItem as any).PaymentID}`}
             canDelete={parseInt(props.mutateItem.PaymentID) >= 0}
             onReset={onReset}
             onCancel={props.onCancel}
             onDelete={props.onDelete}
             onMutate={form.onMutate}
+            onExpand={props.onExpand}
+            onMinimize={props.onMinimize}
+            expanded={props.expanded}
         >
             {/* Amount */}
             <ItemFormGroup head="Amount">
@@ -50,20 +54,20 @@ export default function PaymentForm(props: FormProps<DB_Payment, Payment, Paymen
                     options={[
                         ["", "Cash", 
                             <div className="top-[-3px]">
-                                <p className="text-left">
+                                <p className={clsx("tracking-wide text-left", !addCard && "text-blue-500 font-medium")}>
                                     Cash
                                 </p>
-                                <span className="block text-left">
+                                <span className="block text-left text-01 tracking-wide font-medium">
                                     Paid with cash. Must be USD.
                                 </span>
                             </div>
                         ], 
                         ["\0", "Credit", 
                             <div className="top-[-3px]">
-                                <p className="text-left">
+                                <p className={clsx("tracking-wide text-left", addCard && "text-blue-500 font-medium")}>
                                     Credit
                                 </p>
-                                <span className="block text-left">
+                                <span className="block text-left text-01 tracking-wide font-medium">
                                     Paid with VISA or Mastercard.
                                 </span>
                             </div>

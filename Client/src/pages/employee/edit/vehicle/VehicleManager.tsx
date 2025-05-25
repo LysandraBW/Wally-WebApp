@@ -24,12 +24,10 @@ export default function VehicleManager(props: VehicleManagerProps) {
     }
 
     return (
-        <div>
-            <VehicleForm
-                parent={props.parentForm}
-                appointment={props.appointment}
-                onSaveUpdates={processUpdates}
-            />
-        </div>
+        <VehicleForm
+            parent={props.parentForm}
+            appointment={props.appointment}
+            onSaveUpdates={processUpdates}
+        />
     )
 }

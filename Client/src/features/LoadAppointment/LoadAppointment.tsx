@@ -1,41 +1,70 @@
-import TextField from "@/component/Form/Text/TextField";
 import { UseForm } from "../Form/useForm/useForm";
-import Button from "@/component/Form/Button/Button";
+import { Tooltip } from "react-tooltip";
 
 interface LoadAppointmentProps {
     form: UseForm;
     head: string;
+    paragraph: string;
     loadAppointment: () => void;
+    appointmentNotFound: boolean;
+    setAppointmentNotFound: (b: boolean) => void;
 }
 
 export default function LoadAppointment(props: LoadAppointmentProps) {
     return (
-         <div className="flex flex-col">
-            <div>
-                <div className="p-4 py-8 border-b border-gray-200 mb-4 bg-gray-50">
-                    <h5 className="font-medium">{props.head}</h5>
-                    <span className="block text-03">Enter the ID of the appointment you want to view.</span>
-                </div>
+         <div className="flex flex-col gap-4 bg-white grow p-8 items-center justify-center ">
+            <div className="">
+                <h5 className="whitespace-nowrap text-center font-medium">{props.head}</h5>
+                <span className="text-center block text-md tracking-wide text-gray-600 font-normal max-w-[350px]">{props.paragraph}</span>
             </div>
-            <form 
-                onSubmit={e => e.preventDefault()}
-                className="px-4 flex flex-col gap-4 max-w-[400px]">
-                <TextField
-                    type="text"
-                    name="id"
-                    label="Enter Appointment ID"
-                    value={props.form.getInput("id").data}
-                    state={props.form.getInput("id").state}
-                    onBlur={undefined}
-                    onChange={props.form.updateInputData}
-                />
-                <Button
-                    type="submit"
-                    label="Load Appointment"
-                    style="boring boringBlack small"
-                    onClick={props.loadAppointment}
-                />
-            </form>
+            <div>
+                <div 
+                    id="loadInput"
+                    className="border border-gray-300 shadow-sm rounded-lg w-[350px] flex gap-1 p-1 pl-2 h-[36px] focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-100"
+                >
+                    <input
+                        name="id"
+                        type="text"
+                        value={props.form.getInput("id").data}
+                        onBlur={undefined}
+                        onChange={(event) => {
+                            // Remove the Tooltip
+                            props.appointmentNotFound &&  props.setAppointmentNotFound(false);
+                            props.form.updateInputData(event.target.name, event.target.value);
+                        }}
+                        className="rounded-md w-full outline-none peer tracking-wider"
+                    />
+                    <div 
+                        onClick={props.loadAppointment}
+                        className="bg-white shadow-xs border border-gray-300 h-full w-[48px] flex items-center justify-center rounded-md hover:bg-blue-500 hover:border-blue-500 group cursor-pointer transition-all peer-focus:border-blue-500 stroke-gray-400 peer-focus:!stroke-blue-500"
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" className="size-4 stroke-inherit group-hover:!stroke-white cursor-pointer transition-all">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
+                        </svg>
+                    </div>
+                </div>
+                {!props.form.getInput("id").state[0] &&
+                    <span className="text-03 text-red-500 font-medium tracking-wide">{props.form.getInput("id").state[1]}</span>
+                }
+            </div>
+            <Tooltip
+                isOpen={props.appointmentNotFound}
+                anchorSelect="#loadInput"
+                opacity={1}
+                place="bottom"
+                border={"1px solid #fcd34d"}
+                style={{
+                    backgroundColor: "#fffbeb",
+                    boxShadow: "0px 2px 2px 0px #00000010",
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    gap: "0rem",
+                    borderRadius: "6px",
+                }}
+            >
+                <h6 className="text-02 tracking-wide text-gray-600">No appointment has this information. Please try again.</h6>
+            </Tooltip>
         </div>
     )
 }

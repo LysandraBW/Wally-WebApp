@@ -25,12 +25,10 @@ export default function ContactManager(props: ContactManagerProps) {
     }
 
     return (
-        <div>
-            <ContactForm
-                parent={props.parentForm}
-                appointment={props.appointment}
-                onSaveUpdates={processUpdates}
-            />
-        </div>
+        <ContactForm
+            parent={props.parentForm}
+            appointment={props.appointment}
+            onSaveUpdates={processUpdates}
+        />
     )
 }

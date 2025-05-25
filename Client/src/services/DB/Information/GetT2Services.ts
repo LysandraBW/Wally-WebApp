@@ -12,7 +12,7 @@ export type ServiceT2Pairs = {[serviceClass: string]: {[serviceDivision: string]
 export type ServiceFlat = Array<[string, string]>;
 
 export async function GetT2Services() {
-    const {output} = await request("GET", "/services");
+    const output = await request("GET", "/services");
     
     const serviceMap: ServiceMap = {};
     const serviceFlat: ServiceFlat = [];

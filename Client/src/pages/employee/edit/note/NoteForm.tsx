@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import FileManager from "./FileManager";
 import { getCookie } from "@/utils/cookies/getCookie";
-import GetEmployeeNamePairs from "@/services/DB/Procedure/Employee/GetEmployeeNamePairs";
 import useItemForm from "@/features/ItemManager/useItemForm";
 import { FormProps } from "@/features/ItemManager/ItemManager";
 import { Options } from "@/features/Form/DEF";
@@ -11,6 +10,7 @@ import MultipleSelect from "@/component/Form/Select/Select/MultipleSelect";
 import Radio from "@/component/Form/Radio/Radio";
 import ItemForm from "@/features/ItemManager/Form/ItemForm";
 import ItemFormGroup from "@/features/ItemManager/Form/ItemFormGroup";
+import GetEmployeeNamePairs from "@/services/DB/Employee/GetEmployeeNamePairs";
 
 export default function NoteForm<DB_Note, Note, Notes>(props: FormProps<DB_Note, Note, Notes>) {
     const form = useItemForm(props);
@@ -19,8 +19,7 @@ export default function NoteForm<DB_Note, Note, Notes>(props: FormProps<DB_Note,
 
     useEffect(() => {
         const load = async () => {
-            const sessionID = await getCookie("sessionID");
-            const employees = await GetEmployeeNamePairs(sessionID);
+            const employees = await GetEmployeeNamePairs();
             console.log(employees);
             setEmployees(employees);
         }
@@ -48,6 +47,9 @@ export default function NoteForm<DB_Note, Note, Notes>(props: FormProps<DB_Note,
             onDelete={props.onDelete}
             onCancel={props.onCancel}
             onMutate={form.onMutate}
+            onExpand={props.onExpand}
+            onMinimize={props.onMinimize}
+            expanded={props.expanded}
         >
             {/* Content */}
             <ItemFormGroup head="Content">
