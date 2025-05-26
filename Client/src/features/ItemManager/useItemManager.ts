@@ -28,6 +28,7 @@ export default function useItemManager<BaseItem, Item, Items>(props: UseItemMana
         props.parentForm.setInputState(form.fName, [state, ""]);
         if (!state)
             throw "Error in Items!";
+        console.log(oldItems, newItems);
         props.saveAllUpdates(oldItems, newItems);
     }
 
@@ -110,6 +111,7 @@ export default function useItemManager<BaseItem, Item, Items>(props: UseItemMana
         toUpdateItem,
         toCreateItem,
         cancelUpdate,
-        cancelCreate
+        cancelCreate,
+        defineItem: props.defineItem
     }
 }

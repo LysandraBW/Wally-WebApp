@@ -7,7 +7,7 @@ interface BackProps {
 
 export default function Back(props: BackProps) {
     return (
-        <div className="pl-2 pb-2 border-b border-gray-200">
+        <div className="">
             <div className="icon">
                 <ArrowLeft
                     width="12"

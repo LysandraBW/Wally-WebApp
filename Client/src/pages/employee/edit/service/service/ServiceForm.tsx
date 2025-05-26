@@ -18,12 +18,16 @@ export default function ServiceForm<DB_AppointmentService, Service, Services>(pr
 
     return (
         <ItemForm
-            header={props.mode === "Create" ? "Create Service" : `Edit Service #${(props.mutateItem as any).ServiceID}`}
-            canDelete={true}
+            header={props.mode === "Create" ? "Add Service" : `Edit Service #${(props.mutateItem as any).ServiceID}`}
+            canDelete={props.mode !== "Create"}
             onReset={onReset}
             onCancel={props.onCancel}
             onDelete={props.onDelete}
             onMutate={form.onMutate}
+            onExpand={props.onExpand}
+            onMinimize={props.onMinimize}
+            expanded={props.expanded}
+            tab="Services"
         >
             <ItemFormGroup head="">
                 <TextField

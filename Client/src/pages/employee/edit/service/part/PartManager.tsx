@@ -10,6 +10,12 @@ interface PartManagerProps {
     parentForm: UseForm;
     partList: Array<DB_AppointmentPart>;
     onSaveUpdates: (updates: PartUpdates) => void;
+    // Forms
+    tabOpen: boolean;
+    openForm: (form: string) => void;
+    openFormDisplayed: string;
+    openForms: Array<string>;
+    closeForm: (form: string) => void;
 }
 
 export default function PartManager(props: PartManagerProps) {
@@ -23,15 +29,19 @@ export default function PartManager(props: PartManagerProps) {
     }
 
     return (
-        <div>
-            <ItemManager
-                itemList={props.partList}
-                defineItem={definePart}
-                parentForm={props.parentForm}
-                Form={PartForm}
-                Display={PartDisplay}
-                saveAllUpdates={processUpdates}
-            />
-        </div>
+        <ItemManager
+            itemList={props.partList}
+            defineItem={definePart}
+            parentForm={props.parentForm}
+            Form={PartForm}
+            Display={PartDisplay}
+            saveAllUpdates={processUpdates}
+            tabOpen={props.tabOpen}
+            openForm={props.openForm}
+            openFormDisplayed={props.openFormDisplayed}
+            openForms={props.openForms}
+            closeForm={props.closeForm}
+            tab="Parts"
+        />
     )
 }

@@ -13,8 +13,8 @@ export default function DisplayItems(props: DisplayItemsProps) {
     return (
         <div 
             className={clsx(
-                "w-min max-h-[300px]",
-                "flex flex-col flex-wrap gap-4",
+                "",
+                "flex flex-wrap gap-4",
                 "overflow-x scroll-hide"
             )}
         >

@@ -57,7 +57,7 @@ export default function UpdateItem(props: UpdateItemProps) {
                             "flex justify-center items-center gap-1",
                             "h-min w-min aspect-square rounded",
                             "bg-white hover:bg-gray-50 shadow-sm",
-                            "border border-gray-200 p-1"
+                            "border border-gray-300 p-1"
                         )}
                     >
                         <EditIcon
@@ -76,7 +76,7 @@ export default function UpdateItem(props: UpdateItemProps) {
                             "flex justify-center items-center gap-1",
                             "h-min w-min aspect-square rounded",
                             "bg-white hover:bg-gray-50 shadow-sm",
-                            "border border-gray-200 p-1"
+                            "border border-gray-300 p-1"
                         )}
                     >
                         <TrashIcon

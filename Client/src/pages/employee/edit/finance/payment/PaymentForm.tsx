@@ -25,7 +25,7 @@ export default function PaymentForm(props: FormProps<DB_Payment, Payment, Paymen
     return (
         <ItemForm
             header={props.mode === "Create" ? "Add Payment" : `Edit Payment #${(props.mutateItem as any).PaymentID}`}
-            canDelete={parseInt(props.mutateItem.PaymentID) >= 0}
+            canDelete={props.mode !== "Create"}
             onReset={onReset}
             onCancel={props.onCancel}
             onDelete={props.onDelete}

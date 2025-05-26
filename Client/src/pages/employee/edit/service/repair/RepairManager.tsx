@@ -10,6 +10,12 @@ interface RepairManagerProps {
     parentForm: UseForm;
     repairList: Array<DB_AppointmentRepair>;
     onSaveUpdates: (updates: RepairUpdates) => void;
+    // Forms
+    tabOpen: boolean;
+    openForm: (form: string) => void;
+    openFormDisplayed: string;
+    openForms: Array<string>;
+    closeForm: (form: string) => void;
 }
 
 export default function RepairManager(props: RepairManagerProps) {
@@ -23,15 +29,19 @@ export default function RepairManager(props: RepairManagerProps) {
     }
 
     return (
-        <div>
-            <ItemManager
-                itemList={props.repairList}
-                defineItem={defineRepair}
-                parentForm={props.parentForm}
-                Form={RepairForm}
-                Display={RepairDisplay}
-                saveAllUpdates={processUpdates}
-            />
-        </div>
+        <ItemManager
+            itemList={props.repairList}
+            defineItem={defineRepair}
+            parentForm={props.parentForm}
+            Form={RepairForm}
+            Display={RepairDisplay}
+            saveAllUpdates={processUpdates}
+            tabOpen={props.tabOpen}
+            openForm={props.openForm}
+            openFormDisplayed={props.openFormDisplayed}
+            openForms={props.openForms}
+            closeForm={props.closeForm}
+            tab="Repairs"
+        />
     )
 }

@@ -18,12 +18,16 @@ export default function RepairForm<DB_AppointmentRepair, Repair, Repairs>(props:
 
     return (
         <ItemForm
-            header={props.mode === "Create" ? "Create Repair" : `Edit Repair #${(props.mutateItem as any).RepairID}`}
-            canDelete={true}
+            header={props.mode === "Create" ? "Add Repair" : `Edit Repair #${(props.mutateItem as any).RepairID}`}
+            canDelete={props.mode !== "Create"}
             onReset={onReset}
             onDelete={props.onDelete}
             onCancel={props.onCancel}
             onMutate={form.onMutate}
+            onExpand={props.onExpand}
+            onMinimize={props.onMinimize}
+            expanded={props.expanded}
+            tab="Repairs"
         >
             <ItemFormGroup head="">
                 <TextField

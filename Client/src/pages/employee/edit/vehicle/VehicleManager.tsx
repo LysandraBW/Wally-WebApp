@@ -8,6 +8,7 @@ interface VehicleManagerProps {
     parentForm: UseForm;
     appointment: DB_Appointment;
     onSaveUpdates: (updates: VehicleUpdates) => void;
+    tabOpen: boolean;
 }
 
 export default function VehicleManager(props: VehicleManagerProps) {
@@ -28,6 +29,7 @@ export default function VehicleManager(props: VehicleManagerProps) {
             parent={props.parentForm}
             appointment={props.appointment}
             onSaveUpdates={processUpdates}
+            tabOpen={props.tabOpen}
         />
     )
 }

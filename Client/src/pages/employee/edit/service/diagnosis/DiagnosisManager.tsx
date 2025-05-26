@@ -10,6 +10,12 @@ interface DiagnosisManagerProps {
     parentForm: UseForm;
     diagnosisList: Array<DB_AppointmentDiagnosis>;
     onSaveUpdates: (updates: DiagnosisUpdates) => void;
+    // Forms
+    tabOpen: boolean;
+    openForm: (form: string) => void;
+    openFormDisplayed: string;
+    openForms: Array<string>;
+    closeForm: (form: string) => void;
 }
 
 export default function DiagnosisManager(props: DiagnosisManagerProps) {
@@ -23,15 +29,19 @@ export default function DiagnosisManager(props: DiagnosisManagerProps) {
     }
 
     return (
-        <div>
-            <ItemManager
-                itemList={props.diagnosisList}
-                defineItem={defineDiagnosis}
-                parentForm={props.parentForm}
-                Form={DiagnosisForm}
-                Display={DiagnosisDisplay}
-                saveAllUpdates={processUpdates}
-            />
-        </div>
+        <ItemManager
+            itemList={props.diagnosisList}
+            defineItem={defineDiagnosis}
+            parentForm={props.parentForm}
+            Form={DiagnosisForm}
+            Display={DiagnosisDisplay}
+            saveAllUpdates={processUpdates}
+            tabOpen={props.tabOpen}
+            openForm={props.openForm}
+            openFormDisplayed={props.openFormDisplayed}
+            openForms={props.openForms}
+            closeForm={props.closeForm}
+            tab="Diagnoses"
+        />
     )
 }

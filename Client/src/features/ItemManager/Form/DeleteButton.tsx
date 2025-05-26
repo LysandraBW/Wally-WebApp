@@ -10,8 +10,8 @@ export default function DeleteButton(props: DeleteButtonProps) {
         <button
             onClick={props.onDelete}
             className={clsx(
-                "rounded p-1 bg-white w-min hover:bg-gray-50",
-                "border border-gray-200"
+                "rounded p-1 bg-white w-min hover:bg-gray-50 hover:shadow-xs transition-all",
+                "border border-gray-300 shadow-sm stroke-gray-400 hover:stroke-black"
             )}
         >
             <TrashIcon
@@ -20,7 +20,7 @@ export default function DeleteButton(props: DeleteButtonProps) {
                 fill="#9CA3AF"
                 color="#9CA3AF"
                 stroke="#9CA3AF"
-                strokeWidth="0.25"
+                strokeWidth="0.1"
                 cursor="pointer"
             />
         </button>

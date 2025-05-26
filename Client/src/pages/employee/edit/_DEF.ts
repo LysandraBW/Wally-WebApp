@@ -22,4 +22,4 @@ export const MasterForm = makeForm({
     [`${DIAGNOSIS}`]: [null, ""]
 }, z.object({}));
 
-export const tabs = ["General", "Vehicle", "Cost", "Payments", "Diagnoses", "Parts", "Repairs", "Services", "Notes"];
+export const tabs = ["General", "Vehicle", "Finances", "Diagnoses", "Parts", "Repairs", "Services", "Notes"];

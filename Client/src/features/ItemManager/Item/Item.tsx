@@ -12,7 +12,7 @@ export default function Item(props: ItemProps) {
     return (
         <div className={clsx(
             "bg-white shadow-sm",
-            "rounded-md border"
+            "rounded-md border border-gray-300"
         )}>
             <div className="p-2">
                 <div className="flex items-center">
@@ -20,17 +20,17 @@ export default function Item(props: ItemProps) {
                         className={clsx(
                             "font-medium",
                             "text-gray-400 text-00",
-                            "tracking-tighter"
+                            "tracking-wide"
                         )}
                     >
-                        ID: {props.ID}
+                        {props.ID === -1 ? "New" : `ID: ${props.ID}`}
                     </span>
                 </div>
                 <span 
                     className={clsx(
                         "font-medium",
-                        "text-gray-950 text-05",
-                        "tracking-tight"
+                        "text-gray-950 text-03",
+                        "tracking"
                     )}
                 >
                     {props.head}
@@ -40,8 +40,8 @@ export default function Item(props: ItemProps) {
                 <div 
                     key={i}
                     className={clsx(
-                        "flex items-center p-1 gap-1",
-                        "rounded-b border-t border-t-gray-200",
+                        "flex items-center p-2 gap-1",
+                        "rounded-b-lg bg-gray-50 border-t border-t-gray-200",
                         "scroll-hide"
                     )}
                 >
@@ -49,9 +49,9 @@ export default function Item(props: ItemProps) {
                         <span
                             key={i}
                             className={clsx(
-                                "text-00 font-medium",
-                                "tag shadow-none",
-                                "border-solid border-gray-200",
+                                "text-00 font-medium tracking-wide",
+                                "tag shadow-xs",
+                                "border-solid border-gray-200 text-gray-400",
                                 "flex gap-1"
                             )}
                         >

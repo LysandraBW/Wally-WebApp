@@ -1,11 +1,12 @@
 import CloseButton from "@/component/Button/CloseButton";
-import { ReactNode } from "react";
+import { ReactNode, useContext } from "react";
 import DeleteButton from "./DeleteButton";
 import ResetButton from "./ResetButton";
 import SaveCancelButtons from "./SaveCancelButtons";
 import clsx from "clsx";
 import ExpandButton from "./ExpandButton";
 import MinimizeButton from "./Minimize";
+import { UpdateManagerContext } from "@/pages/employee/edit/Update";
 
 interface ItemFormProps {
     header: string;
@@ -18,9 +19,12 @@ interface ItemFormProps {
     onMutate: () => void;
     onExpand: () => void;
     onMinimize: () => void;
+    tab: string;
 }
 
 export default function ItemForm(props: ItemFormProps) {
+    const updateManagerContext = useContext(UpdateManagerContext);
+
     return (
         <div
             className={clsx(
@@ -77,7 +81,10 @@ export default function ItemForm(props: ItemFormProps) {
                     */}
                     {props.canDelete &&  
                         <DeleteButton
-                            onDelete={props.onDelete}
+                            onDelete={() => {
+                                props.onDelete();
+                                updateManagerContext.setChangesMade(props.tab, true);
+                            }}
                         />
                     }
                 </div>
@@ -91,7 +98,10 @@ export default function ItemForm(props: ItemFormProps) {
             <div className="p-4 border-t border-t-gray-300 relative after:bg-white after:absolute after:top-[-2px] after:left-0 after:w-full after:h-[1px]">
                 <SaveCancelButtons
                     onCancel={props.onCancel}
-                    onMutate={props.onMutate}
+                    onMutate={() => {
+                        props.onMutate();
+                        updateManagerContext.setChangesMade(props.tab, true);
+                    }}
                 />
             </div>
         </div>

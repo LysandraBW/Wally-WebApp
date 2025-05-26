@@ -32,13 +32,13 @@ export default function LoadAppointment(props: LoadAppointmentProps) {
                             props.appointmentNotFound &&  props.setAppointmentNotFound(false);
                             props.form.updateInputData(event.target.name, event.target.value);
                         }}
-                        className="rounded-md w-full outline-none peer tracking-wider"
+                        className="rounded-md w-full outline-none peer tracking-wider text-03"
                     />
                     <div 
                         onClick={props.loadAppointment}
-                        className="bg-white shadow-xs border border-gray-300 h-full w-[48px] flex items-center justify-center rounded-md hover:bg-blue-500 hover:border-blue-500 group cursor-pointer transition-all peer-focus:border-blue-500 stroke-gray-400 peer-focus:!stroke-blue-500"
+                        className="bg-gray-100 shadow-xs border- ml-2 border-gray-300 h-full aspect-square flex items-center justify-center rounded-md hover:bg-blue-500 hover:border-blue-500 group cursor-pointer transition-all peer-focus:border-blue-500 stroke-gray-400 peer-focus:!stroke-blue-500"
                     >
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" className="size-4 stroke-inherit group-hover:!stroke-white cursor-pointer transition-all">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2.5" stroke="currentColor" className="size-4 stroke-inherit group-hover:!stroke-white cursor-pointer transition-all">
                             <path strokeLinecap="round" strokeLinejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
                         </svg>
                     </div>

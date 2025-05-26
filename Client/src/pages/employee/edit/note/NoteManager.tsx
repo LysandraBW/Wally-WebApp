@@ -14,6 +14,12 @@ interface NoteManagerProps {
     noteList: Array<DB_Note>;
     onSaveUpdates: (updates: NoteUpdates) => void;
     appointmentID: string;
+    // Forms
+    tabOpen: boolean;
+    openForm: (form: string) => void;
+    openFormDisplayed: string;
+    openForms: Array<string>;
+    closeForm: (form: string) => void;
 }
 
 export default function NoteManager(props: NoteManagerProps) {
@@ -128,15 +134,19 @@ export default function NoteManager(props: NoteManagerProps) {
     }
 
     return (
-        <div>
-            <ItemManager
-                defineItem={defineNote}
-                parentForm={props.parent}
-                itemList={props.noteList}
-                Form={NoteForm}
-                Display={NoteDisplay}
-                saveAllUpdates={processUpdates}
-            />
-        </div>
+        <ItemManager
+            defineItem={defineNote}
+            parentForm={props.parent}
+            itemList={props.noteList}
+            Form={NoteForm}
+            Display={NoteDisplay}
+            saveAllUpdates={processUpdates}
+            tabOpen={props.tabOpen}
+            openForm={props.openForm}
+            openFormDisplayed={props.openFormDisplayed}
+            openForms={props.openForms}
+            closeForm={props.closeForm}
+            tab="Notes"
+        />
     )
 }

@@ -1,5 +1,5 @@
 import { Appointment as DB_Appointment } from "waltronics-types";
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useContext, useEffect, useState } from "react";
 import { makeVehicle, vehicleTest, Vehicle } from "./_DEF";
 import { VEHICLE } from "../_DEF";
 import { fetchModels } from "@/services/NHTSA/fetchModels";
@@ -14,11 +14,13 @@ import makeForm from "@/features/Form/useForm/makeForm";
 import SaveResetButtons from "@/features/ItemManager/Form/SaveResetButtons";
 import TextFieldGrid from "../TextFieldGrid";
 import SearchGrid from "../SearchGrid";
+import { UpdateManagerContext } from "../Update";
 
 interface VehicleFormProps {
     parent: UseForm;
     appointment: DB_Appointment;
     onSaveUpdates: (oldVehicle: Vehicle, newVehicle: Vehicle) => void;
+    tabOpen: boolean;
 }
 
 export default function VehicleForm(props: VehicleFormProps) {
@@ -28,6 +30,7 @@ export default function VehicleForm(props: VehicleFormProps) {
     const [makes, setMakes] = useState<Options>([]);
     const [models, setModels] = useState<Options>([]);
     const [modelYears, setModelYears] = useState<Options>([]);
+    const updateManagerContext = useContext(UpdateManagerContext);
 
     useEffect(() => {
         resetForm();
@@ -40,6 +43,7 @@ export default function VehicleForm(props: VehicleFormProps) {
             return;
         const newVehicle: Vehicle = form.getData() as Vehicle;
         props.onSaveUpdates(oldVehicle, newVehicle);
+        updateManagerContext.setChangesMade("Vehicle", false);
     }
 
     const resetForm = async () => {
@@ -70,6 +74,7 @@ export default function VehicleForm(props: VehicleFormProps) {
             getValues(vehicleModelYears)
         );        
         form.resetForm(makeForm(vehicle, test));
+        updateManagerContext.setChangesMade("Vehicle", false);
     }
 
     const updateVehicle = async (VIN: string) => {
@@ -108,79 +113,82 @@ export default function VehicleForm(props: VehicleFormProps) {
         }
         form.updateInputData(name, value);
         props.parent.setInputState(VEHICLE, [form.getState(), ""]);
+        updateManagerContext.setChangesMade("Vehicle", JSON.stringify(form.getData()) !== JSON.stringify(oldVehicle));
     }
     
     return (
         <Fragment>
-            <div className="row-start-3 row-span-1 col-start-1 col-span-1 grow relative flex flex-col">
-                <div className="bg-white relative after:absolute after:w-[1px] after:h-full after:top-0 after:left-[0px] after:bg-gray-300 before:absolute before:w-[1px] before:h-full after:top-0 before:right-[0px] before:bg-gray-300 h-full grow">
-                    <table className="grow w-full border-collapse">
-                        <tbody>
-                            <TextFieldGrid
-                                name="VIN"
-                                type="text"
-                                label="VIN"
-                                value={form.getInput("VIN").data || ""}
-                                state={form.getInput("VIN").state}
-                                onChange={updateValue}
-                                onBlur={undefined}
-                            />
-                            <SearchGrid
-                                name="ModelYear"
-                                label="Model Year"
-                                toggleLabel="Select Model Year"
-                                values={form.getInput("ModelYear").data || []}
-                                state={form.getInput("ModelYear").state}
-                                options={modelYears}
-                                onChange={updateValue}
-                                disabled={false}
-                            />
-                            <SearchGrid
-                                name="Make"
-                                label="Make"
-                                toggleLabel="Select Make"
-                                values={form.getInput("Make").data || []}
-                                state={form.getInput("Make").state}
-                                options={makes}
-                                onChange={updateValue}
-                                disabled={false}
-                            />
-                            <SearchGrid
-                                name="Model"
-                                label="Model"
-                                toggleLabel="Select Model"
-                                values={form.getInput("Model").data || []}
-                                state={form.getInput("Model").state}
-                                options={models}
-                                onChange={updateValue}
-                                disabled={false}
-                            />
-                            <TextFieldGrid
-                                name="Mileage"
-                                type="text"
-                                label="Mileage"
-                                value={form.getInput("Mileage").data || ""}
-                                state={form.getInput("Mileage").state}
-                                onChange={updateValue}
-                                onBlur={undefined}
-                            />
-                            <TextFieldGrid
-                                name="LicensePlate"
-                                type="text"
-                                label="License Plate"
-                                value={form.getInput("LicensePlate").data || ""}
-                                state={form.getInput("LicensePlate").state}
-                                onChange={updateValue}
-                                onBlur={undefined}
-                            />
-                        </tbody>
-                    </table>
+            {props.tabOpen &&
+                <div className="row-start-5 row-span-1 col-start-1 col-span-1 grow relative flex flex-col h-min">
+                    <div className="bg-white relative after:absolute after:w-[1px] after:h-full after:top-0 after:left-[0px] after:bg-gray-300 before:absolute before:w-[1px] before:h-full after:top-0 before:right-[0px] before:bg-gray-300 h-full grow">
+                        <table className="grow w-full border-collapse">
+                            <tbody>
+                                <TextFieldGrid
+                                    name="VIN"
+                                    type="text"
+                                    label="VIN"
+                                    value={form.getInput("VIN").data || ""}
+                                    state={form.getInput("VIN").state}
+                                    onChange={updateValue}
+                                    onBlur={undefined}
+                                />
+                                <SearchGrid
+                                    name="ModelYear"
+                                    label="Model Year"
+                                    toggleLabel="Select Model Year"
+                                    values={form.getInput("ModelYear").data || []}
+                                    state={form.getInput("ModelYear").state}
+                                    options={modelYears}
+                                    onChange={updateValue}
+                                    disabled={false}
+                                />
+                                <SearchGrid
+                                    name="Make"
+                                    label="Make"
+                                    toggleLabel="Select Make"
+                                    values={form.getInput("Make").data || []}
+                                    state={form.getInput("Make").state}
+                                    options={makes}
+                                    onChange={updateValue}
+                                    disabled={false}
+                                />
+                                <SearchGrid
+                                    name="Model"
+                                    label="Model"
+                                    toggleLabel="Select Model"
+                                    values={form.getInput("Model").data || []}
+                                    state={form.getInput("Model").state}
+                                    options={models}
+                                    onChange={updateValue}
+                                    disabled={false}
+                                />
+                                <TextFieldGrid
+                                    name="Mileage"
+                                    type="text"
+                                    label="Mileage"
+                                    value={form.getInput("Mileage").data || ""}
+                                    state={form.getInput("Mileage").state}
+                                    onChange={updateValue}
+                                    onBlur={undefined}
+                                />
+                                <TextFieldGrid
+                                    name="LicensePlate"
+                                    type="text"
+                                    label="License Plate"
+                                    value={form.getInput("LicensePlate").data || ""}
+                                    state={form.getInput("LicensePlate").state}
+                                    onChange={updateValue}
+                                    onBlur={undefined}
+                                />
+                            </tbody>
+                        </table>
+                    </div>
+                    <SaveResetButtons
+                        onSave={saveForm}
+                        onReset={resetForm}
+                    />
                 </div>
-                <SaveResetButtons
-                    onSave={saveForm}
-                    onReset={resetForm}
-                />
-            </div>
+            }
         </Fragment>
     )
 }

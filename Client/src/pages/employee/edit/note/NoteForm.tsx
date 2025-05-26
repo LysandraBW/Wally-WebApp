@@ -41,8 +41,8 @@ export default function NoteForm<DB_Note, Note, Notes>(props: FormProps<DB_Note,
 
     return (
         <ItemForm
-            header={props.mode === "Create" ? "Create Note" : `Edit Note #${(props.mutateItem as any).NoteID}`}
-            canDelete={true}
+            header={props.mode === "Create" ? "Add Note" : `Edit Note #${(props.mutateItem as any).NoteID}`}
+            canDelete={props.mode !== "Create"}
             onReset={onReset}
             onDelete={props.onDelete}
             onCancel={props.onCancel}
@@ -50,6 +50,7 @@ export default function NoteForm<DB_Note, Note, Notes>(props: FormProps<DB_Note,
             onExpand={props.onExpand}
             onMinimize={props.onMinimize}
             expanded={props.expanded}
+            tab="Notes"
         >
             {/* Content */}
             <ItemFormGroup head="Content">

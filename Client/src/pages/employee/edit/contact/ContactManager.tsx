@@ -8,6 +8,7 @@ interface ContactManagerProps {
     parentForm: UseForm;
     appointment: DB_Appointment;
     onSaveUpdates: (updates: ContactUpdates) => void;
+    tabOpen: boolean;
 }
 
 export default function ContactManager(props: ContactManagerProps) {
@@ -29,6 +30,7 @@ export default function ContactManager(props: ContactManagerProps) {
             parent={props.parentForm}
             appointment={props.appointment}
             onSaveUpdates={processUpdates}
+            tabOpen={props.tabOpen}
         />
     )
 }

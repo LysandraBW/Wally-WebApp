@@ -70,6 +70,10 @@ export default function Page() {
                         <Update
                             appointment={appointment}
                             appointmentID={appointmentID}
+                            close={() => {
+                                setAppointment(undefined);
+                                setAppointmentID("");
+                            }}
                         />
                     }
                     {!appointmentID &&

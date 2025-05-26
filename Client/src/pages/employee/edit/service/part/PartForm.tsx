@@ -19,14 +19,18 @@ export default function PartForm<DB_AppointmentPart, Part, Parts>(props: FormPro
 
     return (
         <ItemForm
-            header={props.mode === "Create" ? "Create Part" : `Edit Part #${(props.mutateItem as any).PartID}`}
-            canDelete={true}
+            header={props.mode === "Create" ? "Add Part" : `Edit Part #${(props.mutateItem as any).PartID}`}
+            canDelete={props.mode !== "Create"}
             onReset={onReset}
             onCancel={props.onCancel}
             onDelete={props.onDelete}
             onMutate={form.onMutate}
+            onExpand={props.onExpand}
+            onMinimize={props.onMinimize}
+            expanded={props.expanded}
+            tab="Parts"
         >
-            <ItemFormGroup head="">
+            <ItemFormGroup head="Part">
                 <TextField
                     type="text"
                     name="PartName"
@@ -46,7 +50,7 @@ export default function PartForm<DB_AppointmentPart, Part, Parts>(props: FormPro
                     onBlur={undefined}
                 />
             </ItemFormGroup>
-            <ItemFormGroup head="">
+            <ItemFormGroup head="Amount">
                 <TextField
                     type="text"
                     name="Quantity"

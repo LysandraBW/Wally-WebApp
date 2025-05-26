@@ -18,12 +18,16 @@ export default function DiagnosisForm<DB_AppointmentDiagnosis, Diagnosis, Diagno
 
     return (
         <ItemForm
-            header={props.mode === "Create" ? "Create Diagnosis" : `Edit Diagnosis #${(props.mutateItem as any).DiagnosisID}`}
-            canDelete={true}
+            header={props.mode === "Create" ? "Add Diagnosis" : `Edit Diagnosis #${(props.mutateItem as any).DiagnosisID}`}
+            canDelete={props.mode !== "Create"}
             onReset={onReset}
             onDelete={props.onDelete}
             onCancel={props.onCancel}
             onMutate={form.onMutate}
+            onExpand={props.onExpand}
+            onMinimize={props.onMinimize}
+            expanded={props.expanded}
+            tab="Diagnoses"
         >
             <ItemFormGroup head="">
                 <TextField

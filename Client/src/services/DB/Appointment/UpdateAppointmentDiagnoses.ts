@@ -18,7 +18,7 @@ export async function UpdateAppointmentDiagnoses(appointmentID: string, updates:
         }
 
         for (const DELETE of updates.Delete) {
-            request("POST", `/appointment/${appointmentID}/diagnosis/${DELETE.DiagnosisID}`);
+            request("DELETE", `/appointment/${appointmentID}/diagnosis/${DELETE.DiagnosisID}`);
         }
 
         return true;
