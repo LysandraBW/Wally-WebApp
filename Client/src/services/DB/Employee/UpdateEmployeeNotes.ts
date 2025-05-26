@@ -35,7 +35,8 @@ export async function UpdateEmployeeNotes(updates: NoteUpdates) {
                 showCustomer: INSERT.ShowCustomer
             });
 
-            if (!output || output.noteID)
+            console.log("NOTE OUTPUT", output);
+            if (!output || !output.output)
                 throw "Error";
 
             if (INSERT.Files) {
@@ -45,7 +46,7 @@ export async function UpdateEmployeeNotes(updates: NoteUpdates) {
                         continue;
                     const _file = file as File;
                     const URL = await uploadFile(await generateURL(), _file);
-                    request("PUT", `/appointment/note/${output.noteID}/attachment`, {
+                    request("PUT", `/appointment/note/${output.output}/attachment`, {
                         name: _file.name,
                         type: _file.type,
                         url: URL
@@ -55,7 +56,7 @@ export async function UpdateEmployeeNotes(updates: NoteUpdates) {
 
             if (INSERT.Sharees) {
                 for (const noteShareeID of INSERT.Sharees) {
-                    request("PUT", `/appointment/note/${output.noteID}/sharee`, {
+                    request("PUT", `/appointment/note/${output.output}/sharee`, {
                         noteShareeID
                     });
                 }

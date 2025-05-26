@@ -18,12 +18,12 @@ export async function UpdateEmployeeEvents(updates: EventUpdates) {
                 summary: INSERT.Summary
             });
 
-            if (!output || !output.EventID)
+            if (!output || !output.output)
                 throw "Error";
 
             if (INSERT.Sharees) {
                 for (const eventShareeID of INSERT.Sharees) {
-                    request("PUT", `/employee/event/${output.EventID}/sharee`, {
+                    request("PUT", `/employee/event/${output.output}/sharee`, {
                         eventShareeID
                     });
                 }

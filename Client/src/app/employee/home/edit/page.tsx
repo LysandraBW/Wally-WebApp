@@ -1,6 +1,6 @@
 "use client";
 import { z } from "zod";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import UpdateManager from "@/pages/employee/edit/Update";
 import useForm from "@/features/Form/useForm/useForm";
@@ -8,6 +8,7 @@ import makeForm from "@/features/Form/useForm/makeForm";
 import { Appointment as DB_Appointment } from "waltronics-types";
 import LoadAppointment from "@/features/LoadAppointment/LoadAppointment";
 import SelectAppointment from "@/services/DB/Appointment/SelectAppointment";
+import { EmployeeContext } from "../layout";
 
 export default function Page() {
     const form = useForm("ID");
@@ -16,6 +17,7 @@ export default function Page() {
     const [appointment, setAppointment] = useState<DB_Appointment>();
     const [appointmentID, setAppointmentID] = useState("");
     const [appointmentNotFound, setAppointmentNotFound] = useState(false);
+    const employeeContext = useContext(EmployeeContext);
 
     useEffect(() => {
         const load = async () => {
@@ -42,6 +44,10 @@ export default function Page() {
         load();
     }, []);
 
+    useEffect(() => {
+        employeeContext.setCurrentPage && employeeContext.setCurrentPage("Edit Appointment");
+    }, [employeeContext]);
+
     const loadAppointment = async () => {
         if (!form.getState())
             return;
@@ -63,8 +69,8 @@ export default function Page() {
     
     return (
         <div className="flex flex-col overflow-x-clip grow">
-            <div className="p-8 pb-0 flex flex-col grow">
-                <h5 className="font-medium pb-4">Update Appointment</h5>
+            <div className="p-8 pt-5 pb-8 flex flex-col grow">
+                <h5 className="font-medium pb-4">Edit Appointment</h5>
                 <div className="flex flex-col bg-white w-full h-full grow">
                     {(appointment && appointmentID) &&
                         <UpdateManager

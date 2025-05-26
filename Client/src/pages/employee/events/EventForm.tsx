@@ -1,7 +1,6 @@
 import { Fragment, useEffect, useState } from "react";
 import Button from "@/component/Form/Button/Button";
 import { getCookie } from "@/utils/cookies/getCookie";
-import GetEmployeeNamePairs from "@/services/DB/Procedure/Employee/GetEmployeeNamePairs";
 import useItemForm from "@/features/ItemManager/useItemForm";
 import { FormProps } from "@/features/ItemManager/ItemManager";
 import { Options } from "@/features/Form/DEF";
@@ -10,6 +9,7 @@ import TextField from "@/component/Form/Text/TextField";
 import MultipleSelect from "@/component/Form/Select/Select/MultipleSelect";
 import ItemForm from "@/features/ItemManager/Form/ItemForm";
 import ItemFormGroup from "@/features/ItemManager/Form/ItemFormGroup";
+import GetEmployeeNamePairs from "@/services/DB/Employee/GetEmployeeNamePairs";
 
 export default function EventForm<DB_Event, Event, Events>(props: FormProps<DB_Event, Event, Events>) {
     const form = useItemForm(props);
@@ -18,8 +18,7 @@ export default function EventForm<DB_Event, Event, Events>(props: FormProps<DB_E
 
     useEffect(() => {
         const load = async () => {
-            const sessionID = await getCookie("sessionID");
-            const employees = await GetEmployeeNamePairs(sessionID);
+            const employees = await GetEmployeeNamePairs();
             setEmployees(employees);
             onReset();
         }
@@ -39,12 +38,16 @@ export default function EventForm<DB_Event, Event, Events>(props: FormProps<DB_E
 
     return (
         <ItemForm
-            header="Event"
-            canDelete={true}
+            header={props.mode === "Create" ? "Add Event" : !!!(props.mutateItem as any).EventID ? "Edit New Event" : `Edit Event #${(props.mutateItem as any).PaymentID}`}
+            canDelete={props.mode !== "Create"}
             onReset={onReset}
             onCancel={props.onCancel}
             onDelete={props.onDelete}
             onMutate={form.onMutate}
+            onExpand={props.onExpand}
+            expanded={props.expanded}
+            onMinimize={props.onMinimize}
+            tab=""
         >
             <ItemFormGroup head="Event">
                 <TextField

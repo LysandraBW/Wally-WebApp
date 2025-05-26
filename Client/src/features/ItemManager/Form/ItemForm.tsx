@@ -29,7 +29,7 @@ export default function ItemForm(props: ItemFormProps) {
         <div
             className={clsx(
                 "grow flex flex-col justify-between bg-white",
-                "min-w-[400px] w-full"
+                "min-w-[400px] w-full border border-gray-300"
             )}
         >
             <div 

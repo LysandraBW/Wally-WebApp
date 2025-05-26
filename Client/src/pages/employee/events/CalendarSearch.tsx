@@ -11,6 +11,7 @@ import makeForm from "@/features/Form/useForm/makeForm";
 import ChevronRight from "@/component/Icon/ChevonRight";
 import ChevronLeft from "@/component/Icon/ChevronLeft";
 import clsx from "clsx";
+import CalendarSelect from "./CalendarSelect";
 
 interface CalendarSearchProps {
     year: number;
@@ -49,24 +50,20 @@ export default function CalendarSearch(props: CalendarSearchProps) {
     }, [props.monthIndex]);
 
     return (
-        <div className="flex gap-1 items-center h-min">
+        <div className="flex gap-1 items-center h-[26px]">
             <button 
                 onClick={props.goToPrevMonth}
                 className={clsx(
-                    "p-2 h-full flex items-center justify-center",
-                    "bg-gray-100 border border-gray-200 rounded"
+                    "h-full aspect-square flex items-center justify-center",
+                    "bg-white border border-gray-300 rounded cursor-pointer hover:bg-gray-50 shadow-sm stroke-gray-400 hover:stroke-black"
                 )}
             >
-                <ChevronLeft
-                    width="10"
-                    height="10"
-                    fill="#9ca3af"
-                    stroke="#9ca3af"
-                    strokeWidth="1.75"
-                />
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2.5" stroke="currentColor" className="size-3 stroke-inherit">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
+                </svg>
             </button>
             <div className="min-w-[5rem]">
-                <Select
+                <CalendarSelect
                     name="year"
                     values={form.getInput("year").data}
                     state={form.getInput("year").state}
@@ -79,7 +76,7 @@ export default function CalendarSearch(props: CalendarSearchProps) {
                 />
             </div>
             <div className="min-w-[10rem]">
-                <Select
+                <CalendarSelect
                     name="month"
                     values={form.getInput("month").data}
                     state={form.getInput("month").state}
@@ -94,17 +91,14 @@ export default function CalendarSearch(props: CalendarSearchProps) {
             <button 
                 onClick={props.goToNextMonth}
                 className={clsx(
-                    "p-2 w-min flex items-center justify-center",
-                    "bg-gray-100 border border-gray-200 rounded"
+                    "h-full aspect-square bg-white flex items-center justify-center",
+                    "border border-gray-300 rounded cursor-pointer hover:bg-gray-50 shadow-sm stroke-gray-400 hover:stroke-black"
                 )}
             >
-                <ChevronRight
-                    width="10"
-                    height="10"
-                    fill="#9ca3af"
-                    stroke="#9ca3af"
-                    strokeWidth="1.75"
-                />
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2.5" stroke="currentColor" className="size-3 stroke-inherit">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+                </svg>
+
             </button>
         </div>
     )

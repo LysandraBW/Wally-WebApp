@@ -24,7 +24,7 @@ export default function Checkbox(props: CheckboxProps) {
                     "border border-gray-300 shadow-sm rounded-[2.5px] cursor-pointer",
                     props.checked && `
                         !bg-blue-600 
-                        border-blue-500 
+                        !border-blue-500 
                         text-white
                     `)}
             >

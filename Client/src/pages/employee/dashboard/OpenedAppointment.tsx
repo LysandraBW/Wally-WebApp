@@ -29,7 +29,7 @@ function DataGroup({head, data}: {
                 {data.map(([key, value], i) => (
                     <Fragment key={i}>
                         <span className="text-gray-400 tracking-wide">{key}</span>
-                        <span className="text-gray-700 tracking-wide font-medium">{value}</span>
+                        <span className="text-black tracking-wide">{value}</span>
                     </Fragment>
                 ))}
             </div>
@@ -82,24 +82,24 @@ export default function OpenedAppointment(props: OpenedAppointmentProps) {
                 <div>
                     <div className="px-4 py-4 flex flex-col items-center border-b border-gray-300">
                         {/* Full Name */}
-                        <h6 className="text-gray-950 font-semibold text-3xl mb-2 text-center">
+                        <h6 className="text-gray-950 font-medium text-3xl mb-2 text-center">
                             {appointment.FName} {appointment.LName}
                         </h6>
                         {/* Appointment ID */}
                         <div className="!w-min flex items-center gap-1 fill-gray-400">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.75" stroke="currentColor" className="size-4 stroke-gray-400">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-4 stroke-gray-400">
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M15 9h3.75M15 12h3.75M15 15h3.75M4.5 19.5h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Zm6-10.125a1.875 1.875 0 1 1-3.75 0 1.875 1.875 0 0 1 3.75 0Zm1.294 6.336a6.721 6.721 0 0 1-3.17.789 6.721 6.721 0 0 1-3.168-.789 3.376 3.376 0 0 1 6.338 0Z" />
                             </svg>
-                            <span className="w-min text-01 text-gray-400 font-medium whitespace-nowrap tracking-wider">
+                            <span className="w-min text-01 text-gray-400 whitespace-nowrap tracking-wider">
                                 {appointment.AppointmentID}
                             </span>
                         </div>
                         {/* Creation Date */}
                         <div className="!w-min flex items-center gap-1 fill-gray-400">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.75" stroke="currentColor" className="size-4 stroke-gray-400">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-4 stroke-gray-400">
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
                             </svg>
-                            <span className="w-min text-01 text-gray-400 font-medium whitespace-nowrap tracking-wider">
+                            <span className="w-min text-01 text-gray-400 whitespace-nowrap tracking-wider">
                                 Created on {toDisplayDate(appointment.CreationDate).slice(0, 12)}
                             </span>
                         </div>
@@ -171,13 +171,13 @@ export default function OpenedAppointment(props: OpenedAppointmentProps) {
             >
                 <button
                     onClick={() => navigate(PAGE_VIEW_APPOINTMENT, {appointmentID: props.appointmentID})}
-                    className="w-full bg-white/50  backdrop-blur-lg border-r-[0.5px] border-gray-300 px-4 py-4 text-gray-400 text-md font-medium tracking-wide hover:bg-gray-50 hover:text-black"
+                    className="w-full bg-white/50  backdrop-blur-lg border-r-[0.5px] border-gray-300 px-4 py-4 text-gray-400 text-03 font-medium tracking-wide hover:bg-gray-50 hover:text-black"
                 >
                     View
                 </button>
                 <button
                     onClick={() => navigate(PAGE_EDIT_APPOINTMENT, {appointmentID: props.appointmentID})}
-                    className="w-full bg-white/50 backdrop-blur-lg border-l-[0.5px] border-gray-300 px-4 py-4 text-gray-400 text-md font-medium tracking-wide hover:bg-gray-50 hover:text-black"
+                    className="w-full bg-white/50 backdrop-blur-lg border-l-[0.5px] border-gray-300 px-4 py-4 text-gray-400 text-03 font-medium tracking-wide hover:bg-gray-50 hover:text-black"
                 >
                     Edit
                 </button>

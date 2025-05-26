@@ -20,7 +20,7 @@ export default function ContactManager(props: ContactManagerProps) {
             Phone: updatedValue(oldContact.Phone, newContact.Phone),
             StartDate: updatedValue(oldContact.StartDate, newContact.StartDate),
             EndDate: updatedValue(oldContact.EndDate, newContact.EndDate),
-            StatusID: updatedValue(oldContact.StatusID, newContact.StatusID)
+            StatusID: updatedValue(oldContact.StatusID[0], newContact.StatusID[0])
         } as ContactUpdates;
         props.onSaveUpdates(updates);
     }

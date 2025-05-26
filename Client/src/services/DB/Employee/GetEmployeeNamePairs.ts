@@ -4,5 +4,6 @@ import { Options } from "@/features/Form/DEF";
 
 export default async function GetEmployeeNamePairs(): Promise<Options> {
     const output = await SelectEmployeeNames();
-    return output.map((employee: DB_EmployeeName) => [employee.EmployeeID, employee.FName + " " + employee.LName]);
+    console.log(output)
+    return output.map((employee: DB_EmployeeName) => [employee.EmployeeID, (employee as any).Name]);
 }

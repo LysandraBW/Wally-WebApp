@@ -15,7 +15,7 @@ interface ListProps extends Pick<ReadWriteArrayInputProps, "values"> {
 export default function List(props: ListProps) {
     return (
         <ul 
-            className="px-0 relative top-[calc(100%+0.25rem)] field bg-white max-h-[200px] overflow-y-scroll w-full scroll-hide"
+            className="px-0 absolute top-[calc(100%+.25rem)] rounded-md border border-gray-300 bg-white w-full z-[120] shadow-sm"
         >
             {props.options.map(([value, label, node], i) => (
                 <li
@@ -24,39 +24,41 @@ export default function List(props: ListProps) {
                         event.stopPropagation();
                         props.selectValue(value);
                     }}
+                    className={clsx(
+                        "first:rounded-t-[6px] last:rounded-b-[6px]",
+                        "px-2 py-1 flex justify-between items-center gap-2",
+                        props.multiple && "!justify-normal",
+                        "hover:bg-gray-50 hover:cursor-pointer",
+                    )}
                 >
-                    <ListElement
-                        multiple={props.multiple}
-                    >
-                        {props.multiple && 
-                            <Checkbox
-                                name=""
-                                value={value}
-                                checked={props.values.includes(value)}
-                                onChange={() => props.selectValue(value)}
-                            />
-                        }
-                        {node && node}
-                        {!node &&
-                            <Fragment>
-                                <span 
-                                    className={clsx(
-                                        "text-gray-600",
-                                        props.values.includes(value) && "font-medium text-gray-950"
-                                    )}
-                                >
-                                    {label}
-                                </span>
-                            </Fragment>
-                        }
-                        {!props.multiple && props.values.includes(value) &&
-                            <CheckIcon
-                                width="16"
-                                height="16"
-                                color="#020617"
-                            />
-                        }
-                    </ListElement>
+                    {props.multiple && 
+                        <Checkbox
+                            name=""
+                            value={value}
+                            checked={props.values.includes(value)}
+                            onChange={() => props.selectValue(value)}
+                        />
+                    }
+                    {node && node}
+                    {!node &&
+                        <Fragment>
+                            <span 
+                                className={clsx(
+                                    "text-gray-600",
+                                    props.values.includes(value) && "font-medium text-gray-950"
+                                )}
+                            >
+                                {label}
+                            </span>
+                        </Fragment>
+                    }
+                    {!props.multiple && props.values.includes(value) &&
+                        <CheckIcon
+                            width="16"
+                            height="16"
+                            color="#020617"
+                        />
+                    }
                 </li>
             ))}
         </ul>

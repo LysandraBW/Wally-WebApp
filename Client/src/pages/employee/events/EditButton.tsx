@@ -9,7 +9,7 @@ export default function EditButton({onUpdate}: {onUpdate: () => void}) {
                 "flex justify-center items-center gap-1",
                 "h-min w-min aspect-square",
                 "bg-white hover:bg-gray-50",
-                "rounded p-1 border border-gray-200"
+                "rounded p-1 border border-gray-300 shadow-sm"
             )}
         >
             <EditIcon

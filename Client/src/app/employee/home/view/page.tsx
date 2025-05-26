@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import View from "@/pages/employee/view/View";
 import { useRouter, useSearchParams } from "next/navigation";
 import useForm from "@/features/Form/useForm/useForm";
@@ -14,6 +14,8 @@ import LoadAppointment from "@/features/LoadAppointment/LoadAppointment";
 import { Appointment as DB_Appointment } from "waltronics-types";
 import SelectAppointment from "@/services/DB/Appointment/SelectAppointment";
 import { z } from "zod";
+import { AnimatePresence } from "motion/react";
+import { EmployeeContext } from "../layout";
 
 export default function Page() {
     const form = useForm("ID");
@@ -22,6 +24,7 @@ export default function Page() {
     const [appointment, setAppointment] = useState<DB_Appointment>();
     const [appointmentID, setAppointmentID] = useState("");
     const [appointmentNotFound, setAppointmentNotFound] = useState(false);
+    const employeeContext = useContext(EmployeeContext);
 
     useEffect(() => {
         const load = async () => {
@@ -40,11 +43,14 @@ export default function Page() {
                     setAppointmentNotFound(true);
                 }
             }
-
             form.resetForm();
         }
         load();
     }, []);
+
+    useEffect(() => {
+        employeeContext.setCurrentPage && employeeContext.setCurrentPage("View Appointment");
+    }, [employeeContext]);
 
     const loadAppointment = async () => {
         if (!form.getState())
@@ -63,24 +69,27 @@ export default function Page() {
         router.replace(URL);
         setAppointmentID(ID);
         setAppointment(appointment);
+        form.resetForm();
     }
     
     return (
         <div className="flex flex-col overflow-x-clip grow">
-            <div className="p-8 pb-0 flex flex-col grow">
-                <h5 className="font-medium pb-4">View Appointment</h5>
+            <div className="p-8 pt-5 pb-8 flex flex-col grow">
+                <h5 className={clsx("font-medium pb-5")}>View Appointment</h5>
                 <div className="flex flex-col bg-white w-full h-full grow">
-                    {(appointment && appointmentID) &&
-                        <View
-                            appointment={appointment}
-                            appointmentID={appointmentID}
-                            close={() => {
-                                setAppointment(undefined);
-                                setAppointmentID("");
-                                router.replace("/employee/home/view");
-                            }}
-                        />
-                    }
+                    <AnimatePresence>
+                        {(appointment && appointmentID) &&
+                            <View
+                                appointment={appointment}
+                                appointmentID={appointmentID}
+                                close={() => {
+                                    setAppointment(undefined);
+                                    setAppointmentID("");
+                                    router.replace("/employee/home/view");
+                                }}
+                            />
+                        }
+                    </AnimatePresence>
                     {!appointmentID &&
                         <LoadAppointment
                             head="Load Appointment"

@@ -77,6 +77,7 @@ export default function Page() {
                                 alignItems: "center",
                                 gap: "0rem",
                                 borderRadius: "6px",
+                                pointerEvents: "auto"
                             }}
                         >
                             <h6 className="text-02 tracking-wide text-gray-600">No appointment matches this information. Please try again.</h6>

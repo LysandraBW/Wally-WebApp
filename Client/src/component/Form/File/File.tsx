@@ -1,10 +1,10 @@
 import { ReadInputProps } from "@/features/Form/DEF";
 import { Field } from "../Field";
 import { useState } from "react";
-import bytesForHuman from "@/utils/convert";
 import UploadIcon from "@/component/Icon/Upload";
 import clsx from "clsx";
 import CrossIcon from "@/component/Icon/Cross";
+import { toBytes } from "@/utils/convert";
 
 interface FileProps extends ReadInputProps {
     accept: string;
@@ -76,7 +76,7 @@ export default function File(props: FileProps) {
                                     {file.name}
                                 </span>
                                 <span className="block">
-                                    {bytesForHuman(file.size)}
+                                    {toBytes(file.size)}
                                 </span>
                             </div>
                             {/* Delete File Button */}

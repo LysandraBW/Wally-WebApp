@@ -43,7 +43,7 @@ export default function MultipleSelect(props: SelectProps) {
                    tabIndex={0}
                     onBlur={closeList}
                     onClick={openList}
-                    className="relative"
+                    className="relative h-[36px]"
                 >
                     <Toggle
                         open={open}

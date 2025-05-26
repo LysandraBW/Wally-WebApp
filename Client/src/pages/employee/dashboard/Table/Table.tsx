@@ -20,7 +20,7 @@ export default function Table(props: TableProps) {
     return (
         <div>
             {props.appointmentManager.appointments && props.appointmentManager.appointments.length > 0 &&
-                <table>
+                <table className="">
                     <TableHead
                         filterManager={props.filterManager}
                         toggleManager={props.toggleManager}
@@ -43,13 +43,16 @@ export default function Table(props: TableProps) {
                 </table>
             }
             {props.appointmentManager.appointments && props.appointmentManager.appointments.length === 0 && 
-                <div className="flex justify-center items-center p-4">
+                <div className="flex flex-col gap-2 justify-center items-center p-4 py-8 border-b border-b-gray-300">
                     {/* If there's no appointment, we show a cool image. */}
-                        <img
-                            width="200"
-                            height="200"
-                            src="https://media.tenor.com/gUUIT73oHrAAAAAe/all-my-monkeys.png"
-                        />
+                    <img
+                        width="200"
+                        height="200"
+                        src="https://media.tenor.com/gUUIT73oHrAAAAAe/all-my-monkeys.png"
+                    />
+                    <span className="text-gray-400 tracking-wide font-medium text-03">
+                        No Appointments Found
+                    </span>
                 </div>
             }
         </div>

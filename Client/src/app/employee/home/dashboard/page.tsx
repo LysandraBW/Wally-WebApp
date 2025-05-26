@@ -12,9 +12,10 @@ import SearchBar from "@/pages/employee/dashboard/SearchBar";
 import Statuses from "@/pages/employee/dashboard/Statuses";
 import Table from "@/pages/employee/dashboard/Table/Table";
 import clsx from "clsx";
-import { Fragment, useEffect, useReducer, useState } from "react";
+import { Fragment, useContext, useEffect, useReducer, useState } from "react";
 import { BarLoader } from "react-spinners";
 import { AnimatePresence } from "motion/react";
+import { EmployeeContext } from "../layout";
 
 export default function Page() {
     const [alert, alertDispatch] =  useReducer(alertReducer, startAlert);
@@ -24,6 +25,7 @@ export default function Page() {
     const appointmentManager = useAppointmentManager(filterManager, setLoadingTable);
     const toggleManager = useToggleManager(appointmentManager, setLoadingTable);
     const deleteManager = useDeleteManager(alertDispatch, toggleManager, filterManager, appointmentManager, setLoadingTable);
+    const employeeContext = useContext(EmployeeContext);
 
     useInterval(() => {
         // Every second, the alerts will be refreshed,
@@ -43,14 +45,18 @@ export default function Page() {
         setLoaded(loaded);
     }, [loadingTable]);
 
+    useEffect(() => {
+        employeeContext.setCurrentPage && employeeContext.setCurrentPage("Dashboard");
+    }, [employeeContext]);
+
     return (
         <div className="overflow-x-clip grow">
             <Alert
                 alert={alert}
             />
-            <div className="p-8 flex flex-col gap-4 grow">
+            <div className="p-8 pt-5 flex flex-col gap-5 grow">
                 <h5 className="font-medium">Dashboard</h5>
-                <div className="flex gap-2">
+                <div className="flex gap-4">
                     <div className="w-[200px] flex flex-col gap-2">
                         {[
                             [
@@ -84,7 +90,7 @@ export default function Page() {
                             </div>
                         ))}
                     </div>
-                    <div className="border border-gray-300 rounded-t-md overflow-x-scroll scroll-hide w-full">
+                    <div className="border border-gray-300 border-b-0 rounded-t-md overflow-x-scroll scroll-hide w-full">
                         <Actions
                             deleteManager={deleteManager}
                             filterManager={filterManager}

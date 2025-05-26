@@ -126,7 +126,7 @@ export default function ItemManager<BaseItem, Item, Items>(props: ItemManagerPro
                         animate={{width: "400px", opacity: 1}}
                         exit={{width: "0px", opacity: 0}}
                         key={itemManager.defineItem.itemName + "UnexpandedAdd"}
-                        className="overflow-x-hidden w-[400px] border-l border-l-gray-300 row-start-2 row-span-4 col-start-3 col-span-1 border-t- border-t-gray-300 flex grow bg-white relative after:absolute after:w-[1px] after:h-full after:bg-gray-300 after:right-0 after:top-0 !bg-white mb-8 border-b border-b-gray-300"
+                        className="overflow-x-hidden w-[400px] row-start-2 row-span-4 col-start-3 col-span-1 flex grow bg-white relative after:absolute after:w-[1px] after:h-full after:bg-gray-300 after:right-0 after:top-0 !bg-white mb-0"
                     >
                         <props.Form
                             mode="Create"
@@ -148,7 +148,7 @@ export default function ItemManager<BaseItem, Item, Items>(props: ItemManagerPro
                         animate={{width: "400px"}}
                         exit={{width: "0px"}}
                         key={itemManager.defineItem.itemName + "UnexpandedEdit"}
-                        className="w-[400px] border-l border-l-gray-300 row-start-2 row-span-4 col-start-3 col-span-1 border-t- border-t-gray-300 flex grow bg-white relative after:absolute after:w-[1px] after:h-full after:bg-gray-300 after:right-0 after:top-0 !bg-white mb-8 border-b border-b-gray-300"
+                        className="overflow-x-hidden w-[400px] row-start-2 row-span-4 col-start-3 col-span-1 flex grow bg-white relative after:absolute after:w-[1px] after:h-full after:bg-gray-300 after:right-0 after:top-0 !bg-white mb-0"
                     >
                         <props.Form
                             mode="Update"

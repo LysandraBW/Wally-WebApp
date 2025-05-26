@@ -33,6 +33,7 @@ export default function PaymentForm(props: FormProps<DB_Payment, Payment, Paymen
             onExpand={props.onExpand}
             onMinimize={props.onMinimize}
             expanded={props.expanded}
+            tab="Finances"
         >
             {/* Amount */}
             <ItemFormGroup head="Amount">
@@ -53,7 +54,7 @@ export default function PaymentForm(props: FormProps<DB_Payment, Payment, Paymen
                     values={[addCard ? "\0" : ""]}
                     options={[
                         ["", "Cash", 
-                            <div className="top-[-3px]">
+                            <div className="relative top-[-3px]">
                                 <p className={clsx("tracking-wide text-left", !addCard && "text-blue-500 font-medium")}>
                                     Cash
                                 </p>
@@ -63,7 +64,7 @@ export default function PaymentForm(props: FormProps<DB_Payment, Payment, Paymen
                             </div>
                         ], 
                         ["\0", "Credit", 
-                            <div className="top-[-3px]">
+                            <div className="relative top-[-3px]">
                                 <p className={clsx("tracking-wide text-left", addCard && "text-blue-500 font-medium")}>
                                     Credit
                                 </p>

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Days, Events, Years } from "./_DEF";
+import { Days, Events, ShortenedDays, Years } from "./_DEF";
 import CalendarDate from "./CalendarDate";
 import getEventsWhen from "./getEventsWhen";
 import clsx from "clsx";
@@ -67,21 +67,21 @@ export default function Calendar(props: CalendarProps) {
         <div className="">
             {/* These are the days of the week Sunday, Monday, etc. */}
             <div className="grid grid-cols-7">
-                {Days.map((day, i) => 
+                {ShortenedDays.map((day, i) => 
                     <div 
                         key={i} 
                         className={clsx(
-                            "first:rounded-tl first:border-l last:rounded-tr",
+                            "first:rounded-l-md last:rounded-r-md",
                             "flex items-center justify-center p-1",
-                            "border-t border-b border-r",
-                            "text-center"
+                            "border-t first:border-l last:border-r border-gray-300 border-b",
+                            "text-center shadow-sm bg-white mb-2"
                         )}
                     >
-                        <span className="text-01 text-blue-500 font-semibold">{day}</span>
+                        <span className="text-01 text-black tracking-wider font-medium">{day}</span>
                     </div>
                 )}
             </div>
-            <div className='grid grid-cols-7 grid-rows-4'>
+            <div className='grid grid-cols-7 grid-rows-4 shadow-sm'>
                 {eventMap &&
                     thirtyFiveDays.map(i => {
                         // These are days that aren't actually in
@@ -89,22 +89,27 @@ export default function Calendar(props: CalendarProps) {
                         // the previous or next month.
                         if (eventMap[props.year][props.monthIndex][i][0] > 25 && i < 5)
                             return (
-                                <div key={i} className="bg-gray-50 border-r border-b first:border-l"/>
-                            );
-                        if (eventMap[props.year][props.monthIndex][i][0] < 5 && i > 25)
+                                <div key={i} className="first:rounded-tl last:rounded-tr bg-gray-50 border-t border-r border-b border-gray-300 first:border-l"/>
+                            );  
+                        if (eventMap[props.year][props.monthIndex][i][0] <= 5 && i > 25)
                             return (
-                                <div key={i} className="bg-gray-50 border-r"/>
+                                <div key={i} className="first:rounded-bl last:rounded-br bg-gray-100 border-b border-r border-gray-300"/>
                             );
                         return (
                             <div 
                                 key={i}
                                 className={clsx(
+                                    "first:rounded-tl",
                                     "aspect-square",
                                     "border-r border-b",
-                                    "border-gray-200",
-                                    "hover:bg-gray-50", 
-                                    35 - i <= 7 && "!border-b-0",
-                                    i % 7 == 0 && "border-l"
+                                    "border-gray-300",
+                                    "hover:bg-gray-50 cursor-pointer", 
+                                    i < 7 && "border-t",
+                                    35 - i <= 7 && "border-b border-b-gray-300",
+                                    i == 28 && "rounded-bl", 
+                                    i % 7 == 0 && "border-l",
+                                    i== 6 && "rounded-tr",
+                                    i == 34 && "rounded-br"
                                 )}
                             >
                                 <CalendarDate

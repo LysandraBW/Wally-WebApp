@@ -7,7 +7,7 @@ export async function navigate(page: string, data: {[k: string]: string} = {}) {
         redirect(page);
     }
     else if (page === PAGE_APPOINTMENT) {
-        redirect(`/employee/home/dashboard?aptID=${data.id}`); 
+        redirect(`/employee/home/dashboard?appointmentID=${data.id}`); 
     }
     else if (page === PAGE_DASHBOARD) {
         redirect(`/employee/home/dashboard`); 
@@ -17,9 +17,9 @@ export async function navigate(page: string, data: {[k: string]: string} = {}) {
         redirect(`/employee/login`); 
     }
     else if (page === PAGE_EDIT_APPOINTMENT) {
-        redirect(`/employee/home/edit?aptID=${data.appointmentID}`);
+        redirect(`/employee/home/edit?appointmentID=${data.appointmentID}`);
     }
     else if (page === PAGE_VIEW_APPOINTMENT) {
-        redirect(`/employee/home/view?aptID=${data.appointmentID}`);
+        redirect(`/employee/home/view?appointmentID=${data.appointmentID}`);
     }
 }

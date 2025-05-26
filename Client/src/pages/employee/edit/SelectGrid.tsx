@@ -37,18 +37,21 @@ export default function SelectGrid(props: SelectProps) {
 
     const selectValue = (value: string) => {
         const updatedValue = [value]; 
+        console.log(updatedValue);
         props.onChange(props.name, updatedValue);
     }
 
     const clickValue = (event: any, value: string) => {
+        event.preventDefault();
         event.stopPropagation();
         selectValue(value);
+        setOpen(false);
     }
 
     return (
         <Fragment>
             <tr className="h-[32px] p-0">
-                <td className="w-0 p-0 text-c-enter bg-white font-medium px-4 text-03 tracking-wide border border-gray-300">{props.label}</td>
+                <td className="w-0 p-0 text-c-enter bg-white font-medium px-4 text-03 tracking-wide border border-gray-300 align-top pt-1">{props.label}</td>
                 <td className="p-0 border border-gray-300">
                     <table className="w-full border-0 border-collapse">
                         <tbody>
@@ -66,6 +69,28 @@ export default function SelectGrid(props: SelectProps) {
                                                 stroke="#1F2937"
                                             />
                                         </div>
+                                        {open &&
+                                            <ul className="bg-white w-full">
+                                                {props.options.map(([value, label], i) => (
+                                                    <li
+                                                        key={i}
+                                                        onClick={(event) => {console.log(1); clickValue(event, value)}}
+                                                        className="bg-gray-50 flex items-center justify-between px-4 py-2 border-b border-b-gray-300 last:border-b-0 cursor-pointer hover:bg-gray-100"
+                                                    >
+                                                        <span className={clsx("text-gray-600 text-sm tracking-wide", props.values.includes(value) && "font-medium text-gray-950")}>
+                                                            {label}
+                                                        </span>
+                                                        {props.values.includes(value) &&
+                                                            <CheckIcon
+                                                                width="16"
+                                                                height="16"
+                                                                color="#020617"
+                                                            />
+                                                        }
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        }
                                     </div>
                                 </td>
                             </tr>
@@ -73,33 +98,6 @@ export default function SelectGrid(props: SelectProps) {
                     </table>
                 </td>
             </tr>
-            {open &&
-                <tr className="">
-                    <td className="p-0 border border-gray-300"></td>
-                    <td className="p-0 border border-gray-300">
-                        <ul className="bg-white w-full">
-                            {props.options.map(([value, label], i) => (
-                                <li
-                                    key={i}
-                                    onClick={(event) => clickValue(event, value)}
-                                    className="bg-gray-50 flex items-center justify-between px-4 py-2 border-b border-b-gray-300 last:border-b-0 cursor-pointer hover:bg-gray-100"
-                                >
-                                    <span className={clsx("text-gray-600 text-sm tracking-wide", props.values.includes(value) && "font-medium text-gray-950")}>
-                                        {label}
-                                    </span>
-                                    {props.values.includes(value) &&
-                                        <CheckIcon
-                                            width="16"
-                                            height="16"
-                                            color="#020617"
-                                        />
-                                    }
-                                </li>
-                            ))}
-                        </ul>
-                    </td>
-                </tr>
-            }
             {(props.state && props.state[0] === false) &&
                 <tr className="min-h-[24px] p-0 bg-red-100/50">
                     <td className="p-0 border border-gray-300 bg-gray-50 w-[150px] px-4"></td>

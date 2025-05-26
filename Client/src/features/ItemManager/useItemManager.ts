@@ -7,6 +7,7 @@ export interface UseItemManagerProps<BaseItem, Item, Items> {
     defineItem: Define<BaseItem, Item, Items>;
     parentForm: UseForm;
     saveAllUpdates: (oldItems: Items, newItems: Items) => void;
+    autoSave?: boolean;
 }
 
 export default function useItemManager<BaseItem, Item, Items>(props: UseItemManagerProps<BaseItem, Item, Items>) {
@@ -18,10 +19,16 @@ export default function useItemManager<BaseItem, Item, Items>(props: UseItemMana
     const [nextCreateID, setNextCreateID] = useState(-1);
     const [toCreateItem, setToCreateItem] = useState<Item>({} as Item);
     const [toUpdateItem, setToUpdateItem] = useState<Item>({} as Item);
+    const [autoSave, setAutoSave] = useState(props.autoSave);
 
     useEffect(() => {
         resetUpdates();
     }, [props.itemList]);
+
+    useEffect(() => {
+        if (autoSave && JSON.stringify(oldItems) !== JSON.stringify(newItems))
+            saveUpdates();
+    }, [newItems]);
 
     const saveUpdates = () => {
         const state = form.getState();

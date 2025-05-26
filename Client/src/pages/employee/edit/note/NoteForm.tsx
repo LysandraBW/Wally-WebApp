@@ -11,6 +11,7 @@ import Radio from "@/component/Form/Radio/Radio";
 import ItemForm from "@/features/ItemManager/Form/ItemForm";
 import ItemFormGroup from "@/features/ItemManager/Form/ItemFormGroup";
 import GetEmployeeNamePairs from "@/services/DB/Employee/GetEmployeeNamePairs";
+import clsx from "clsx";
 
 export default function NoteForm<DB_Note, Note, Notes>(props: FormProps<DB_Note, Note, Notes>) {
     const form = useItemForm(props);
@@ -109,17 +110,21 @@ export default function NoteForm<DB_Note, Note, Notes>(props: FormProps<DB_Note,
                                 state={form.form.getInput("ShowCustomer").state}
                                 options={[
                                     ["0", "No", 
-                                        <div className="top-[-3px]">
-                                            <h6 className="text-left text-04">Show</h6>
-                                            <span className="block text-left">
+                                        <div className="relative top-[-3px]">
+                                            <p className={clsx("tracking-wide text-left", form.form.getInput("ShowCustomer").data[0] === "0" && "text-blue-500 font-medium")}>
+                                                Show
+                                            </p>
+                                            <span className="block text-left text-01 tracking-wide font-medium">
                                                 The customer will be able to see this note.
                                             </span>
                                         </div>
                                     ], 
                                     ["1", "Yes",
-                                        <div className="top-[-3px]">
-                                            <h6 className="text-left text-04">Hide</h6>
-                                            <span className="block text-left">
+                                        <div className="relative top-[-3px]">
+                                            <p className={clsx("tracking-wide text-left", form.form.getInput("ShowCustomer").data[0] === "1" && "text-blue-500 font-medium")}>
+                                                Hide
+                                            </p>
+                                            <span className="block text-left text-01 tracking-wide font-medium">
                                                 The customer will not be able to see this note.
                                             </span>
                                         </div>

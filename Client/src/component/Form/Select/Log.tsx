@@ -16,14 +16,14 @@ export default function Log(props: LogProps) {
     }
 
     return (
-        <div className={clsx("h-full overflow-x-clip", props.values.length > 0 && "border-r border-r-gray-200")}>
+        <div className={clsx("h-full overflow-x-clip")}>
             {props.values.length !== 0 &&
-                <ul className="flex gap-1 overflow-x-scroll scroll-hide h-full">
+                <ul className="flex gap-1 overflow-x-scroll scroll-hide h-full pl-1">
                     {props.values.map((value, i) => (
                         <li
                             key={i}
                             onClick={(e) => deleteValue(e, value)}
-                            className="field flex justify-between items-center gap-1 py-0 pr-1 pl-2 bg-white shadow-sm whitespace-nowrap hover:bg-gray-50 cursor-pointer w-min"
+                            className="flex justify-between items-center gap-1 py-0 pr-1 pl-2 bg-gray-100 rounded whitespace-nowrap hover:bg-gray-50 cursor-pointer w-min"
                         >
                             <span className="text-01 tracking-wider">{props.valueToLabel[value]}</span>
                             <CrossIcon

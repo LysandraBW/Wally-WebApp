@@ -10,9 +10,16 @@ export async function UpdateAppointmentContact(appointmentID: string, updates: C
             phone: updates.Phone
         });
 
+        let startDate = updates.StartDate;
+        if (startDate)
+            startDate = startDate.replace("T", " ") + ":00";
+
+        let endDate = updates.EndDate;
+        if (endDate)
+            endDate = endDate.replace("T", " ") + ":00"
         request("POST", `/appointment/${appointmentID}/date`, {
-            startDate: updates.StartDate,
-            endDate: updates.EndDate
+            startDate,
+            endDate
         });
 
         request("POST", `/appointment/${appointmentID}/status`, {

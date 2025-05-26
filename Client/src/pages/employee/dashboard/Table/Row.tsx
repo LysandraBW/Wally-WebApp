@@ -44,7 +44,7 @@ export default function TableRow(props: TableRowProps) {
         <tr
             onClick={markAsSeen}
             className={clsx(
-                "border-b border-b-gray-200 last:!border-b-0",
+                "border-b border-b-gray-200 last:!border-b-0- last:border-b-gray-300",
                 "cursor-pointer group hover:!bg-white",
                 seen && "!bg-gray-50"
             )}

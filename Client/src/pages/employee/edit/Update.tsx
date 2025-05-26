@@ -165,7 +165,7 @@ export default function UpdateManager(props: UpdatePros) {
                 <Alert
                     alert={alert}
                 />
-                <div className="grow grid grid-cols-[auto_min-content_min-content] grid-rows-[3.5rem_3.5rem_37.59px_38.59px_auto] overflow-x-hidden">
+                <div className="grow grid grid-cols-[auto_min-content_min-content] grid-rows-[37.59px_4.5rem_37.59px_38.59px_auto] overflow-x-hidden">
                     <div className="col-start-1 row-start-1 row-span-2 border-t border-t-gray-300 border-x border-x-gray-300 bg-white py-4 px-4 flex justify-between items-center gap-1 border-b border-b-gray-300">
                         <div className="w-full">
                             <div className="flex w-full gap-2 items-center justify-between mb-1">
@@ -194,13 +194,13 @@ export default function UpdateManager(props: UpdatePros) {
                                 animate={{width: "400px", opacity: 1}}
                                 exit={{width: "0px", opacity: 0}}
                                 key="FormTabs"
-                                className="overflow-hidden w-[400px] relative before:absolute before:bottom-0 before:left-0 before:bg-gray-300 before:h-[1px] before:w-full after:absolute after:top-0 after:right-0 after:bg-gray-300 after:h-full after:w-[1px] border-l border-l-gray-300 border-t border-t-gray-300 bg-gray-50 col-start-3 col-span-1 row-start-1 row-span-1 flex items-end  border-r- border-r-gray-300"
+                                className="overflow-hidden w-[400px] relative bg-gray-50- col-start-3 col-span-1 row-start-1 row-span-1 flex"
                             >
                                 {openForms.map((form, i) => (
-                                    <div key={i} onClick={() =>{console.log(1); setOpenFormDisplayed(form)}} className={clsx("overflow-hidden hover:bg-gray-100 cursor-pointer group border-t border-t-gray-300 h-[37.59px] flex gap-4 items-center justify-between px-4 pr-2 bg-gray-50 border-t border-t-gray-300 border-r border-b border-b-gray-300 border-r-gray-300 !border-l-0 rounded-tr-lg-", form === openFormDisplayed && "cursor-auto !pr-4 !border-r-blue-500- !border-t-blue-500- !border-b-blue-500- !bg-white relative  z-50")}>
-                                        {<span className={clsx("tracking-wide text-02 text-gray-400 font-medium whitespace-nowrap group-hover:text-gray-600", form === openFormDisplayed && "!text-blue-500 drop-shadow-sm-")}>{form}</span>}
+                                    <div key={i} onClick={() =>{console.log(1); setOpenFormDisplayed(form)}} className={clsx("h-full first:border-l border-l-gray-300 overflow-hidden hover:bg-gray-100 cursor-pointer group border-t border-t-gray-300 flex gap-4 items-center justify-between px-4 pr-2 bg-gray-50 border-t border-t-gray-300 border-r border-r-gray-300 rounded-tr-lg-", form === openFormDisplayed && "cursor-auto !pr-4 !border-r-blue-500- !border-t-blue-500- !border-b-blue-500- !bg-white relative  z-50")}>
+                                        {<span className={clsx("tracking-wide text-02 text-gray-400 font-medium whitespace-nowrap group-hover:text-gray-600", form === openFormDisplayed && "!text-black drop-shadow-sm-")}>{form}</span>}
                                         {form !== openFormDisplayed &&
-                                            <div onClick={(event) => {event.stopPropagation(); console.log(2); closeOpenForm(form)}} className={clsx("p-[2px] bg-transparent cursor-pointer rounded stroke-gray-400 hover:bg-gray-200 group-hover:bg-gray-200 group-hover:stroke-gray-600 hover:stroke-black", form === openFormDisplayed && "stroke-black")}>
+                                            <div onClick={(event) => {event.preventDefault(); event.stopPropagation(); console.log(2); closeOpenForm(form)}} className={clsx("p-[2px] bg-transparent cursor-pointer rounded stroke-gray-400 hover:bg-gray-200 hover:stroke-black", form === openFormDisplayed && "stroke-black")}>
                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="3" stroke="currentColor" className="w-[10px] stroke-inherit">
                                                     <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
                                                 </svg>

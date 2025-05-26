@@ -18,12 +18,10 @@ export default function NoteItem(props: NoteItemProps) {
 
     useEffect(() => {
         const load = async () => {
-            const sessionID = await getCookie("sessionID");
             const employees = await GetEmployeeNamePairs();
-
-            const tags = [];
-
             const IDToEmployee = idToEmployee || getValuesToLabels(employees);
+            
+            const tags = [];
 
             const sharees = [];
             for (const sharee of props.note.Sharees) {
@@ -89,21 +87,27 @@ export default function NoteItem(props: NoteItemProps) {
             
             if (attachments.length > 0)
                 tags.push(attachments);
+            
+            
             setTags(tags);
         }
         load();
     }, []);
     
     return (
-        <Item
-            ID={parseInt(props.note.NoteID)}
-            head={(
-                <div>
-                    <h6 className="font-medium text-05">{props.note.Head}</h6>
-                    <p className="text-03 border-l border-gray-300 border-dashed ml-2 pl-2">{props.note.Body}</p>
-                </div>
-            )}
-            tags={tags || []}
-        />
+        <Fragment>
+            {tags &&
+                <Item
+                    ID={parseInt(props.note.NoteID)}
+                    head={(
+                        <div>
+                            <h6 className="font-medium text-05">{props.note.Head}</h6>
+                            <p className="text-03 border-l border-gray-300 border-dashed ml-2 pl-2">{props.note.Body}</p>
+                        </div>
+                    )}
+                    tags={tags || []}
+                />
+            }
+        </Fragment>
     )
 }
