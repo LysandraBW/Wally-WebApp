@@ -2,7 +2,7 @@
 import { z } from "zod";
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import Update from "@/pages/employee/edit/Update";
+import UpdateManager from "@/pages/employee/edit/Update";
 import useForm from "@/features/Form/useForm/useForm";
 import makeForm from "@/features/Form/useForm/makeForm";
 import { Appointment as DB_Appointment } from "waltronics-types";
@@ -67,12 +67,13 @@ export default function Page() {
                 <h5 className="font-medium pb-4">Update Appointment</h5>
                 <div className="flex flex-col bg-white w-full h-full grow">
                     {(appointment && appointmentID) &&
-                        <Update
+                        <UpdateManager
                             appointment={appointment}
                             appointmentID={appointmentID}
                             close={() => {
                                 setAppointment(undefined);
                                 setAppointmentID("");
+                                router.replace("/employee/home/edit");
                             }}
                         />
                     }

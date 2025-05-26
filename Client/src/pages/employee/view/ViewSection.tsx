@@ -4,31 +4,30 @@ import { Fragment, ReactNode } from "react";
 // I also should put these components in separate files,
 // but it's a lot of work... and I could change my mind
 // and waste my time, so I'll see how it plays out!
+// What was I thinking when I made this comment?
 export function ScalarViewSection({head, data}: {
     head: string;
     data: Array<[ReactNode, ReactNode]>;
 }) {
     return (
-        <div className="flex flex-col gap-2 p-4 border-b border-gray-200">
-            {/* <h6 className="font-medium uppercase text-01 text-gray-300">{head}</h6>  */}
-            <div className="grid grid-cols-[min-content_min-content] gap-x-4 gap-y-2">
-                {data.map(([key, value], i) => (
-                    <Fragment
-                        key={i}
+        <Fragment>
+            {data.map(([key, value], i) => (
+                <tr
+                    key={i}
+                    className="h-[32px] max-h-[32px]"
+                >
+                    <td className="border border-gray-300 whitespace-nowrap w-0 px-4 text-03 tracking-wide text-black">{key}</td>
+                    <td 
+                        className={clsx(
+                            "whitespace-nowrap border border-gray-300 ",
+                            "px-4 text-03 tracking-wide font-medium text-black"
+                        )}
                     >
-                        <span className="whitespace-nowrap">{key}</span>
-                        <span 
-                            className={clsx(
-                                "whitespace-nowrap",
-                                "font-medium text-gray-950"
-                            )}
-                        >
-                            {value
-                        }</span>
-                    </Fragment>
-                ))}
-            </div>
-        </div>
+                        {value}
+                    </td>
+                </tr>
+            ))}
+        </Fragment>
     )
 }
 
@@ -37,18 +36,39 @@ export function NonScalarViewSection({head, data}: {
     data: Array<ReactNode>;
 }) {
     return (
-        <div className="flex flex-col gap-2 p-4 border-b border-gray-200">
-            {/* <h6 className="font-medium uppercase text-01 text-gray-300">{head}</h6> */}
-            <div className="flex flex-col flex-wrap gap-4 max-h-[400px] w-min">
-                {data.map((item, i) => (
-                    <div 
-                        key={i}
-                        className="w-[300px] rounded-md"
-                    >
-                        {item}
+        <Fragment>
+            <tr
+                className="h-[32px] max-h-[32px]"
+            >
+                <td className="border border-gray-300 whitespace-nowrap w-0 px-4 text-03 tracking-wide text-black align-top pt-2">{head}</td>
+                <td 
+                    className={clsx(
+                        "whitespace-nowrap border border-gray-300 ",
+                        "px-4 text-03 tracking-wide font-medium text-black"
+                    )}
+                >
+                    <div className="flex flex-wrap gap-4 py-4">
+                        {data.map((item, i) => (
+                            <div 
+                                key={i}
+                                className="w-[300px] rounded-md"
+                            >
+                                {item}
+                            </div>
+                        ))}
+                        {data.length === 0 &&
+                            <div className="w-full bg-gray-5-0 rounded-md h-[100px] flex flex-col justify-center gap-1 items-center justify-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6 stroke-gray-400">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="m20.25 7.5-.625 10.632a2.25 2.25 0 0 1-2.247 2.118H6.622a2.25 2.25 0 0 1-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z" />
+                                </svg>
+                                <span className="text-gray-400 tracking-wide font-medium text-04">
+                                    No {head} Found
+                                </span>
+                            </div>
+                        }
                     </div>
-                ))}
-            </div>
-        </div>
+                </td>
+            </tr>
+        </Fragment>
     )
 }

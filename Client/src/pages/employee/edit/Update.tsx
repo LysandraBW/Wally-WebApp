@@ -49,7 +49,7 @@ interface UpdatePros {
 
 export const UpdateManagerContext = createContext<{changesMade: {[k: string]: boolean}, setChangesMade: (key: string, value: boolean) => void}>({changesMade: {}, setChangesMade: (key: string, value: boolean) => {return}});
 
-export default function Update(props: UpdatePros) {
+export default function UpdateManager(props: UpdatePros) {
     const form = useForm("Update", MasterForm);
     const [tab, setTab] = useState(tabs[0]);
     const [alert, alertDispatch] =  useReducer(alertReducer, startAlert);
