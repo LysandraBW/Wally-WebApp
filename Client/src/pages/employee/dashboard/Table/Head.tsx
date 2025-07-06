@@ -39,9 +39,9 @@ export default function TableHead(props: TableHeadProps) {
     }
 
     return (
-        <thead className="border-b border-gray-200">
+        <thead className="border-b border-gray-300 bg-white">
             <tr>
-                <th className="px-2 !border-l-0 border-r border-r-gray-200">
+                <th className="px-2 !border-l-0 border-r border-r-gray-300">
                     <Checkbox
                         name=""
                         value=""
@@ -49,11 +49,11 @@ export default function TableHead(props: TableHeadProps) {
                         onChange={props.toggleManager.toggleAllSelections}
                     />
                 </th>
-                <th className="border-r border-r-gray-20"></th>
+                <th className="border-r border-r-gray-300"></th>
                 {columns.map((col, i) => (
                     <th 
                         key={i}
-                        className={clsx("p-2 whitespace-nowrap", "border-r border-r-gray-200", i == columns.length - 1 && "!border-r-0")}
+                        className={clsx("p-2 whitespace-nowrap", "border-r border-r-gray-300", i == columns.length - 1 && "!border-r-0")}
                     >
                         <div className={clsx("flex gap-2", "justify-between items-center")}>
                             <span className="text-02 font-medium tracking-wide">{col[1]}</span>

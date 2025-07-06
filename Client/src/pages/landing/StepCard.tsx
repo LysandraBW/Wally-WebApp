@@ -20,7 +20,7 @@ export default function StepCard(props: StepCardProps) {
                 </div>
             }
             {(props.title && props.paragraph) &&
-                <div className="h-full p-4 m-4 bg-white ">
+                <div className="h-full p-4 bg-white ">
                     <h4 className="text-[1.25rem] font-medium text-center text-gray-700 mb-1">{props.title}</h4>
                     <p className="text-sm text-gray-400 text-center tracking-wide">{props.paragraph}</p>
                 </div>

@@ -9,6 +9,7 @@ import { Appointment as DB_Appointment } from "waltronics-types";
 import LoadAppointment from "@/features/LoadAppointment/LoadAppointment";
 import SelectAppointment from "@/services/DB/Appointment/SelectAppointment";
 import { EmployeeContext } from "../layout";
+import clsx from "clsx";
 
 export default function Page() {
     const form = useForm("ID");
@@ -68,9 +69,9 @@ export default function Page() {
     }
     
     return (
-        <div className="flex flex-col overflow-x-clip grow">
-            <div className="p-8 pt-5 pb-8 flex flex-col grow">
-                <h5 className="font-medium pb-4">Edit Appointment</h5>
+        <div className="flex flex-col grow">
+            <div className="p-4 flex flex-col grow">
+                <h6 className={clsx("font-medium pb-4 leading-5")}>Edit Appointment</h6>
                 <div className="flex flex-col bg-white w-full h-full grow">
                     {(appointment && appointmentID) &&
                         <UpdateManager

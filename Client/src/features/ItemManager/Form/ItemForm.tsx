@@ -29,20 +29,20 @@ export default function ItemForm(props: ItemFormProps) {
         <div
             className={clsx(
                 "grow flex flex-col justify-between bg-white",
-                "min-w-[400px] w-full border border-gray-300"
+                "min-w-[400px] w-full border border-gray-300 rounded-tr-md rounded-b-md"
             )}
         >
             <div 
                 className={clsx(
                     "grow bg-white",
-                    "w-full"
+                    "w-full rounded-tr-md"
                 )}
             >
                 {/* Header and Close Button */}
                 <div 
                     className={clsx(
                         "bg-white flex justify-between items-center",
-                        "p-4 gap-1 border-b border-b-gray-300"
+                        "p-4 gap-1 border-b border-b-gray-300 rounded-tr-md"
                     )}
                 >
                     <h6 className="font-medium">{props.header}</h6>
@@ -95,7 +95,7 @@ export default function ItemForm(props: ItemFormProps) {
                 {props.children}
             </div>
             {/* Save, Cancel Buttons */}
-            <div className="p-4 border-t border-t-gray-300 relative after:bg-white after:absolute after:top-[-2px] after:left-0 after:w-full after:h-[1px]">
+            <div className="p-2 border-t border-t-gray-300 relative after:bg-white after:absolute after:top-[-2px] after:left-0 after:w-full after:h-[1px]">
                 <SaveCancelButtons
                     onCancel={props.onCancel}
                     onMutate={() => {

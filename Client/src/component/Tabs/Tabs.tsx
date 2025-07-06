@@ -12,7 +12,7 @@ export default function Tabs(props: TabsProps) {
     const updateManagerContext = useContext(UpdateManagerContext);
 
     return (
-         <div className="w-full flex h-full justify-between gap-4 bg-gray-50 border-b- border-b-gray-300">
+         <div className="w-full flex h-full justify-between gap-1 bg-gray-50 border-b- border-b-gray-300">
             {props.tabs.map((tab, i) => (
                 <div
                     key={i}
@@ -20,7 +20,7 @@ export default function Tabs(props: TabsProps) {
                 >
                     <button 
                         onClick={() => props.onTabClick(tab)}
-                        className={clsx("py-2 px-4 w-full hover:bg-gray-100 flex items-center gap-2 h-full", props.tab === tab && `!bg-white shadow-sm`)}
+                        className={clsx("py-2 px-4 w-full hover:bg-gray-100 flex items-center gap-2 h-full", props.tab === tab && `!bg-white shadow-sm-`)}
                     >
                         <span className={clsx("relative text-03 tracking-wide", props.tab === tab && `text-gray-950 font-medium`)}>
                             {tab}

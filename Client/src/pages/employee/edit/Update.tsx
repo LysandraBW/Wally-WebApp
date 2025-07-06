@@ -165,17 +165,17 @@ export default function UpdateManager(props: UpdatePros) {
                 <Alert
                     alert={alert}
                 />
-                <div className="grow grid grid-cols-[auto_min-content_min-content] grid-rows-[37.59px_4.5rem_37.59px_38.59px_auto] overflow-x-hidden">
-                    <div className="col-start-1 row-start-1 row-span-2 border-t border-t-gray-300 border-x border-x-gray-300 bg-white py-4 px-4 flex justify-between items-center gap-1 border-b border-b-gray-300">
+                <div className="grow grid grid-cols-[auto_min-content_min-content] grid-rows-[37.59px_3.5rem_37.59px_38.59px_auto]">
+                    <div className="col-start-1 row-start-1 row-span-2 border-t border-t-gray-300 border-x border-x-gray-300 rounded-t-md bg-white py-4 px-4 flex justify-between items-center gap-1 border-b border-b-gray-300">
                         <div className="w-full">
                             <div className="flex w-full gap-2 items-center justify-between mb-1">
-                                <h5 className="text-xl font-medium flex">Appointment</h5>
+                                <p className="text-05 text-black font-medium flex">Appointment</p>
                                 <CloseButton
                                     close={props.close}
                                 />
                             </div>
-                            <p className="tracking-wide text-xs font-medium">{props.appointmentID}</p>
-                            <p className="tracking-wide text-xs font-medium">{Object.values(changesMade).includes(true) ? "Unsaved Changes" : "No Changes Made"}</p>
+                            <p className="tracking-wide text-xs font-medium-">{props.appointmentID}</p>
+                            <p className="tracking-wide text-xs font-medium-">{Object.values(changesMade).includes(true) ? "Unsaved Changes" : "No Changes Made"}</p>
                         </div>
                     </div>
                     <div className="row-start-3 row-span-1 col-start-1 col-span-1 border-x border-x-gray-300 bg-white">
@@ -185,7 +185,7 @@ export default function UpdateManager(props: UpdatePros) {
                             onTabClick={setTab}
                         />
                     </div>
-                    {!!openForms.length && <div className="col-start-2 col-span-1 row-start-1 row-span-5 bg-white"><div className="w-[2rem]"></div></div>}
+                    {!!openForms.length && <div className="col-start-2 col-span-1 row-start-1 row-span-5 bg-white"><div className="w-[1rem]"></div></div>}
                     <h6 className="col-start-1 row-start-4 row-span-1 border-t border-t-gray-300 border-x border-x-gray-300 w-full p-4 py-2 font-medium text-04 bg-gray-100 tracking-wide h-min">Showing {tab} {tab[tab.length - 1] === "s" ? "" : "Information"}</h6>
                     <AnimatePresence>
                         {!!openForms.length &&
@@ -194,10 +194,10 @@ export default function UpdateManager(props: UpdatePros) {
                                 animate={{width: "400px", opacity: 1}}
                                 exit={{width: "0px", opacity: 0}}
                                 key="FormTabs"
-                                className="overflow-hidden w-[400px] relative bg-gray-50- col-start-3 col-span-1 row-start-1 row-span-1 flex"
+                                className="overflow-hidden max-w-[400px] relative bg-gray-50- col-start-3 col-span-1 row-start-1 row-span-1 flex"
                             >
                                 {openForms.map((form, i) => (
-                                    <div key={i} onClick={() =>{console.log(1); setOpenFormDisplayed(form)}} className={clsx("h-full first:border-l border-l-gray-300 overflow-hidden hover:bg-gray-100 cursor-pointer group border-t border-t-gray-300 flex gap-4 items-center justify-between px-4 pr-2 bg-gray-50 border-t border-t-gray-300 border-r border-r-gray-300 rounded-tr-lg-", form === openFormDisplayed && "cursor-auto !pr-4 !border-r-blue-500- !border-t-blue-500- !border-b-blue-500- !bg-white relative  z-50")}>
+                                    <div key={i} onClick={() =>{console.log(1); setOpenFormDisplayed(form)}} className={clsx("rounded-t h-full first:border-l border-l-gray-300 overflow-hidden hover:bg-gray-100 cursor-pointer group border-t border-t-gray-300 flex gap-4 items-center justify-between px-4 pr-2 bg-gray-50 border-t border-t-gray-300 border-r border-r-gray-300 rounded-tr-lg-", form === openFormDisplayed && "cursor-auto !pr-4 !border-r-blue-500- !border-t-blue-500- !border-b-blue-500- !bg-white relative  z-50")}>
                                         {<span className={clsx("tracking-wide text-02 text-gray-400 font-medium whitespace-nowrap group-hover:text-gray-600", form === openFormDisplayed && "!text-black drop-shadow-sm-")}>{form}</span>}
                                         {form !== openFormDisplayed &&
                                             <div onClick={(event) => {event.preventDefault(); event.stopPropagation(); console.log(2); closeOpenForm(form)}} className={clsx("p-[2px] bg-transparent cursor-pointer rounded stroke-gray-400 hover:bg-gray-200 hover:stroke-black", form === openFormDisplayed && "stroke-black")}>

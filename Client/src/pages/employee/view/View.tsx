@@ -27,17 +27,17 @@ export default function View(props: ViewProps) {
             // initial={{opacity: 0}}
             // animate={{opacity: 1}}
             // exit={{opacity: 0}}
-            className="w-full bg-white"
+            className="w-full bg-gray-50 flex flex-col grow rounded-md"
         >
-            <div className="col-start-1 row-start-1 row-span-2 border-t border-t-gray-300 border-x border-x-gray-300 bg-white py-4 px-4 flex justify-between items-center gap-1 border-b border-b-gray-300">
+            <div className="col-start-1 row-start-1 row-span-2 p-4 rounded-t-md border border-gray-300 bg-white flex justify-between items-center gap-1">
                 <div className="w-full">
                     <div className="flex w-full gap-2 items-center justify-between mb-1">
-                        <h5 className="text-xl font-medium flex">Appointment</h5>
+                        <p className="text-05 text-black font-medium flex">Appointment</p>
                         <CloseButton
                             close={props.close}
                         />
                     </div>
-                    <p className="tracking-wide text-xs font-medium">{props.appointmentID}</p>
+                    <p className="tracking-wide text-xs font-medium-">{props.appointmentID}</p>
                 </div>
             </div>
             <div className="row-start-3 row-span-1 col-start-1 col-span-1 border-x border-x-gray-300 bg-white">
@@ -175,6 +175,7 @@ export default function View(props: ViewProps) {
                     }
                 </tbody>
             </table>
+            <div className="grow border-x border-b border-gray-300 rounded-b-md"></div>
         </motion.div>
     )
 }

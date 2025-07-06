@@ -49,7 +49,7 @@ export default function TableEntry(props: TableEntryProps) {
         <td 
             className={clsx(
                 "px-2 py-0 min-w-[200px] max-w-[200px]",
-                "border-r border-r-gray-200",
+                "border-r border-r-gray-300",
                 props.style
             )}
         >

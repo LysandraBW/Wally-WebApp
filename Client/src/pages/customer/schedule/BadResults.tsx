@@ -14,7 +14,7 @@ export default function BadResults(props: BadResultsProps) {
             </div>
             <Header
                 header="Something Went Wrong"
-                paragraph={<>Please try to schedule your appointment again.<br/>If this error continues, please call us at 000-000-0000.</>}
+                paragraph={<>Please try to schedule your appointment again. If this error continues, please call us at 000-000-0000.</>}
             />
             <div className="flex justify-center min-w-[200px]">
                 <button 

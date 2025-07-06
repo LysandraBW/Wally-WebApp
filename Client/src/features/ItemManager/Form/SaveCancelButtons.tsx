@@ -11,7 +11,7 @@ export default function SaveCancelButtons(props: SaveCancelButtonsProps) {
             <div className="min-w-[6rem]">
                 <button
                     onClick={props.onCancel}
-                    className="w-full px-4 py-2 rounded-md bg-white border border-gray-300  shadow-sm tracking-wide font-medium text-gray-400"
+                    className="w-full px-4 py-1 rounded-md bg-white border border-gray-300  shadow-sm text-sm tracking-wide font-medium text-gray-400"
                 >
                     Cancel
                 </button>
@@ -19,7 +19,7 @@ export default function SaveCancelButtons(props: SaveCancelButtonsProps) {
             <div className="min-w-[6rem]">
                 <button
                     onClick={props.onMutate}
-                    className="w-full px-4 py-2 rounded-md bg-white border border-gray-300 shadow-sm tracking-wide font-medium text-black"
+                    className="w-full px-4 py-1 rounded-md bg-white border border-gray-300 shadow-sm text-sm tracking-wide font-medium text-black"
                 >
                     Save
                 </button>

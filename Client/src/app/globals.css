@@ -109,3 +109,32 @@
             !cursor-pointer;
     }
 }
+
+@layer utilities {
+    @keyframes scrolling {
+        0% {
+        transform: translateX(0);
+        }
+        100% {
+        transform: translateX(-100%);
+        }
+    }
+
+    @keyframes scrolling-reverse {
+        0% {
+        transform: translateX(-100%);
+        }
+        100% {
+        transform: translateX(0);
+        }
+    }
+
+    @keyframes slide-left {
+        from { transform: translateX(0) }
+        to { transform: translateX(-100%) }
+    }
+
+    .slide-left {
+        animation: slide-left 30s linear infinite;
+    }
+}

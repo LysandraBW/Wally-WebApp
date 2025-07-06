@@ -48,8 +48,8 @@ export default function Page() {
             <Alert
                 alert={alert}
             />
-            <div className="p-8 pt-5 flex flex-col grow gap-4">
-                <h5 className="font-medium">Calendar</h5>
+            <div className="p-4 flex flex-col grow gap-4">
+                <h6 className="font-medium leading-5">Calendar</h6>
                 <EventManager
                     parentForm={form}
                     eventList={events}

@@ -14,7 +14,7 @@ export function ScalarViewSection({head, data}: {
             {data.map(([key, value], i) => (
                 <tr
                     key={i}
-                    className="h-[32px] max-h-[32px]"
+                    className="h-[32px] max-h-[32px] bg-white"
                 >
                     <td className="border border-gray-300 whitespace-nowrap w-0 px-4 text-03 tracking-wide text-black">{key}</td>
                     <td 
@@ -43,7 +43,7 @@ export function NonScalarViewSection({head, data}: {
                 <td className="border border-gray-300 whitespace-nowrap w-0 px-4 text-03 tracking-wide text-black align-top pt-2">{head}</td>
                 <td 
                     className={clsx(
-                        "whitespace-nowrap border border-gray-300 ",
+                        "whitespace-nowrap border border-gray-300 py-0",
                         "px-4 text-03 tracking-wide font-medium text-black"
                     )}
                 >

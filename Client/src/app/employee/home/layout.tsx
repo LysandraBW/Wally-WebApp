@@ -36,12 +36,13 @@ export default function Page({children}: Readonly<{children: React.ReactNode}>) 
             {authenticated &&
                 <EmployeeContext value={{employee, setCurrentPage}}>
                     <div className="h-full grow grid grid-cols-[256px_auto] grid-rows-[64px_auto]">
-                        <div className="col-start-1 col-span-1 row-start-1 row-span-1 bg-white border-b border-b-gray-300 border-r border-r-gray-300 h-full w-full flex items-center justify-center">
+                        <div className="col-start-1 col-span-1 row-start-1 row-span-1 bg-gray-100 border-b border-b-gray-300 h-full w-full flex items-center justify-center">
                             <Logo
-                                textClassName="text-lg drop-shadow-sm"
+                                svgClassName=""
+                                textClassName="text-lg"
                             />
                         </div>
-                        <div className="col-start-1 col-span-1 row-start-2 row-span-1 bg-white h-full w-full p-4 flex flex-col gap-4 border-r border-r-gray-300">
+                        <div className="col-start-1 col-span-1 row-start-2 row-span-1 bg-gray-50 h-full w-full p-4 flex flex-col gap-2 border-r border-r-gray-300">
                             {[
                                 [
                                     "Dashboard", 
@@ -79,7 +80,7 @@ export default function Page({children}: Readonly<{children: React.ReactNode}>) 
                                     href={value[1] as string}
                                     className={clsx("flex items-center justify-between gap-1 bg-white hover:bg-gray-50 cursor-pointer pr-1 border border-gray-300 w-full block px-2 py-1 rounded text-sm text-gray-400 tracking-wide stroke-gray-400 shadow-sm", currentPage === value[0] && "!text-black font-medium !stroke-black")}
                                 >
-                                    <div className={clsx("flex items-center gap-2 text-02 text-gray-400 tracking-wide stroke-gray-400 font-medium", currentPage === value[0] && "!text-black font-medium !stroke-black")}>
+                                    <div className={clsx("flex items-center gap-2 text-02 text-gray-400 tracking-wide stroke-gray-400 font-medium-", currentPage === value[0] && "!text-black font-medium !stroke-black")}>
                                         {value[2]}
                                         {value[0] as string}
                                     </div>
@@ -89,10 +90,10 @@ export default function Page({children}: Readonly<{children: React.ReactNode}>) 
                                 </a>
                             ))}
                         </div>
-                        <nav className="col-start-2 col-span-1 row-start-1 row-span-1 bg-gray-50 border-b border-b-gray-300 h-full w-full px-8 flex items-center justify-end">
+                        <nav className="col-start-2 col-span-1 row-start-1 row-span-1 bg-gray-100 border-b border-b-gray-300 h-full w-full px-4 flex items-center justify-end">
                             <div 
                                 id="profile" 
-                                className="aspect-square w-10 h-10 rounded-lg border border-gray-300 bg-white shadow-sm cursor-pointer hover:bg-gray-50"
+                                className="overflow-hidden aspect-square w-10 h-10 rounded-md border border-gray-300 bg-white shadow-sm cursor-pointer hover:bg-gray-50"
                                 tabIndex={0}
                                 onClick={() => setOpenProfile(true)}
                                 onBlur={(event) => {

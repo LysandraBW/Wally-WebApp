@@ -1,4 +1,4 @@
-import { DM_Sans, Instrumental, Inter, Jakarta, Satoshi } from "@/public/Font";
+import { DM_Sans, Instrumental, Inter, Jakarta, Satoshi, IBM, Rubik } from "@/public/Font";
 import "./globals.css";
 
 export default function RootLayout({

@@ -15,7 +15,7 @@ export default function GoodResults(props: GoodResultsProps) {
             </div>
             <Header
                 header="Appointment Scheduled"
-                paragraph={<>Your appointment will be confirmed in 1-2 days.<br/>In the meantime, use the information below to check on your appointment.<br/>Thank you for trusting us at Waltronics.</>}
+                paragraph={<>Your appointment will be confirmed in 1-2 days. In the meantime, use the information below to check on your appointment. Thank you for trusting us at Waltronics.</>}
             />
             {/* 
                 The user can click these buttons to 

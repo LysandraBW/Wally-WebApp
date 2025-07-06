@@ -23,7 +23,16 @@ const config: Config = {
         "09": "2.441rem",
         "10": "3.052rem",
         "11": "3.815rem"
-      }
+      },
+      keyframes: {
+        'slide-left': {
+          from: { transform: 'translateX(0)' },
+          to: { transform: 'translateX(-100%)' },
+        },
+      },
+      animation: {
+        'slide-left': 'slide-left 8s linear infinite',
+      },
     },
   },
   plugins: [],

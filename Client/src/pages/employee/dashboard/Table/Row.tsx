@@ -44,13 +44,13 @@ export default function TableRow(props: TableRowProps) {
         <tr
             onClick={markAsSeen}
             className={clsx(
-                "border-b border-b-gray-200 last:!border-b-0- last:border-b-gray-300",
+                "border-b border-b-gray-300 last:!border-b-0- last:border-b-gray-300",
                 "cursor-pointer group hover:!bg-white",
                 seen && "!bg-gray-50"
             )}
         >
             {/* Check */}
-            <td className="p-2 !border-l-0 border-r border-r-gray-200">
+            <td className="p-2 !border-l-0 border-r border-r-gray-300">
                 <Checkbox
                     name=""
                     value=""
@@ -60,7 +60,7 @@ export default function TableRow(props: TableRowProps) {
             </td>
             {/* Flag */}
             <td 
-                className="p-2 !border-l-0 border-r border-r-gray-200"
+                className="p-2 !border-l-0 border-r border-r-gray-300"
                 onClick={markAsFlagged}
             >
                 {!flagged &&

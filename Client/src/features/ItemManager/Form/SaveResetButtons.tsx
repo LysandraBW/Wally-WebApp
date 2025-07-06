@@ -18,7 +18,7 @@ export default function SaveResetButtons(props: SaveResetButtonsProps) {
             className={clsx(
                 "sticky bottom-0 z-30",
                 "flex gap-4 justify-end border-r border-r-gray-300 border-b border-b-gray-300 border-l border-l-gray-300",
-                "bg-gray-50 w-full p-4",
+                "bg-gray-50 w-full p-2 rounded-b-md",
             )}
         >
             <div className="w-min min-w-[10rem]">

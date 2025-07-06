@@ -19,7 +19,7 @@ export default function ProgressBar(props: ProgressBarProps) {
                 className={clsx(
                     "bg-white shadow-sm border border-white",
                     "w-full h-full flex justify-center items-center rounded shadow-sm group",
-                    props.step >= props.rank && "!bg-blue-700 border !border-blue-700",
+                    props.step >= props.rank && "!bg-blue-400 border !border-blue-400",
                     props.canShowTooltip && "cursor-pointer hover:bg-black hover:border-black transition-all"
                 )}
             >

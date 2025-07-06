@@ -54,9 +54,9 @@ export default function Page() {
             <Alert
                 alert={alert}
             />
-            <div className="p-8 pt-5 flex flex-col gap-5 grow">
-                <h5 className="font-medium">Dashboard</h5>
-                <div className="flex gap-4">
+            <div className="p-4 pb-0 flex flex-col gap-4 grow h-full">
+                <h6 className="font-medium leading-5">Dashboard</h6>
+                <div className="flex gap-4 grow">
                     <div className="w-[200px] flex flex-col gap-2">
                         {[
                             [
@@ -78,7 +78,7 @@ export default function Page() {
                             ]].map((category, i) => (
                             <div 
                                 key={i}
-                                className={clsx("w-full py-1 px-2 pr-1 rounded flex gap-1 justify-between items-center bg-white border border-gray-300 shadow-sm group hover:bg-gray-100 cursor-pointer", filterManager.category === category[1] && "!border-blue-50-0")}
+                                className={clsx("w-full py-1 px-2 pr-1 rounded flex gap-1 justify-between items-center bg-white border border-gray-300 shadow-sm group hover:bg-gray-50 cursor-pointer", filterManager.category === category[1] && "!border-blue-50-0")}
                             >
                                 <div className="flex gap-1 items-center">
                                     <span className={clsx("block stroke-gray-400 group-hover:stroke-black-", filterManager.category === category[1] && "!stroke-black")}>{category[0]}</span>
@@ -90,7 +90,7 @@ export default function Page() {
                             </div>
                         ))}
                     </div>
-                    <div className="border border-gray-300 border-b-0 rounded-t-md overflow-x-scroll scroll-hide w-full">
+                    <div className="flex flex-col grow border border-gray-300 border-b-0 rounded-t-md overflow-x-scroll scroll-hide w-full h-full">
                         <Actions
                             deleteManager={deleteManager}
                             filterManager={filterManager}
@@ -99,9 +99,9 @@ export default function Page() {
                         <Statuses
                             filterManager={filterManager}
                         />
-                        <div className="bg-gray-200">
+                        <div className="flex flex-col grow">
                             {loaded && 
-                                <div className={"bg-white overflow-x-auto scroll-hide"}>
+                                <div className={"flex flex-col grow bg-gray-100 overflow-x-auto scroll-hide"}>
                                     <Table
                                         filterManager={filterManager}
                                         toggleManager={toggleManager}

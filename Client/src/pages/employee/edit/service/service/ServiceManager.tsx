@@ -142,7 +142,7 @@ export default function ServiceManager(props: ServiceManagerProps) {
                         animate={{width: "400px", opacity: 1}}
                         exit={{width: "0px", opacity: 0}}
                         key={"ServiceUnexpandedAdd"}
-                        className="overflow-x-hidden w-[400px] row-start-2 row-span-4 col-start-3 col-span-1 flex grow bg-white relative after:absolute after:w-[1px] after:h-full after:bg-gray-300 after:right-0 after:top-0 !bg-white mb-0"
+                        className="overflow-x-hidden w-[400px] row-start-2 row-span-4 col-start-3 col-span-1 flex grow bg-white relative  !bg-white mb-0"
                     >
                     <ServiceForm
                             mode="Create"
@@ -164,7 +164,7 @@ export default function ServiceManager(props: ServiceManagerProps) {
                         animate={{width: "400px", opacity: 1}}
                         exit={{width: "0px", opacity: 0}}
                         key={"ServiceUnexpandedEdit"}
-                        className="overflow-x-hidden w-[400px] row-start-2 row-span-4 col-start-3 col-span-1 flex grow bg-white relative after:absolute after:w-[1px] after:h-full after:bg-gray-300 after:right-0 after:top-0 !bg-white mb-0"
+                        className="overflow-x-hidden w-[400px] row-start-2 row-span-4 col-start-3 col-span-1 flex grow bg-white relative  !bg-white mb-0"
                     >
                         <ServiceForm
                             mode="Update"

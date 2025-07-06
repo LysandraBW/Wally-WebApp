@@ -74,8 +74,8 @@ export default function Page() {
     
     return (
         <div className="flex flex-col overflow-x-clip grow">
-            <div className="p-8 pt-5 pb-8 flex flex-col grow">
-                <h5 className={clsx("font-medium pb-5")}>View Appointment</h5>
+            <div className="p-4 flex flex-col grow">
+                <h6 className={clsx("font-medium pb-4 leading-5")}>View Appointment</h6>
                 <div className="flex flex-col bg-white w-full h-full grow">
                     <AnimatePresence>
                         {(appointment && appointmentID) &&

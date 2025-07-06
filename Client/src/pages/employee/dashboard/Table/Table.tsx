@@ -18,7 +18,7 @@ export default function Table(props: TableProps) {
     
 
     return (
-        <div>
+        <div className="flex flex-col grow">
             {props.appointmentManager.appointments && props.appointmentManager.appointments.length > 0 &&
                 <table className="">
                     <TableHead
@@ -43,7 +43,7 @@ export default function Table(props: TableProps) {
                 </table>
             }
             {props.appointmentManager.appointments && props.appointmentManager.appointments.length === 0 && 
-                <div className="flex flex-col gap-2 justify-center items-center p-4 py-8 border-b border-b-gray-300">
+                <div className="grow h-full flex flex-col gap-2 justify-center items-center p-4 py-8">
                     {/* If there's no appointment, we show a cool image. */}
                     <img
                         width="200"

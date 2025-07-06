@@ -97,106 +97,111 @@ export default function Page() {
     
     return (
         <div className="relative bg-white flex flex-col min-h-screen">
-            <NavBar sticky={true} border={true}/>
-            <div className="flex flex-col grow ">
-                {/* 
-                If the output is not NULL, we show the user the
-                results (fail or pass).
-                */}
-                {(output !== null && output[0] !== "") &&
-                    <GoodResults
-                        output={output}
-                    />
-                }
-                {(output !== null && output[0] === "") &&
-                    <BadResults
-                        restart={() => setOutput(null)}
-                    />
-                }
-                {/* 
-                    If the output is NULL, we have yet to receive the user's
-                    submission. Therefore, we show them the form to complete.
-                */}
-                {output === null &&
-                    <div className="relative w-full py-16 px-16 flex flex-col items-center gap-8">
-                        {/* 
-                            Header
-                        */}
-                        <header className="flex flex-col items-center w-min">
-                            <h3 className="text-center font-medium whitespace-nowrap">Schedule Appointment</h3>
-                            <p className="text-center text-md tracking-wide max-w-[440px] text-gray-600">To schedule an appointment, complete the form below.<br/>After completion, your appointment will be shortly confirmed.</p>
-                        </header>    
-                        {/* 
-                            Tracker:
-                            This just shows the current step
-                            that the user is on.
-                        */}
-                        <div className="bg-black rounded-lg px-4 py-4 pb-5 flex flex-col gap-2 w-[350px] border border-black">
-                            <div>
-                                <span 
-                                className="text-01 font-medium text-gray-500" 
-                                style={{lineHeight: "0.72rem"}}
-                                >
-                                    STEP {step + 1}
-                                </span>
-                                <h6 
-                                    className={clsx("mb-2 tracking-wide !text-05 font-medium text-white")}
-                                    style={{lineHeight: "1.125rem"}}
-                                >
-                                    {stepData[step].header}
-                                </h6>
-                            </div>
-                            <div className="flex h-2.5 justify-between gap-2">
-                                <ProgressBar
-                                    id="bar0"
-                                    rank={0}
-                                    step={step}
-                                    tooltipLabel="Back to Contact Information"
-                                    canShowTooltip={step > 0}
-                                />
-                                <ProgressBar
-                                    id="bar1"
-                                    rank={1}
-                                    step={step}
-                                    tooltipLabel="Back to Vehicle Information"
-                                    canShowTooltip={step > 1}
-                                />
-                                <ProgressBar
-                                    id="bar2"
-                                    rank={2}
-                                    step={step}
-                                    tooltipLabel="Back to Service Information"
-                                    canShowTooltip={step > 2}
-                                />
-                            </div>
-                        </div>          
-                        {/* 
-                            Form 
-                        */}
-                        <form 
-                            onSubmit={(e) => e.preventDefault()}
-                            className="w-full flex flex-col gap-4 w-[350px]"
-                        >
-                            {step === 0 && <ContactForm form={contactForm}/>}
-                            {step === 1 && <VehicleForm form={vehicleForm}/>}
-                            {step === 2 && <ServiceForm form={serviceForm}/>}
-                            <div className="flex gap-4">
-                                {step !== 0 &&
-                                    <button 
-                                        onClick={goToPreviousForm} 
-                                        className="w-full shadow-sm text-04 font-medium rounded-lg px-4 py-2 border border-gray-200 tracking-wide text-md text-gray-500"
+            <NavBar sticky={true} border={true} background={true}/>
+            <div className="flex grow">
+                <div className="flex flex-col grow shadow-lg">
+                    {/* 
+                    If the output is not NULL, we show the user the
+                    results (fail or pass).
+                    */}
+                    {(output !== null && output[0] !== "") &&
+                        <GoodResults
+                            output={output}
+                        />
+                    }
+                    {(output !== null && output[0] === "") &&
+                        <BadResults
+                            restart={() => setOutput(null)}
+                        />
+                    }
+                    {/* 
+                        If the output is NULL, we have yet to receive the user's
+                        submission. Therefore, we show them the form to complete.
+                    */}
+                    {output === null &&
+                        <div className="relative w-full py-16 px-16 flex flex-col items-center gap-8">
+                            {/* 
+                                Header
+                            */}
+                            <header className="flex flex-col items-center w-min">
+                                <h3 className="text-center font-medium whitespace-nowrap">Schedule Appointment</h3>
+                                <p className="text-center text-md tracking-wide max-w-[440px] text-gray-600">To schedule an appointment, complete the form below.<br/>After completion, your appointment will be shortly confirmed.</p>
+                            </header>    
+                            {/* 
+                                Tracker:
+                                This just shows the current step
+                                that the user is on.
+                            */}
+                            <div className="bg-blue-600 rounded-lg px-4 py-4 pb-5 flex flex-col gap-2 w-[400px]">
+                                <div>
+                                    <span 
+                                    className="text-01 font-medium text-blue-300" 
+                                    style={{lineHeight: "0.72rem"}}
                                     >
-                                        Previous
-                                    </button>
-                                }
-                                <ButtonTwo
-                                    label={step === 2 ? "Schedule" : `Continue to ${step == 0 ? "Vehicle" : "Service"}`}
-                                    onClick={step == 2 ? submitForm : goToNextForm}
-                                />
-                            </div>
-                        </form>
-                    </div>
-                }
+                                        STEP {step + 1}
+                                    </span>
+                                    <h6 
+                                        className={clsx("mb-2 tracking-wide !text-05 font-medium text-white")}
+                                        style={{lineHeight: "1.125rem"}}
+                                    >
+                                        {stepData[step].header}
+                                    </h6>
+                                </div>
+                                <div className="flex h-2.5 justify-between gap-2">
+                                    <ProgressBar
+                                        id="bar0"
+                                        rank={0}
+                                        step={step}
+                                        tooltipLabel="Back to Contact Information"
+                                        canShowTooltip={step > 0}
+                                    />
+                                    <ProgressBar
+                                        id="bar1"
+                                        rank={1}
+                                        step={step}
+                                        tooltipLabel="Back to Vehicle Information"
+                                        canShowTooltip={step > 1}
+                                    />
+                                    <ProgressBar
+                                        id="bar2"
+                                        rank={2}
+                                        step={step}
+                                        tooltipLabel="Back to Service Information"
+                                        canShowTooltip={step > 2}
+                                    />
+                                </div>
+                            </div>          
+                            {/* 
+                                Form 
+                            */}
+                            <form 
+                                onSubmit={(e) => e.preventDefault()}
+                                className="flex flex-col gap-4 w-[400px]"
+                            >
+                                {step === 0 && <ContactForm form={contactForm}/>}
+                                {step === 1 && <VehicleForm form={vehicleForm}/>}
+                                {step === 2 && <ServiceForm form={serviceForm}/>}
+                                <div className="flex gap-4">
+                                    {step !== 0 &&
+                                        <button 
+                                            onClick={goToPreviousForm} 
+                                            className="w-full shadow-sm text-04 font-medium rounded-lg px-4 py-2 border border-gray-200 tracking-wide text-md text-gray-500"
+                                        >
+                                            Previous
+                                        </button>
+                                    }
+                                    <ButtonTwo
+                                        label={step === 2 ? "Schedule" : `Continue to ${step == 0 ? "Vehicle" : "Service"}`}
+                                        onClick={step == 2 ? submitForm : goToNextForm}
+                                    />
+                                </div>
+                            </form>
+                        </div>
+                    }
+                </div>
+                <div className="h-screen w-[55%]">
+                    <img src="./Blue_1_BG.svg" className="fixed top-[54px] h-[calc(100%-54px)] w-full object-cover"/>
+                </div>
             </div>
         </div>
     )

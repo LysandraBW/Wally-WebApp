@@ -182,7 +182,7 @@ export default function PaymentManager(props: PaymentManagerProps) {
                                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6 stroke-gray-400">
                                                         <path strokeLinecap="round" strokeLinejoin="round" d="m20.25 7.5-.625 10.632a2.25 2.25 0 0 1-2.247 2.118H6.622a2.25 2.25 0 0 1-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z" />
                                                     </svg>
-                                                    <span className="text-gray-400 tracking-wide font-medium text-04">
+                                                <span className="text-gray-400 tracking-wide font-medium text-04">
                                                         No Payment Found
                                                     </span>
                                                 </div>
@@ -206,7 +206,7 @@ export default function PaymentManager(props: PaymentManagerProps) {
                         animate={{width: "400px", opacity: 1}}
                         exit={{width: "0px", opacity: 0}}
                         key={itemManager.defineItem.itemName + "UnexpandedAdd"}
-                        className="overflow-x-hidden w-[400px] row-start-2 row-span-4 col-start-3 col-span-1 flex grow bg-white relative after:absolute after:w-[1px] after:h-full after:bg-gray-300 after:right-0 after:top-0 !bg-white mb-0"
+                        className="overflow-x-hidden w-[400px] max-w-full row-start-2 row-span-4 col-start-3 col-span-1 flex grow bg-white relative !bg-white mb-0"
                     >
                         <PaymentForm
                             mode="Create"
@@ -230,7 +230,7 @@ export default function PaymentManager(props: PaymentManagerProps) {
                         animate={{width: "400px", opacity: 1}}
                         exit={{width: "0px", opacity: 0}}
                         key={itemManager.defineItem.itemName + "UnexpandedEdit"}
-                        className="overflow-x-hidden w-[400px] row-start-2 row-span-4 col-start-3 col-span-1 flex grow bg-white relative after:absolute after:w-[1px] after:h-full after:bg-gray-300 after:right-0 after:top-0 !bg-white mb-0"
+                        className="overflow-x-hidden w-[400px] row-start-2 row-span-4 col-start-3 col-span-1 flex grow bg-white relative  !bg-white mb-0"
                     >
                         <PaymentForm
                             mode="Update"

@@ -12,10 +12,10 @@ interface LoadAppointmentProps {
 
 export default function LoadAppointment(props: LoadAppointmentProps) {
     return (
-         <div className="flex flex-col gap-4 bg-gray-50 grow p-8 items-center justify-center rounded-lg">
+         <div className="flex flex-col gap-4 bg-gray-50/50 grow p-8 items-center justify-center rounded-lg border border-dashed">
             <div className="">
-                <h5 className="whitespace-nowrap text-center text-06 font-medium">{props.head}</h5>
-                <span className="text-center block text-sm tracking-wide text-gray-600 font-normal max-w-[350px]">{props.paragraph}</span>
+                <p className="whitespace-nowrap text-center text-05 text-black font-medium">{props.head}</p>
+                <span className="text-center block text- tracking-wide text-gray-400 font-normal max-w-[350px]">{props.paragraph}</span>
             </div>
             <div>
                 <div 

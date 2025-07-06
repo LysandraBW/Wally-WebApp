@@ -101,8 +101,8 @@ export default function NoteItem(props: NoteItemProps) {
                     ID={parseInt(props.note.NoteID)}
                     head={(
                         <div>
-                            <h6 className="font-medium text-05">{props.note.Head}</h6>
-                            <p className="text-03 border-l border-gray-300 border-dashed ml-2 pl-2">{props.note.Body}</p>
+                            <h6 className="font-medium text-04 tracking-wide">{props.note.Head}</h6>
+                            <p className="text-03 border-l- border-gray-300 border-dashed ml-0 pl-0">{props.note.Body}</p>
                         </div>
                     )}
                     tags={tags || []}
