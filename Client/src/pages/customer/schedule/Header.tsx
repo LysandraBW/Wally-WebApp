@@ -1,3 +1,4 @@
+import { Instrumental } from "@/public/Font";
 import clsx from "clsx";
 
 interface HeaderProps {
@@ -8,11 +9,25 @@ interface HeaderProps {
 export default function Header(props: HeaderProps) {
     return (
         <div className="flex flex-col justify-self-center items-center relative">
-            <header className="flex flex-col items-center w-min">
-                <h1 className={clsx("text-center text-[2rem] pb-4 text-black font-medium whitespace-nowrap")}>
+            <header className="flex flex-col items-center w-min relative">
+                <h1 
+                    className={clsx(
+                        "pb-2",
+                        "text-[2rem] text-black font-medium",
+                        "text-center whitespace-nowrap"
+                    )}
+                >
                     {props.header}
                 </h1>
-                <p className="text-center font-normal text-[1rem] text-black tracking-wide text-gray-700">{props.paragraph}</p>
+                <p
+                    className={clsx(
+                        Instrumental.className,
+                        "font-normal text-gray-500",
+                        "text-center tracking-wide"
+                    )}
+                >
+                    {props.paragraph}
+                </p>
             </header>
         </div>
     )

@@ -1,5 +1,6 @@
 "use client";
 import { InputState } from "@/features/Form/useForm/Input";
+import { Instrumental } from "@/public/Font";
 import clsx from "clsx";
 import { ReactNode } from "react";
 
@@ -23,7 +24,14 @@ export function Field(props: FieldProps) {
             {props.input}
             {/* Error Message */}
             {props.state && props.state[0] === false &&
-                <span className="text-01 text-red-500 font-medium">{props.state[1]}</span>
+                <span 
+                    className={clsx(
+                        Instrumental.className, 
+                        "text-01 text-red-500 font-medium tracking-wide"
+                    )}
+                >
+                    {props.state[1]}
+                </span>
             }
         </label>
     )

@@ -8,7 +8,7 @@ interface BackProps {
 export default function Back(props: BackProps) {
     return (
         <div className="">
-            <div className="icon">
+            <div className="">
                 <ArrowLeft
                     width="12"
                     height="12"

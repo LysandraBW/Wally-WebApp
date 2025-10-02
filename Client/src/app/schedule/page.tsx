@@ -1,5 +1,5 @@
 "use client";
-import ButtonTwo from "@/component/Form/Button/ButtonTwo";
+import ButtonTwo from "@/component/Form/Button/Button2";
 import NavBar from "@/component/NavBar/NavBar";
 import useForm from "@/features/Form/useForm/useForm";
 import { startContactForm, startVehicleForm, startServiceForm } from "@/pages/customer/schedule/_DEF";
@@ -12,6 +12,8 @@ import { useState } from "react";
 import ProgressBar from "../../pages/customer/schedule/ProgressBar";
 import GoodResults from "@/pages/customer/schedule/GoodResults";
 import BadResults from "@/pages/customer/schedule/BadResults";
+import { Instrumental } from "@/public/Font";
+import ButtonThree from "@/component/Form/Button/Button3";
 
 // The step at which a user is in the form
 // is correlated with some variables.
@@ -99,17 +101,17 @@ export default function Page() {
         <div className="relative bg-white flex flex-col min-h-screen">
             <NavBar sticky={true} border={true} background={true}/>
             <div className="flex grow">
-                <div className="flex flex-col grow shadow-lg">
+                <div className="flex flex-col grow p-4">
                     {/* 
                     If the output is not NULL, we show the user the
                     results (fail or pass).
                     */}
-                    {(output !== null && output[0] !== "") &&
+                    {(output !== null && output[0]) &&
                         <GoodResults
                             output={output}
                         />
                     }
-                    {(output !== null && output[0] === "") &&
+                    {(output !== null && !output[0]) &&
                         <BadResults
                             restart={() => setOutput(null)}
                         />
@@ -124,18 +126,36 @@ export default function Page() {
                                 Header
                             */}
                             <header className="flex flex-col items-center w-min">
-                                <h3 className="text-center font-medium whitespace-nowrap">Schedule Appointment</h3>
-                                <p className="text-center text-md tracking-wide max-w-[440px] text-gray-600">To schedule an appointment, complete the form below.<br/>After completion, your appointment will be shortly confirmed.</p>
+                                <h3 className="text-center font-medium whitespace-nowrap">
+                                    Schedule Appointment
+                                </h3>
+                                <p 
+                                    className={clsx(
+                                        "max-w-[440px]",
+                                        "text-md text-gray-600",
+                                        "text-center tracking-wide",
+                                        Instrumental.className
+                                    )}
+                                >
+                                    To schedule an appointment, complete the form below.<br/>
+                                    After completion, your appointment will be shortly confirmed.
+                                </p>
                             </header>    
                             {/* 
                                 Tracker:
                                 This just shows the current step
                                 that the user is on.
                             */}
-                            <div className="bg-blue-600 rounded-lg px-4 py-4 pb-5 flex flex-col gap-2 w-[400px]">
+                            <div 
+                                className={clsx(
+                                    "w-[400px] px-4 py-4 pb-5",
+                                    "flex flex-col gap-2",
+                                    "bg-blue-600 rounded-lg shadow-sm"
+                                )}
+                            >
                                 <div>
                                     <span 
-                                    className="text-01 font-medium text-blue-300" 
+                                    className="text-01 font-medium text-blue-200" 
                                     style={{lineHeight: "0.72rem"}}
                                     >
                                         STEP {step + 1}
@@ -183,12 +203,10 @@ export default function Page() {
                                 {step === 2 && <ServiceForm form={serviceForm}/>}
                                 <div className="flex gap-4">
                                     {step !== 0 &&
-                                        <button 
+                                        <ButtonThree
+                                            label="Previous"
                                             onClick={goToPreviousForm} 
-                                            className="w-full shadow-sm text-04 font-medium rounded-lg px-4 py-2 border border-gray-200 tracking-wide text-md text-gray-500"
-                                        >
-                                            Previous
-                                        </button>
+                                        />
                                     }
                                     <ButtonTwo
                                         label={step === 2 ? "Schedule" : `Continue to ${step == 0 ? "Vehicle" : "Service"}`}
@@ -199,8 +217,29 @@ export default function Page() {
                         </div>
                     }
                 </div>
-                <div className="h-screen w-[55%]">
-                    <img src="./Blue_1_BG.svg" className="fixed top-[54px] h-[calc(100%-54px)] w-full object-cover"/>
+                <div 
+                    className={clsx(
+                        "relative",
+                        "w-[55%] h-[calc(100vh-53px)]",
+                        "max-sm:hidden"
+                    )}
+                >
+                    <img 
+                        src="./Noise.svg" 
+                        className={clsx(
+                            "w-full h-full",
+                            "fixed z-10",
+                            "object-cover",
+                            "opacity-50"
+                        )}
+                    />
+                    <div 
+                        className={clsx(
+                            "fixed top-[53px]",
+                            "w-full h-[calc(100%-53px)]",
+                            "bg-black bg-cover bg-top"
+                        )}
+                    ></div>
                 </div>
             </div>
         </div>

@@ -17,13 +17,23 @@ export default function ProgressBar(props: ProgressBarProps) {
                 id={props.id} 
                 data-tooltip-place="bottom"
                 className={clsx(
-                    "bg-white shadow-sm border border-white",
-                    "w-full h-full flex justify-center items-center rounded shadow-sm group",
-                    props.step >= props.rank && "!bg-blue-400 border !border-blue-400",
+                    "w-full h-full",
+                    "flex justify-center items-center",
+                    "bg-white shadow-sm",
+                    "border border-white rounded",
+                    "group",
+                    props.step >= props.rank && "!bg-blue-700 !border-blue-800",
                     props.canShowTooltip && "cursor-pointer hover:bg-black hover:border-black transition-all"
                 )}
             >
-                <div className={clsx("w-1 h-1 rounded-full bg-gray-300", props.step >= props.rank && "bg-white")}></div>    
+                <div 
+                    className={clsx(
+                        "w-1 h-1", 
+                        "bg-gray-300",
+                        "rounded-full",
+                        props.step >= props.rank && "bg-white"
+                    )}
+                ></div>    
             </div>
             {
                 props.canShowTooltip &&
@@ -32,15 +42,17 @@ export default function ProgressBar(props: ProgressBarProps) {
                         border="1px solid rgb(229 231 235)"
                         opacity={1}
                         style={{
-                            backgroundColor: "white",
-                            boxShadow: "0px 2px 2px 0px #00000010",
                             display: "flex",
                             flexDirection: "column",
                             alignItems: "center",
                             gap: "0.25rem",
+                            backgroundColor: "white",
+                            boxShadow: "0px 2px 2px 0px #00000010",
                         }}
                     >
-                        <h6 className="text-sm tracking-normal text-gray-700">{props.tooltipLabel}</h6>
+                        <h6 className="text-sm text-gray-700">
+                            {props.tooltipLabel}
+                        </h6>
                     </Tooltip> 
             }
         </Fragment>

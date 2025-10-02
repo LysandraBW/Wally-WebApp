@@ -89,7 +89,7 @@
     }
 
     /* Buttons  */
-    button.icon {
+    .icon {
         @apply
             p-1
             w-min
@@ -101,7 +101,7 @@
             hover:bg-gray-200;
     }
 
-    button.icon * {
+    .icon * {
         @apply
             !fill-inherit
             !stroke-inherit

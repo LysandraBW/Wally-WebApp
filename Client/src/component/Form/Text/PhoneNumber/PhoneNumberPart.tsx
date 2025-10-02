@@ -19,6 +19,11 @@ export default function PhoneNumberPart(props: PhoneNumberPartProps) {
             value={props.value}
             onBlur={props.onBlur}
             onChange={onChange}
+            onKeyDown={(event) => {
+                const key = event.key;
+                if (key == "Backspace" && props.value == "")
+                    props.onChange(props.part, "");
+            }}
             className="field"
         />
     )

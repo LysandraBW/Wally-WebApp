@@ -1,11 +1,11 @@
 import getValues from "@/features/Form/helpers/getValues";
 import { Options } from "@/features/Form/DEF";
 import { UseForm } from "@/features/Form/useForm/useForm";
-import { subsetOf } from "@/lib/Zod/InputTest";
+import { strictSubsetOf } from "@/lib/Zod/InputTest";
 import { GetT1Services } from "@/services/DB/Information/GetT1Services";
 import { Fragment, useEffect, useState } from "react";
-import SearchServices from "./SearchServices";
 import SearchServicesSimple from "./SearchServicesSimple";
+import { SERVICE_ERR_MSG } from "./_DEF";
 
 interface ServiceFormProps {
     form: UseForm;
@@ -18,7 +18,9 @@ export default function ServiceForm(props: ServiceFormProps) {
         const initialize = async () => {
             const services: {[name: string]: Options} = {...await GetT1Services(), "Other": [["0", "I Don't Know"]]};
             setServices(services);
-            props.form.setInputTest("services", subsetOf(getValues(Object.values(services).flat())));
+
+            const serviceValues = getValues(Object.values(services).flat())
+            props.form.setInputTest("services", strictSubsetOf(serviceValues, SERVICE_ERR_MSG));
         }
         initialize();
     }, []);

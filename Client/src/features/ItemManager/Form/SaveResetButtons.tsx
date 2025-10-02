@@ -1,5 +1,5 @@
 import Button from "@/component/Form/Button/Button";
-import ButtonTwo from "@/component/Form/Button/ButtonTwo";
+import ButtonTwo from "@/component/Form/Button/Button2";
 import clsx from "clsx";
 
 interface SaveResetButtonsProps {

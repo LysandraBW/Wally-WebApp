@@ -1,61 +1,62 @@
 "use client";
-import Image from "next/image";
-import NavBar from "@/component/NavBar/NavBar";
-import { Inter } from "@/public/Font";
+import clsx from "clsx";
+import { Instrumental } from "@/public/Font";
+import { HREF_SCHEDULE } from "@/utils/constants";
+import NavBarLanding from "@/component/NavBar/NavBarLanding";
 
 export default function Page() {
-	const scale = 0.5;
-
 	return (
-		<>
-			<NavBar sticky={false}/>
-			<section className="h-[calc(100vh-54px)] bg-gray-100 relative flex flex-col justify-between">
-				<div className="h-full flex justify-center items-center">
-					<header className="flex flex-col justify-center items-center gap-4">
-						<h1 className="text-center text-[4rem] text-black font-medium">Your Friendly Neighborhood<br/><span className="text-[4rem] text-blue-600 font-semibold relative after:absolute after:w-full after:bottom-0 after:left-0 after:h-1.5 after:bg-blue-800">Mechanic</span>.</h1>
-						<p className="text-center text-[1.125rem] tracking-wide text-gray-500 max-w-[640px]">Fear not, for your friendly neighborhood mechanic is here. Whether it's your brakes, engine, or air conditioning (or anything really) giving you trouble, we are ready to service.</p>
-						<button className="mt-4 text-center h-[2.625rem] px-[1.25rem] rounded-[0.5rem] bg-gradient-to-b from-blue-700 to-blue-700 text-gray-200 text-[1rem] text-shadow font-medium tracking-wide border-[1.25px] border-blue-800 shadow-[inset_0px_2px_0_0_#ffffff2b] hover:text-white transition-all">Request Appointment</button>
+		<div className="bg-black flex flex-col grow w-screen">		
+			<NavBarLanding/>
+			<section className="grow flex flex-col items-center justify-center w-full h-full">
+				<div className="grid grid-cols-1 grid-rows-[auto_auto] w-full h-full grow p-4 pb-0 gap-4">
+					<header className="flex flex-col items-center justify-center gap-4 max-md:px-8">
+						<h1 
+							className={clsx(
+								"text-6xl text-gray-200 text-center",
+								"font-normal tracking-tight leading-[4rem]"
+							)}
+						>
+							Running Rough?<br/>
+							We'll Get You <span className="tracking-tight text-blue-600 text-6xl">Rolling</span>.
+						</h1>
+						<p 
+							className={clsx(
+								"max-w-[600px]",
+								"leading-[1.5rem] text-gray-400 text-[1rem] tracking-wide text-center", 
+								Instrumental.className
+							)}
+						>
+							We're all about honest repairs, fair prices, and fast turnarounds 
+							— no upsells, no gimmicks. 
+							Just real service you can trust, from people who actually care.
+						</p>
+						<a 
+							href={HREF_SCHEDULE}
+							className={clsx(
+								"w-min px-4 py-2 mt-4",
+								"bg-blue-600",
+								"border border-blue-500 rounded-lg",
+								"text-[1rem] text-white font-medium whitespace-nowrap",
+								"shadow-[#193cb8_0px_2px_0px_0px]",
+								"cursor-pointer hover:bg-blue-700 transition-all",
+							)}
+						>
+							Schedule Appointment
+						</a>
 					</header>
-				</div>
-				<div className="flex flex-col items-center">
-					<div className="w-full logos group relative overflow-hidden whitespace-nowrap relative after:absolute after:top-0 after:left-0 after:w-full after:h-full after:bg-gradient-to-r after:from-gray-100 after:via-gray-100/0 after:to-gray-100">
-						<div className="w-full slide-left group-hover:animation-pause inline-flex justify-around">
-							<img className="inline h-10 w-10" src="Acura.svg"/>
-							<img className="inline h-10 w-10" src="Audi.svg"/>
-							<img className="inline h-10 w-10" src="BMW.svg"/>
-							<img className="inline h-10 w-10" src="Chevrolet.svg"/>
-							<img className="inline h-10 w-10" src="Ford.svg"/>
-							<img className="inline h-10 w-10" src="GMC.svg"/>
-							<img className="inline h-10 w-10" src="Honda.svg"/>
-							<img className="inline h-10 w-10" src="Hyundai.svg"/>
-							<img className="inline h-10 w-10" src="Infiniti.svg"/>
-							<img className="inline h-10 w-10" src="Kia.svg"/>
-							<img className="inline h-10 w-10" src="Mercedes.svg"/>
-							<img className="inline h-10 w-10" src="Nissan.svg"/>
-							<img className="inline h-10 w-10" src="Subaru.svg"/>
-							<img className="inline h-10 w-10" src="Toyota.svg"/>
-							<img className="inline h-10 w-10" src="Volkswagen.svg"/>
-						</div>
-						<div className="w-full slide-left group-hover:animation-pause inline-flex justify-around">
-							<img className="inline h-10 w-10" src="Acura.svg"/>
-							<img className="inline h-10 w-10" src="Audi.svg"/>
-							<img className="inline h-10 w-10" src="BMW.svg"/>
-							<img className="inline h-10 w-10" src="Chevrolet.svg"/>
-							<img className="inline h-10 w-10" src="Ford.svg"/>
-							<img className="inline h-10 w-10" src="GMC.svg"/>
-							<img className="inline h-10 w-10" src="Honda.svg"/>
-							<img className="inline h-10 w-10" src="Hyundai.svg"/>
-							<img className="inline h-10 w-10" src="Infiniti.svg"/>
-							<img className="inline h-10 w-10" src="Kia.svg"/>
-							<img className="inline h-10 w-10" src="Mercedes.svg"/>
-							<img className="inline h-10 w-10" src="Nissan.svg"/>
-							<img className="inline h-10 w-10" src="Subaru.svg"/>
-							<img className="inline h-10 w-10" src="Toyota.svg"/>
-							<img className="inline h-10 w-10" src="Volkswagen.svg"/>
-						</div>
-					</div>
+					<div 
+						style={{backgroundImage: "url('../pexels-thanks-394797.jpg')"}} 
+						className={clsx(
+							"w-[75%] h-full min-h-10 m-auto",
+							"relative z-20",
+							"flex",
+							"bg-cover bg-top",
+							"rounded-t-3xl "
+						)}
+					/>
 				</div>
 			</section>
-		</>
+		</div>
 	)
 }

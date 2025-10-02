@@ -60,8 +60,8 @@ export default function Search(props: SelectProps) {
                     <div
                         className={clsx(   
                             open && "hidden",       
-                            "field grid grid-cols-[auto_13px] h-full shadow-sm",
-                            "gap-3 justify-between items-center pr-3 !text-gray-400 text-[0.9rem]"
+                            "field grid grid-cols-[auto_13px] shadow-sm",
+                            "gap-3 justify-between items-center pr-3"
                         )}
                         onMouseDown={(e) => {
                             e.preventDefault();
@@ -82,7 +82,60 @@ export default function Search(props: SelectProps) {
                                 setSearch(event.target.value);
                             }}
                         />
-                        <ul className="px-0 relative top-[0.25rem] field bg-white max-h-[200px] overflow-y-scroll w-full scroll-hide">
+                        {matched.length == 0 &&
+                            <ul className={clsx(
+                                "px-0 relative top-[0.25rem] field bg-white h-full w-full shadow"
+                            )}>
+                                <li
+                                    className={clsx(
+                                        "",
+                                        "text-center text-gray-600 text-[0.85rem]",
+                                    )}
+                                >
+                                    No Results
+                                </li>
+                            </ul>
+                        }
+                        {matched.length > 0 &&
+                            <ul className={clsx(
+                                "px-0 relative top-[0.25rem] field bg-white max-h-[200px] overflow-y-scroll w-full shadow",
+                                matched.length < 10 && "min-h-[100px]",
+                                matched.length < 20 && "min-h-[100px]",
+                                matched.length >= 20 && "min-h-[200px]",
+                            )}>
+                                {matched.map(([value, label], i) => (
+                                    <li
+                                        key={i}
+                                        onClick={(event) => {
+                                            selectValue(value);
+                                        }}
+                                        className={clsx(
+                                            "px-3 py-1.5 flex justify-between items-center gap-2",
+                                            "hover:bg-gray-100 hover:cursor-pointer text-gray-600",
+                                        )}
+                                    >
+                                        {label}
+                                        
+                                    </li>
+                                ))}
+                                {matched.length == 0 &&
+                                    <li
+                                        className={clsx(
+                                            "px-3 py-1.5 ",
+                                            "text-center text-gray-600",
+                                        )}
+                                    >
+                                        No Results
+                                    </li>
+                                }
+                            </ul>
+                        }
+                        {/* <ul className={clsx(
+                            "px-0 relative top-[0.25rem] field bg-white max-h-[200px] overflow-y-scroll w-full",
+                            matched.length < 10 && "min-h-[100px]",
+                            matched.length < 20 && "min-h-[100px]",
+                            matched.length >= 20 && "min-h-[200px]",
+                        )}>
                             {matched.map(([value, label], i) => (
                                 <li
                                     key={i}
@@ -91,14 +144,24 @@ export default function Search(props: SelectProps) {
                                     }}
                                     className={clsx(
                                         "px-3 py-1.5 flex justify-between items-center gap-2",
-                                        "hover:bg-gray-100 hover:cursor-pointer",
+                                        "hover:bg-gray-100 hover:cursor-pointer text-gray-600",
                                     )}
                                 >
                                     {label}
                                     
                                 </li>
                             ))}
-                        </ul>
+                            {matched.length == 0 &&
+                                <li
+                                    className={clsx(
+                                        "px-3 py-1.5 ",
+                                        "text-center text-gray-600",
+                                    )}
+                                >
+                                    No Results
+                                </li>
+                            }
+                        </ul> */}
                     </>
                 }
                 </div>

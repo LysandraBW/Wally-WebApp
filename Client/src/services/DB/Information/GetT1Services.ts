@@ -5,7 +5,7 @@ import { request } from "../request";
 export type ServiceT1Pairs = {[serviceClass: string]: Options};
 
 export async function GetT1Services() {
-    const output = await request("GET", "services");
+    const output = await request("GET", "/services");
 
     const servicesT1: {[serviceClass: string]: Options} = {};
     for (const service of output) {

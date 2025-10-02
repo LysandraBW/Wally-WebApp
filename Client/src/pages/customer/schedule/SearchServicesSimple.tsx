@@ -59,10 +59,10 @@ export default function SearchServicesSimple(props: SearchSortedProps) {
                         <div 
                             onClick={() => setOpen(true)}
                             className={clsx(
-                                "field grid grid-cols-[95%_5%] min-h-10 w-full gap-1 justify-between items-center"
+                                "field grid grid-cols-[95%_5%] h-full w-full gap-1 justify-between items-center"
                             )}
                         >
-                            <label className="">Click to View Services</label>
+                            <label className="text-[0.85rem]">Click to View Services</label>
                             <div className="flex justify-center items-center cursor-pointer rounded hover:bg-gray-50">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="black" className="size-6">
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 15 12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9" />
@@ -72,7 +72,7 @@ export default function SearchServicesSimple(props: SearchSortedProps) {
                         {/* Service Type */}
                         {open && tab === "" &&
                             <div
-                                className="px-0 relative z-10 top-[calc(0.25rem)] field bg-white max-h-[200px] overflow-y-scroll w-full scroll-hide shadow-lg"
+                                className="px-0 relative z-10 top-[calc(0.25rem)] field h-auto bg-white overflow-auto w-full shadow-lg"
                             >
                                 {tabs.map((t, i) => (
                                     <div 
@@ -80,7 +80,7 @@ export default function SearchServicesSimple(props: SearchSortedProps) {
                                         onClick={() => setTab(t)}
                                         className={clsx(
                                             "px-3 py-1.5 flex justify-normal items-center gap-2",
-                                            "hover:bg-gray-100 hover:cursor-pointer",
+                                            "hover:bg-gray-100 hover:cursor-pointer text-[0.85rem]",
                                         )}
                                     >
                                         {t}
@@ -91,11 +91,11 @@ export default function SearchServicesSimple(props: SearchSortedProps) {
                         {/* Services for Type */}
                         {open && tab !== "" &&
                             <div className="pb-4 relative z-10">
-                                <div className="px-0 relative top-[calc(0.25rem)] field bg-white overflow-y-scroll w-full">
-                                    <div onClick={() => setTab("")}>
+                                <div className="px-0 relative top-[calc(0.25rem)] field bg-white !h-auto w-full">
+                                    <div className="mx-2 mb-2 icon" onClick={() => setTab("")}>
                                         <Back/>
                                     </div>
-                                    <div className="border-b border-b-gray-200">
+                                    <div className="border-y border-y-gray-200">
                                         <input
                                             name={props.name}
                                             value={search}
@@ -107,7 +107,7 @@ export default function SearchServicesSimple(props: SearchSortedProps) {
                                             )}
                                         />
                                     </div>
-                                    <div className="max-h-[100px]">
+                                    <div className="overflow-auto max-h-[200px]">
                                         {matched.map((m, i) => (
                                             <div 
                                                 key={i} 
@@ -132,34 +132,36 @@ export default function SearchServicesSimple(props: SearchSortedProps) {
                             </div>
                         }
                     </div>
-                    <div className="rounded-md bg-gray-100 p-2 w-full">
-                        {props.values.length !== 0 &&
-                            <ul className="w-full flex flex-wrap gap-1">
-                                {props.values.map((value, i) => (
-                                    <li
-                                        key={i}
-                                        onClick={(e) => selectValue(value)}
-                                        className="field flex justify-between items-center gap-1 py-1 pr-1 pl-2 bg-white shadow-sm whitespace-nowrap hover:bg-gray-50 cursor-pointer w-min"
-                                    >
-                                        <span className="text-01 tracking-wider">{valueToLabel[value]}</span>
-                                        <CrossIcon
-                                            top="0.05px"
-                                            width="13"
-                                            height="13"
-                                            fill="#9CA3AF"
-                                            color="#9CA3AF"
-                                            stroke="#9CA3AF"
-                                            strokeWidth="0.5"
-                                            cursor="pointer"
-                                        />
-                                    </li>
-                                ))}
-                            </ul>
-                        }
-                        {props.values.length === 0 &&
-                            <p className="px-2 py-1 justify-self-center self-center block w-full text-center text-01 uppercase font-medium">No Services Selected</p>
-                        }
-                    </div>
+                    {props.values.length !== 0 &&
+                        <div className="rounded-md bg-gray-100 p-2 w-full">
+                            {props.values.length !== 0 &&
+                                <ul className="w-full flex flex-wrap gap-1">
+                                    {props.values.map((value, i) => (
+                                        <li
+                                            key={i}
+                                            onClick={(e) => selectValue(value)}
+                                            className="field h-min flex justify-between items-center gap-1 py-1.5 pr-1 pl-2 bg-white shadow-sm whitespace-nowrap hover:bg-gray-100 cursor-pointer w-min"
+                                        >
+                                            <span className="block leading-[0.5rem] text-xs text-gray-600 tracking-wider">{valueToLabel[value]}</span>
+                                            <CrossIcon
+                                                top="0.05px"
+                                                width="13"
+                                                height="13"
+                                                fill="#9CA3AF"
+                                                color="#9CA3AF"
+                                                stroke="#9CA3AF"
+                                                strokeWidth="0.5"
+                                                cursor="pointer"
+                                            />
+                                        </li>
+                                    ))}
+                                </ul>
+                            }
+                            {/* {props.values.length === 0 &&
+                                <p className="px-2 py-1 justify-self-center self-center block w-full text-center text-xs tracking-wide  font-medium-">No Services Selected</p>
+                            } */}
+                        </div>
+                    }
                 </div>
             }
         />

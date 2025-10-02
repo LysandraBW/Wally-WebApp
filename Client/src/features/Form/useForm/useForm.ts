@@ -59,11 +59,11 @@ export default function useForm(fName: string, startForm: Form = {data: {}, test
             return;
         let state: InputState = [true, ""];
         const output = form.test.safeParse({[name]: data});
-        // console.log(output);
+        console.log(output);
         if (!output.success)
             state = processTestResults(output.error.issues)[name];
         form.data[name] = {data, state};
-        // console.log(form.data);
+        console.log(form.data);
         setForceUpdate(f => f + 1);
     }
 
@@ -87,6 +87,8 @@ export default function useForm(fName: string, startForm: Form = {data: {}, test
     const getState = (update: boolean = true): boolean => {
         if (!form)
             return true;
+        const data = getData();
+        console.log(data)
         const output = form.test.safeParse(getData());
         if (output.success || !update)
             return output.success;

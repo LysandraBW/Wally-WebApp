@@ -1,31 +1,37 @@
 import { z } from "zod";
 import { Form } from "@/features/Form/useForm/Form";
 import makeForm from "@/features/Form/useForm/makeForm";
-import { subsetOf } from "@/lib/Zod/InputTest";
+import { strictSubsetOf } from "@/lib/Zod/InputTest";
+import { isEmail, isName, isPhone, isVIN } from "@/utils/validate";
+
+export const MAKE_ERR_MSG = "Must select a make."
+export const MODEL_ERR_MSG = "Must select a model."
+export const MODEL_YEAR_ERR_MSG = "Must select a model."
+export const SERVICE_ERR_MSG = "Must select a service."
 
 export const startContactForm = (): Form => makeForm(
     {fName: "", lName: "", email: "", phone: ""},
     z.object({
-        fName: z.string().min(1, {message: "Must enter a first name."}),
-        lName: z.string().min(1, {message: "Must enter a last name."}),
-        email: z.string().min(1, {message: "Must enter an email address."}),
-        phone: z.string().min(1, {message: "Must enter a phone number."})
+        fName: isName,
+        lName: isName,
+        email: isEmail,
+        phone: isPhone
     })
 );
 
 export const startVehicleForm = (): Form => makeForm(
-    {vin: "", make: [], model: [], modelYear: "" },
+    {vin: "", make: [], model: [], modelYear: [] },
     z.object({
-        vin: z.string().or(z.null()).or(z.literal("")),
-        make: subsetOf([]),
-        model: subsetOf([]),
-        modelYear: subsetOf([])
+        vin: isVIN,
+        make: strictSubsetOf([], MAKE_ERR_MSG),
+        model: strictSubsetOf([], MODEL_ERR_MSG),
+        modelYear: strictSubsetOf([], MODEL_YEAR_ERR_MSG)
     })
 );
 
 export const startServiceForm = (): Form => makeForm(
     {services: []},
     z.object({
-        services: subsetOf([])
+        services: strictSubsetOf([], SERVICE_ERR_MSG)
     })
 );
