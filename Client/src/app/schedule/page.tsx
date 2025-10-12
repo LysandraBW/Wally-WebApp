@@ -99,7 +99,7 @@ export default function Page() {
     
     return (
         <div className="relative bg-white flex flex-col min-h-screen">
-            <NavBar sticky={true} border={true} background={true}/>
+            <NavBar sticky={true} border={true} background={true} shadow={true}/>
             <div className="flex grow">
                 <div className="flex flex-col grow p-4">
                     {/* 
@@ -220,24 +220,15 @@ export default function Page() {
                 <div 
                     className={clsx(
                         "relative",
-                        "w-[55%] h-[calc(100vh-53px)]",
+                        "w-[50%] h-[calc(100vh-53px)]",
                         "max-sm:hidden"
                     )}
                 >
-                    <img 
-                        src="./Noise.svg" 
-                        className={clsx(
-                            "w-full h-full",
-                            "fixed z-10",
-                            "object-cover",
-                            "opacity-50"
-                        )}
-                    />
                     <div 
                         className={clsx(
                             "fixed top-[53px]",
                             "w-full h-[calc(100%-53px)]",
-                            "bg-black bg-cover bg-top"
+                            "bg-gray-200 bg-cover bg-top"
                         )}
                     ></div>
                 </div>

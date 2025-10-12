@@ -1,3 +1,4 @@
+import { Instrumental } from "@/public/Font";
 import clsx from "clsx";
 
 interface TabsProps {
@@ -10,15 +11,16 @@ export default function Tabs(props: TabsProps) {
     return (
         <div 
             className={clsx(
-                // "flex justify-between gap-4 px-1 py-1",
-                // "bg-white border-b border-gray-200"
                 "p-0"
             )}
         >
             <div 
                 className={clsx(
-                    "w-full flex gap-4 px-[0px] justify-between",
-                    "bg-gray-50 border-t border-b border-t-gray-200 border-b-gray-200 overflow-clip"
+                    "w-full",
+                    "flex justify-between gap-4",
+                    "bg-gray-50",
+                    "border-t border-t-gray-200 border-b border-b-gray-200",
+                    "overflow-clip"
                 )}
             >
                 {props.tabs.map((tab, i) => (
@@ -26,18 +28,24 @@ export default function Tabs(props: TabsProps) {
                         key={i}
                         onClick={() => props.selectTab(tab)}
                         className={clsx(
-                            "w-min py-1 px-4 w-full rounded-none hover:bg-gray-100",
+                            "w-full",
+                            "py-1 px-4",
+                            "rounded-none",
+                            "hover:bg-gray-100",
                             props.tab === tab && `
                                 bg-white 
-                                shadow ring-1 ring-gray-200
-                                hover:bg-white transition-all
+                                ring-1 ring-gray-200
+                                transition-all hover:bg-white
                             `
                         )}
                     >
                         <span
                             className={clsx(
-                                "text-01 text-gray-500 relative tracking-wide",
-                                props.tab === tab && "text-gray-950 font-medium"
+                                "relative",
+                                Instrumental.className,
+                                "text-01 text-gray-500",
+                                "uppercase tracking-wide",
+                                props.tab === tab && "text-gray-600 font-medium"
                             )}
                         >
                             {tab}

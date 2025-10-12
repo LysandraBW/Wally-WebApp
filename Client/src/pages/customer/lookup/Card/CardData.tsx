@@ -1,3 +1,4 @@
+import { Instrumental } from "@/public/Font";
 import clsx from "clsx";
 import { Fragment } from "react";
 
@@ -17,14 +18,16 @@ export default function CardData(props: CardDataProps) {
             {/* Key */}
             <div 
                 className={clsx(
-                    "py-2 pl-4 align-top",
+                    Instrumental.className,
+                    "py-2 pl-4",
+                    "align-top",
                     "border-b border-gray-200 border-r border-r-gray-200",
-                    props.lastRow && ""
                 )}
             >
                 <p 
                     className={clsx(
-                        "text-02 tracking-wide",
+                        "text-02",
+                        "tracking-wide",
                         "whitespace-nowrap"
                     )}
                 >
@@ -34,15 +37,17 @@ export default function CardData(props: CardDataProps) {
             {/* Value */}
             <div 
                 className={clsx(
-                    "py-2 pl-4 align-top",
+                    Instrumental.className,
+                    "py-2 pl-4",
+                    "align-top",
                     "border-b border-gray-200",
-                    props.lastRow && ""
                 )}
             >
                 <p 
                     className={clsx(
-                        "text-02 tracking-wide",
-                        "font-medium text-gray-950"
+                        "text-02 text-gray-600",
+                        "font-medium",
+                        "tracking-wide"
                     )}
                 >
                     {props.value}

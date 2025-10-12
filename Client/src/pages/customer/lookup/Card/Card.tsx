@@ -7,6 +7,7 @@ import VehicleTab from "./VehicleTab";
 import PaymentTab from "./PaymentTab";
 import NotesTab from "./Note/NotesTab";
 import { ProtectedAppointment as DB_ProtectedAppointment } from "waltronics-types";
+import { Instrumental } from "@/public/Font";
 
 interface CardProps {
     appointment: DB_ProtectedAppointment;
@@ -20,30 +21,46 @@ export default function Card(props: CardProps) {
     return (
         <div 
             className={clsx(
-                "relative z-20 min-w-[400px] w-fit h-[500px] overflow-y-auto",
-                "shadow-xl bg-white flex flex-col"
+                "w-full h-full",
+                "flex flex-col",
+                "relative z-20",
+                "overflow-y-auto",
+                "bg-gray-50 border border-gray-200 border-t-0",
+                "max-md:border-t-0"
             )}
         >
             <div 
                 className={clsx(
-                    "p-4 border-b- border-b-gray-200-",
-                    "flex justify-between"
-                )}>
-                {/* Title */}
-                <h6 
-                    className={clsx(
-                        "font-medium"
-                    )}
-                >
-                    Appointment Information
-                </h6>
-                {/* Close Button */}
+                    "p-2 px-2",
+                    "flex justify-end items-center",
+                    "bg-gray-50",
+                    "border-b border-b-gray-200"
+                )}
+            >
                 <div className="h-min w-min">
                     <CloseButton
                         close={props.closeAppointment}
                     />
                 </div>
-            </div>
+            </div> 
+            {/* Appointment ID */}
+            <div 
+                className={clsx(
+                    "p-1 px-4",
+                    "flex justify-left items-center",
+                    "bg-gray-50",
+                    "tracking-wide"
+                )}
+            >
+                <p 
+                    className={clsx(
+                        Instrumental.className, 
+                        "text-md text-left text-gray-600 font-medium"
+                    )}
+                >
+                    APPT. {props.appointment.AppointmentID}
+                </p>
+            </div> 
             {/* Tabs */}
             <Tabs
                 tab={tab}
@@ -51,9 +68,27 @@ export default function Card(props: CardProps) {
                 selectTab={setTab}
             />
             {/* Data */}
-            <div className="bg-white grow">
-                <h4 className="bg-gray-50 pt-2 pl-4 pb-2 border-b border-b-gray-200 text-05 font-medium">Showing {tab} {tab !== "Notes" && "Information"}</h4>
-                <div className="w-full grid grid-cols-[33%_66%]">
+            <div className="bg-gray-50 flex flex-col grow">
+                {/* Showing Tab */}
+                <h4 
+                    className={clsx(
+                        Instrumental.className, 
+                        "pt-2 pl-4 pb-2",
+                        "border-b border-b-gray-200",
+                        "text-04 text-gray-600 font-medium",
+                        "tracking-wide",
+                        "bg-gray-50"
+                    )}
+                >
+                    Showing {tab} {tab !== "Notes" && "Information"}
+                </h4>
+                {/* Showing Data */}
+                <div 
+                    className={clsx(
+                        "w-full",
+                        tab !== "Notes" && "grid grid-cols-[33%_auto]"
+                    )}
+                >
                     {tab === "General" &&
                         <ContactTab
                             appointment={props.appointment}
@@ -69,12 +104,12 @@ export default function Card(props: CardProps) {
                             appointment={props.appointment}
                         />
                     }
+                    {tab === "Notes" &&
+                        <NotesTab
+                            appointment={props.appointment}
+                        />
+                    }
                 </div>
-                {tab === "Notes" &&
-                    <NotesTab
-                        appointment={props.appointment}
-                    />
-                }
             </div>
         </div>
     )
