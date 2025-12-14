@@ -30,7 +30,7 @@ export default function Events(props: EventsProps) {
     }, []);
     
     const saveUpdates = async (updates: EventUpdates) => {
-        console.log(updates);
+        // console.log(updates);
         const output = await UpdateEmployeeEvents(updates);
         if (output) alertDispatch(saveTDispatch(randomKey(), alertDispatch));
         else alertDispatch(saveFDispatch(randomKey(), alertDispatch));

@@ -21,7 +21,7 @@ export default function NoteForm<DB_Note, Note, Notes>(props: FormProps<DB_Note,
     useEffect(() => {
         const load = async () => {
             const employees = await GetEmployeeNamePairs();
-            console.log(employees);
+            // console.log(employees);
             setEmployees(employees);
         }
         load();

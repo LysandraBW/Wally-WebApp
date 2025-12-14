@@ -8,7 +8,8 @@ const headers = new Headers({
 export async function request(method: "GET"|"POST"|"UPDATE"|"DELETE"|"PUT", route: string, body: Body = {}) {
     const URL = `${baseURL}${route}`;
     console.log(URL);
-
+    console.log(body);
+    
     let response = null;
     if (method === "GET") {
         response = await fetch(URL, {credentials: "include"});

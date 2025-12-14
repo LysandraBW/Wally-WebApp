@@ -25,7 +25,7 @@ export default function Page() {
     useEffect(() => {
         const load = async () => {
             const events = await SelectEvents();
-            console.log(events);
+            // console.log(events);
             setEvents(events);
         }
         load();
@@ -36,9 +36,9 @@ export default function Page() {
     }, [employeeContext]);
     
     const saveUpdates = async (updates: EventUpdates) => {
-        console.log(updates);
+        // console.log(updates);
         const output = await UpdateEmployeeEvents(updates);
-        console.log(output);
+        // console.log(output);
         if (output) alertDispatch(saveTDispatch(randomKey(), alertDispatch));
         else alertDispatch(saveFDispatch(randomKey(), alertDispatch));
     }

@@ -7,6 +7,7 @@ import { Employee as DB_Employee } from "waltronics-types";
 import clsx from "clsx";
 import Logo from "@/component/NavBar/Logo";
 import { Tooltip } from "react-tooltip";
+import { DM_Sans, IBM, Instrumental } from "@/public/Font";
 
 export const EmployeeContext = createContext<{employee?: DB_Employee, setCurrentPage?: (page: string) => void}>({});
 
@@ -32,17 +33,43 @@ export default function Page({children}: Readonly<{children: React.ReactNode}>) 
     }, [authenticated]);
 
     return (
-        <div className="min-h-screen flex flex-col bg-green-500">
+        <div className="flex flex-col grow">
             {authenticated &&
                 <EmployeeContext value={{employee, setCurrentPage}}>
-                    <div className="h-full grow grid grid-cols-[256px_auto] grid-rows-[64px_auto]">
-                        <div className="col-start-1 col-span-1 row-start-1 row-span-1 bg-gray-100 border-b border-b-gray-300 h-full w-full flex items-center justify-center">
+                    <div 
+                        className={clsx(
+                            "h-full",
+                            "grow",
+                            "grid grid-cols-[256px_calc(100%-256px)] grid-rows-[64px_calc(100%-64px)]"
+                        )}
+                    >
+                        <div 
+                            className={clsx(
+                                "h-full w-full",
+                                "flex items-center justify-center",
+                                "row-start-1 row-span-1",
+                                "col-start-1 col-span-1",
+                                "bg-gray-200-",
+                                "border-r border-r-gray-300",
+                                "border-b border-b-gray-300",
+                                "shadow"
+                            )}
+                        >
                             <Logo
-                                svgClassName=""
-                                textClassName="text-lg"
+                                svgClassName="fill-blue-600 stroke-blue-600"
+                                textClassName={clsx(DM_Sans.className, "tracking-tighter font-black")}
                             />
                         </div>
-                        <div className="col-start-1 col-span-1 row-start-2 row-span-1 bg-gray-50 h-full w-full p-4 flex flex-col gap-2 border-r border-r-gray-300">
+                        <div 
+                            className={clsx(
+                                "h-full p-4",
+                                "flex flex-col gap-4",
+                                "col-start-1 col-span-1",
+                                "row-start-2 row-span-1",
+                                "bg-gray-100",
+                                "border-r border-r-gray-300"
+                            )}
+                        >
                             {[
                                 [
                                     "Dashboard", 
@@ -57,8 +84,6 @@ export default function Page({children}: Readonly<{children: React.ReactNode}>) 
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-4 stroke-inherit">
                                         <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 0 0 2.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 0 0-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75 2.25 2.25 0 0 0-.1-.664m-5.8 0A2.251 2.251 0 0 1 13.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25ZM6.75 12h.008v.008H6.75V12Zm0 3h.008v.008H6.75V15Zm0 3h.008v.008H6.75V18Z" />
                                     </svg>
-
-                             
                                 ], 
                                 [
                                     "Edit Appointment", 
@@ -78,22 +103,57 @@ export default function Page({children}: Readonly<{children: React.ReactNode}>) 
                                 <a 
                                     key={i} 
                                     href={value[1] as string}
-                                    className={clsx("flex items-center justify-between gap-1 bg-white hover:bg-gray-50 cursor-pointer pr-1 border border-gray-300 w-full block px-2 py-1 rounded text-sm text-gray-400 tracking-wide stroke-gray-400 shadow-sm", currentPage === value[0] && "!text-black font-medium !stroke-black")}
+                                    className={clsx(
+                                        "w-full block",
+                                        "pr-2 px-2 py-1",
+                                        "bg-white",
+                                        "border border-gray-300 rounded-md shadow-sm",
+                                        "transition-all group hover:bg-gray-50",
+                                        "cursor-pointer",
+                                        currentPage !== value[0] && `
+                                            !border-gray-300
+                                        `,
+                                        currentPage === value[0] && `
+                                            !bg-blue-600 !border-blue-500
+                                        `
+                                    )}
                                 >
-                                    <div className={clsx("flex items-center gap-2 text-02 text-gray-400 tracking-wide stroke-gray-400 font-medium-", currentPage === value[0] && "!text-black font-medium !stroke-black")}>
+                                    <div
+                                        className={clsx(
+                                            "flex items-center gap-2",
+                                            "text-sm text-gray-400 font-normal",
+                                            "tracking-wide",
+                                            "stroke-gray-400", 
+                                            "group-hover:stroke-black group-hover:text-black",
+                                            currentPage === value[0] && "!text-white !font-medium !stroke-white"
+                                        )}
+                                    >
                                         {value[2]}
                                         {value[0] as string}
                                     </div>
-                                    {currentPage === value[0] && 
-                                        <div style={{width: "4px"}} className="h-full justify-self-end bg-blue-500 rounded-full"></div>
-                                    }
                                 </a>
                             ))}
                         </div>
-                        <nav className="col-start-2 col-span-1 row-start-1 row-span-1 bg-gray-100 border-b border-b-gray-300 h-full w-full px-4 flex items-center justify-end">
+                        <nav 
+                            className={clsx(
+                                "h-full w-full px-4",
+                                "flex items-center justify-end",
+                                "col-start-2 col-span-1",
+                                "row-start-1 row-span-1",
+                                "border-b border-b-gray-300",
+                                "bg-gray-100"
+                            )}
+                        >
                             <div 
                                 id="profile" 
-                                className="overflow-hidden aspect-square w-10 h-10 rounded-md border border-gray-300 bg-white shadow-sm cursor-pointer hover:bg-gray-50"
+                                className={clsx(
+                                    "w-10 h-10 aspect-square",
+                                    "border border-gray-300 rounded-md",
+                                    "bg-white shadow-sm",
+                                    "overflow-hidden",
+                                    "cursor-pointer",
+                                    "hover:bg-gray-50"
+                                )}
                                 tabIndex={0}
                                 onClick={() => setOpenProfile(true)}
                                 onBlur={(event) => {
@@ -107,7 +167,7 @@ export default function Page({children}: Readonly<{children: React.ReactNode}>) 
                                     isOpen={openProfile}
                                     opacity={1}
                                     place="bottom-end"
-                                    border={"1px solid #d1d5db"}
+                                    border="1px solid #D1D5DB"
                                     style={{
                                         width: "300px",
                                         backgroundColor: "white",
@@ -136,7 +196,16 @@ export default function Page({children}: Readonly<{children: React.ReactNode}>) 
                                 </Tooltip>
                             </div>
                         </nav>
-                        <section className="flex flex-col grow col-start-2 col-span-1 row-start-2 row-span-1 bg-white h-full w-full overflow-hidden">
+                        <section 
+                            className={clsx(
+                                "h-full",
+                                "flex flex-col grow",
+                                "col-start-2 col-span-1",
+                                "row-start-2 row-span-1",
+                                // "bg-red-500",
+                                "overflow-x-hidden"
+                            )}
+                        >
                             {children}
                         </section>
                     </div>

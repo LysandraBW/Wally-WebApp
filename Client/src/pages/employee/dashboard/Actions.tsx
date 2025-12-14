@@ -19,7 +19,7 @@ export default function Actions(props: ActionsProps) {
         <div 
             className={clsx(
                 "flex p-2 items-center gap-2",
-                "border-b border-gray-300 bg-white"
+                "border-b border-gray-300 bg-white rounded-t-md"
             )}
         >
             <div className="flex gap-1">

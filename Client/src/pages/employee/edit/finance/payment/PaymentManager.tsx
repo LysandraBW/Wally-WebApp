@@ -110,24 +110,24 @@ export default function PaymentManager(props: PaymentManagerProps) {
 
     useEffect(() => {
         if (props.openForms.findIndex(f => f === "Add Payment") === -1) {
-            console.log("Cancel Create");
+            // console.log("Cancel Create");
             itemManager.cancelCreate();
         }
 
         if (props.openForms.findIndex(f => f === "Edit Payment") === -1) {
-            console.log("Cancel Update");
+            // console.log("Cancel Update");
             itemManager.cancelUpdate();
         }
     }, [props.openForms]);
 
     useEffect(() => {
         
-        console.log("CREATE ID CHANGED", itemManager.createID);
+        // console.log("CREATE ID CHANGED", itemManager.createID);
     }, [itemManager.createID]);
 
     useEffect(() => {
         
-        console.log("update ID CHANGED",itemManager.updateID);
+        // console.log("update ID CHANGED",itemManager.updateID);
     }, [itemManager.updateID]);
 
     useEffect(() => {

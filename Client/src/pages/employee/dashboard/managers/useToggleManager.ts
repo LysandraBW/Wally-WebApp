@@ -9,17 +9,22 @@ export default function useToggleManager(appointmentManager: AppointmentManager,
     const [selectedAppointments, setSelectedAppointments] = useState<Array<string>>([]);
 
     useEffect(() => {
-        if (!appointmentManager.appointments)
+        // console.log("???")
+        if (!appointmentManager.appointments) {
+            // console.log("No Appointments, Here")
+            setLoadedTable(loadingTable => ({...loadingTable, "toggleManager": true}));
             return;
-        console.log(selectedAppointments.length, appointmentManager.appointments.length);
+        }
+        // console.log(selectedAppointments.length, appointmentManager.appointments.length);
         if (appointmentManager.appointments.length === 0) {
             setAllSelected(false)
         }
         else {
             setAllSelected(selectedAppointments.length === appointmentManager.appointments.length);
         }
+        // console.log("Appointments, Here")
         setLoadedTable(loadingTable => ({...loadingTable, "toggleManager": true}));
-    }, [selectedAppointments]);
+    }, [appointmentManager.appointments, selectedAppointments]);
 
     useEffect(() => {
         if (!appointmentManager.appointments)

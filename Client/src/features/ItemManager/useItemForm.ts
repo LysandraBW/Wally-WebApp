@@ -13,7 +13,7 @@ export interface UseItemFormProps<BaseItem, Item, Items> {
 }
 
 export default function useItemForm<BaseItem, Item, Items>(props: UseItemFormProps<BaseItem, Item, Items>) {
-    const form = useForm(props.parentForm.fName + props.defineItem.itemID);
+    const form = useForm(props.parentForm.fName + (props.mutateItem as any)[props.defineItem.itemID]);
 
     const onMutate = async () => {
         const state = form.getState();
@@ -24,6 +24,9 @@ export default function useItemForm<BaseItem, Item, Items>(props: UseItemFormPro
     }
 
     const onReset = async (item: Item, test: FormTest) => {
+        // const item = props.mutateItem;
+        // const test = props.defineItem.test;
+
         if (props.mode === "Create") {
             form.resetForm(makeForm(<Data> item , test));
             props.parentForm.setInputState(form.fName, [null, ""]);

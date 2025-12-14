@@ -37,7 +37,7 @@ export default function SelectGrid(props: SelectProps) {
 
     const selectValue = (value: string) => {
         const updatedValue = [value]; 
-        console.log(updatedValue);
+        // console.log(updatedValue);
         props.onChange(props.name, updatedValue);
     }
 

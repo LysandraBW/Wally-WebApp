@@ -27,6 +27,7 @@ export default function EventManager(props: EventManagerProps) {
     const [tabs, setTabs] = useState<Array<string>>([]);
 
     const processUpdates = (oldItems: Events, newItems: Events) => {
+        // console.log("CALLED");
         const updates = makeEventUpdates(oldItems, newItems);
         props.onSaveUpdates(updates);
     }
@@ -150,10 +151,10 @@ export default function EventManager(props: EventManagerProps) {
                                 className="overflow-y-hidden scroll-hide overflow-x-scroll relative bg-white col-start-3 col-span-1 row-start-1 row-span-1 flex items-end relative"
                             >
                                 {tabs.map((t, i) => (
-                                    <div key={i} onClick={() =>{console.log(1); setTab(t)}} className={clsx("!min-w-fit first:border-l border-l-gray-300 overflow-x-hidden hover:bg-gray-100 cursor-pointer group border-t border-t-gray-300 h-[37.59px] flex gap-4 items-center justify-between px-4 pr-2 bg-gray-50 border-t border-t-gray-300 border-r  border-r-gray-300 rounded-tr-lg-", t === tab && "cursor-auto !pr-4 !border-r-blue-500- !border-t-blue-500- !border-b-blue-500- !bg-white relative  z-50")}>
+                                    <div key={i} onClick={() =>{setTab(t)}} className={clsx("!min-w-fit first:border-l border-l-gray-300 overflow-x-hidden hover:bg-gray-100 cursor-pointer group border-t border-t-gray-300 h-[37.59px] flex gap-4 items-center justify-between px-4 pr-2 bg-gray-50 border-t border-t-gray-300 border-r  border-r-gray-300 rounded-tr-lg-", t === tab && "cursor-auto !pr-4 !border-r-blue-500- !border-t-blue-500- !border-b-blue-500- !bg-white relative  z-50")}>
                                         {<span className={clsx("tracking-wide text-02 text-gray-400 font-medium whitespace-nowrap group-hover:text-gray-600", t === tab && "!text-black drop-shadow-sm-")}>{t}</span>}
                                         {t !== tab &&
-                                            <div onClick={(event) => {event.stopPropagation(); console.log(2); closeTab(t)}} className={clsx("p-[2px] bg-transparent cursor-pointer rounded stroke-gray-400 hover:bg-gray-200 hover:stroke-black", t === tab && "stroke-black")}>
+                                            <div onClick={(event) => {event.stopPropagation(); closeTab(t)}} className={clsx("p-[2px] bg-transparent cursor-pointer rounded stroke-gray-400 hover:bg-gray-200 hover:stroke-black", t === tab && "stroke-black")}>
                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="3" stroke="currentColor" className="w-[10px] stroke-inherit">
                                                     <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
                                                 </svg>
@@ -168,7 +169,7 @@ export default function EventManager(props: EventManagerProps) {
                                         year={eventManager.year}
                                         monthIndex={eventManager.monthIndex}
                                         dateIndex={eventManager.dateIndex}
-                                        items={{}}
+                                        items={eventManager.openedEvents}
                                         onClose={eventManager.closeOpenedEvents}
                                         onUpdate={eventManager.onClickUpdateItem}
                                         onDelete={eventManager.deleteFromOpenedEvents}
@@ -201,7 +202,7 @@ export default function EventManager(props: EventManagerProps) {
                                         parentForm={eventManager.form}
                                         onCancel={eventManager.cancelUpdate}
                                         onMutate={(item: Event) => {
-                                            eventManager.createItem(item);
+                                            eventManager.updateItem(item);
                                         }}
                                         onDelete={() => {
                                             eventManager.deleteItem(eventManager.updateID);
@@ -268,7 +269,7 @@ export default function EventManager(props: EventManagerProps) {
                             parentForm={eventManager.form}
                             onCancel={eventManager.cancelUpdate}
                             onMutate={(item) => {
-                                eventManager.createItem(item);
+                                eventManager.updateItem(item);
                             }}
                             onDelete={() => {
                                 eventManager.deleteItem(eventManager.updateID);

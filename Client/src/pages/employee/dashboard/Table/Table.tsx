@@ -18,9 +18,9 @@ export default function Table(props: TableProps) {
     
 
     return (
-        <div className="flex flex-col grow">
+        <div className="grow overflow-x-scroll flex flex-col grow bg-gray-100 overflow-x-scroll scroll-hide">
             {props.appointmentManager.appointments && props.appointmentManager.appointments.length > 0 &&
-                <table className="">
+                <table className="overflow-x-scroll">
                     <TableHead
                         filterManager={props.filterManager}
                         toggleManager={props.toggleManager}

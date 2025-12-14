@@ -38,7 +38,7 @@ export default function EventForm<DB_Event, Event, Events>(props: FormProps<DB_E
 
     return (
         <ItemForm
-            header={props.mode === "Create" ? "Add Event" : !!!(props.mutateItem as any).EventID ? "Edit New Event" : `Edit Event #${(props.mutateItem as any).PaymentID}`}
+            header={props.mode === "Create" ? "Add Event" : !!!(props.mutateItem as any).EventID ? "Edit New Event" : `Edit Event #${(props.mutateItem as any).EventID}`}
             canDelete={props.mode !== "Create"}
             onReset={onReset}
             onCancel={props.onCancel}

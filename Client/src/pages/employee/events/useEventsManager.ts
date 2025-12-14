@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import getEventsWhen from "./getEventsWhen";
 import { Event, Events } from "./_DEF";
 import useItemManager, { UseItemManagerProps } from "@/features/ItemManager/useItemManager";
@@ -11,11 +11,25 @@ export default function useEventsManager<DB_Event, _Event extends Event, _Events
     const [year, setYear] = useState(today.getFullYear());
     const [monthIndex, setMonthIndex] = useState(today.getMonth());
     const [dateIndex, setDateIndex] = useState(-1);
+    const [openedEventID, setOpenedEventID] = useState("");
     const [openedEvent, setOpenedEvent] = useState<Event>();
+    // const [openedEventsDateIndex, setOpenedEventsDateIndex] = useState();
     const [openedEvents, setOpenedEvents] = useState<Events>();
+
+    useEffect(() => {
+        if (openedEventID) {
+            openEvent(openedEventID);
+        }
+        
+        if (dateIndex) {
+            openEvents(dateIndex);
+        }
+            
+    }, [itemManager.newItems]);
 
     const openEvent = (eventID: string) => {
         const event = itemManager.newItems[eventID];
+        setOpenedEventID(eventID);
         setOpenedEvent(event);
     }
 
@@ -27,6 +41,7 @@ export default function useEventsManager<DB_Event, _Event extends Event, _Events
 
     const closeOpenedEvent = () => {
         setOpenedEvent(undefined);
+        setOpenedEventID("");
     }
 
     const closeOpenedEvents = () => {
@@ -64,6 +79,13 @@ export default function useEventsManager<DB_Event, _Event extends Event, _Events
         setMonthIndex(monthIndex - 1);
     }
 
+    const onClickUpdateItem = (ID: string) => {
+        if (itemManager.newItems[ID] == openedEvent) {
+            closeOpenedEvent();
+        }
+        itemManager.onClickUpdateItem(ID);
+    }
+
     return {
         year,
         setYear,
@@ -82,6 +104,7 @@ export default function useEventsManager<DB_Event, _Event extends Event, _Events
         deleteFromOpenedEvents,
         goToNextMonth,
         goToPrevMonth,
-        ...itemManager
+        ...itemManager,
+        onClickUpdateItem
     }
 }

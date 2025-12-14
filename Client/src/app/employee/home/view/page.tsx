@@ -58,7 +58,7 @@ export default function Page() {
         const ID = form.getInput("id").data;
 
         const appointment = await SelectAppointment({appointmentID: ID});
-        console.log(appointment);
+        // console.log(appointment);
         // Appointment Does Not Exist
         if (!appointment || !appointment.FName) {
             setAppointmentNotFound(true);

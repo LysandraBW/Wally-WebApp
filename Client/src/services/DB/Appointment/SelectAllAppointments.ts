@@ -1,7 +1,7 @@
 import { request, Body } from "../request";
 
 export default async function SelectAllAppointments(body: Body) {
-    console.log(body);
+    // console.log(body);
     let url = "/appointments?";
     for (const entry of Object.entries(body)) {
         if (entry[1] === null)

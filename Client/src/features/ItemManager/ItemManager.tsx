@@ -50,21 +50,23 @@ export default function ItemManager<BaseItem, Item, Items>(props: ItemManagerPro
     useEffect(() => {
         if (itemManager.createID) {
             props.openForm(`Add ${itemManager.defineItem.itemName}`);
-            console.log("BEING CALLED")}
-        else{
+            // console.log("BEING CALLED");
+        }
+        else {
             setExpanded(false);
-            props.closeForm(`Add ${itemManager.defineItem.itemName}`);}
-
+            props.closeForm(`Add ${itemManager.defineItem.itemName}`);
+        }
         if (itemManager.updateID)
             props.openForm(`Edit ${itemManager.defineItem.itemName}`);
-        else{
+        else {
             setExpanded(false);
-            props.closeForm(`Edit ${itemManager.defineItem.itemName}`);}
+            props.closeForm(`Edit ${itemManager.defineItem.itemName}`);
+        }
     }, [itemManager.createID, itemManager.updateID]);
 
-    useEffect(() => {
-        console.log(expanded);
-    }, [expanded]);
+    // useEffect(() => {
+    //     console.log(expanded);
+    // }, [expanded]);
 
     return (
         <Fragment>

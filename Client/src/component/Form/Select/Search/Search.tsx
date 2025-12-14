@@ -17,7 +17,7 @@ export default function Search(props: SelectProps) {
 
     useEffect(() => {
         if (props.values[0]) {
-            console.log("Close");
+            // console.log("Close");
             setOpen(false);
         }
     }, [props.values]);
@@ -52,7 +52,7 @@ export default function Search(props: SelectProps) {
                     onBlur={(event) => {
                         if (event.currentTarget.contains(event.relatedTarget))
                             return;
-                        console.log("Close");
+                        // console.log("Close");
                         setOpen(false);
                     }}
                     className="h-10"
@@ -65,7 +65,7 @@ export default function Search(props: SelectProps) {
                         )}
                         onMouseDown={(e) => {
                             e.preventDefault();
-                            console.log("Open");
+                            // console.log("Open");
                             setOpen(true);
                         }}
                     >

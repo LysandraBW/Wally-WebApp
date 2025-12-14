@@ -20,14 +20,17 @@ export default function useServiceManager(props: UseItemManagerProps<DB_Appointm
     useEffect(() => {
         const load = async () => {
             const services = await DeepServices();
+            // console.log(services);
+            
             setServiceMap(services.map);
             setServiceDeep(services.deep);
             
             const upperDivisions = Object.keys(services.deep);
             setUpperDivisions(upperDivisions);
 
-            const lowerDivisions = Object.keys(services.deep[upperDivisions[0]]);
-            setLowerDivisions(lowerDivisions);
+            // const lowerDivisions = Object.keys(services.deep[upperDivisions[0]]);
+            // setLowerDivisions(lowerDivisions);
+            setLowerDivisions([]);
         }
         load();
     }, []);
@@ -35,10 +38,13 @@ export default function useServiceManager(props: UseItemManagerProps<DB_Appointm
     useEffect(() => {
         if (!serviceMap)
             return;
+
         const values: Array<string> = [];
         const services = Object.values(itemManager.newItems) as Array<Service>;
+    
         for (const service of services) {
             const serviceID = service.ServiceID;
+
             if (!serviceID)
                 continue;
             
@@ -49,6 +55,7 @@ export default function useServiceManager(props: UseItemManagerProps<DB_Appointm
             if (sameMap(service as any, defaultService as any, ["Class", "Division", "Service"]))
                 values.push(serviceID);    
         }
+
         setValue(values);
     }, [itemManager.newItems, serviceMap]);
 

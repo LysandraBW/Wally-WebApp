@@ -45,7 +45,7 @@ export default function EventDisplay(props: EventDisplayProps<Events>) {
                     />
                 </div>
             </div>
-            <div className="p-4">
+            <div className="p-4 py-0 pb-4 flex flex-col gap-4">
                 {/* View/Update Events */}
                 {Object.entries(props.items).map(([itemID, item], i) => (
                     <div key={i}>
@@ -65,7 +65,7 @@ export default function EventDisplay(props: EventDisplayProps<Events>) {
                                 }
                                 tags={[
                                     [toDisplayDate(item.Date)],
-                                    [item.Sharees.map((sharee, i) => (
+                                    [...item.Sharees.map((sharee, i) => (
                                         <Fragment>
                                             <Person
                                                     width="14"

@@ -1,4 +1,5 @@
 import { Options } from "@/features/Form/DEF";
+import GetLabelPairs from "@/services/DB/Information/GetLabelPairs";
 import GetStatusPairs from "@/services/DB/Information/GetStatusPairs";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
@@ -11,17 +12,23 @@ export default function useFilterManager(setLoadedTable: Dispatch<SetStateAction
     const [deleted, setDeleted] = useState<Bit>("0");
     const [statusID, setStatusID] = useState<string>("");
     const [statuses, setStatuses] = useState<Options>([]);
+    const [labelID, setLabelID] = useState<string>("");
+    const [labels, setLabels] = useState<Options>([["General", "General"], ["-1", "New"], ["1", "Seen"], ["2", "Flagged"], ["3", "Starred"], ["Deleted", "Deleted"]]);
     const [pageIndex, setPageIndex] = useState(0);
     const [pageLength, setPageLength] = useState(10);
     const [maxPageIndex, setMaxPageIndex] = useState(0);
     const [stringPageIndex, setStringPageIndex] = useState("");
-    const [category, setCategory] = useState("General");
+    // const [category, setCategory] = useState("General");
     const [columnDirections, setColumnDirections] = useState<ColumnDirections>({});
     
+    // useEffect(() => {
+    //     console.log(category);
+    // }, [category]);
+
     useEffect(() => {
         const load = async () => {
             const statuses = await GetStatusPairs();
-            setStatuses([["", "All"], ...statuses, ["-1", "Deleted"]]);
+            setStatuses([["", "All"], ...statuses]);
         }
         load();
     }, []);
@@ -88,20 +95,23 @@ export default function useFilterManager(setLoadedTable: Dispatch<SetStateAction
     }
 
     const updateStatus = (statusID: string) => {
-        // Deleted Status
-        if (statusID === "-1")
-            setDeleted("1");
-        else
-            setDeleted("0");
+        // console.log("updateStatus");
+        // console.log(statusID);
+        // // Deleted Status
+        // if (statusID === "-1")
+        //     setDeleted("1");
+        // else
+        //     setDeleted("0");
         setStatusID(statusID);
     }
 
     const filter = () => {
         return {
             search,
-            deleted,
-            statusID: 
-                statusID === "-1" || statusID === null ? "" : statusID,
+            deleted: labelID === "Deleted" ? "1" : "0",
+            statusID: statusID === "-1" || statusID === null ? "" : statusID,
+            // category,
+            labelID: labelID in ["Deleted", ""] ? "" : labelID,
             pageSize: pageLength,
             pageNumber: pageIndex + 1
         }
@@ -109,10 +119,12 @@ export default function useFilterManager(setLoadedTable: Dispatch<SetStateAction
 
     return {
         search,
-        category,
-        deleted,
+        // category,
+        // deleted,
         statusID,
         statuses,
+        labelID,
+        labels,
         pageIndex,
         pageLength,
         maxPageIndex,
@@ -126,8 +138,9 @@ export default function useFilterManager(setLoadedTable: Dispatch<SetStateAction
         updateMaxPageIndex,
         updateColumnDirection,
         setSearch,
-        setDeleted,
+        // setDeleted,
         setStatusID: updateStatus,
-        setCategory
+        setLabelID
+        // setCategory
     }
 }

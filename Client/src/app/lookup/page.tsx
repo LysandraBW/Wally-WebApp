@@ -121,7 +121,8 @@ export default function Page() {
                                         "tracking-wide"
                                     )}
                                 >
-                                    No appointment matches this information. Please try again.
+                                    No appointment matches this information. 
+                                    Please try again.
                                 </h6>
                                 <a 
                                     href="/schedule" 

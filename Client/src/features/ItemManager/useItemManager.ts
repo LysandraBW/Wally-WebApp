@@ -35,7 +35,7 @@ export default function useItemManager<BaseItem, Item, Items>(props: UseItemMana
         props.parentForm.setInputState(form.fName, [state, ""]);
         if (!state)
             throw "Error in Items!";
-        console.log(oldItems, newItems);
+        // console.log(oldItems, newItems);
         props.saveAllUpdates(oldItems, newItems);
     }
 
@@ -49,8 +49,10 @@ export default function useItemManager<BaseItem, Item, Items>(props: UseItemMana
     const deleteItem = (ID: string) => {
         const updatedItems = {...newItems} as any;
         delete updatedItems[ID];
+    
         setNewItems(updatedItems);
         form.deleteInput(form.fName + ID);
+        
         props.parentForm.setInputState(form.fName, [form.getState(), ""]);
 
         if (ID === createID) setCreateID("");

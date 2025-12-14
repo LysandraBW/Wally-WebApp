@@ -11,7 +11,7 @@ export type AppointmentManager = ReturnType<typeof useAppointmentManager>;
 export default function useAppointmentManager(filterManager: FilterManager, setLoadedTable: Dispatch<SetStateAction<{[k: string]: boolean}>>) {
     const router = useRouter();
     const searchParams = useSearchParams();
-    const [appointments, setAppointments] = useState<Array<Appointment>>();
+    const [appointments, setAppointments] = useState<Array<Appointment>>([]);
     const [openedAppointment, setOpenedAppointment] = useState<string>();
     const [tableAppointments, setTableAppointments] = useState<Array<Appointment>>();
 
@@ -24,9 +24,10 @@ export default function useAppointmentManager(filterManager: FilterManager, setL
     }, []);
 
     useEffect(() => {
+        // console.log("Here")
         setLoadedTable(loadingTable => ({...loadingTable, "toggleManager": false}));
         loadAppointments();
-    }, [filterManager.search, filterManager.statusID, filterManager.deleted]);
+    }, [filterManager.search, filterManager.statusID, filterManager.labelID]);
 
     useEffect(() => {
         if (!appointments)
@@ -35,6 +36,8 @@ export default function useAppointmentManager(filterManager: FilterManager, setL
     }, [filterManager.columnDirections]);
 
     useEffect(() => {
+        // console.log(`appointments = ${appointments}`)
+        // console.log("Must Update Table Appointments")
         updateTableAppointments();
     }, [appointments, filterManager.pageIndex]);
 
@@ -96,11 +99,12 @@ export default function useAppointmentManager(filterManager: FilterManager, setL
 
     const sortAppointments = (appointments: Array<AppointmentEntry>) => {
         if (appointments.length === 0)
-            return;
+            return [];
+
         // Sort by Creation Date (Default)
-        const sortedAppointments = [...appointments];
+        let sortedAppointments = [...appointments];
         sortedAppointments.sort((b, a) => {
-            console.log(a.CreationDate, new Date(a.CreationDate).getTime(), b.CreationDate, new Date(b.CreationDate).getTime())
+            // console.log(a.CreationDate, new Date(a.CreationDate).getTime(), b.CreationDate, new Date(b.CreationDate).getTime())
             return new Date(a.CreationDate).getTime() - new Date(b.CreationDate).getTime();
         });
 
@@ -109,20 +113,37 @@ export default function useAppointmentManager(filterManager: FilterManager, setL
             if (column === null || direction === null)
                 continue;
             
-            const isNumber = typeof (sortedAppointments[0] as any)[`${column}`] === "number";
+            const appointmentsNonNull = [];
+            const appointmentsNull = [];
+
+            for (const appointment of sortedAppointments) {
+                const value = (appointment as any)[`${column}`];
+                if (value === null)
+                    appointmentsNull.push(appointment);
+                else
+                    appointmentsNonNull.push(appointment);
+            }
+
+            if (!appointmentsNonNull) {
+                break;
+            }
+
+            const isNumber = typeof (appointmentsNonNull[0] as any)[`${column}`] === "number";
             if (isNumber) {
-                sortedAppointments.sort((a, b) => {
+                appointmentsNonNull.sort((a, b) => {
                     return (a as any)[`${column}`] - (b as any)[`${column}`];
                 });
             }
             else {
-                sortedAppointments.sort((a, b) => {
+                appointmentsNonNull.sort((a, b) => {
                     return ((a as any)[`${column}`] as string).localeCompare((b as any)[`${column}`] as string);
                 });
             }
             
             if (direction === "0")
-                sortedAppointments.reverse();
+                appointmentsNonNull.reverse();
+        
+            sortedAppointments = [...appointmentsNonNull, ...appointmentsNull];
         }
 
         return sortedAppointments;

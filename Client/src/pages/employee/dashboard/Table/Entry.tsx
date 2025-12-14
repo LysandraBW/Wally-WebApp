@@ -55,7 +55,7 @@ export default function TableEntry(props: TableEntryProps) {
         >
             <div className="w-full h-full whitespace-nowrap flex gap-2 items-center overflow-clip">
                 {props.isNew &&
-                    <span className="bg-blue-50 text-blue-500 border border-blue-300 shadow-sm tracking-wider font-semibold text-[0.5rem] py-[1px] px-[4px] rounded">NEW</span>
+                    <span className="bg-blue-600 text-white border border-blue-500 shadow-sm  tracking-wider font-semibold text-[0.4rem] py-[1px] px-[4px] rounded">NEW</span>
                 }
                 <p className="w-min text-gray-700 tracking-wider text-02 whitespace-nowrap group-hover:text-blue-500 overflow-hidden text-ellipsis">
                     {stringL}

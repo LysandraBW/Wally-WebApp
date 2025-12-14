@@ -6,6 +6,7 @@ import NavBar from "@/component/NavBar/NavBar";
 import { Tooltip } from "react-tooltip";
 import { navigate } from "@/utils/navigate";
 import { PAGE_DASHBOARD } from "@/utils/constants";
+import clsx from "clsx";
 
 export default function Page() {
     const [sessionID, setSessionID] = useState<string>();
@@ -18,15 +19,42 @@ export default function Page() {
     }, [sessionID]);
 
     return (
-        <div className="relative bg-white flex flex-col min-h-screen">
+        <div 
+            className={clsx(
+                "min-h-screen",
+                "flex flex-col",
+                "relative",
+                "bg-white"
+            )}
+        >
             <NavBar sticky={true} border={true}/>
             <div className="grid grid-cols-2 grow">
-                <div className="relative py-20 bg-white justify-center flex flex-col items-start justify-self-center gap-6">
+                <div 
+                    className={clsx(
+                        "py-20",
+                        "flex flex-col justify-center items-start justify-self-center gap-6",
+                        "relative",
+                        "bg-white"
+                    )}
+                >
                     <header className="flex flex-col max-w-[400px]">
                         <h3 className="font-medium whitespace-nowrap">Log In</h3>
-                        <p className="text-md tracking-wide max-w-[440px] text-gray-600 font-medium">Welcome back!</p>
+                        <p 
+                            className={clsx(
+                                "max-w-[440px]",
+                                "text-md text-gray-600 font-medium",
+                                "tracking-wide"
+                            )}
+                        >
+                            Welcome back!
+                        </p>
                     </header>
-                    <div className="w-full min-w-[350px] flex justify-center">
+                    <div 
+                        className={clsx(
+                            "w-full min-w-[350px]",
+                            "flex justify-center"
+                        )}
+                    >
                         <form
                             onSubmit={(e) => e.preventDefault()}
                             className="w-full flex flex-col gap-4"
@@ -41,7 +69,7 @@ export default function Page() {
                                 anchorSelect="#errorPopup"
                                 opacity={1}
                                 place="bottom"
-                                border={"1px solid #fcd34d"}
+                                border="1px solid #FCF34D"
                                 style={{
                                     backgroundColor: "#fffbeb",
                                     display: "flex",
@@ -52,12 +80,22 @@ export default function Page() {
                                     boxShadow: "0px 2px 2px 0px #00000010",
                                 }}
                             >
-                                <h6 className="text-02 tracking-wide text-gray-600">No login matches this information. Please try again.</h6>
+                                <h6 className="text-02 tracking-wide text-gray-600">
+                                    No login matches this information. 
+                                    Please try again.
+                                </h6>
                             </Tooltip> 
                         }
                     </div>
                 </div>
-                <div className="bg-[url('../public/Sparks.jpg')]" style={{backgroundPosition: "center", backgroundSize: "cover"}}></div>
+                <div 
+                    className="bg-[url('../public/Sparks.jpg')]" 
+                    style={{
+                        backgroundPosition: "center", 
+                        backgroundSize: "cover"
+                    }}
+                >
+                </div>
             </div>
         </div>
     )

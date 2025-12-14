@@ -23,7 +23,7 @@ export default function SearchGrid(props: SelectProps) {
 
      useEffect(() => {
         if (props.values[0]) {
-            console.log("Close");
+            // console.log("Close");
             setOpen(false);
         }
     }, [props.values]);
@@ -35,14 +35,14 @@ export default function SearchGrid(props: SelectProps) {
 
     const openList = (event: any) => {
         event.preventDefault();
-        console.log("Open");
+        // console.log("Open");
         setOpen(true);
     }
 
     const closeList = (event: any): void => {
         if (event.currentTarget.contains(event.relatedTarget))
             return;
-        console.log("Close");
+        // console.log("Close");
         setOpen(false);
         // setOpen(false);
         // setSearch("");

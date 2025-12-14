@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { Form } from "./Form";
+import { Form, FormData, FormTest } from "./Form";
 import { useEffect, useState } from "react";
 import { Data, Input, InputData, InputState, InputTest } from "./Input";
 import makeInput from "./makeInput";
@@ -8,9 +8,11 @@ import processTestResults from "./processTestResults";
 const forms: {[name: string]: Form} = {};
 export type UseForm = ReturnType<typeof useForm>;
 
+// fName: Form Name
+
 export default function useForm(fName: string, startForm: Form = {data: {}, test: z.object({})}) {
     let form: Form = forms[fName];
-    const [, setForceUpdate] = useState(0);
+    const [forceUpdate, setForceUpdate] = useState(0);
 
     useEffect(() => {
         forms[fName] = startForm;
@@ -27,6 +29,7 @@ export default function useForm(fName: string, startForm: Form = {data: {}, test
         if (!form)
             return;
         delete form.data[name];
+        setForceUpdate(f => f + 1);
     }
 
     const setInputData = (name: string, data: InputData): void => {
@@ -45,6 +48,19 @@ export default function useForm(fName: string, startForm: Form = {data: {}, test
         form.test = updatedTest;
     }
 
+    const setTest = (test: FormTest): void => {
+        if (!form)
+            return;
+        form.test = test;
+    }
+
+    const setData = (data: FormData): void => {
+        if (!form)
+            return;
+        form.data = data;
+        setForceUpdate(f => f + 1);
+    }
+
     const setInputState = (name: string, state: InputState): void => {
         if (!form)
             return;
@@ -59,11 +75,9 @@ export default function useForm(fName: string, startForm: Form = {data: {}, test
             return;
         let state: InputState = [true, ""];
         const output = form.test.safeParse({[name]: data});
-        console.log(output);
         if (!output.success)
             state = processTestResults(output.error.issues)[name];
         form.data[name] = {data, state};
-        console.log(form.data);
         setForceUpdate(f => f + 1);
     }
 
@@ -77,30 +91,35 @@ export default function useForm(fName: string, startForm: Form = {data: {}, test
     const getData = (): Data => {
         if (!form)
             return {};
+
         const data: Data = {};
-        const fData = form.data;
-        for (const name of Object.keys(fData))
-            data[name] = fData[name].data;
+        for (const name of Object.keys(form.data)) {
+            data[name] = form.data[name].data;
+        }
+
         return data;
     }
 
     const getState = (update: boolean = true): boolean => {
         if (!form)
             return true;
-        const data = getData();
-        console.log(data)
+        
         const output = form.test.safeParse(getData());
+
         if (output.success || !update)
             return output.success;
+
         const states = processTestResults(output.error.issues);
         for (const [name, state] of Object.entries(states))
             form.data[name].state = state
+
         setForceUpdate(f => f + 1);
         return false;
     }
 
     const resetForm = (form: Form = {data: {}, test: z.object({})}): void => {
         forms[fName] = form;
+        setForceUpdate(f => f + 1);
     }
 
     return {
@@ -113,7 +132,10 @@ export default function useForm(fName: string, startForm: Form = {data: {}, test
         setInputData,
         setInputTest,
         setInputState,
+        setTest,
+        setData,
         deleteInput,
-        resetForm
+        resetForm,
+        forceUpdate
     }
 }

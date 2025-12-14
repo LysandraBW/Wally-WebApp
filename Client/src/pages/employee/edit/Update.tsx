@@ -58,15 +58,15 @@ export default function UpdateManager(props: UpdatePros) {
     const [openFormDisplayed, setOpenFormDisplayed] = useState("");
     const [changesMade, setChangesMade] = useState<{[k: string]: boolean}>({});    
 
-    useEffect(() => {
-        console.log(openForms, openFormDisplayed);
-    }, [openForms, openFormDisplayed]);
+    // useEffect(() => {
+    //     console.log(openForms, openFormDisplayed);
+    // }, [openForms, openFormDisplayed]);
 
     const loadAppointment = async () => {
         const appointment = await SelectAppointment({
             appointmentID: props.appointmentID
         });
-        console.log(appointment);
+        // console.log(appointment);
         setAppointment(appointment);
     }
 
@@ -88,14 +88,14 @@ export default function UpdateManager(props: UpdatePros) {
     }
 
     const closeOpenForm = (form: string) => {
-        console.log("Closing Form: ", form);
+        // console.log("Closing Form: ", form);
         const formIndex = openForms.findIndex(f => f === form);
         if (formIndex === -1)
             return;
-        console.log("Can Close", formIndex);
+        // console.log("Can Close", formIndex);
         let updatedOpenForms = [...openForms];
         updatedOpenForms.splice(formIndex, 1);
-        console.log("Updated Open Forms: ", updatedOpenForms);
+        // console.log("Updated Open Forms: ", updatedOpenForms);
         if (updatedOpenForms.length === 0)
             setOpenFormDisplayed("");
         else if (updatedOpenForms.length === 1)
@@ -106,55 +106,55 @@ export default function UpdateManager(props: UpdatePros) {
     }
 
     const saveContact = async (updates: ContactUpdates) => {
-        console.log(updates);
+        // console.log(updates);
         const output = await UpdateAppointmentContact(props.appointmentID, updates);
         alertOutput(output);
     }
 
     const saveVehicle = async (updates: VehicleUpdates) => {
-        console.log(updates);
+        // console.log(updates);
         const output = await UpdateAppointmentVehicle(props.appointmentID, updates);
         alertOutput(output);
     }
 
     const saveCost = async (updates: CostUpdates) => {
-        console.log(updates);
+        // console.log(updates);
         const output = await UpdateAppointmentCost(props.appointmentID, updates);
         alertOutput(output);
     }
 
     const savePayment = async (updates: PaymentUpdates) => {
-        console.log(updates);
+        // console.log(updates);
         const output = await UpdateAppointmentPayments(props.appointmentID, updates);
         alertOutput(output);
     }
 
     const saveDiagnoses = async (updates: DiagnosisUpdates) => {
-        console.log(updates);
+        // console.log(updates);
         const output = await UpdateAppointmentDiagnoses(props.appointmentID, updates);
         alertOutput(output);
     }
 
     const saveRepairs = async (updates: RepairUpdates) => {
-        console.log(updates);
+        // console.log(updates);
         const output = await UpdateAppointmentRepairs(props.appointmentID, updates);
         alertOutput(output);
     }
 
     const saveServices = async (updates: ServiceUpdates) => {
-        console.log(updates);
+        // console.log(updates);
         const output = await UpdateAppointmentServices(props.appointmentID, updates);
         alertOutput(output);
     }
 
     const saveParts = async (updates: PartUpdates) => {
-        console.log(updates);
+        // console.log(updates);
         const output = await UpdateAppointmentParts(props.appointmentID, updates);
         alertOutput(output);
     }
 
     const saveNotes = async (updates: NoteUpdates) => {
-        console.log(updates);
+        // console.log(updates);
         const output = await UpdateEmployeeNotes(updates);
         alertOutput(output);
     }
@@ -197,7 +197,7 @@ export default function UpdateManager(props: UpdatePros) {
                                 className="overflow-hidden max-w-[400px] relative bg-gray-50- col-start-3 col-span-1 row-start-1 row-span-1 flex"
                             >
                                 {openForms.map((form, i) => (
-                                    <div key={i} onClick={() =>{console.log(1); setOpenFormDisplayed(form)}} className={clsx("rounded-t h-full first:border-l border-l-gray-300 overflow-hidden hover:bg-gray-100 cursor-pointer group border-t border-t-gray-300 flex gap-4 items-center justify-between px-4 pr-2 bg-gray-50 border-t border-t-gray-300 border-r border-r-gray-300 rounded-tr-lg-", form === openFormDisplayed && "cursor-auto !pr-4 !border-r-blue-500- !border-t-blue-500- !border-b-blue-500- !bg-white relative  z-50")}>
+                                    <div key={i} onClick={() =>{setOpenFormDisplayed(form)}} className={clsx("rounded-t h-full first:border-l border-l-gray-300 overflow-hidden hover:bg-gray-100 cursor-pointer group border-t border-t-gray-300 flex gap-4 items-center justify-between px-4 pr-2 bg-gray-50 border-t border-t-gray-300 border-r border-r-gray-300 rounded-tr-lg-", form === openFormDisplayed && "cursor-auto !pr-4 !border-r-blue-500- !border-t-blue-500- !border-b-blue-500- !bg-white relative  z-50")}>
                                         {<span className={clsx("tracking-wide text-02 text-gray-400 font-medium whitespace-nowrap group-hover:text-gray-600", form === openFormDisplayed && "!text-black drop-shadow-sm-")}>{form}</span>}
                                         {form !== openFormDisplayed &&
                                             <div onClick={(event) => {event.preventDefault(); event.stopPropagation(); console.log(2); closeOpenForm(form)}} className={clsx("p-[2px] bg-transparent cursor-pointer rounded stroke-gray-400 hover:bg-gray-200 hover:stroke-black", form === openFormDisplayed && "stroke-black")}>

@@ -15,7 +15,7 @@ export default function DisplayItems(props: DisplayItemsProps) {
             className={clsx(
                 "",
                 "flex flex-wrap gap-4",
-                "overflow-x scroll-hide"
+                // "bg-red-500"
             )}
         >
             {props.items.map((item, i) => (

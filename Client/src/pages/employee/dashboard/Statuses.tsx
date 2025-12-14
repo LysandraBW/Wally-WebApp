@@ -22,7 +22,7 @@ export default function Statuses(props: StatusesProps) {
                         "flex justify-between items-center gap-2 px-1",
                         status[0] === props.filterManager.statusID && `
                             after:absolute
-                            after:w-full after:h-[4px] after:rounded-full 
+                            after:w-full after:h-[3px]
                             after:bg-blue-500
                             after:bottom-[-9px] after:left-0
                         `

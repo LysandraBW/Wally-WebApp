@@ -13,7 +13,7 @@ export async function navigate(page: string, data: {[k: string]: string} = {}) {
         redirect(`/employee/home/dashboard`); 
     }
     else if (page === PAGE_EMPLOYEE_LOGIN) {
-        console.log(2);
+        // console.log(2);
         redirect(`/employee/login`); 
     }
     else if (page === PAGE_EDIT_APPOINTMENT) {

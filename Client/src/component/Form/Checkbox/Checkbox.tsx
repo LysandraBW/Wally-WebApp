@@ -35,6 +35,7 @@ export default function Checkbox(props: CheckboxProps) {
                         fill="#FFF"
                         stroke="#FFF"
                         strokeWidth="1"
+                        cursor="pointer"
                     />
                 }
             </span>

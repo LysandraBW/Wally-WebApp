@@ -3,13 +3,29 @@ import ItemFormGroup from "@/features/ItemManager/Form/ItemFormGroup";
 import ItemForm from "@/features/ItemManager/Form/ItemForm";
 import { FormProps } from "@/features/ItemManager/ItemManager";
 import useItemForm from "@/features/ItemManager/useItemForm";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export default function ServiceForm<DB_AppointmentService, Service, Services>(props: FormProps<DB_AppointmentService, Service, Services>) {
     const form = useItemForm(props);
+    const [header, setHeader] = useState("");
 
     useEffect(() => {
         onReset();
+    }, []);
+
+    useEffect(() => {
+        if (props.mode === "Create") {
+            setHeader("Create");
+        }
+        else {
+            const appointmentServiceID = (props.mutateItem as any).AppointmentServiceID;
+            if (appointmentServiceID < 0) {
+                setHeader("Edit Service");
+            }
+            else {
+                setHeader(`Edit Service #${appointmentServiceID}`);
+            }
+        }
     }, []);
 
     const onReset = () => {
@@ -18,7 +34,7 @@ export default function ServiceForm<DB_AppointmentService, Service, Services>(pr
 
     return (
         <ItemForm
-            header={props.mode === "Create" ? "Add Service" : `Edit Service #${(props.mutateItem as any).ServiceID}`}
+            header={header}
             canDelete={props.mode !== "Create"}
             onReset={onReset}
             onCancel={props.onCancel}

@@ -48,7 +48,7 @@ export default function Navigation(props: NavigationProps) {
                     <ChevronLeft
                         width="12"
                         height="12"
-                        left="-1px"
+                        left="-3px"
                         strokeWidth="0.5"
                         cursor="pointer"
                     />
@@ -60,7 +60,7 @@ export default function Navigation(props: NavigationProps) {
                     <ChevronRight
                         width="12"
                         height="12"
-                        left="1px"
+                        left="3px"
                         strokeWidth="0.5"
                         cursor="pointer"
                     />

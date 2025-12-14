@@ -55,7 +55,8 @@ export default function Page() {
         const ID = form.getInput("id").data;
 
         const appointment = await SelectAppointment({appointmentID: ID});
-        console.log(appointment);
+        // console.log(appointment);
+
         // Appointment Does Not Exist
         if (!appointment || !appointment.FName) {
             setAppointmentNotFound(true);
@@ -72,7 +73,7 @@ export default function Page() {
         <div className="flex flex-col grow">
             <div className="p-4 flex flex-col grow">
                 <h6 className={clsx("font-medium pb-4 leading-5")}>Edit Appointment</h6>
-                <div className="flex flex-col bg-white w-full h-full grow">
+                <div className="flex flex-col w-full h-full grow">
                     {(appointment && appointmentID) &&
                         <UpdateManager
                             appointment={appointment}

@@ -45,7 +45,7 @@ export class DefinePayment extends Define<DB_Payment, Payment, Payments> {
     }
 
     buildItem(baseItem: DB_Payment | null): Payment {
-        console.log("Base Item", baseItem);
+        // console.log("Base Item", baseItem);
         return {
             CCN: baseItem?.CCN || "",
             EXP: baseItem?.EXP || "",

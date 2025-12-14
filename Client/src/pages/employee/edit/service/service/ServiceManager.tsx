@@ -61,14 +61,17 @@ export default function ServiceManager(props: ServiceManagerProps) {
     useEffect(() => {
         if (serviceManager.createID)
             props.openForm("Add Service");
-        else{
+        else {
             setExpanded(false);
-            props.closeForm("Add Service");}
+            props.closeForm("Add Service");
+        }
+        
         if (serviceManager.updateID)
             props.openForm("Edit Service");
-        else{
+        else {
             setExpanded(false);
-            props.closeForm("Edit Service");}
+            props.closeForm("Edit Service");
+        }
     }, [serviceManager.createID, serviceManager.updateID]);
 
     return (

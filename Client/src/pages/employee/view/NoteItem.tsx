@@ -92,7 +92,7 @@ export default function NoteItem(props: NoteItemProps) {
             setTags(tags);
         }
         load();
-    }, []);
+    }, [props.note]);
     
     return (
         <Fragment>
