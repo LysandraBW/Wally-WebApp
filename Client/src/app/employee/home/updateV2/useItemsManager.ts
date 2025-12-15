@@ -1,7 +1,6 @@
-import { Data } from "@/features/Form/useForm/Input";
 import useForm, { UseForm } from "@/features/Form/useForm/useForm";
 import { Define } from "@/features/ItemManager/Define";
-import { Dispatch, SetStateAction, useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 
 export interface UseItemsManagerProps<BaseItem, Item, Items> {
@@ -25,7 +24,7 @@ export default function useItemsManager<BaseItem, Item, Items>(props: UseItemsMa
     const itemsManagerForm = useForm(props.keyForUpdateManagerForm);
     const [oldItems, setOldItems] = useState<Items>({} as any);
     const [newItems, setNewItems] = useState<Items>({} as any);
-    const [forms, setForms] = useState<{[itemID: string]: Item}>();
+    const [forms, setForms] = useState<{[itemID: string]: Item}>({});
     const [counter, setCounter] = useState(-1);
 
 
@@ -40,18 +39,10 @@ export default function useItemsManager<BaseItem, Item, Items>(props: UseItemsMa
         }
         
         if (props.handleChangesMade && !props.doNotManageChangesMade)  {
-            console.log("!props.doNotManageChangesMade")
             const changesMade = JSON.stringify(oldItems) !== JSON.stringify(newItems);
             props.handleChangesMade(props.keyForUpdateManagerForm, changesMade);
         }
     }, [newItems]);
-
-
-    useEffect(() => {
-        console.log("useEffect[forms]");
-        console.log("\tforms: ", forms);
-        console.log("\tkeyForUpdateManagerForm: ", props.keyForUpdateManagerForm);
-    }, [forms]);
 
 
     const resetUpdates = () => {
@@ -64,12 +55,10 @@ export default function useItemsManager<BaseItem, Item, Items>(props: UseItemsMa
 
 
     const saveUpdates = () => {
-        console.log("saveUpdates");
         const state = itemsManagerForm.getState();
         props.updateManagerForm.setInputState(props.keyForUpdateManagerForm, [state, ""]);
         if (!state)
             throw new Error("Error in Form");
-        console.log("props.saveUpdates called");
         props.saveUpdates(oldItems, newItems);
     }
 
@@ -92,6 +81,7 @@ export default function useItemsManager<BaseItem, Item, Items>(props: UseItemsMa
     const handleCreateItem = () => {
         const itemID = counter.toString();
         const item: Item = createBlankItem(itemID);
+        console.log(item, props.keyForUpdateManagerForm, itemID);
         setCounter(c => c - 1);
         insertForm(itemID, item);
         props.openForm(props.keyForUpdateManagerForm, itemID, "Create");
@@ -99,11 +89,8 @@ export default function useItemsManager<BaseItem, Item, Items>(props: UseItemsMa
 
 
     const handleUpdateItem = (itemID: string) => {
-        console.log("handleUpdateItem");
         const item: Item = (newItems as any)[itemID];
         insertForm(itemID, item);
-        console.log("\titemID: ", itemID);
-        console.log("\titem: ", item);
         props.openForm(props.keyForUpdateManagerForm, itemID, "Update");
     }
 
@@ -176,6 +163,7 @@ export default function useItemsManager<BaseItem, Item, Items>(props: UseItemsMa
         item: props.item,
         itemsManagerForm,
         updateManagerForm: props.updateManagerForm,
+        keyForUpdateManagerForm: props.keyForUpdateManagerForm,
         oldItems,
         newItems,
         setNewItems,

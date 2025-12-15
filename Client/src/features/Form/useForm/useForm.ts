@@ -17,7 +17,7 @@ export default function useForm(fName: string, startForm: Form = {data: {}, test
     useEffect(() => {
         forms[fName] = startForm;
         form = forms[fName];
-    }, []);
+    }, [fName]);
 
     const getInput = (name: string): Input => {
         if (!form || !form.data[name])
@@ -75,8 +75,10 @@ export default function useForm(fName: string, startForm: Form = {data: {}, test
             return;
         let state: InputState = [true, ""];
         const output = form.test.safeParse({[name]: data});
+        
         if (!output.success)
             state = processTestResults(output.error.issues)[name];
+        
         form.data[name] = {data, state};
         setForceUpdate(f => f + 1);
     }

@@ -19,7 +19,7 @@ export default function ServicesManager(props: ServicesManagerProps) {
                         <tr>
                             <td className="w-0 p-0 text--center bg-white font-medium px-4 text-03 tracking-wide whitespace-nowrap border border-gray-300 align-top pt-2">Services</td>
                             <td className="p-0 border border-gray-300">
-                                <div className="w-full">
+                            <div className="w-full">
                                     <div className="">
                                         {/* Easy-Add */}
                                         <div className="relative bg-gray-50 flex flex-col gap-0 py-6 px-4  border-b border-b-gray-200">

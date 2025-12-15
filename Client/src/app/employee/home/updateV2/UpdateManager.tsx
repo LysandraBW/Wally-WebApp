@@ -62,7 +62,7 @@ interface UpdateManagerProps {
     close: () => void;
 }
 
-interface ItemManagerForm<BaseItem, Item, Items> {
+export interface ItemManagerForm<BaseItem, Item, Items> {
     itemsManagerKey: string;
     itemID: string;
     mutation: "Create"|"Update";
@@ -76,7 +76,7 @@ export default function UpdateManager<BaseItem, Item, Items>(props: UpdateManage
     const [alert, alertDispatch] =  useReducer(alertReducer, startAlert);
     const [appointment, setAppointment] = useState<DB_Appointment>(props.appointment);
     const [tab, setTab] = useState(CONTACT);
-    const [tabs, setTabs] = useState([[CONTACT, "General"], [VEHICLE, "Vehicle"], [PAYMENT, "Finances"], [DIAGNOSIS, "Diagnoses"], [PART, "Parts"], [REPAIR, "Repairs"], [SERVICE, "Services"], [NOTE, "Notes"]]);
+    const [tabs] = useState([[CONTACT, "General"], [VEHICLE, "Vehicle"], [PAYMENT, "Finances"], [DIAGNOSIS, "Diagnoses"], [PART, "Parts"], [REPAIR, "Repairs"], [SERVICE, "Services"], [NOTE, "Notes"]]);
     const [itemManagerForms, setItemManagerForms] = useState<Array<ItemManagerForm<BaseItem, Item, Items>>>([]);
     const [currentItemManagerForm, setCurrentItemManagerForm] = useState<ItemManagerForm<BaseItem, Item, Items>|null>();
     const [currentItemManagerHeader, setCurrentItemManagerHeader] = useState("");

@@ -87,7 +87,7 @@ export class DefineEvent extends Define<DB_Event, Event, Events> {
     }
 }
 
-export function makeEventUpdates(oldItems: Events, newItems: Events) {
+export function buildEventUpdates(oldItems: Events, newItems: Events) {
     const updates: EventUpdates = {
         Update: [],
         Insert: {

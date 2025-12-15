@@ -1,7 +1,6 @@
 import useItemsManager from "./useItemsManager";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import useForm from "@/features/Form/useForm/useForm";
-import { Data } from "@/features/Form/useForm/Input";
 import { sameMap } from "@/features/ItemManager/helpers/sameMap";
 import makeFormData from "@/features/Form/useForm/makeFormData";
 
@@ -11,8 +10,7 @@ export interface UseItemManagerProps<BaseItem, Item, Items> {
 }
 
 export default function useItemManager<BaseItem, Item, Items>(props: UseItemManagerProps<BaseItem, Item, Items>) {
-    const itemForm = useForm(props.itemID);
-    const [referenceData, setReferenceData] = useState<Data>();
+    const itemForm = useForm(props.itemsManager.keyForUpdateManagerForm + props.itemID);
     
     
     useEffect(() => {
@@ -22,28 +20,12 @@ export default function useItemManager<BaseItem, Item, Items>(props: UseItemMana
 
     useEffect(() => {
         const data = (props.itemsManager.forms as any)[props.itemID];
-        setReferenceData(data);
-    }, [props.itemsManager.forms]);
-
-
-    useEffect(() => {
-        // console.log("useEffect[referenceData]");
-        // console.log("\treferenceData", referenceData);
-        // console.log("\tObject.keys(referenceData)", Object.keys(referenceData || {}));
-        // console.log("\titemForm.getData()", itemForm.getData());
-        if (!referenceData || sameMap(itemForm.getData(), referenceData, Object.keys(referenceData)))
+        if (sameMap(itemForm.getData(), data, Object.keys(data)))
             return;
-        itemForm.setData(makeFormData(referenceData));
-        // console.log("\titemForm.setData({...})", makeFormData(referenceData));
-    }, [referenceData]);
-
-
-    // useEffect(() => {
-    //     console.log("useEffect[itemForm]");
-    //     console.log("\titemForm.getData()", itemForm.getData());
-    // }, [itemForm]);
-
-
+        itemForm.setData(makeFormData(data));
+    }, [props.itemsManager.forms]);
+    
+    
     const updateInputValue = async (inputName: string, inputValue: any) => {
         itemForm.updateInputData(inputName, inputValue);
         props.itemsManager.itemsManagerForm.setInputState(
@@ -56,8 +38,6 @@ export default function useItemManager<BaseItem, Item, Items>(props: UseItemMana
 
     const saveItem = async () => {
         const state = itemForm.getState();
-        // console.log("saveItem");
-        // console.log("\tstate: ", state);
         props.itemsManager.itemsManagerForm.setInputState(props.itemID, [state, ""]);
         if (!state)
             return;

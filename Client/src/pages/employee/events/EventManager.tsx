@@ -1,6 +1,6 @@
 import { Event as DB_Event } from "waltronics-types";
 import Calendar from "./Calendar";
-import { DefineEvent, Event, Events, makeEventUpdates } from "./_DEF";
+import { DefineEvent, Event, Events, buildEventUpdates } from "./_DEF";
 import EventModal from "./EventModal";
 import EventForm from "./EventForm";
 import CalendarSearch from "./CalendarSearch";
@@ -28,7 +28,7 @@ export default function EventManager(props: EventManagerProps) {
 
     const processUpdates = (oldItems: Events, newItems: Events) => {
         // console.log("CALLED");
-        const updates = makeEventUpdates(oldItems, newItems);
+        const updates = buildEventUpdates(oldItems, newItems);
         props.onSaveUpdates(updates);
     }
 
