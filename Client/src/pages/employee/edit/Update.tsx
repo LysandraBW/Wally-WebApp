@@ -160,7 +160,17 @@ export default function UpdateManager(props: UpdatePros) {
     }
 
     return (
-        <UpdateManagerContext.Provider value={{changesMade, setChangesMade: (key: string, value: boolean) => setChangesMade(changesMade => ({...changesMade, [`${key}`]: value}))}}>
+        <UpdateManagerContext.Provider 
+            value={{
+                "changesMade": changesMade, 
+                "setChangesMade": (key: string, value: boolean) => {
+                    setChangesMade(changesMade => ({
+                        ...changesMade, 
+                        [`${key}`]: value
+                    }));
+                }
+            }}
+        >
             <motion.div className="flex flex-col grow">
                 <Alert
                     alert={alert}

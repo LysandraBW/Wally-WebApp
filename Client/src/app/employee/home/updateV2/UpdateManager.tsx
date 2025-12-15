@@ -3,7 +3,7 @@ import randomKey from "@/features/Alert/randomKey";
 import saveFDispatch from "@/features/Alert/saveFDispatch";
 import saveTDispatch from "@/features/Alert/saveTDispatch";
 import SelectAppointment from "@/services/DB/Appointment/SelectAppointment";
-import { useEffect, useReducer, useState } from "react";
+import { createContext, useCallback, useEffect, useReducer, useState } from "react";
 import { Appointment as DB_Appointment } from "waltronics-types";
 import { Diagnosis as DB_AppointmentDiagnosis } from "waltronics-types";
 import useItemsManager from "./useItemsManager";
@@ -22,7 +22,7 @@ import { UpdateAppointmentParts } from "@/services/DB/Appointment/UpdateAppointm
 import PartsManager from "./part/PartsManager";
 import PartManager from "./part/PartManager";
 import { DefineDiagnosis, Diagnoses, Diagnosis } from "@/pages/employee/edit/service/diagnosis/_DEF";
-import { DIAGNOSIS, NOTE, SERVICE } from "./_DEF";
+import { CONTACT, DIAGNOSIS, NOTE, SERVICE, VEHICLE } from "./_DEF";
 import DiagnosisManager from "./diagnosis/DiagnosisManager";
 import DiagnosesManager from "./diagnosis/DiagnosesManager";
 import { UpdateAppointmentDiagnoses } from "@/services/DB/Appointment/UpdateAppointmentDiagnoses";
@@ -53,6 +53,7 @@ import { UpdateAppointmentVehicle } from "@/services/DB/Appointment/UpdateAppoin
 import ContactManager from "./contact/ContactManager";
 import VehicleManager from "./vehicle/VehicleManager";
 import Alert from "@/features/Alert/Alert";
+import { useRouter, useSearchParams } from "next/navigation";
 
 
 interface UpdateManagerProps {
@@ -67,17 +68,30 @@ interface ItemManagerForm<BaseItem, Item, Items> {
     mutation: "Create"|"Update";
 }
 
+
 export default function UpdateManager<BaseItem, Item, Items>(props: UpdateManagerProps) {
+    const router = useRouter();
+    const searchParams = useSearchParams();
     const updateManagerForm = useForm("Update", MasterForm);
     const [alert, alertDispatch] =  useReducer(alertReducer, startAlert);
     const [appointment, setAppointment] = useState<DB_Appointment>(props.appointment);
-    const [tab, setTab] = useState("General");
+    const [tab, setTab] = useState(CONTACT);
+    const [tabs, setTabs] = useState([[CONTACT, "General"], [VEHICLE, "Vehicle"], [PAYMENT, "Finances"], [DIAGNOSIS, "Diagnoses"], [PART, "Parts"], [REPAIR, "Repairs"], [SERVICE, "Services"], [NOTE, "Notes"]]);
     const [itemManagerForms, setItemManagerForms] = useState<Array<ItemManagerForm<BaseItem, Item, Items>>>([]);
     const [currentItemManagerForm, setCurrentItemManagerForm] = useState<ItemManagerForm<BaseItem, Item, Items>|null>();
     const [currentItemManagerHeader, setCurrentItemManagerHeader] = useState("");
     const [currentItemManagerCanDelete, setCurrentItemManagerCanDelete] = useState(false);
+    const [changesMade, setChangesMade] = useState<{[k: string]: boolean}>({});
 
     
+    useEffect(() => {
+        if (searchParams) {
+            const tab = searchParams.get("tab") || "";
+            setTab(tab || CONTACT);
+        }
+    }, []);
+
+
     useEffect(() => {
         if (!currentItemManagerForm) {
             setCurrentItemManagerHeader("");
@@ -111,6 +125,13 @@ export default function UpdateManager<BaseItem, Item, Items>(props: UpdateManage
     }
 
     
+    const handleTabChange = async (tab: string) => {
+        setTab(tab);
+        const URL = `/employee/home/updateV2?appointmentID=${props.appointmentID}&tab=${tab}`;
+        router.replace(URL);
+    }
+
+
     const openForm = (itemsManagerKey: string, itemID: string, mutation: "Create"|"Update") => {
         // console.log("openForm");
         // console.log("\titemsManagerKey: ", itemsManagerKey);
@@ -141,14 +162,14 @@ export default function UpdateManager<BaseItem, Item, Items>(props: UpdateManage
     }
 
 
-    const alertMessage = (good: boolean) => {
+    const alertMessage = async (good: boolean) => {
         console.log("alertMessage");
         const key = randomKey();
         console.log("\tgood: ", good);
         if (good) {
             const dispatch = saveTDispatch(key, alertDispatch);
             alertDispatch(dispatch);
-            refreshAppointment();
+            await refreshAppointment();
         }
         else {
             const dispatch = saveFDispatch(key, alertDispatch)
@@ -157,15 +178,23 @@ export default function UpdateManager<BaseItem, Item, Items>(props: UpdateManage
     }
 
 
+    const handleChangesMade = useCallback((itemManagerKey: string, changeMade: boolean) => {
+        setChangesMade(changesMade => ({
+            ...changesMade,
+            [`${itemManagerKey}`]: changeMade
+        }))
+    }, []);
+    
+
     const saveContactUpdates = async (updates: ContactUpdates) => {
         const output = await UpdateAppointmentContact(props.appointmentID, updates);
-        alertMessage(output);
+        await alertMessage(output);
     }
     
 
     const saveVehicleUpdates = async (updates: VehicleUpdates) => {
         const output = await UpdateAppointmentVehicle(props.appointmentID, updates);
-        alertMessage(output);
+        await alertMessage(output);
     }
     
 
@@ -180,10 +209,11 @@ export default function UpdateManager<BaseItem, Item, Items>(props: UpdateManage
             const mutateKeys = ["Repair"];
             const updates = buildUpdate(oldItems, newItems, itemID, mutateKeys, mutateKeys, itemID);
             const output = await UpdateAppointmentRepairs(props.appointmentID, updates);
-            alertMessage(output);
+            await alertMessage(output);
         },
         openForm: openForm,
-        closeForm: closeForm
+        closeForm: closeForm,
+        handleChangesMade
     });
 
 
@@ -198,10 +228,11 @@ export default function UpdateManager<BaseItem, Item, Items>(props: UpdateManage
             const mutateKeys = ["PartName", "PartNumber", "Quantity", "UnitCost"];
             const updates = buildUpdate(oldItems, newItems, itemID, mutateKeys, mutateKeys, itemID);
             const output = await UpdateAppointmentParts(props.appointmentID, updates);
-            alertMessage(output);
+            await alertMessage(output);
         },
         openForm,
-        closeForm
+        closeForm,
+        handleChangesMade
     });
 
 
@@ -216,10 +247,11 @@ export default function UpdateManager<BaseItem, Item, Items>(props: UpdateManage
             const mutateKeys = ["Code", "Message"];
             const updates = buildUpdate(oldItems, newItems, itemID, mutateKeys, mutateKeys, itemID);
             const output = await UpdateAppointmentDiagnoses(props.appointmentID, updates);
-            alertMessage(output);
+            await alertMessage(output);
         },
         openForm,
-        closeForm
+        closeForm,
+        handleChangesMade
     });
 
 
@@ -235,10 +267,11 @@ export default function UpdateManager<BaseItem, Item, Items>(props: UpdateManage
             const mutateKeys = ["Service", "Division", "Class"];
             const updates = buildUpdate(oldItems, newItems, itemID, mutateKeys, mutateKeys, deleteKey);
             const output = await UpdateAppointmentServices(props.appointmentID, updates);
-            alertMessage(output);
+            await alertMessage(output);
         },
         openForm,
-        closeForm
+        closeForm,
+        handleChangesMade
     });
 
 
@@ -256,17 +289,18 @@ export default function UpdateManager<BaseItem, Item, Items>(props: UpdateManage
             const insertKeys = ["Payment", "Name", "Type", "CCN", "EXP"];
             const updates = buildUpdate(oldItems, newItems, itemID, updateKeys, insertKeys, itemID);
             const output = await UpdateAppointmentPayments(props.appointmentID, updates);
-            alertMessage(output);
+            await alertMessage(output);
         },
         saveCostUpdates: async (oldItem: Cost, newItem: Cost) => {
             const updates = {
                 Cost: updatedValue(oldItem.Cost, newItem.Cost)
             } as CostUpdates;
             const output = await UpdateAppointmentCost(props.appointmentID, updates);
-            alertMessage(output);
+            await alertMessage(output);
         },
         openForm,
-        closeForm
+        closeForm,
+        handleChangesMade
     });
 
 
@@ -279,10 +313,11 @@ export default function UpdateManager<BaseItem, Item, Items>(props: UpdateManage
         saveUpdates: async (oldItems: Notes, newItems: Notes) => {
             const updates = buildNoteUpdate(props.appointmentID, oldItems, newItems);
             const output = await UpdateEmployeeNotes(updates);
-            alertMessage(output);
+            await alertMessage(output);
         },
         openForm,
-        closeForm
+        closeForm,
+        handleChangesMade
     });
 
 
@@ -291,10 +326,14 @@ export default function UpdateManager<BaseItem, Item, Items>(props: UpdateManage
             <Alert
                 alert={alert}
             />
+            {JSON.stringify(changesMade)}
             {tabs &&
-                tabs.map((tab, i) => (
-                    <div key={i} onClick={() => setTab(tab)}>
+                tabs.map(([tabID, tab], i) => (
+                    <div key={i} onClick={() => handleTabChange(tabID)}>
                         {tab}
+                        {(changesMade[tabID] && changesMade[tabID]) &&
+                            <div className="w-1 h-1 rounded-full bg-blue-500"></div>
+                        }
                     </div>
                 ))
             }
@@ -357,46 +396,48 @@ export default function UpdateManager<BaseItem, Item, Items>(props: UpdateManage
                     }
                 </>
             }
-            {tab == "General" &&
+            {tab == CONTACT &&
                 <ContactManager
                     updateManagerForm={updateManagerForm}
                     appointment={appointment}
                     onSaveUpdates={saveContactUpdates}
+                    setChangesMade={handleChangesMade}
                 />
             }
-            {tab == "Vehicle" &&
+            {tab == VEHICLE &&
                 <VehicleManager
                     updateManagerForm={updateManagerForm}
                     appointment={appointment}
                     onSaveUpdates={saveVehicleUpdates}
+                    setChangesMade={handleChangesMade}
                 />
             }
-            {tab == "Repairs" &&
+            {tab == REPAIR &&
                 <RepairsManager
                     repairsManager={repairsManager}
                 />
             }
-            {tab == "Parts" &&
+            {tab == PART &&
                 <PartsManager
                     partsManager={partsManager}
                 />
             }
-            {tab == "Diagnoses" &&
+            {tab == DIAGNOSIS &&
                 <DiagnosesManager
                     diagnosesManager={diagnosesManager}
                 />
             }
-            {tab == "Services" &&
+            {tab == SERVICE &&
                 <ServicesManager
                     servicesManager={servicesManager}
                 />
             }
-            {tab == "Finances" &&
+            {tab == PAYMENT &&
                 <PaymentsManager
                     paymentsManager={paymentsManager}
                 />
             }
-            {tab == "Notes" &&
+            {tab == NOTE &&
                 <NotesManager
                     notesManager={notesManager}
                 />

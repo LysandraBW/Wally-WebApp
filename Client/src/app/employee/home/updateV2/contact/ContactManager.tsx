@@ -2,7 +2,7 @@ import { updatedValue } from "@/features/ItemManager/helpers/updatedValue";
 import useForm, { UseForm } from "@/features/Form/useForm/useForm";
 import { Appointment as DB_Appointment } from "waltronics-types";
 import { CONTACT } from "../_DEF";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Options } from "@/features/Form/DEF";
 import GetStatusPairs from "@/services/DB/Information/GetStatusPairs";
 import { Contact, contactTest, ContactUpdates, makeContact } from "@/pages/employee/edit/contact/_DEF";
@@ -16,13 +16,14 @@ interface ContactManagerProps {
     updateManagerForm: UseForm;
     appointment: DB_Appointment;
     onSaveUpdates: (updates: ContactUpdates) => void;
+    setChangesMade?: (keyForUpdateManager: string, changesMade: boolean) => void;
 }
 
 export default function ContactManager(props: ContactManagerProps) {
     const form = useForm(CONTACT);
     const [statuses, setStatuses] = useState<Options>([]);
     const [oldContact, setOldContact] = useState<Contact>();
-    // const updateManagerContext = useContext(UpdateManagerContext);
+    
 
     useEffect(() => {
         refresh();
@@ -57,21 +58,23 @@ export default function ContactManager(props: ContactManagerProps) {
             return;
         const newContact = form.getData() as Contact;
         processUpdates(oldContact, newContact);
-        // updateManagerContext.setChangesMade("General", false);
+        props.setChangesMade && props.setChangesMade(CONTACT, false);
     }
 
+    
     const resetUpdates = async () => {
         const contact = makeContact(props.appointment);
         setOldContact(contact);
         form.resetForm(makeForm(contact, contactTest, true));
         props.updateManagerForm.setInputState(CONTACT, [form.getState(), ""]);
-        // updateManagerContext.setChangesMade("General", false);
+        props.setChangesMade && props.setChangesMade(CONTACT, false);
     }
+
 
     const updateValue = async (name: string, value: any) => {
         form.updateInputData(name, value);
         props.updateManagerForm.setInputState(CONTACT, [form.getState(), ""]);
-        // updateManagerContext.setChangesMade("General", JSON.stringify(form.getData()) !== JSON.stringify(oldContact));
+        props.setChangesMade && props.setChangesMade(CONTACT, JSON.stringify(form.getData()) !== JSON.stringify(oldContact));
     }
     
 

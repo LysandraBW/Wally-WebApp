@@ -1,7 +1,7 @@
 import { Data } from "@/features/Form/useForm/Input";
 import useForm, { UseForm } from "@/features/Form/useForm/useForm";
 import { Define } from "@/features/ItemManager/Define";
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useContext, useEffect, useState } from "react";
 
 
 export interface UseItemsManagerProps<BaseItem, Item, Items> {
@@ -16,14 +16,15 @@ export interface UseItemsManagerProps<BaseItem, Item, Items> {
     
     openForm: (keyForUpdateManager: string, itemID: string, mutation: "Create"|"Update") => void;
     closeForm: (keyForUpdateManager: string, itemID: string) => void;
+
+    handleChangesMade?: (keyForUpdateManager: string, changesMade: boolean) => void;
+    doNotManageChangesMade?: boolean;
 }
 
 export default function useItemsManager<BaseItem, Item, Items>(props: UseItemsManagerProps<BaseItem, Item, Items>) {
     const itemsManagerForm = useForm(props.keyForUpdateManagerForm);
-    
     const [oldItems, setOldItems] = useState<Items>({} as any);
     const [newItems, setNewItems] = useState<Items>({} as any);
-
     const [forms, setForms] = useState<{[itemID: string]: Item}>();
     const [counter, setCounter] = useState(-1);
 
@@ -34,8 +35,15 @@ export default function useItemsManager<BaseItem, Item, Items>(props: UseItemsMa
 
 
     useEffect(() => {
-        if (props.saveAuto && JSON.stringify(oldItems) !== JSON.stringify(newItems))
+        if (props.saveAuto && JSON.stringify(oldItems) !== JSON.stringify(newItems)) {
             saveUpdates();
+        }
+        
+        if (props.handleChangesMade && !props.doNotManageChangesMade)  {
+            console.log("!props.doNotManageChangesMade")
+            const changesMade = JSON.stringify(oldItems) !== JSON.stringify(newItems);
+            props.handleChangesMade(props.keyForUpdateManagerForm, changesMade);
+        }
     }, [newItems]);
 
 

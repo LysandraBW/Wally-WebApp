@@ -2,7 +2,7 @@ import { Appointment as DB_Appointment } from "waltronics-types";
 import { updatedValue } from "@/features/ItemManager/helpers/updatedValue";
 import useForm, { UseForm } from "@/features/Form/useForm/useForm";
 import { VEHICLE } from "@/pages/employee/edit/_DEF";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Options } from "@/features/Form/DEF";
 import { makeVehicle, Vehicle, vehicleTest, VehicleUpdates } from "@/pages/employee/edit/vehicle/_DEF";
 import VehicleMakePairs from "@/services/DB/Information/SelectVehicleMakePairs";
@@ -16,10 +16,12 @@ import TextFieldGrid from "@/pages/employee/edit/TextFieldGrid";
 import SearchGrid from "@/pages/employee/edit/SearchGrid";
 import SaveResetButtons from "@/features/ItemManager/Form/SaveResetButtons";
 
+
 interface VehicleManagerProps {
     updateManagerForm: UseForm;
     appointment: DB_Appointment;
     onSaveUpdates: (updates: VehicleUpdates) => void;
+    setChangesMade?: (keyForUpdateManager: string, changesMade: boolean) => void;
 }
 
 export default function VehicleManager(props: VehicleManagerProps) {
@@ -28,8 +30,7 @@ export default function VehicleManager(props: VehicleManagerProps) {
     const [makes, setMakes] = useState<Options>([]);
     const [models, setModels] = useState<Options>([]);
     const [modelYears, setModelYears] = useState<Options>([]);
-    // const updateManagerContext = useContext(UpdateManagerContext);
-
+    
 
     useEffect(() => {
         resetUpdates();
@@ -58,7 +59,7 @@ export default function VehicleManager(props: VehicleManagerProps) {
 
         const newVehicle: Vehicle = form.getData() as Vehicle;
         processUpdates(oldVehicle, newVehicle);
-        // updateManagerContext.setChangesMade("Vehicle", false);
+        props.setChangesMade && props.setChangesMade(VEHICLE, false);
     }
 
     
@@ -90,7 +91,7 @@ export default function VehicleManager(props: VehicleManagerProps) {
             getValues(vehicleModelYears)
         );        
         form.resetForm(makeForm(vehicle, test));
-        // updateManagerContext.setChangesMade("Vehicle", false);
+        props.setChangesMade && props.setChangesMade(VEHICLE, false);
     }
 
 
@@ -134,7 +135,7 @@ export default function VehicleManager(props: VehicleManagerProps) {
         }
         form.updateInputData(name, value);
         props.updateManagerForm.setInputState(VEHICLE, [form.getState(), ""]);
-        // updateManagerContext.setChangesMade("Vehicle", JSON.stringify(form.getData()) !== JSON.stringify(oldVehicle));
+        props.setChangesMade && props.setChangesMade(VEHICLE, JSON.stringify(form.getData()) !== JSON.stringify(oldVehicle));
     }
 
 
