@@ -1,50 +1,51 @@
 import TextField from "@/component/Form/Text/TextField";
-import ItemFormGroup from "@/features/ItemManager/Form/ItemFormGroup";
-import { ThingManagerProps, ThingManagerWrapper } from "../ThingManager";
-import useThingManager from "../useThingManager";
+import ItemFormGroup from "@/features/ItemManager/components/ItemFormGroup";
+import useItemManager from "../../../../../features/ItemManager/useItemManager";
+import { ItemManagerProps, ItemManagerWrapper } from "@/features/ItemManager/components/ItemManagerWrapper";
+import { Service, Services } from "./_DEF";
+import { Service as DB_AppointmentService } from "waltronics-types";
 
-export default function ServiceForm<DB_AppointmentService, Service, Services>(props: ThingManagerProps<DB_AppointmentService, Service, Services>) {
-    const thingManager = useThingManager(props);
+export default function ServiceManager(props: ItemManagerProps<DB_AppointmentService, Service, Services>) {
+    const itemManager = useItemManager(props as any);
 
     return (
-        <ThingManagerWrapper
+        <ItemManagerWrapper
             header={props.header}
             canDelete={props.canDelete}
-            saveThing={thingManager.saveThing}
-            resetThing={thingManager.resetThing}
-            closeThing={thingManager.closeThing}
-            cancelThing={thingManager.cancelThing}
-            deleteThing={thingManager.deleteThing}
+            saveItem={itemManager.saveItem}
+            closeItem={itemManager.closeItem}
+            resetItem={itemManager.resetItem}
+            deleteItem={itemManager.deleteItem}
         >
             <ItemFormGroup head="">
                 <TextField
                     type="text"
                     name="Class"
                     label="Class"
-                    value={thingManager.thingForm.getInput("Class").data}
-                    state={thingManager.thingForm.getInput("Class").state}
-                    onChange={thingManager.updateInputValue}
+                    value={itemManager.itemForm.getInput("Class").data}
+                    state={itemManager.itemForm.getInput("Class").state}
+                    onChange={itemManager.updateInputValue}
                     onBlur={undefined}
                 />
                 <TextField
                     type="text"
                     name="Division"
                     label="Division"
-                    value={thingManager.thingForm.getInput("Division").data}
-                    state={thingManager.thingForm.getInput("Division").state}
-                    onChange={thingManager.updateInputValue}
+                    value={itemManager.itemForm.getInput("Division").data}
+                    state={itemManager.itemForm.getInput("Division").state}
+                    onChange={itemManager.updateInputValue}
                     onBlur={undefined}
                 />
                 <TextField
                     type="text"
                     name="Service"
                     label="Service"
-                    value={thingManager.thingForm.getInput("Service").data}
-                    state={thingManager.thingForm.getInput("Service").state}
-                    onChange={thingManager.updateInputValue}
+                    value={itemManager.itemForm.getInput("Service").data}
+                    state={itemManager.itemForm.getInput("Service").state}
+                    onChange={itemManager.updateInputValue}
                     onBlur={undefined}
                 />
             </ItemFormGroup>
-        </ThingManagerWrapper>
+        </ItemManagerWrapper>
     )
 }

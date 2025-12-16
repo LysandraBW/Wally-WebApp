@@ -1,16 +1,15 @@
 "use client";
 import { useEffect, useState } from "react";
-import LookupForm from "@/pages/customer/lookup/LookupForm";
-import Card from "@/pages/customer/lookup/Card/Card";
+import LookupForm from "@/app/lookup/LookupForm";
+import AppointmentDisplay from "@/app/lookup/AppointmentDisplay/AppointmentDisplay";
 import NavBar from "@/component/NavBar/NavBar";
 import { Tooltip } from "react-tooltip";
-import { startForm } from "@/pages/customer/lookup/_DEF";
+import { startForm } from "@/app/lookup/_DEF";
 import useForm from "@/features/Form/useForm/useForm";
 import LookupAppointment from "@/services/DB/Appointment/LookupAppointment";
 import { ProtectedAppointment as DB_ProtectedAppointment } from "waltronics-types";
 import SelectProtectedAppointment, { ROLE_APPOINTMENT } from "@/services/DB/Appointment/SelectProtectedAppointment";
 import clsx from "clsx";
-import { Instrumental } from "@/public/Font";
 
 export interface ID {
     sessionID: string;
@@ -18,69 +17,43 @@ export interface ID {
 }
 
 export default function Page() {
-    const [person, setPerson] = useState<ID|null>();
+    const [user, setUser] = useState<ID|null>();
     const [appointment, setAppointment] = useState<DB_ProtectedAppointment|null>();
-    
     const form = useForm("Lookup", startForm());
+
 
     useEffect(() => {
         const load = async () => {
-            if (!person)
+            if (!user)
                 return;
-            const summary = await SelectProtectedAppointment(person.appointmentID, ROLE_APPOINTMENT);
+            const summary = await SelectProtectedAppointment(user.appointmentID, ROLE_APPOINTMENT);
             setAppointment(summary);
         }
         load();
-    }, [person]);
+    }, [user]);
+
 
     const submitForm = async () => {
         const output = await LookupAppointment(form.getData());
-        setPerson(output);
+        setUser(output);
     }
 
+
     return (
-        <div 
-            className={clsx(
-                "min-h-screen",
-                "flex flex-col",
-                "relative",
-                "bg-white"
-            )}
-        >
+        <div className="min-h-screen flex flex-col relative bg-white">
             <NavBar sticky={true} border={true} background={true} shadow={false}/>
-            <div 
-                className={clsx(
-                    "grow",
-                    "grid grid-cols-[50%_auto]",
-                    "relative",
-                    appointment && "max-md:grid-cols-1"
-                )}
-            >
-                <div 
-                    className={clsx(
-                        "py-16 px-16",
-                        "flex flex-col items-center justify-center gap-8",
-                        "relative",
-                        appointment && "max-md:hidden"
-                    )}
-                >
+            <div className={clsx("grow grid grid-cols-[50%_auto] relative", appointment && "max-md:grid-cols-1")}>
+                <div className={clsx("flex flex-col items-center justify-center gap-8 relative py-16 px-16", appointment && "max-md:hidden")}>
                     <header className="flex flex-col items-center w-min">
                         <h3 className="text-center font-medium whitespace-nowrap">
                             Lookup Appointment
                         </h3>
-                        <p 
-                            className={clsx(
-                                Instrumental.className, 
-                                "max-w-[440px]",
-                                "text-center text-md tracking-wide text-gray-600"
-                            )}
-                        >
+                        <p className="max-w-[440px] text-center text-md tracking-wide text-gray-600">
                             Learn more about your appointment by entering 
                             the appointment's ID and associated email address.
                         </p>
                     </header>
-                    {/* Form */}
-                    <div className={"flex flex-col w-[350px]"}>
+                    <div className="flex flex-col w-[350px]">
                         {/* 
                             The output of this form consists of 2
                             IDs: an appointment ID and a session ID.
@@ -97,7 +70,7 @@ export default function Page() {
                             />
                         </form>
                         {/* Error Message */}
-                        {person === null && 
+                        {user === null && 
                             <Tooltip 
                                 isOpen={true}
                                 anchorSelect="#errorPopup"
@@ -115,21 +88,13 @@ export default function Page() {
                                     pointerEvents: "auto"
                                 }}
                             >
-                                <h6 
-                                    className={clsx(
-                                        "text-02 text-gray-600",
-                                        "tracking-wide"
-                                    )}
-                                >
+                                <h6 className="text-02 text-gray-600 tracking-wide">
                                     No appointment matches this information. 
                                     Please try again.
                                 </h6>
                                 <a 
                                     href="/schedule" 
-                                    className={clsx(
-                                        "text-02 text-blue-500",
-                                        "tracking-wide underline"
-                                    )}
+                                    className="text-02 text-blue-500 tracking-wide underline"
                                 >
                                     Haven't scheduled an appointment?
                                 </a>
@@ -137,16 +102,10 @@ export default function Page() {
                         }
                     </div>
                 </div>
-                <div 
-                    className={clsx(
-                        "bg-gray-200",
-                        "bg-cover bg-center bg-no-repeat"
-                    )}
-                >
-                    {/* Appointment Information */}
+                <div className="bg-gray-200 bg-cover bg-center bg-no-repeat">
                     {appointment &&
                         <div className="bg-gray-200 h-full w-full">
-                            <Card
+                            <AppointmentDisplay
                                 appointment={appointment}
                                 closeAppointment={() => setAppointment(null)}
                             />

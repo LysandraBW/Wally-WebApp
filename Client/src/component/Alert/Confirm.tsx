@@ -1,4 +1,4 @@
-import TransparentCover from "@/views/Absolute/TransparentCover";
+
 import CloseButton from "../Button/CloseButton";
 import Button from "../Form/Button/Button";
 
@@ -14,7 +14,7 @@ interface ConfirmProps {
 
 export default function Confirm(props: ConfirmProps) {
     return (
-        <TransparentCover style="items-center">
+        <div>
             <div className="flex flex-col gap-4 rounded-md border border-gray-300 shadow-sm p-4 bg-white">
                 <div className="flex justify-end">
                     <CloseButton
@@ -32,6 +32,6 @@ export default function Confirm(props: ConfirmProps) {
                     </div>
                 </div>
             </div>
-        </TransparentCover>
+        </div>
     )
 }

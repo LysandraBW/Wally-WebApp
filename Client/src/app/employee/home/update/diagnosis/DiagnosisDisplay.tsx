@@ -1,10 +1,9 @@
-import { DisplayProps } from "@/features/ItemManager/ItemManager";
-import { MappedDiagnoses } from "./_DEF";
-import UpdateItem from "@/features/ItemManager/Item/UpdateItem";
-import DiagnosisItem from "@/pages/employee/view/DiagnosisItem";
-import DisplayItems from "@/features/ItemManager/Item/DisplayItems";
+import UpdateItem from "@/features/ItemManager/components/UpdateItem";
+import DisplayItems, { DisplayProps } from "@/features/ItemManager/components/DisplayItems";
+import { Diagnoses } from "@/app/employee/home/update/diagnosis/_DEF";
+import DiagnosisItem from "@/pages/items/DiagnosisItem";
 
-export default function DiagnosisDisplay<A extends MappedDiagnoses>(props: DisplayProps<A>) {
+export default function DiagnosisDisplay<A extends Diagnoses>(props: DisplayProps<A>) {
     return (
         <DisplayItems
             items={

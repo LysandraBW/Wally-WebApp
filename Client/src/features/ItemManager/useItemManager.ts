@@ -1,126 +1,71 @@
-import useForm, { UseForm } from "../Form/useForm/useForm";
-import { Define } from "./Define";
-import { useEffect, useState } from "react";
+import useItemsManager from "./useItemsManager";
+import { useEffect } from "react";
+import useForm from "@/features/Form/useForm/useForm";
+import { sameMap } from "@/features/ItemManager/helpers/sameMap";
+import makeFormData from "@/features/Form/useForm/makeFormData";
 
 export interface UseItemManagerProps<BaseItem, Item, Items> {
-    itemList: Array<BaseItem>;
-    defineItem: Define<BaseItem, Item, Items>;
-    parentForm: UseForm;
-    saveAllUpdates: (oldItems: Items, newItems: Items) => void;
-    autoSave?: boolean;
+    itemID: string;
+    itemsManager: ReturnType<typeof useItemsManager>;
 }
 
 export default function useItemManager<BaseItem, Item, Items>(props: UseItemManagerProps<BaseItem, Item, Items>) {
-    const form = useForm(props.defineItem.formID);
-    const [updateID, setUpdateID] = useState("");
-    const [createID, setCreateID] = useState("");
-    const [oldItems, setOldItems] = useState<Items>({} as Items);
-    const [newItems, setNewItems] = useState<Items>({} as Items);
-    const [nextCreateID, setNextCreateID] = useState(-1);
-    const [toCreateItem, setToCreateItem] = useState<Item>({} as Item);
-    const [toUpdateItem, setToUpdateItem] = useState<Item>({} as Item);
-    const [autoSave, setAutoSave] = useState(props.autoSave);
-
-    useEffect(() => {
-        resetUpdates();
-    }, [props.itemList]);
-
-    useEffect(() => {
-        if (autoSave && JSON.stringify(oldItems) !== JSON.stringify(newItems))
-            saveUpdates();
-    }, [newItems]);
-
-    const saveUpdates = () => {
-        const state = form.getState();
-        props.parentForm.setInputState(form.fName, [state, ""]);
-        if (!state)
-            throw "Error in Items!";
-        // console.log(oldItems, newItems);
-        props.saveAllUpdates(oldItems, newItems);
-    }
-
-    const resetUpdates = () => {
-        const items = props.defineItem.buildItems(props.itemList);
-        setOldItems(items);
-        setNewItems(items);
-        props.parentForm.setInputState(form.fName, [form.getState(), ""]);
-    }
-
-    const deleteItem = (ID: string) => {
-        const updatedItems = {...newItems} as any;
-        delete updatedItems[ID];
+    const itemForm = useForm(props.itemsManager.keyForUpdateManagerForm + props.itemID);
     
-        setNewItems(updatedItems);
-        form.deleteInput(form.fName + ID);
-        
-        props.parentForm.setInputState(form.fName, [form.getState(), ""]);
+    
+    useEffect(() => {
+        itemForm.setTest(props.itemsManager.item.test());
+    }, []);
 
-        if (ID === createID) setCreateID("");
-        if (ID === updateID) setUpdateID("");
+
+    useEffect(() => {
+        const data = (props.itemsManager.forms as any)[props.itemID];
+        if (sameMap(itemForm.getData(), data, Object.keys(data)))
+            return;
+        itemForm.setData(makeFormData(data));
+    }, [props.itemsManager.forms]);
+    
+    
+    const updateInputValue = async (inputName: string, inputValue: any) => {
+        itemForm.updateInputData(inputName, inputValue);
+        props.itemsManager.itemsManagerForm.setInputState(
+            props.itemID, 
+            [itemForm.getState(false), ""]
+        );
+        props.itemsManager.updateForm(props.itemID, itemForm.getData());
     }
 
-    const createItem = (item: Item) => {
-        const updatedItems = {...newItems} as any;
-        updatedItems[createID] = item;
-        setNewItems(updatedItems);
-        setCreateID("");
+
+    const saveItem = async () => {
+        const state = itemForm.getState();
+        props.itemsManager.itemsManagerForm.setInputState(props.itemID, [state, ""]);
+        if (!state)
+            return;
+        props.itemsManager.saveForm(props.itemID);
     }
 
-    const updateItem = (item: Item) => {
-        const updatedItems = {...newItems} as any;
-        updatedItems[updateID] = {...item};
-        setNewItems(updatedItems);
-        setUpdateID("");
+
+    const resetItem = async () => {
+        props.itemsManager.resetForm(props.itemID);
     }
 
-    const onClickCreateItem = () => {
-        const createID = nextCreateID.toString();
-        setCreateID(createID);
-        setNextCreateID(nextCreateID => nextCreateID - 1);
-        setToCreateItem({
-            ...props.defineItem.buildItem(null), 
-            [`${props.defineItem.itemID}`]: createID
-        });
+
+    const deleteItem = async () => {
+        props.itemsManager.deleteItemInForm(props.itemID);
     }
 
-    const onClickUpdateItem = (ID: string) => {
-        setUpdateID(ID);
-        setToUpdateItem((newItems as any)[ID]);
+
+    const closeItem = async () => {
+        props.itemsManager.closeForm(props.itemID);
     }
 
-    const cancelCreate = () => {
-        setCreateID("");
-        setToCreateItem({} as Item);
-    }
-
-    const cancelUpdate = () => {
-        setUpdateID("");
-        setToUpdateItem({} as Item);
-    }
 
     return {
-        form,
-        createID,
-        updateID,
-        oldItems,
-        newItems,
-        nextCreateID,
-        setCreateID,
-        setUpdateID,
-        setOldItems,
-        setNewItems,
-        setNextCreateID,
-        saveUpdates,
-        resetUpdates,
-        createItem,
-        updateItem,
-        deleteItem,
-        onClickUpdateItem,
-        onClickCreateItem,
-        toUpdateItem,
-        toCreateItem,
-        cancelUpdate,
-        cancelCreate,
-        defineItem: props.defineItem
+        itemForm,
+        updateInputValue,
+        saveItem,
+        closeItem,
+        resetItem,
+        deleteItem
     }
 }

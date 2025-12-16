@@ -202,7 +202,6 @@ export default function Page({children}: Readonly<{children: React.ReactNode}>) 
                                 "flex flex-col grow",
                                 "col-start-2 col-span-1",
                                 "row-start-2 row-span-1",
-                                // "bg-red-500",
                                 "overflow-x-hidden"
                             )}
                         >

@@ -1,16 +1,16 @@
+import { Define } from "@/features/ItemManager/Define";
 import { toString } from "@/utils/convert";
 import { z } from "zod";
 import { SERVICE } from "../_DEF";
 import { FormTest } from "@/features/Form/useForm/Form";
 import { Service as DB_Service } from "waltronics-types";
-import { Define } from "../Define";
 
 export interface Service extends Omit<DB_Service, "AppointmentServiceID" | "ServiceID"> {
     AppointmentServiceID: string;
     ServiceID: string;
 };
 
-export interface MappedServices {
+export interface Services {
     [serviceID: string]: Service;
 };
 
@@ -31,12 +31,12 @@ export interface ServiceUpdates {
     }>;
 }
 
-export class DefineService extends Define<DB_Service, Service, MappedServices> {
-    key = SERVICE;
-    thingName = "Service";
-    thingIDName = "AppointmentServiceID";
+export class DefineService extends Define<DB_Service, Service, Services> {
+    formID = SERVICE;
+    itemID = "AppointmentServiceID";
+    itemName = "Service";
 
-    thingTest(..._: any[]): FormTest {
+    test(..._: any[]): FormTest {
         return z.object({
             Class: z.string(),
             Division: z.string(),
@@ -44,21 +44,21 @@ export class DefineService extends Define<DB_Service, Service, MappedServices> {
         });
     }
 
-    processBaseThing(baseThing: DB_Service | null): Service {
+    buildItem(baseItem: DB_Service | null): Service {
         return {
-            AppointmentServiceID: toString(baseThing?.AppointmentServiceID),
-            AppointmentID: toString(baseThing?.AppointmentID),
-            Class: baseThing?.Class || "",
-            Division: baseThing?.Division || "",
-            Service: baseThing?.Service || "",
-            ServiceID: toString(baseThing?.ServiceID),
+            AppointmentServiceID: toString(baseItem?.AppointmentServiceID),
+            AppointmentID: toString(baseItem?.AppointmentID),
+            Class: baseItem?.Class || "",
+            Division: baseItem?.Division || "",
+            Service: baseItem?.Service || "",
+            ServiceID: toString(baseItem?.ServiceID),
         }
     }
 
-    processBaseThings(baseThings: DB_Service[]): MappedServices {
-        const services: MappedServices = {};
-        for (const service of baseThings)
-            services[service.AppointmentServiceID] = this.processBaseThing(service);
+    buildItems(baseItems: DB_Service[]): Services {
+        const services: Services = {};
+        for (const service of baseItems)
+            services[service.AppointmentServiceID] = this.buildItem(service);
         return services;
     }
 }

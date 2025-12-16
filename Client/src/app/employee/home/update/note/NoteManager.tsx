@@ -1,152 +1,145 @@
-import { Note as DB_Note } from "waltronics-types";
-import { DefineNote, Notes, NoteUpdates } from "./_DEF";
-import NoteDisplay from "./NoteDisplay";
-import NoteForm from "./NoteForm";
-import ItemManager from "@/features/ItemManager/ItemManager";
-import { MathSet } from "@/features/ItemManager/helpers/MathSet";
-import { sameMap } from "@/features/ItemManager/helpers/sameMap";
-import { updatedValue } from "@/features/ItemManager/helpers/updatedValue";
-import { filesToFormData } from "@/services/Cloud/filesToFormData";
-import { UseForm } from "@/features/Form/useForm/useForm";
+import { useEffect, useState } from "react";
+import FileManager from "./FileManager";
+import { Options } from "@/features/Form/DEF";
+import getValues from "@/features/Form/helpers/getValues";
+import TextField from "@/component/Form/Text/TextField";
+import MultipleSelect from "@/component/Form/Select/Select/MultipleSelect";
+import Radio from "@/component/Form/Radio/Radio";
+import ItemFormGroup from "@/features/ItemManager/components/ItemFormGroup";
+import GetEmployeeNamePairs from "@/services/DB/Employee/GetEmployeeNamePairs";
+import clsx from "clsx";
+import useItemManager from "../../../../../features/ItemManager/useItemManager";
+import { Note as DB_Note} from "waltronics-types";
+import { ItemManagerProps, ItemManagerWrapper } from "@/features/ItemManager/components/ItemManagerWrapper";
+import { Note, Notes } from "./_DEF";
 
-interface NoteManagerProps {
-    parent: UseForm;
-    noteList: Array<DB_Note>;
-    onSaveUpdates: (updates: NoteUpdates) => void;
-    appointmentID: string;
-    // Forms
-    tabOpen: boolean;
-    openForm: (form: string) => void;
-    openFormDisplayed: string;
-    openForms: Array<string>;
-    closeForm: (form: string) => void;
-}
+export default function NoteManager(props: ItemManagerProps<DB_Note, Note, Notes>) {
+    const itemManager = useItemManager(props as any);
+    const [isCreator, setIsCreator] = useState(false);
+    const [employees, setEmployees] = useState<Options>([]);
 
-export default function NoteManager(props: NoteManagerProps) {
-    const defineNote = new DefineNote();
-    
-    const processUpdates = (oldItems: Notes, newItems: Notes) => {
-        const updates: NoteUpdates = {
-            Update: [],
-            Insert: {
-                Attachment: [],
-                Note: [],
-                Sharee: []
-            },
-            Delete: {
-                Attachment: [],
-                Note: [],
-                Sharee: []
-            }
+    useEffect(() => {
+        const load = async () => {
+            const employees = await GetEmployeeNamePairs();
+            setEmployees(employees);
         }
-    
-        const oldIDs = new MathSet(Object.keys(oldItems));
-        const newIDs = new MathSet(Object.keys(newItems));
-    
-        const toUpdateIDs = oldIDs.intersection(newIDs);
-        const toInsertIDs = newIDs.difference(oldIDs);
-        const toDeleteIDs = oldIDs.difference(newIDs);
-    
-        for (const ID of toUpdateIDs) {
-            const oldItem = oldItems[ID];
-            const newItem = newItems[ID];
-    
-            if (!sameMap(oldItem, newItem, ["Head", "Body", "ShowCustomer"])) {
-                updates.Update.push({
-                    AppointmentID: oldItem.AppointmentID,
-                    NoteID: oldItem.NoteID,
-                    Head: updatedValue(oldItem.Head, newItem.Head),
-                    Body: updatedValue(oldItem.Body, newItem.Body),
-                    ShowCustomer: updatedValue(oldItem.ShowCustomer[0], newItem.ShowCustomer[0])
-                });
-            }
-    
-            // ATTACHMENTS
-            const oldAttachmentIDs = new MathSet(oldItem.Attachments.map(a => a.AttachmentID));
-            const newAttachmentIDs = new MathSet(newItem.Attachments.map(a => a.AttachmentID));
-            const toDeleteAttachmentIDs = oldAttachmentIDs.difference(newAttachmentIDs);
-    
-            for (const attachmentID of toDeleteAttachmentIDs) {
-                updates.Delete.Attachment.push({
-                    NoteID: ID,
-                    AttachmentID: attachmentID
-                });
-            }
-    
-            if (newItem.UploadedAttachments) {
-                updates.Insert.Attachment.push({
-                    NoteID: ID,
-                    Files: filesToFormData(newItem.UploadedAttachments)
-                });
-            }
-    
-            // SHAREES
-            const oldShareeIDs = new MathSet(oldItem.Sharees);
-            const newShareeIDs = new MathSet(newItem.Sharees);
-            const toDeleteShareeIDs = oldShareeIDs.difference(newShareeIDs);
-            const toInsertShareeIDs = newShareeIDs.difference(oldShareeIDs);
-    
-            for (const shareeID of toDeleteShareeIDs) {
-                updates.Delete.Sharee.push({
-                    NoteID: ID,
-                    NoteShareeID: shareeID
-                });
-            }
-    
-            for (const shareeID of toInsertShareeIDs) {
-                updates.Insert.Sharee.push({
-                    NoteID: ID,
-                    NoteShareeID: shareeID
-                })
-            }
-        }
-    
-        for (const ID of toInsertIDs) {
-            const newItem = newItems[ID];
-            updates.Insert.Note.push({
-                AppointmentID: props.appointmentID,
-                Head: newItem.Head,
-                Body: newItem.Body,
-                ShowCustomer: newItem.ShowCustomer[0],
-                Files: filesToFormData(newItem.UploadedAttachments),
-                Sharees: newItem.Sharees
-            });
-        }
-    
-        for (const ID of toDeleteIDs) {
-            const oldItem = oldItems[ID];
-    
-            // Deleting Sharee
-            if (oldItem.EmployeeID in oldItem.Sharees) {
-                updates.Delete.Sharee.push({
-                    NoteID: ID,
-                    NoteShareeID: oldItem.EmployeeID
-                });
-            }
-            else {
-                updates.Delete.Note.push({
-                    NoteID: ID,
-                    AppointmentID: oldItem.AppointmentID
-                });
-            }
-        }
-        props.onSaveUpdates(updates);
-    }
+        load();
+    }, []);
+
+
+    useEffect(() => {
+        if (!employees)
+            return;
+
+        if (!props.itemsManager.forms || !(props.itemID in props.itemsManager.forms)) 
+            return;
+
+        const note = props.itemsManager.forms[props.itemID] as Note;
+        const isCreator = !note.Sharees.includes(note.EmployeeID) || !note.NoteID;
+        setIsCreator(isCreator);
+
+        const test = props.itemsManager.item.test(isCreator, getValues(employees));
+        itemManager.itemForm.setTest(test);
+        
+    }, [employees]);
+
 
     return (
-        <ItemManager
-            defineItem={defineNote}
-            parentForm={props.parent}
-            itemList={props.noteList}
-            Form={NoteForm}
-            Display={NoteDisplay}
-            saveAllUpdates={processUpdates}
-            tabOpen={props.tabOpen}
-            openForm={props.openForm}
-            openFormDisplayed={props.openFormDisplayed}
-            openForms={props.openForms}
-            closeForm={props.closeForm}
-            tab="Notes"
-        />
+        <ItemManagerWrapper
+            header={props.header}
+            canDelete={props.canDelete}
+            saveItem={itemManager.saveItem}
+            closeItem={itemManager.closeItem}
+            resetItem={itemManager.resetItem}
+            deleteItem={itemManager.deleteItem}
+        >
+            {/* Content */}
+            <ItemFormGroup head="Content">
+                <div className="flex flex-col gap-4">
+                    <TextField
+                        type="text"
+                        name="Head"
+                        label="Head"
+                        value={itemManager.itemForm.getInput("Head").data}
+                        state={itemManager.itemForm.getInput("Head").state}
+                        onChange={itemManager.updateInputValue}
+                        onBlur={undefined}
+                    />
+                    <TextField
+                        type="text"
+                        name="Body"
+                        label="Body"
+                        value={itemManager.itemForm.getInput("Body").data}
+                        state={itemManager.itemForm.getInput("Body").state}
+                        onChange={itemManager.updateInputValue}
+                        onBlur={undefined}
+                    />
+                </div>
+            </ItemFormGroup>
+            {/* Attachments */}
+            {/*
+                 Currently out of service, I don't have my AWS set up anymore. 
+                I was afraid that they'd randomly charge me an arm and a leg. 
+            */}
+            {/* <ItemFormGroup head="Attachments">
+                <FileManager
+                    files={itemManager.itemForm.getInput("Attachments").data || []}
+                    updateFiles={(files) => {
+                        itemManager.updateInputValue("Attachments", files);
+                    }}
+                    uploadFiles={(fileList) => {
+                        itemManager.updateInputValue("UploadedAttachments", fileList);
+                    }}
+                />
+            </ItemFormGroup> */}
+            {/* Sharees */}
+            {isCreator &&
+                <ItemFormGroup head="Control Access">
+                    <div className="flex flex-col gap-2">
+                        <div className="flex flex-col gap-4">
+                            <MultipleSelect
+                                name="Sharees"
+                                label="Select Sharees"
+                                toggleLabel="Select Sharees"
+                                values={itemManager.itemForm.getInput("Sharees").data}
+                                state={itemManager.itemForm.getInput("Sharees").state}
+                                options={employees}
+                                disabled={false}
+                                onChange={itemManager.updateInputValue}
+                            />
+                            <Radio
+                                name="ShowCustomer"
+                                label="Show to Customer"
+                                values={itemManager.itemForm.getInput("ShowCustomer").data}
+                                state={itemManager.itemForm.getInput("ShowCustomer").state}
+                                options={[
+                                    ["0", "No", 
+                                        <div className="relative top-[-3px]">
+                                            <p className={clsx("tracking-wide text-left", itemManager.itemForm.getInput("ShowCustomer").data[0] === "0" && "text-blue-500 font-medium")}>
+                                                Show
+                                            </p>
+                                            <span className="block text-left text-01 tracking-wide font-medium">
+                                                The customer will be able to see this note.
+                                            </span>
+                                        </div>
+                                    ], 
+                                    ["1", "Yes",
+                                        <div className="relative top-[-3px]">
+                                            <p className={clsx("tracking-wide text-left", itemManager.itemForm.getInput("ShowCustomer").data[0] === "1" && "text-blue-500 font-medium")}>
+                                                Hide
+                                            </p>
+                                            <span className="block text-left text-01 tracking-wide font-medium">
+                                                The customer will not be able to see this note.
+                                            </span>
+                                        </div>
+                                    ]
+                                ]}
+                                onChange={itemManager.updateInputValue}
+                            />
+                        </div>
+                    </div>  
+                </ItemFormGroup>
+            }
+        </ItemManagerWrapper>
     )
 }

@@ -1,37 +1,54 @@
-import { z } from "zod";
-import { toString } from "@/utils/convert";
-import { Define } from "../Define";
-import { PAYMENT } from "../_DEF";
 import { FormTest } from "@/features/Form/useForm/Form";
+import { Define } from "@/features/ItemManager/Define";
+import { PAYMENT } from "@/app/employee/home/update/_DEF";
+import { toString } from "@/utils/convert";
 import { Payment as DB_Payment } from "waltronics-types";
+import { z } from "zod";
 
+export interface Cost {
+    Cost: string
+}
+
+export function makeCost(cost: string): Cost {
+    return {
+        Cost: cost
+    }
+}
+
+export const costTest = z.object({
+    Cost: z.string()
+});
+
+export interface CostUpdates {
+    Cost: string | null;
+}
 export interface Payment extends Omit<DB_Payment, "Payment" | "PaymentID" | "PaymentDate" | "AppointmentID"> {
     Payment: string;
     PaymentID: string;
     PaymentDate: string;
 }
 
-export interface MappedPayments {
+export interface Payments {
     [paymentID: string]: Payment;
 }
 
 export interface PaymentUpdates {
     Insert: Array<{
-        Payment: string | number;  
+        Payment: string | number;
         Name: string | null;
         Type: string | null;
         CCN: string | null;
         EXP: string | null;
-    }>
+    }>;
     Delete: Array<{
         PaymentID: number;
-    }>
+    }>;
 }
 
-export class DefinePayment extends Define<DB_Payment, Payment, MappedPayments> {
-    key = PAYMENT;
+export class DefinePayment extends Define<DB_Payment, Payment, Payments> {
+    formID = PAYMENT;
+    itemID = "PaymentID";
     itemName = "Payment";
-    itemIDName = "PaymentID";
 
     test(..._: any[]): FormTest {
         return z.object({
@@ -44,7 +61,7 @@ export class DefinePayment extends Define<DB_Payment, Payment, MappedPayments> {
         });
     }
 
-    processThing(baseItem: DB_Payment | null): Payment {
+    buildItem(baseItem: DB_Payment | null): Payment {
         // console.log("Base Item", baseItem);
         return {
             CCN: baseItem?.CCN || "",
@@ -57,10 +74,10 @@ export class DefinePayment extends Define<DB_Payment, Payment, MappedPayments> {
         };
     }
 
-    processThings(baseItems: DB_Payment[]): MappedPayments {
-        const payments: MappedPayments = {};
+    buildItems(baseItems: DB_Payment[]): Payments {
+        const payments: Payments = {};
         for (const payment of baseItems)
-            payments[toString(payment.PaymentID)] = this.processThing(payment);
+            payments[toString(payment.PaymentID)] = this.buildItem(payment);
         return payments;
     }
 }

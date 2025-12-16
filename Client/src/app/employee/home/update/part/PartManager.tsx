@@ -1,69 +1,60 @@
-import PartDisplay from "./PartDisplay";
-import buildUpdate from "@/features/ItemManager/buildUpdate";
-import { Part as DB_AppointmentPart } from "waltronics-types";
-import { DefinePart, MappedParts, Part, PartUpdates } from "./_DEF";
-import PartForm from "./PartForm";
-import ItemManager from "@/features/ItemManager/ItemManager";
-import { UseForm } from "@/features/Form/useForm/useForm";
-import useThingsManager from "../useThingsManager";
-import CreateItemButton from "@/features/ItemManager/Form/CreateItemButton";
-import SaveResetButtons from "@/features/ItemManager/Form/SaveResetButtons";
-// import { Part as DB_AppointmentPart } from "waltronics-types";
+import TextField from "@/component/Form/Text/TextField";
+import ItemFormGroup from "@/features/ItemManager/components/ItemFormGroup";
+import { ItemManagerProps, ItemManagerWrapper } from "@/features/ItemManager/components/ItemManagerWrapper";
+import useItemManager from "@/features/ItemManager/useItemManager";
 
-interface PartManagerProps {
-    thingsManager: ReturnType<typeof useThingsManager<DB_AppointmentPart, Part, MappedParts>>;
-}
+export default function PartManager<DB_AppointmentPart, Part, Parts>(props: ItemManagerProps<DB_AppointmentPart, Part, Parts>) {
+    const itemManager = useItemManager(props);
 
-export default function PartManager(props: PartManagerProps) {
     return (
-        <div className="row-start-5 row-span-1 col-start-1 col-span-1 relative flex flex-col grow h-min">
-            <div className="gap-4 bg-white relative after:absolute after:w-[1px] after:h-full after:top-0 after:left-[0px] after:bg-gray-300 before:absolute before:w-[1px] before:h-full after:top-0 before:right-[0px] before:bg-gray-300 h-full">
-                <table className="w-full">
-                    <tbody>
-                        <tr>
-                            <td className="w-0 p-0 text--center bg-white font-medium px-4 text-03 tracking-wide whitespace-nowrap border border-gray-300 align-top pt-2">Repair</td>
-                            <td className="p-0 border border-gray-300">
-                                <div className="relative bg-gray-50 flex flex-col gap-0 py-6 px-4  border-b border-b-gray-200">
-                                    <span className="absolute top-[calc(1rem-8px)] left-[calc(0.25rem*4)] text-00 font-medium tracking-wide text-gray-400">Add</span>
-                                    <CreateItemButton
-                                        onCreate={props.thingsManager.openCreateThingForm}
-                                    />
-                                </div>
-                                <div className="px-4 py-4">
-                                    <PartDisplay
-                                        items={props.thingsManager.newThings}
-                                        onUpdate={props.thingsManager.openUpdateThingForm}
-                                        onDelete={(ID: string) => {
-                                            props.thingsManager.deleteThing(ID);
-                                            // updateManagerContext.setChangesMade(props.tab, true);
-                                        }}
-                                    />
-                                    {Object.keys(props.thingsManager.newThings as {}).length <= 0 &&
-                                        <div className="bg-gray-5-0 rounded-md h-[100px] flex flex-col justify-center gap-1 items-center justify-center">
-                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6 stroke-gray-400">
-                                                <path strokeLinecap="round" strokeLinejoin="round" d="m20.25 7.5-.625 10.632a2.25 2.25 0 0 1-2.247 2.118H6.622a2.25 2.25 0 0 1-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z" />
-                                            </svg>
-                                            <span className="text-gray-400 tracking-wide font-medium text-04">
-                                                No Repairs Found
-                                            </span>
-                                        </div>
-                                    }
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <SaveResetButtons
-                onSave={() => {
-                    props.thingsManager.saveUpdates();
-                    // updateManagerContext.setChangesMade(props.tab, false);
-                }}
-                onReset={() => {
-                    props.thingsManager.resetUpdates();
-                    // updateManagerContext.setChangesMade(props.tab, false);
-                }}
-            />
-        </div>
+        <ItemManagerWrapper
+            header={props.header}
+            canDelete={props.canDelete}
+            saveItem={itemManager.saveItem}
+            closeItem={itemManager.closeItem}
+            resetItem={itemManager.resetItem}
+            deleteItem={itemManager.deleteItem}
+        >
+            <ItemFormGroup head="Part">
+                <TextField
+                    type="text"
+                    name="PartName"
+                    label="Part Name"
+                    value={itemManager.itemForm.getInput("PartName").data}
+                    state={itemManager.itemForm.getInput("PartName").state}
+                    onChange={itemManager.updateInputValue}
+                    onBlur={undefined}
+                />
+                <TextField
+                    type="text"
+                    name="PartNumber"
+                    label="Part Number"
+                    value={itemManager.itemForm.getInput("PartNumber").data}
+                    state={itemManager.itemForm.getInput("PartNumber").state}
+                    onChange={itemManager.updateInputValue}
+                    onBlur={undefined}
+                />
+            </ItemFormGroup>
+            <ItemFormGroup head="Amount">
+                <TextField
+                    type="text"
+                    name="Quantity"
+                    label="Quantity"
+                    value={itemManager.itemForm.getInput("Quantity").data}
+                    state={itemManager.itemForm.getInput("Quantity").state}
+                    onChange={itemManager.updateInputValue}
+                    onBlur={undefined}
+                />
+                <TextField
+                    type="text"
+                    name="UnitCost"
+                    label="Unit Cost"
+                    value={itemManager.itemForm.getInput("UnitCost").data}
+                    state={itemManager.itemForm.getInput("UnitCost").state}
+                    onChange={itemManager.updateInputValue}
+                    onBlur={undefined}
+                />
+            </ItemFormGroup>
+        </ItemManagerWrapper>
     )
 }

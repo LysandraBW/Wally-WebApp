@@ -1,4 +1,4 @@
-import { Define } from "../Define";
+import { Define } from "@/features/ItemManager/Define";
 import { Repair as DB_AppointmentRepair } from "waltronics-types";
 import { toString } from "@/utils/convert";
 import { z } from "zod";
@@ -9,7 +9,7 @@ export interface Repair extends Omit<DB_AppointmentRepair, "RepairID"> {
     RepairID: string;
 }
 
-export interface MappedRepairs {
+export interface Repairs {
     [repairID: string]: Repair;
 }
 
@@ -26,10 +26,10 @@ export interface RepairUpdates {
     }>;
 }
 
-export class DefineRepair extends Define<DB_AppointmentRepair, Repair, MappedRepairs> {
-    key = REPAIR;
-    thingIDName = "RepairID";
-    thingName = "Repair";
+export class DefineRepair extends Define<DB_AppointmentRepair, Repair, Repairs> {
+    formID = REPAIR;
+    itemID = "RepairID";
+    itemName = "Repair";
 
     test(..._: any[]): FormTest {
         return z.object({
@@ -37,17 +37,17 @@ export class DefineRepair extends Define<DB_AppointmentRepair, Repair, MappedRep
         });
     }
 
-    processThing(baseThing: DB_AppointmentRepair | null): Repair {
+    buildItem(baseItem: DB_AppointmentRepair | null): Repair {
         return {
-            RepairID: toString(baseThing?.RepairID),
-            Repair: baseThing?.Repair || ""
+            RepairID: toString(baseItem?.RepairID),
+            Repair: baseItem?.Repair || ""
         }
     }
 
-    processThings(baseThings: DB_AppointmentRepair[]): MappedRepairs {
-        const mappedrepairs: MappedRepairs = {};
-        for (const repair of baseThings)
-            mappedrepairs[repair.RepairID] = this.processThing(repair);
-        return mappedrepairs;
+    buildItems(baseItems: DB_AppointmentRepair[]): Repairs {
+        const repairs: Repairs = {};
+        for (const repair of baseItems)
+            repairs[repair.RepairID] = this.buildItem(repair);
+        return repairs;
     }
 }

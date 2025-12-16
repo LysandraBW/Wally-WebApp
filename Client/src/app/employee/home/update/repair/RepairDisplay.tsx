@@ -1,10 +1,10 @@
-import { DisplayProps } from "@/features/ItemManager/ItemManager";
-import { MappedRepairs } from "./_DEF";
-import UpdateItem from "@/features/ItemManager/Item/UpdateItem";
-import RepairItem from "@/pages/employee/view/RepairItem";
-import DisplayItems from "@/features/ItemManager/Item/DisplayItems";
+import UpdateItem from "@/features/ItemManager/components/UpdateItem";
+import DisplayItems, { DisplayProps } from "@/features/ItemManager/components/DisplayItems";
+import { Repairs } from "./_DEF";
+import RepairItem from "@/pages/items/RepairItem";
 
-export default function RepairDisplay<A extends MappedRepairs>(props: DisplayProps<A>) {
+
+export default function RepairDisplay<A extends Repairs>(props: DisplayProps<A>) {
     return (
         <DisplayItems
             items={Object.entries(props.items).map(([itemID, item], i) => (

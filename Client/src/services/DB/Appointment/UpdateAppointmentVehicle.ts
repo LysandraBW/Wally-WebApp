@@ -1,4 +1,4 @@
-import { VehicleUpdates } from "@/pages/employee/edit/vehicle/_DEF";
+import { VehicleUpdates } from "@/app/employee/home/update/vehicle/_DEF";
 import { request } from "../request";
 
 export async function UpdateAppointmentVehicle(appointmentID: string, updates: VehicleUpdates) {

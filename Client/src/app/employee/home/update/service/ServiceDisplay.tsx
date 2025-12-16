@@ -1,10 +1,9 @@
-import { DisplayProps } from "@/features/ItemManager/ItemManager";
-import { MappedServices } from "./_DEF";
-import UpdateItem from "@/features/ItemManager/Item/UpdateItem";
-import ServiceItem from "@/pages/employee/view/ServiceItem";
-import DisplayItems from "@/features/ItemManager/Item/DisplayItems";
+import UpdateItem from "@/features/ItemManager/components/UpdateItem";
+import DisplayItems, { DisplayProps } from "@/features/ItemManager/components/DisplayItems";
+import { Services } from "./_DEF";
+import ServiceItem from "@/pages/items/ServiceItem";
 
-export default function ServiceDisplay<A extends MappedServices>(props: DisplayProps<A>) {
+export default function ServiceDisplay<A extends Services>(props: DisplayProps<A>) {
     return (
         <DisplayItems
             items={Object.entries(props.items).map(([itemID, item], i) => (

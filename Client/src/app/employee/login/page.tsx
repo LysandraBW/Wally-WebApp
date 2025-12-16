@@ -1,12 +1,11 @@
 "use client";
-import LoginForm from "../../../pages/employee/login/LoginForm";
+import LoginForm from "./LoginForm";
 import { useEffect, useState } from "react";
 import { setCookie } from "@/utils/cookies/setCookie";
 import NavBar from "@/component/NavBar/NavBar";
 import { Tooltip } from "react-tooltip";
 import { navigate } from "@/utils/navigate";
 import { PAGE_DASHBOARD } from "@/utils/constants";
-import clsx from "clsx";
 
 export default function Page() {
     const [sessionID, setSessionID] = useState<string>();
@@ -19,42 +18,17 @@ export default function Page() {
     }, [sessionID]);
 
     return (
-        <div 
-            className={clsx(
-                "min-h-screen",
-                "flex flex-col",
-                "relative",
-                "bg-white"
-            )}
-        >
+        <div className="relative min-h-screen flex flex-col bg-white">
             <NavBar sticky={true} border={true}/>
             <div className="grid grid-cols-2 grow">
-                <div 
-                    className={clsx(
-                        "py-20",
-                        "flex flex-col justify-center items-start justify-self-center gap-6",
-                        "relative",
-                        "bg-white"
-                    )}
-                >
+                <div className="py-20 flex flex-col justify-center items-start justify-self-center gap-6 relative bg-white">
                     <header className="flex flex-col max-w-[400px]">
                         <h3 className="font-medium whitespace-nowrap">Log In</h3>
-                        <p 
-                            className={clsx(
-                                "max-w-[440px]",
-                                "text-md text-gray-600 font-medium",
-                                "tracking-wide"
-                            )}
-                        >
+                        <p className="max-w-[440px] text-md text-gray-600 font-medium tracking-wide">
                             Welcome back!
                         </p>
                     </header>
-                    <div 
-                        className={clsx(
-                            "w-full min-w-[350px]",
-                            "flex justify-center"
-                        )}
-                    >
+                    <div className="w-full min-w-[350px] flex justify-center">
                         <form
                             onSubmit={(e) => e.preventDefault()}
                             className="w-full flex flex-col gap-4"
@@ -88,14 +62,7 @@ export default function Page() {
                         }
                     </div>
                 </div>
-                <div 
-                    className="bg-[url('../public/Sparks.jpg')]" 
-                    style={{
-                        backgroundPosition: "center", 
-                        backgroundSize: "cover"
-                    }}
-                >
-                </div>
+                <div className="bg-[url('../public/Sparks.jpg')] bg-center bg-cover"/>
             </div>
         </div>
     )

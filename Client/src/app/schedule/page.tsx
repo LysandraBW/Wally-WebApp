@@ -2,18 +2,16 @@
 import ButtonTwo from "@/component/Form/Button/Button2";
 import NavBar from "@/component/NavBar/NavBar";
 import useForm from "@/features/Form/useForm/useForm";
-import { startContactForm, startVehicleForm, startServiceForm } from "@/pages/customer/schedule/_DEF";
-import ContactForm from "@/pages/customer/schedule/ContactForm";
-import ServiceForm from "@/pages/customer/schedule/ServiceForm";
-import VehicleForm from "@/pages/customer/schedule/VehicleForm";
 import ScheduleAppointment from "@/services/DB/Appointment/ScheduleAppointment";
-import clsx from "clsx";
 import { useState } from "react";
-import ProgressBar from "../../pages/customer/schedule/ProgressBar";
-import GoodResults from "@/pages/customer/schedule/GoodResults";
-import BadResults from "@/pages/customer/schedule/BadResults";
-import { Instrumental } from "@/public/Font";
 import ButtonThree from "@/component/Form/Button/Button3";
+import { startContactForm, startServiceForm, startVehicleForm } from "./_DEF";
+import SchedulePassed from "./SchedulePassed";
+import ScheduleFailed from "./ScheduleFailed";
+import ProgressBar from "./ProgressBar";
+import ContactForm from "./ContactForm";
+import VehicleForm from "./VehicleForm";
+import ServiceForm from "./ServiceForm";
 
 // The step at which a user is in the form
 // is correlated with some variables.
@@ -47,23 +45,26 @@ export default function Page() {
     // Output of Scheduling Function
     //      == NULL:             No Output
     //      == ["", ""]:         Failed
-    //      != NULL || ["", ""]: Passed => [ID, Email]
+    //      == [ID, Email]:     Passed
     const [output, setOutput] = useState<null|[string, string]>(null);
     
+    // step: This determines the form that the user sees.
     const [step, setStep] = useState(0);
     const contactForm = useForm("Contact", startContactForm());
     const vehicleForm = useForm("Vehicle", startVehicleForm());
     const serviceForm = useForm("Service", startServiceForm());
 
-    const goToPreviousForm = () => {
-        setStep(Math.max(0, step - 1));
+    const goToPrevForm = () => {
+        const prevStep = Math.max(0, step - 1);
+        setStep(prevStep);
     }
 
     const goToNextForm = () => {
         const steps = [contactForm, vehicleForm, serviceForm];
         if (!steps[step].getState())
             return;
-        setStep(Math.min(2, step + 1));
+        const nextStep = Math.min(2, step + 1);
+        setStep(nextStep);
     }
 
     const submitForm = async () => {
@@ -72,7 +73,7 @@ export default function Page() {
             return;
 
         // We're storing the contact data because we'll
-        // possibly need the email address later on.
+        // need the email address later on.
         const contactData = contactForm.getData();
         const ID = await ScheduleAppointment(Object.assign(
             {}, 
@@ -83,10 +84,7 @@ export default function Page() {
         
         // If an empty string has been returned as the appointment ID,
         // something has gone wrong. Else, proceed as normal.
-        if (!ID)
-            setOutput(["", ""]);
-        else
-            setOutput([ID, contactData.email]);
+        setOutput(!ID ? ["", ""] : [ID, contactData.email]);
 
         // Reset Process
         window.scrollTo(0, 0);
@@ -102,67 +100,38 @@ export default function Page() {
             <NavBar sticky={true} border={true} background={true} shadow={true}/>
             <div className="flex grow">
                 <div className="flex flex-col grow p-4">
-                    {/* 
-                    If the output is not NULL, we show the user the
-                    results (fail or pass).
-                    */}
                     {(output !== null && output[0]) &&
-                        <GoodResults
+                        <SchedulePassed
                             output={output}
                         />
                     }
                     {(output !== null && !output[0]) &&
-                        <BadResults
+                        <ScheduleFailed
                             restart={() => setOutput(null)}
                         />
                     }
-                    {/* 
-                        If the output is NULL, we have yet to receive the user's
-                        submission. Therefore, we show them the form to complete.
-                    */}
                     {output === null &&
                         <div className="relative w-full py-16 px-16 flex flex-col items-center gap-8">
-                            {/* 
-                                Header
-                            */}
                             <header className="flex flex-col items-center w-min">
                                 <h3 className="text-center font-medium whitespace-nowrap">
                                     Schedule Appointment
                                 </h3>
-                                <p 
-                                    className={clsx(
-                                        "max-w-[440px]",
-                                        "text-md text-gray-600",
-                                        "text-center tracking-wide",
-                                        Instrumental.className
-                                    )}
-                                >
+                                <p className="max-w-[440px] text-md text-gray-600 text-center tracking-wide">
                                     To schedule an appointment, complete the form below.<br/>
                                     After completion, your appointment will be shortly confirmed.
                                 </p>
-                            </header>    
-                            {/* 
-                                Tracker:
-                                This just shows the current step
-                                that the user is on.
-                            */}
-                            <div 
-                                className={clsx(
-                                    "w-[400px] px-4 py-4 pb-5",
-                                    "flex flex-col gap-2",
-                                    "bg-blue-600 rounded-lg shadow-sm"
-                                )}
-                            >
+                            </header>
+                            <div className="w-[400px] px-4 py-4 pb-5 flex flex-col gap-2 bg-blue-600 rounded-lg shadow-sm">
                                 <div>
                                     <span 
-                                    className="text-01 font-medium text-blue-200" 
-                                    style={{lineHeight: "0.72rem"}}
+                                        style={{lineHeight: "0.72rem"}}
+                                        className="text-01 font-medium text-blue-200" 
                                     >
                                         STEP {step + 1}
                                     </span>
                                     <h6 
-                                        className={clsx("mb-2 tracking-wide !text-05 font-medium text-white")}
                                         style={{lineHeight: "1.125rem"}}
+                                        className="mb-2 tracking-wide !text-05 font-medium text-white"
                                     >
                                         {stepData[step].header}
                                     </h6>
@@ -190,10 +159,7 @@ export default function Page() {
                                         canShowTooltip={step > 2}
                                     />
                                 </div>
-                            </div>          
-                            {/* 
-                                Form 
-                            */}
+                            </div>
                             <form 
                                 onSubmit={(e) => e.preventDefault()}
                                 className="flex flex-col gap-4 w-[400px]"
@@ -205,7 +171,7 @@ export default function Page() {
                                     {step !== 0 &&
                                         <ButtonThree
                                             label="Previous"
-                                            onClick={goToPreviousForm} 
+                                            onClick={goToPrevForm} 
                                         />
                                     }
                                     <ButtonTwo
@@ -217,20 +183,10 @@ export default function Page() {
                         </div>
                     }
                 </div>
-                <div 
-                    className={clsx(
-                        "relative",
-                        "w-[50%] h-[calc(100vh-53px)]",
-                        "max-sm:hidden"
-                    )}
-                >
-                    <div 
-                        className={clsx(
-                            "fixed top-[53px]",
-                            "w-full h-[calc(100%-53px)]",
-                            "bg-gray-200 bg-cover bg-top"
-                        )}
-                    ></div>
+                {/* Picture */}
+                <div className="relative w-[50%] h-[calc(100vh-53px)] max-sm:hidden">
+                    <div className="fixed top-[53px] w-full h-[calc(100%-53px)] bg-gray-200 bg-cover bg-top">
+                    </div>
                 </div>
             </div>
         </div>

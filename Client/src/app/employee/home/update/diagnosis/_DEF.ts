@@ -1,16 +1,15 @@
 import { z } from "zod";
 import { toString } from "@/utils/convert";
 import { Diagnosis as DB_AppointmentDiagnosis } from "waltronics-types";
-// import { Define } from "./Define";
+import { Define } from "@/features/ItemManager/Define";
 import { FormTest } from "@/features/Form/useForm/Form";
-import { Define } from "../Define";
 import { DIAGNOSIS } from "../_DEF";
 
 export interface Diagnosis extends Omit<DB_AppointmentDiagnosis, "DiagnosisID"> {
     DiagnosisID: string;
 }
 
-export interface MappedDiagnoses {
+export interface Diagnoses {
     [diagnosisID: string]: Diagnosis;
 }
 
@@ -29,10 +28,10 @@ export interface DiagnosisUpdates {
     }>;
 }
 
-export class DefineDiagnosis extends Define<DB_AppointmentDiagnosis, Diagnosis, MappedDiagnoses> {
-    key = DIAGNOSIS;
-    thingName = "Diagnosis";
-    thingIDName = "DiagnosisID";
+export class DefineDiagnosis extends Define<DB_AppointmentDiagnosis, Diagnosis, Diagnoses> {
+    formID = DIAGNOSIS;
+    itemID = "DiagnosisID";
+    itemName = "Diagnosis";
 
     test(..._: any[]): FormTest {
         return z.object({
@@ -41,18 +40,18 @@ export class DefineDiagnosis extends Define<DB_AppointmentDiagnosis, Diagnosis, 
         });
     }
 
-    processThing(baseThing: DB_AppointmentDiagnosis | null): Diagnosis {
+    buildItem(baseItem: DB_AppointmentDiagnosis | null): Diagnosis {
         return {
-            Code: baseThing ? baseThing.Code : "",
-            Message: baseThing? baseThing.Message : "",
-            DiagnosisID: baseThing ? toString(baseThing.DiagnosisID) : ""
+            Code: baseItem ? baseItem.Code : "",
+            Message: baseItem? baseItem.Message : "",
+            DiagnosisID: baseItem ? toString(baseItem.DiagnosisID) : ""
         }
     }
 
-    processThings(baseThings: DB_AppointmentDiagnosis[]): MappedDiagnoses {
-        const diagnoses: MappedDiagnoses = {};
-        for (const d of baseThings)
-            diagnoses[d.DiagnosisID] = this.processThing(d);
+    buildItems(baseItems: DB_AppointmentDiagnosis[]): Diagnoses {
+        const diagnoses: Diagnoses = {};
+        for (const d of baseItems)
+            diagnoses[d.DiagnosisID] = this.buildItem(d);
         return diagnoses;
     }
 }

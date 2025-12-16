@@ -1,4 +1,4 @@
-import { Define } from "../Define";
+import { Define } from "@/features/ItemManager/Define";
 import { Part as DB_AppointmentPart } from "waltronics-types";
 import { toString } from "@/utils/convert";
 import { z } from "zod";
@@ -11,7 +11,7 @@ export interface Part extends Pick<DB_AppointmentPart, "PartName" | "PartNumber"
     UnitCost: string;
 };
 
-export interface MappedParts {[partID: string]: Part};
+export interface Parts {[partID: string]: Part};
 
 export interface PartUpdates {
     Update: Array<{
@@ -32,10 +32,10 @@ export interface PartUpdates {
     }>;
 }
 
-export class DefinePart extends Define<DB_AppointmentPart, Part, MappedParts> {
-    key = PART;
+export class DefinePart extends Define<DB_AppointmentPart, Part, Parts> {
+    formID = PART;
+    itemID = "PartID";
     itemName = "Part";
-    itemIDName = "PartID";
 
     test(..._: any[]): FormTest {
         return z.object({
@@ -46,7 +46,7 @@ export class DefinePart extends Define<DB_AppointmentPart, Part, MappedParts> {
         });
     }
 
-    processThing(baseItem: DB_AppointmentPart | null): Part {
+    buildItem(baseItem: DB_AppointmentPart | null): Part {
         return {
             PartID: toString(baseItem?.PartID),
             PartName: baseItem?.PartName || "",
@@ -56,10 +56,10 @@ export class DefinePart extends Define<DB_AppointmentPart, Part, MappedParts> {
         }
     }
 
-    processThings(baseItems: DB_AppointmentPart[]): MappedParts {
-        const parts: MappedParts = {};
+    buildItems(baseItems: DB_AppointmentPart[]): Parts {
+        const parts: Parts = {};
         for (const p of baseItems)
-            parts[p.PartID] = this.processThing(p);
+            parts[p.PartID] = this.buildItem(p);
         return parts;
     }
 }

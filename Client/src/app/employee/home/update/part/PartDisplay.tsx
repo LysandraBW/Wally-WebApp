@@ -1,10 +1,9 @@
-import { DisplayProps } from "@/features/ItemManager/ItemManager";
-import { MappedParts } from "./_DEF";
-import UpdateItem from "@/features/ItemManager/Item/UpdateItem";
-import PartItem from "@/pages/employee/view/PartItem";
-import DisplayItems from "@/features/ItemManager/Item/DisplayItems";
+import UpdateItem from "@/features/ItemManager/components/UpdateItem";
+import DisplayItems, { DisplayProps } from "@/features/ItemManager/components/DisplayItems";
+import { Parts } from "./_DEF";
+import PartItem from "@/pages/items/PartItem";
 
-export default function PartDisplay<A extends MappedParts>(props: DisplayProps<A>) {
+export default function PartDisplay<A extends Parts>(props: DisplayProps<A>) {
     return (
         <DisplayItems
             items={

@@ -1,10 +1,9 @@
-import { DisplayProps } from "@/features/ItemManager/ItemManager";
-import { MappedNotes } from "./_DEF";
-import UpdateItem from "@/features/ItemManager/Item/UpdateItem";
-import DisplayItems from "@/features/ItemManager/Item/DisplayItems";
-import NoteItem from "@/pages/employee/view/NoteItem";
+import UpdateItem from "@/features/ItemManager/components/UpdateItem";
+import DisplayItems, { DisplayProps } from "@/features/ItemManager/components/DisplayItems";
+import { Notes } from "./_DEF";
+import NoteItem from "@/pages/items/NoteItem";
 
-export default function NoteDisplay<A extends MappedNotes>(props: DisplayProps<MappedNotes>) {
+export default function NoteDisplay<A extends Notes>(props: DisplayProps<A>) {
     return (
         <DisplayItems
             items={

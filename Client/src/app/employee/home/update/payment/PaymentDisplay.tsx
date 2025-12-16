@@ -1,10 +1,9 @@
-import { DisplayProps } from "@/features/ItemManager/ItemManager";
-import UpdateItem from "@/features/ItemManager/Item/UpdateItem";
-import PaymentItem from "@/pages/employee/view/PaymentItem";
-import DisplayItems from "@/features/ItemManager/Item/DisplayItems";
-import { MappedPayments } from "./_DEF";
+import UpdateItem from "@/features/ItemManager/components/UpdateItem";
+import DisplayItems, { DisplayProps } from "@/features/ItemManager/components/DisplayItems";
+import { Payments } from "./_DEF";
+import PaymentItem from "@/pages/items/PaymentItem";
 
-export default function PaymentDisplay<A extends MappedPayments>(props: DisplayProps<A>) {
+export default function PaymentDisplay<A extends Payments>(props: DisplayProps<A>) {
     return (
         <DisplayItems
             items={

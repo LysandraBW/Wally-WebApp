@@ -1,4 +1,4 @@
-import { ContactUpdates } from "@/pages/employee/edit/contact/_DEF";
+import { ContactUpdates } from "@/app/employee/home/update/contact/_DEF";
 import { request } from "../request";
 
 export async function UpdateAppointmentContact(appointmentID: string, updates: ContactUpdates) {

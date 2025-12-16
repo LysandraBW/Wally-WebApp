@@ -1,4 +1,4 @@
-import { DiagnosisUpdates } from "@/pages/employee/edit/service/diagnosis/_DEF";
+import { DiagnosisUpdates } from "@/app/employee/home/update/diagnosis/_DEF";
 import { request } from "../request";
 
 export async function UpdateAppointmentDiagnoses(appointmentID: string, updates: DiagnosisUpdates) {

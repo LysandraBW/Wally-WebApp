@@ -1,4 +1,4 @@
-import { CostUpdates } from "@/pages/employee/edit/finance/cost/_DEF";
+import { CostUpdates } from "@/app/employee/home/update/payment/_DEF";
 import { request } from "../request";
 
 export async function UpdateAppointmentCost(appointmentID: string, updates: CostUpdates) {

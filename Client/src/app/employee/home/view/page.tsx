@@ -1,19 +1,12 @@
 "use client";
 import { useContext, useEffect, useState } from "react";
-import View from "@/pages/employee/view/View";
+import View from "@/app/employee/home/view/View";
 import { useRouter, useSearchParams } from "next/navigation";
 import useForm from "@/features/Form/useForm/useForm";
-import TextField from "@/component/Form/Text/TextField";
-import EmployeeLayout from "@/views/Layout/Employee/EmployeeLayout";
-import HashIcon from "@/component/Icon/Hash";
-import Button from "@/component/Form/Button/Button";
 import clsx from "clsx";
-import { AppointmentTag } from "@/views/Layout/Employee/BreadCrumb";
-import { Pages } from "@/views/Layout/Employee/VerticalNavigation";
-import LoadAppointment from "@/features/LoadAppointment/LoadAppointment";
+import LoadAppointment from "@/pages/loadAppointment/LoadAppointment";
 import { Appointment as DB_Appointment } from "waltronics-types";
 import SelectAppointment from "@/services/DB/Appointment/SelectAppointment";
-import { z } from "zod";
 import { AnimatePresence } from "motion/react";
 import { EmployeeContext } from "../layout";
 
@@ -26,6 +19,7 @@ export default function Page() {
     const [appointmentNotFound, setAppointmentNotFound] = useState(false);
     const employeeContext = useContext(EmployeeContext);
 
+    
     useEffect(() => {
         const load = async () => {
             // Loading Appointment, if Any
@@ -48,17 +42,19 @@ export default function Page() {
         load();
     }, []);
 
+
     useEffect(() => {
         employeeContext.setCurrentPage && employeeContext.setCurrentPage("View Appointment");
     }, [employeeContext]);
 
+
     const loadAppointment = async () => {
         if (!form.getState())
             return;
+        
         const ID = form.getInput("id").data;
-
         const appointment = await SelectAppointment({appointmentID: ID});
-        // console.log(appointment);
+        
         // Appointment Does Not Exist
         if (!appointment || !appointment.FName) {
             setAppointmentNotFound(true);
@@ -72,6 +68,7 @@ export default function Page() {
         form.resetForm();
     }
     
+
     return (
         <div className="flex flex-col overflow-x-clip grow">
             <div className="p-4 flex flex-col grow">

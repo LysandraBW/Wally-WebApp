@@ -2,21 +2,19 @@
 import Alert from "@/features/Alert/Alert";
 import alertReducer, { startAlert, AlertActionType } from "@/features/Alert/alertReducer";
 import useInterval from "@/features/Alert/useInterval";
-import Actions from "@/pages/employee/dashboard/Actions";
-import useAppointmentManager from "@/pages/employee/dashboard/managers/useAppointmentManager";
-import useDeleteManager from "@/pages/employee/dashboard/managers/useDeleteManager";
-import useFilterManager from "@/pages/employee/dashboard/managers/useFilterManager";
-import useToggleManager from "@/pages/employee/dashboard/managers/useToggleManager";
-import OpenedAppointment from "@/pages/employee/dashboard/OpenedAppointment";
-import SearchBar from "@/pages/employee/dashboard/SearchBar";
-import Statuses from "@/pages/employee/dashboard/Statuses";
-import Table from "@/pages/employee/dashboard/Table/Table";
-import clsx from "clsx";
+import ToolBar from "@/app/employee/home/dashboard/ToolBar/ToolBar";
+import useAppointmentManager from "@/app/employee/home/dashboard/managers/useAppointmentManager";
+import useDeleteManager from "@/app/employee/home/dashboard/managers/useDeleteManager";
+import useFilterManager from "@/app/employee/home/dashboard/managers/useFilterManager";
+import useToggleManager from "@/app/employee/home/dashboard/managers/useToggleManager";
+import AppointmentPane from "@/app/employee/home/dashboard/AppointmentPane";
+import StatusTabs from "@/app/employee/home/dashboard/StatusTabs";
+import Table from "@/app/employee/home/dashboard/Table/Table";
 import { Fragment, useContext, useEffect, useReducer, useState } from "react";
 import { BarLoader } from "react-spinners";
 import { AnimatePresence } from "motion/react";
 import { EmployeeContext } from "../layout";
-import Tab, { DeletedIcon, FlaggedIcon, GeneralIcon } from "./Tab";
+import LabelTabs from "./LabelTabs";
 
 export default function Page() {
     const [alert, alertDispatch] =  useReducer(alertReducer, startAlert);
@@ -28,6 +26,7 @@ export default function Page() {
     const deleteManager = useDeleteManager(alertDispatch, toggleManager, filterManager, appointmentManager, setLoadingTable);
     const employeeContext = useContext(EmployeeContext);
 
+
     useInterval(() => {
         // Every second, the alerts will be refreshed,
         // so that older alerts will be removed after
@@ -35,8 +34,8 @@ export default function Page() {
         alertDispatch({type: AlertActionType.Refresh});
     }, 1000*1);
 
+
     useEffect(() => {
-        // console.log(loadingTable);
         let loaded = true;
         for (const isLoaded of Object.values(loadingTable)) {
             if (!isLoaded) {
@@ -44,13 +43,14 @@ export default function Page() {
                 break;
             }
         }
-        // console.log("Loaded: ", loaded);
         setLoaded(loaded);
     }, [loadingTable]);
+
 
     useEffect(() => {
         employeeContext.setCurrentPage && employeeContext.setCurrentPage("Dashboard");
     }, [employeeContext]);
+
 
     return (
         <div className=" grow">
@@ -58,62 +58,32 @@ export default function Page() {
                 alert={alert}
             />
             <div className="p-4 pb-0 grid grid-cols-[100px_calc(100%-100px-1rem)] gap-4 grow h-full">
-                <div className="flex flex-col gap-4">
-                    <Tab
-                        icon={<GeneralIcon/>}
-                        label="General"
-                        labelID=""
-                        filterManager={filterManager}
-                        onClick={() => filterManager.setLabelID("")}
-                    />
-                    <Tab
-                        icon={<GeneralIcon/>}
-                        label="Seen"
-                        labelID="1"
-                        filterManager={filterManager}
-                        onClick={() => filterManager.setLabelID("1")}
-                    />
-                    <Tab
-                        icon={<GeneralIcon/>}
-                        label="New"
-                        labelID="-1"
-                        filterManager={filterManager}
-                        onClick={() => filterManager.setLabelID("-1")}
-                    />
-                    <Tab
-                        icon={<FlaggedIcon/>}
-                        label="Flagged"
-                        labelID="2"
-                        filterManager={filterManager}
-                        onClick={() => filterManager.setLabelID("2")}
-                    />
-                    <Tab
-                        icon={<DeletedIcon/>}
-                        label="Deleted"
-                        labelID="Deleted"
-                        filterManager={filterManager}
-                        onClick={() => filterManager.setLabelID("Deleted")}
-                    />
-                </div>
+                <LabelTabs
+                    filterManager={filterManager}
+                    labels={filterManager.labels}
+                    onClick={filterManager.setLabelID}
+                />
                 <div className="flex flex-col bg-blue-400 grow border border-gray-300 border-b-0 rounded-t-md h-full">
-                    <Actions
-                        deleteManager={deleteManager}
-                        filterManager={filterManager}
-                        appointmentManager={appointmentManager}
-                    />
-                    <Statuses
-                        filterManager={filterManager}
-                    />
+                    <div className="flex p-2 items-center gap-2 border-b border-gray-300 bg-white rounded-t-md">
+                        <ToolBar
+                            deleteManager={deleteManager}
+                            filterManager={filterManager}
+                            appointmentManager={appointmentManager}
+                        />
+                    </div>
+                    <div className="flex gap-4 px-2 py-2 border-b border-gray-300 bg-white">
+                        <StatusTabs
+                            filterManager={filterManager}
+                        />
+                    </div>
                     <div className="flex flex-col grow">
                         {loaded && 
-                            // <div className={"flex flex-col grow bg-gray-100 overflow-x-scroll scroll-hide"}>
-                                <Table
-                                    filterManager={filterManager}
-                                    toggleManager={toggleManager}
-                                    deleteManager={deleteManager}
-                                    appointmentManager={appointmentManager}
-                                />
-                            // </div>
+                            <Table
+                                filterManager={filterManager}
+                                toggleManager={toggleManager}
+                                deleteManager={deleteManager}
+                                appointmentManager={appointmentManager}
+                            />
                         }
                         {!loaded &&
                             <div className="flex flex-col grow w-full min-h-[200px] bg-white justify-center items-center">
@@ -128,7 +98,7 @@ export default function Page() {
             </div>     
             <AnimatePresence>            
                 {appointmentManager.openedAppointment &&
-                        <OpenedAppointment
+                        <AppointmentPane
                             appointmentID={appointmentManager.openedAppointment}
                             closeAppointment={appointmentManager.closeAppointment}
                         />
