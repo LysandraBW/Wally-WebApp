@@ -9,10 +9,10 @@ import { PAGE_EDIT_APPOINTMENT, PAGE_VIEW_APPOINTMENT } from '@/utils/constants'
 import { AnimatePresence, motion } from "motion/react";
 import Card from "@/component/IconV2/Card";
 import Date from "@/component/IconV2/Date";
+import { AppointmentManager } from "./managers/useAppointmentManager";
 
 interface AppointmentPaneProps {
-    appointmentID: string;
-    closeAppointment: () => void;
+    appointmentManager: AppointmentManager;
 }
 
 // It's not standard practice to include
@@ -25,13 +25,13 @@ function DataGroup({head, data}: {
     data: Array<[React.ReactNode, React.ReactNode]>
 }) {
     return (
-        <div className="flex flex-col gap-2 p-4 border-b border-gray-300 last:!border-b-0 hover:bg-gray-50">
-            <span className="font-medium text-black text-04 tracking-wide">{head}</span>
-            <div className="grid grid-cols-2 gap-0.5">
+        <div className="flex flex-col gap-x-2 gap-y-1 p-4 py-2 border-b border-gray-300 last:!border-b-0 hover:bg-gray-50">
+            <span className="font-medium text-gray-700 text-03 tracking-wide">{head}</span>
+            <div className="grid grid-cols-[30%_70%] gap-x-4">
                 {data.map(([key, value], i) => (
                     <Fragment key={i}>
-                        <span className="text-gray-400 tracking-wide">{key}</span>
-                        <span className="text-black tracking-wide">{value}</span>
+                        <span className="text-gray-400 tracking-wide text-02">{key}</span>
+                        <span className="text-gray-700 tracking-wide text-02">{value}</span>
                     </Fragment>
                 ))}
             </div>
@@ -45,12 +45,13 @@ export default function AppointmentPane(props: AppointmentPaneProps) {
 
     
     useEffect(() => {
+        console.log(props.appointmentManager.openedAppointment);
         const load = async () => {
-            const appointment: DB_Appointment = await SelectAppointment({appointmentID: props.appointmentID});
+            const appointment: DB_Appointment = await SelectAppointment({appointmentID: props.appointmentManager.openedAppointment});
             setAppointment(appointment);
         };
         load(); 
-    }, [props.appointmentID]);
+    }, [props.appointmentManager.openedAppointment]);
 
 
     useEffect(() => {
@@ -74,42 +75,86 @@ export default function AppointmentPane(props: AppointmentPaneProps) {
 
     return (
         <motion.div
-            className="flex flex-col justify-between w-[500px] h-screen max-h-screen overflow-y-scroll scroll-hide bg-white border-l border-gray-300 shadow-2xl fixed top-0 right-0"
+            className="flex flex-col justify-between w-[550px] h-screen max-h-screen overflow-y-scroll scroll-hide bg-white border-l border-gray-300 shadow-2xl fixed top-0 right-0"
             initial={{right: "-500px"}}
             animate={{right: "0px"}}
             exit={{right: "-500px"}}
             key="OpenedAppointment"
         >
             {/* Close Button */}
-            <div className="flex justify-end px-4 py-3 border-b border-gray-300">
-                <CloseButton close={props.closeAppointment}/>
+            <div className="flex justify-between px-4 py-3 border-b border-gray-300">
+                <CloseButton close={props.appointmentManager.closeAppointment}/>
+                <div className="flex gap-2">
+                    <div className="bg-gray-100 rounded p-0.5 px-1 cursor-pointer hover:bg-gray-200 flex items-center justify-center" onClick={props.appointmentManager.goToPrevAppointment}>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" className="cursor-pointer size-3.5 stroke-gray-400">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+                        </svg>
+                    </div>
+                    <div className="bg-gray-100 rounded p-0.5 px-1 cursor-pointer hover:bg-gray-200 flex items-center justify-center" onClick={props.appointmentManager.goToNextAppointment}>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" className="cursor-pointer size-3.5 stroke-gray-400">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+                        </svg>
+                    </div>
+                </div>
             </div>
             {appointment &&
                 <div>
-                    <div className="px-4 py-4 flex flex-col items-center border-b border-gray-300">
-                        {/* Full Name */}
-                        <h6 className="text-gray-950 font-medium text-3xl mb-2 text-center">
-                            {appointment.FName} {appointment.LName}
-                        </h6>
+                    <div className="px-4 py-4 flex flex-col items-center border-b border-gray-300 bg-gray-100">
                         {/* Appointment ID */}
-                        <div className="!w-min flex items-center gap-1 fill-gray-400">
+                        {/* <div className="!w-min flex items-center gap-1 fill-gray-400">
                             <Card
                                 style="size-4 stroke-gray-400"
                             />
                             <span className="w-min text-01 text-gray-400 whitespace-nowrap tracking-wider">
                                 {appointment.AppointmentID}
                             </span>
-                        </div>
+                        </div> */}
                         {/* Creation Date */}
-                        <div className="!w-min flex items-center gap-1 fill-gray-400">
+                        {/* <div className="!w-min flex items-center gap-1 fill-gray-400">
                             <Date
                                 style="size-4 stroke-gray-400"
                             />
                             <span className="w-min text-01 text-gray-400 whitespace-nowrap tracking-wider">
-                                Created on {toDisplayDate(appointment.CreationDate).slice(0, 12)}
+                                Created on {toDisplayDate(appointment.CreationDate).slice(0, 10)}
                             </span>
+                        </div> */}
+                        {/* Full Name */}
+                        <h6 className="text-gray-950 font-medium text-3xl text-center">
+                            {appointment.FName} {appointment.LName}
+                        </h6>
+                    </div>
+                    <div 
+                        className={clsx(
+                            "",
+                            "h-10",
+                            "bg-transparent border-b border-gray-300 p-1"
+                        )}
+                    >
+                        <div className="bg-gray-50 w-full h-full rounded-md border border-gray-300 flex gap-1 p-0.5">
+                            <button
+                                onClick={() => navigate(PAGE_VIEW_APPOINTMENT, {appointmentID: props.appointmentManager.openedAppointment || ""})}
+                                className="w-full rounded bg-white border border-gray-300 shadow-sm text-gray-400 text-02 font-medium tracking-wide hover:bg-gray-50 hover:text-blue-500"
+                            >
+                                View
+                            </button>
+                            <button
+                                onClick={() => navigate(PAGE_EDIT_APPOINTMENT, {appointmentID: props.appointmentManager.openedAppointment || ""})}
+                                className="w-full rounded bg-white border border-gray-300 shadow-sm text-gray-400 text-02 font-medium tracking-wide hover:bg-gray-50 hover:text-blue-500"
+                            >
+                                Update
+                            </button>
                         </div>
                     </div>
+                    <div className="grid grid-cols-[30%_70%] gap-x-4 p-4 py-2 border-b border-b-gray-300 hover:bg-gray-50">
+                        <span className="font-medium text-gray-700 text-03 tracking-wide">Date Created</span>
+                        <span className="text-gray-700 tracking-wide text-02">{toDisplayDate(appointment.CreationDate, "MMMM Do, YYYY [at] h:mm A")}</span>
+                    </div>
+                    <div className="grid grid-cols-[30%_70%] gap-x-4 p-4 py-2 border-b border-b-gray-300 hover:bg-gray-50">
+                        <span className="block font-medium text-gray-700 text-03 tracking-wide">Appointment ID</span>
+                        <span className="block text-gray-700 tracking-wide text-02">{appointment.AppointmentID}</span>
+                    </div>
+                    {/* Buttons for Ease-of-Access */}
+                    
                     <DataGroup
                         head="Contact"
                         data={[
@@ -169,27 +214,6 @@ export default function AppointmentPane(props: AppointmentPaneProps) {
                     />
                 </div>
             }
-            {/* Buttons for Ease-of-Access */}
-            <div 
-                className={clsx(
-                    "flex",
-                    "sticky bottom-0",
-                    "bg-transparent border-t border-gray-300 after:absolute after:w-full after:h-[1px] after:bg-white after:top-[-2px] after:left-0"
-                )}
-            >
-                <button
-                    onClick={() => navigate(PAGE_VIEW_APPOINTMENT, {appointmentID: props.appointmentID})}
-                    className="w-full bg-white/50  backdrop-blur-lg border-r-[0.5px] border-gray-300 px-4 py-4 text-gray-400 text-03 font-medium tracking-wide hover:bg-gray-50 hover:text-black"
-                >
-                    View
-                </button>
-                <button
-                    onClick={() => navigate(PAGE_EDIT_APPOINTMENT, {appointmentID: props.appointmentID})}
-                    className="w-full bg-white/50 backdrop-blur-lg border-l-[0.5px] border-gray-300 px-4 py-4 text-gray-400 text-03 font-medium tracking-wide hover:bg-gray-50 hover:text-black"
-                >
-                    Edit
-                </button>
-            </div>
         </motion.div>
         
     )

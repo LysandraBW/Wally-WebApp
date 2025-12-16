@@ -160,12 +160,38 @@ export default function useAppointmentManager(filterManager: FilterManager, setL
     }
 
 
+    const goToNextAppointment = () => {
+        if (!openedAppointment)
+            return;
+        const appointmentIndex = appointments.findIndex(appt => appt.AppointmentID === openedAppointment);
+        let nextAppointmentIndex = appointmentIndex + 1;
+        if (nextAppointmentIndex >= appointments.length) {
+            nextAppointmentIndex = 0;
+        }
+        setOpenedAppointment(appointments[nextAppointmentIndex].AppointmentID);
+    }
+
+
+    const goToPrevAppointment = () => {
+        if (!openedAppointment)
+            return;
+        const appointmentIndex = appointments.findIndex(appt => appt.AppointmentID === openedAppointment);
+        let prevAppointmentIndex = appointmentIndex - 1;
+        if (prevAppointmentIndex < 0) {
+            prevAppointmentIndex = appointments.length - 1;
+        }
+        setOpenedAppointment(appointments[prevAppointmentIndex].AppointmentID);
+    }
+
+
     return {
         appointments: tableAppointments,
         openedAppointment,
         openAppointment,
         closeAppointment,
         loadAppointments,
-        updateAppointmentLabel
+        updateAppointmentLabel,
+        goToNextAppointment,
+        goToPrevAppointment
     }
 }

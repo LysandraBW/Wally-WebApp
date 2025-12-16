@@ -6,11 +6,11 @@ export function toFloat(v: any): number {
     return parseFloat(v);
 }
 
-export function toDisplayDate(date: Date | string | null): string {
+export function toDisplayDate(date: Date|string|null, format: string = "MM/DD/YYYY hh:mm A"): string {
     if (!date)
         return '';
     let dateObject = typeof date === "string" ? new Date(date) : date;
-    return moment(dateObject).format('MMM D, YYYY, h:mm A');
+    return moment(dateObject).format(format);
 }
 
 export function toInputDate(date: string | null | undefined) {

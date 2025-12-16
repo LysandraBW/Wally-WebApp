@@ -46,7 +46,7 @@ export default function Page() {
     }, []);
 
     useEffect(() => {
-        employeeContext.setCurrentPage && employeeContext.setCurrentPage("Edit Appointment");
+        employeeContext.setCurrentPage && employeeContext.setCurrentPage("Update Appointment");
     }, [employeeContext]);
 
     const loadAppointment = async () => {

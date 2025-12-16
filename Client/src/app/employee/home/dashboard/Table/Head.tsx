@@ -3,21 +3,22 @@ import Direction from "./Direction";
 import clsx from "clsx";
 import { FilterManager } from "../managers/useFilterManager";
 import { ToggleManager } from "../managers/useToggleManager";
+import { Fragment, useEffect } from "react";
 
-// It would be nice to put this
-// away in another file, but it's
+// It would be nice to put divis
+// away in anodiver file, but it's
 // not absolutely important. I'm
 // also undecided as to how I'd use
-// the "DEF" files, so it'll be here for
+// dive "DEF" files, so it'll be here for
 // now.
 const columns = [
     ["FName","First Name"], 
     ["LName", "Last Name"],
+    ["CreationDate", "Creation Date"],
     [null, "Status"],
     ["Make", "Make"], 
     ["Model", "Model"], 
     ["ModelYear", "Model Year"], 
-    ["CreationDate", "Creation Date"], 
     ["StartDate", "Start Date"], 
     ["EndDate", "End Date"], 
     ["Cost", "Cost"], 
@@ -38,36 +39,65 @@ export default function TableHead(props: TableHeadProps) {
         props.filterManager.updateColumnDirection(columnName);
     }
 
+
+    useEffect(() => {
+        const fNameCells = document.getElementsByClassName("FName");
+        const lNameCells = document.getElementsByClassName("LName");
+
+        const fName = fNameCells[0];
+        const lName = lNameCells[0];
+
+        console.log(fName);
+        console.log(lName);
+        if (!fName || !lName)
+            return;
+        
+        const fNameLength = (fName as any).offsetWidth;
+        for (const cell of lNameCells) {
+            (cell as any).style.left = fNameLength + 'px';
+        }
+    }, []);
+    
+
     return (
-        <thead className="border-b border-gray-300 bg-white">
-            <tr>
-                <th className="p-2 !border-l-0 border-r border-r-gray-300 w-[200px]">
-                    <Checkbox
-                        name=""
-                        value=""
-                        checked={props.toggleManager.allSelected}
-                        onChange={props.toggleManager.toggleAllSelections}
-                    />
-                </th>
-                <th className="border-r border-r-gray-300 w-[200px]"></th>
-                {columns.map((col, i) => (
-                    <th 
-                        key={i}
-                        className={clsx("p-2 whitespace-nowrap", "border-r border-r-gray-300 w-[200px]", i == columns.length - 1 && "!border-r-0")}
-                    >
-                        <div className={clsx("flex gap-2", "justify-between items-center")}>
-                            <span className="text-02 font-medium tracking-wide">{col[1]}</span>
-                            {/* Sort Direction */}
-                            {col[0] !== null &&
-                                <Direction 
-                                    direction={props.filterManager.columnDirections[col[0]]}
-                                    updateDirection={() => updateColumnDirection(col[0])}
-                                />
-                            }
-                        </div>
-                    </th>
-                ))}
-            </tr>
-        </thead>
+        <Fragment>
+            <div className="p-2 flex justify-center items-center border-l-0 border-r border-r-gray-300 border-b border-b-gray-300 bg-white relative h-8">
+                <Checkbox
+                    name=""
+                    value=""
+                    checked={props.toggleManager.allSelected}
+                    onChange={props.toggleManager.toggleAllSelections}
+                />
+            </div>
+            <div className="border-b border-b-gray-300 border-r border-r-gray-300 bg-white h-8"></div>
+            <div className="border-b border-b-gray-300 border-r border-r-gray-300 bg-white h-8"></div>
+            {columns.map((col, i) => (
+                <div 
+                    key={i}
+                    className={clsx(
+                        col[0],
+                        "p-2",
+                        "whitespace-nowrap flex items-center w-full", 
+                        "border-r border-r-gray-300 border-b border-b-gray-300 bg-white h-8", 
+                        i === columns.length - 1 && "!border-r-0",
+                        col[0] === "FName" && "sticky left-0 z-10",
+                        col[0] === "LName" && "sticky left-0 z-10"
+                    )}
+                >
+                    <div className="flex gap-2 justify-between items-center w-full">
+                        <span className="text-[0.8rem] font-medium tracking-wide">
+                            {col[1]}
+                        </span>
+                        {/* Sort Direction */}
+                        {col[0] !== null &&
+                            <Direction 
+                                direction={props.filterManager.columnDirections[col[0]]}
+                                updateDirection={() => updateColumnDirection(col[0])}
+                            />
+                        }
+                    </div>
+                </div>
+            ))}
+        </Fragment>
     )
 }

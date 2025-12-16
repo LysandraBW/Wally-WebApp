@@ -63,8 +63,8 @@ export default function Page() {
                     labels={filterManager.labels}
                     onClick={filterManager.setLabelID}
                 />
-                <div className="flex flex-col bg-blue-400 grow border border-gray-300 border-b-0 rounded-t-md h-full">
-                    <div className="flex p-2 items-center gap-2 border-b border-gray-300 bg-white rounded-t-md">
+                <div className="flex flex-col grow border border-gray-300 border-b-0 rounded-t-md h-full">
+                    <div className="flex p-2 items-center gap-2 border-b border-gray-300 bg-white rounded-t-lg">
                         <ToolBar
                             deleteManager={deleteManager}
                             filterManager={filterManager}
@@ -99,8 +99,7 @@ export default function Page() {
             <AnimatePresence>            
                 {appointmentManager.openedAppointment &&
                         <AppointmentPane
-                            appointmentID={appointmentManager.openedAppointment}
-                            closeAppointment={appointmentManager.closeAppointment}
+                            appointmentManager={appointmentManager}
                         />
                 } 
             </AnimatePresence>

@@ -28,7 +28,7 @@ export default function StatusTabs(props: StatusTabsProps) {
                     <span 
                         className={clsx(
                             "whitespace-nowrap font-normal text-02 tracking-wide", 
-                            status[0] === props.filterManager.statusID && "!text-black !font-medium"
+                            status[0] === props.filterManager.statusID && "!text-blue-500 !font-medium"
                         )}
                     >
                         {status[1]}

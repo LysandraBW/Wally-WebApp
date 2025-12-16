@@ -10,7 +10,7 @@ interface LabelTabsProps {
 
 export default function LabelTabs(props: LabelTabsProps) {
     return (
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-2 bg-gray-100 p-1 rounded-t-md border border-gray-300">
             {props.labels.map(([labelID, label], i) => (
                 <div 
                     key={i}
@@ -18,7 +18,8 @@ export default function LabelTabs(props: LabelTabsProps) {
                         "w-full py-1 px-2 pr-2 flex justify-between items-center gap-1",
                         "border border-gray-300 rounded bg-white shadow-sm",
                         "group hover:bg-gray-50 cursor-pointer",
-                        props.filterManager.labelID === labelID && "!bg-blue-600 !border-blue-500"
+                        "relative",
+                        props.filterManager.labelID === labelID && "after:block after:bg-blue-500 after:w-[3px] after:h-full after:relative after:right-[-0.25rem]"
                     )}
                     onClick={() => props.onClick(labelID)}
                 >
@@ -27,7 +28,7 @@ export default function LabelTabs(props: LabelTabsProps) {
                             className={clsx(
                                 "tracking-wide text-xs",
                                 "group-hover:text-black", 
-                                props.filterManager.labelID === labelID && "font-medium !text-white"
+                                props.filterManager.labelID === labelID && "font-medium !text-blue-500"
                             )}
                         >
                             {label}

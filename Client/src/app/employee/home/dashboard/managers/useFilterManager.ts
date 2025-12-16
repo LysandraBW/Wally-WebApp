@@ -12,7 +12,7 @@ export default function useFilterManager(setLoadedTable: Dispatch<SetStateAction
     const [statusID, setStatusID] = useState<string>("");
     const [statuses, setStatuses] = useState<Options>([]);
     const [labelID, setLabelID] = useState<string>("");
-    const [labels] = useState<Options>([["General", "General"], ["-1", "New"], ["1", "Seen"], ["2", "Flagged"], ["3", "Starred"], ["Deleted", "Deleted"]]);
+    const [labels] = useState<Options>([["", "General"], ["-1", "New"], ["1", "Seen"], ["2", "Flagged"], ["3", "Starred"], ["Deleted", "Deleted"]]);
     const [pageIndex, setPageIndex] = useState(0);
     const [pageLength, setPageLength] = useState(10);
     const [maxPageIndex, setMaxPageIndex] = useState(0);

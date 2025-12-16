@@ -1,12 +1,16 @@
 "use client";
 import clsx from "clsx";
-import { useEffect, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 
 interface TableEntryProps {
     entry: string;
     search: string;
     style?: string;
-    isNew?: boolean;
+    seen: boolean;
+    i?: number;
+    showNewFlag?: boolean;
+    children?: ReactNode;
+    onClick: () => void;
 }
 
 export default function TableEntry(props: TableEntryProps) {
@@ -16,7 +20,7 @@ export default function TableEntry(props: TableEntryProps) {
 
     useEffect(() => {
         if (!props.search || !props.entry) {
-            setStringL(props.entry || "N/A");
+            setStringL(props.entry || "");
             return;
         }
         
@@ -46,23 +50,26 @@ export default function TableEntry(props: TableEntryProps) {
     }, [props.entry, props.search]);
 
     return (
-        <td 
+        <div 
+            data-row={props.i || ""}
             className={clsx(
-                "px-2 py-0 min-w-[200px] max-w-[200px]",
-                "border-r border-r-gray-300",
-                props.style
+                "w-full h-full px-2 py-0 flex gap-2 items-center overflow-clip",
+                "border-r border-r-gray-300 bg-gray-100 border-b border-b-gray-300",
+                "whitespace-nowrap cursor-pointer hover:!bg-white",
+                !props.seen && "!bg-white",
+                props.style,
             )}
+            onClick={props.onClick}
         >
-            <div className="w-full h-full whitespace-nowrap flex gap-2 items-center overflow-clip">
-                {props.isNew &&
-                    <span className="bg-blue-600 text-white border border-blue-500 shadow-sm  tracking-wider font-semibold text-[0.4rem] py-[1px] px-[4px] rounded">NEW</span>
-                }
-                <p className="w-min text-gray-700 tracking-wider text-02 whitespace-nowrap group-hover:text-blue-500 overflow-hidden text-ellipsis">
-                    {stringL}
-                    <b>{stringM}</b>
-                    {stringR}
-                </p>
-            </div>
-        </td>
+            {(props.showNewFlag && !props.seen) &&
+                <span className="bg-white border border-gray-300 text-blue-500 tracking-wide font-semibold text-[0.4rem] py-[2px] px-[4px] rounded-sm">NEW</span>
+            }
+            {props.children}
+            <p className="w-min text-gray-700 tracking-wider text-[0.8rem] whitespace-nowrap group-hover:text-blue-500 overflow-hidden text-ellipsis">
+                {stringL}
+                <b className="font-medium">{stringM}</b>
+                {stringR}
+            </p>
+        </div>
     )
 }

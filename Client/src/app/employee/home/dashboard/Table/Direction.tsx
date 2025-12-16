@@ -13,19 +13,19 @@ export default function Direction(props: DirectionProps) {
     return (
         <div 
             onClick={props.updateDirection}
-            className="grid grid-rows-2 bg-white p-[2.5px] cursor-pointer rounded border border-gray-300 shadow-none stroke-gray-400 hover:stroke-black hover:bg-gray-50"
+            className="grid grid-rows-2 bg-white p-[2.5px] cursor-pointer rounded-sm border border-gray-300 shadow-none stroke-gray-400 hover:stroke-gray-700 hover:bg-gray-50"
         >
             <ChevronUpIcon
-                width="6"
-                height="6"
+                width="4"
+                height="4"
                 cursor="pointer"
                 fill={props.direction === "1" ? BLUE : (props.direction === "0" ? GRAY : "inherit")}
                 stroke={props.direction === "1" ? BLUE : (props.direction === "0" ? GRAY : "inherit")}
                 strokeWidth="2"
             />
             <ChevronDownIcon
-                width="6"
-                height="6"
+                width="4"
+                height="4"
                 cursor="pointer"
                 fill={props.direction === "0" ? BLUE : (props.direction === "1" ? GRAY : "inherit")}
                 stroke={props.direction === "0" ? BLUE : (props.direction === "1" ? GRAY : "inherit")}

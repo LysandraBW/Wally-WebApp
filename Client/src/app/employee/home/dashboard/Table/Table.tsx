@@ -14,9 +14,9 @@ interface TableProps {
 
 export default function Table(props: TableProps) {
     return (
-        <div className="grow overflow-x-scroll flex flex-col grow bg-gray-100 overflow-x-scroll scroll-hide">
+        <div className="grow bg-gray-100">
             {props.appointmentManager.appointments && props.appointmentManager.appointments.length > 0 &&
-                <table className="overflow-x-scroll">
+                <div className="grid grid-cols-[min-content_min-content_min-content_repeat(13,1fr)] overflow-x-scroll scroll-hide">
                     <TableHead
                         filterManager={props.filterManager}
                         toggleManager={props.toggleManager}
@@ -27,7 +27,7 @@ export default function Table(props: TableProps) {
                         deleteManager={props.deleteManager}
                         appointmentManager={props.appointmentManager}
                     />
-                </table>
+                </div>
             }
             {props.appointmentManager.appointments && props.appointmentManager.appointments.length === 0 && 
                 <div className="grow h-full flex flex-col gap-2 justify-center items-center p-4 py-8">
