@@ -44,20 +44,20 @@ export default function CalendarDate(props: CalendarDateProps) {
             This contains the events in that date. 
             The UI is a bit sketch.
             */}
-            <div className="flex flex-col gap-1 px-0 w-full">
+            <div className="flex flex-col gap-1 px-1 w-full">
                 {events.map(([eventID, event], i) => (
                     <div 
                         key={i}
                         onClick={(e) => onOpenEvent(e, eventID)}
                         className={clsx(
-                            "p-0.5 bg-white px-1 border border-gray-200 border-x-0- shadow-xs rounded- hover:bg-gray-50-",
-                            "cursor-pointer relative group w-full",
+                            "shadow-sm p-1 bg-white px-1 border border-gray-300 border-x-0- rounded hover:bg-blue-50 hover:border-blue-200",
+                            "cursor-pointer group w-full flex justify-between",
                             // "after:top-0 hover:after:bg-blue-500 after:left-0 after:h-full after:w-[1px] after:bg-black after:absolute"
                         )}
                     >
-                        <p className="text-00 text-black font-medium whitespace-nowrap text-ellipsis overflow-hidden group-hover:text-blue-500">{event.Name}</p>
+                        <p className="text-00 text-gray-700 font-medium whitespace-nowrap text-ellipsis overflow-hidden group-hover:text-blue-500">{event.Name}</p>
                         <div className="flex items-center gap-0.5">
-                            <span className="text-00 text-gray-400 tracking-wide font-medium- relative top-[-0.5px]">
+                            <span className="whitespace-nowrap text-00 text-gray-400 tracking-wide font-medium relative top-[-0.5px] group-hover:text-blue-500">
                                 {getTimeFromDateString(event.Date)}
                             </span>
                         </div>

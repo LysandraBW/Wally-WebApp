@@ -20,13 +20,13 @@ export default function DisplayItems(props: DisplayItemsProps) {
         <div 
             className={clsx(
                 "",
-                "flex flex-wrap gap-4"
+                "flex flex-wrap gap-4 max-h-[500px] overflow-y-scroll"
             )}
         >
             {props.items.map((item, i) => (
                 <div 
                     key={i}
-                    className="w-[300px]"
+                    className="w-[calc((100%-1rem)/2)]"
                 >
                     {item}
                 </div>

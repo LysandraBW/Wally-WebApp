@@ -1,61 +1,101 @@
 import { Event as DB_Event } from "waltronics-types";
 import { Event, Events } from "./_DEF";
-import { useEffect, useState } from "react";
-import getEventsWhen from "./getEventsWhen";
+import { Dispatch, useEffect, useState } from "react";
 import useItemsManager, { UseItemsManagerProps } from "@/features/ItemManager/useItemsManager";
+import { AlertAction } from "@/features/Alert/alertReducer";
+import deleteConfirmationDispatch from "./dispatch/deleteConfirmationDispatch";
+import { Tab } from "@/features/TabManager/useTabsManager";
+import { EventsTab } from "./page";
+
 
 const today = new Date();
 
-export default function useEventsManager(props: UseItemsManagerProps<DB_Event, Event, Events>) {
+export interface UseEventsManagerProps extends UseItemsManagerProps<DB_Event, Event, Events> {
+    filterTabs: (filterTab: (tab: EventsTab) => boolean) => void;
+    alertDispatch: Dispatch<AlertAction>;
+}
+
+export default function useEventsManager(props: UseEventsManagerProps) {
     const itemsManager = useItemsManager(props);
     const [year, setYear] = useState(today.getFullYear());
     const [monthIndex, setMonthIndex] = useState(today.getMonth());
-    const [dateIndex, setDateIndex] = useState(-1);
-    const [openedEventID, setOpenedEventID] = useState("");
-    const [openedEvent, setOpenedEvent] = useState<Event>();
-    const [openedEvents, setOpenedEvents] = useState<Events>();
 
     useEffect(() => {
-        if (openedEventID)
-            openEvent(openedEventID);
-        
-        if (dateIndex > 0)
-            openEvents(dateIndex);
+        props.filterTabs((tab: EventsTab) => {
+            if (tab.event && !(tab.event.eventID in itemsManager.newItems))
+                return false;
+            return true;
+        });
     }, [itemsManager.newItems]);
 
+
     const openEvent = (eventID: string) => {
-        const event = itemsManager.newItems[eventID];
-        setOpenedEventID(eventID);
-        setOpenedEvent(event);
+        props.openTab({
+            id: {
+                eventID
+            },
+            header: `Event #${eventID}`,
+            event: {
+                eventID
+            }
+        });
     }
 
     const openEvents = (dateIndex: number) => {
-        setDateIndex(dateIndex);
-        const events = getEventsWhen(year, monthIndex, dateIndex, itemsManager.newItems);
-        setOpenedEvents(events);
+        props.openTab({
+            id: {
+                dateIndex: dateIndex,
+                year: year,
+                monthIndex: monthIndex,
+            },
+            header: `${monthIndex+1}/${dateIndex}/${year} Events`,
+            events: {
+                year: year,
+                monthIndex: monthIndex,
+                dateIndex: dateIndex
+            }
+        });
     }
 
-    const closeOpenedEvent = () => {
-    setOpenedEvent(undefined);
-        setOpenedEventID("");
+    const closeOpenedEventTab = (eventID: string) => {
+        props.closeTab({
+            eventID
+        });
     }
 
-    const closeOpenedEvents = () => {
-        setDateIndex(-1);
-        setOpenedEvents(undefined);
+    const closeOpenedEventsTab = (year: number, monthIndex: number, dateIndex: number) => {
+        props.closeTab({
+            year,
+            monthIndex,
+            dateIndex
+        });
     }
+
 
     const deleteFromOpenedEvent = (ID: string) => {
-        closeOpenedEvent();
-        itemsManager.deleteItem(ID);
+        itemsManager.deleteNewItem(ID);
+        closeOpenedEventTab(ID);
     }
 
+
     const deleteFromOpenedEvents = (ID: string) => {
-        const updated = {...openedEvents};
-        delete updated[ID];
-        setOpenedEvents(updated);
-        itemsManager.deleteItem(ID);
+        itemsManager.deleteNewItem(ID);
     }
+
+
+    const safelyDeleteFromOpenedEvent = (ID: string) => {
+        props.alertDispatch(deleteConfirmationDispatch(() => deleteFromOpenedEvent(ID), props.alertDispatch));
+    }
+
+
+    const safelyDeleteFromOpenedEvents = (ID: string) => {
+        props.alertDispatch(deleteConfirmationDispatch(() => deleteFromOpenedEvents(ID), props.alertDispatch));
+    }
+
+    const safelyDeleteByEditor = (ID: string) => {
+        props.alertDispatch(deleteConfirmationDispatch(() => itemsManager.deleteItemByEditor(ID), props.alertDispatch));
+    }
+
 
     const goToNextMonth = () => {
         if (monthIndex === 11) {
@@ -66,6 +106,7 @@ export default function useEventsManager(props: UseItemsManagerProps<DB_Event, E
         setMonthIndex(monthIndex + 1);
     }
 
+
     const goToPrevMonth = () => {
         if (monthIndex === 0) {
             setMonthIndex(11);
@@ -75,32 +116,21 @@ export default function useEventsManager(props: UseItemsManagerProps<DB_Event, E
         setMonthIndex(monthIndex - 1);
     }
 
-    const handleUpdateItem = (ID: string) => {
-        if (itemsManager.newItems[ID] == openedEvent) {
-            closeOpenedEvent();
-        }
-        itemsManager.handleUpdateItem(ID);
-    }
-
+    
     return {
         year,
         setYear,
         monthIndex,
-        dateIndex,
         setMonthIndex,
-        openedEvent,
-        setOpenedEvent,
-        openedEvents,
-        setOpenedEvents,
         openEvent,
         openEvents,
-        closeOpenedEvent,
-        closeOpenedEvents,
-        deleteFromOpenedEvent,
-        deleteFromOpenedEvents,
+        closeOpenedEventTab,
+        closeOpenedEventsTab,
+        deleteFromOpenedEvent: safelyDeleteFromOpenedEvent,
+        deleteFromOpenedEvents: safelyDeleteFromOpenedEvents,
         goToNextMonth,
         goToPrevMonth,
         ...itemsManager,
-        handleUpdateItem
+        deleteItemByEditor: safelyDeleteByEditor
     }
 }

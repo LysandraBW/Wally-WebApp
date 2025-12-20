@@ -7,12 +7,12 @@ function sameDate(a: Date, b: Date) {
     return sameY && sameM && sameD;
 }
 
-export default function getEventsWhen(year: number, monthIndex: number, dateIndex: number, allEvents: Events) {
+export default function getEventsWhen(year: number, monthIndex: number, dateIndex: number, events: Events) {
     const date = new Date(year, monthIndex, dateIndex);
-    const events: Events = {};
-    for (const [eventID, event] of Object.entries(allEvents)) {
+    const eventsWhen: Events = {};
+    for (const [eventID, event] of Object.entries(events)) {
         if (sameDate(date, new Date(event.Date)))
-            events[eventID] = event;
+            eventsWhen[eventID] = event;
     }
-    return events;
+    return eventsWhen;
 }

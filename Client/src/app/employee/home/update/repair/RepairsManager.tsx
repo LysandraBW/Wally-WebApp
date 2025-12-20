@@ -11,24 +11,26 @@ interface RepairsManagerProps {
 
 export default function RepairsManager(props: RepairsManagerProps) { 
     return (
-        <div className="row-start-5 row-span-1 col-start-1 col-span-1 relative flex flex-col grow h-min">
-            <div className="gap-4 bg-white relative after:absolute after:w-[1px] after:h-full after:top-0 after:left-[0px] after:bg-gray-300 before:absolute before:w-[1px] before:h-full after:top-0 before:right-[0px] before:bg-gray-300 h-full">
+        <div className="shadow-sm border border-gray-300 rounded-b-md relative flex flex-col grow h-min">
+            <div className="gap-4 bg-white relative h-full">
                 <table className="w-full">
                     <tbody>
                         <tr>
-                            <td className="w-0 p-0 text--center bg-white font-medium px-4 text-03 tracking-wide whitespace-nowrap border border-gray-300 align-top pt-2">{props.repairsManager.item.itemName}</td>
-                            <td className="p-0 border border-gray-300">
+                            <td className="w-0 p-0 text--center bg-white font-medium px-4 text-02 text-gray-700 tracking-wide whitespace-nowrap border-b border-gray-300 align-top pt-2">
+                                Repairs
+                            </td>
+                            <td className="p-0 border-b border-l border-gray-300">
                                 <div className="relative bg-gray-50 flex flex-col gap-0 py-6 px-4  border-b border-b-gray-200">
                                     <span className="absolute top-[calc(1rem-8px)] left-[calc(0.25rem*4)] text-00 font-medium tracking-wide text-gray-400">Add</span>
                                     <CreateItemButton
-                                        onCreate={props.repairsManager.handleCreateItem}
+                                        onCreate={props.repairsManager.startCreateEditor}
                                     />
                                 </div>
                                 <div className="px-4 py-4">
                                     <RepairDisplay
                                         items={props.repairsManager.newItems}
-                                        onUpdate={props.repairsManager.handleUpdateItem}
-                                        onDelete={(ID: string) => props.repairsManager.deleteItem(ID)}
+                                        onUpdate={props.repairsManager.startUpdateEditor}
+                                        onDelete={(ID: string) => props.repairsManager.deleteItemByDisplay(ID)}
                                     />
                                     {Object.keys(props.repairsManager.newItems as {}).length <= 0 &&
                                         <div className="bg-gray-5-0 rounded-md h-[100px] flex flex-col justify-center gap-1 items-center justify-center">

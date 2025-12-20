@@ -31,10 +31,10 @@ export default function EventManager(props: ItemManagerProps<DB_Event, Event, Ev
         if (!employees)
             return;
 
-        if (!props.itemsManager.forms || !(props.itemID in props.itemsManager.forms)) 
+        if (!props.itemsManager.tempItems || !(props.itemID in props.itemsManager.tempItems)) 
             return;
 
-        const event = props.itemsManager.forms[props.itemID] as Event;
+        const event = props.itemsManager.tempItems[props.itemID] as Event;
         const isCreator = !event.Sharees.includes(event.EventID) || !event.EventID;
         setIsCreator(isCreator);
 

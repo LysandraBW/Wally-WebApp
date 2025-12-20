@@ -23,7 +23,7 @@ export default function Page() {
     useEffect(() => {
         const load = async () => {
             // Loading Appointment, if Any
-            if (searchParams) {
+            if (searchParams && searchParams.get("appointmentID")) {
                 const appointmentID = searchParams.get("appointmentID") || "";
                 const appointment = await SelectAppointment({appointmentID});
                 
@@ -39,14 +39,14 @@ export default function Page() {
             }
 
             // Preparing Input for Manual Appointment ID
-            const test = z.object({id: z.string().length(36)});
+            const test = z.object({id: z.string({"message": "Must be a string."}).length(36, {"message": "This is an invalid appointment ID."})});
             form.resetForm(makeForm({id: ""}, test));
         }
         load();
     }, []);
 
     useEffect(() => {
-        employeeContext.setCurrentPage && employeeContext.setCurrentPage("Update Appointment");
+        employeeContext.setCurrentPage && employeeContext.setCurrentPage("Edit Appointment");
     }, [employeeContext]);
 
     const loadAppointment = async () => {
@@ -71,7 +71,6 @@ export default function Page() {
     return (
         <div className="flex flex-col grow">
             <div className="p-4 flex flex-col grow">
-                <h6 className={clsx("font-medium pb-4 leading-5")}>Edit Appointment</h6>
                 <div className="flex flex-col w-full h-full grow">
                     {(appointment && appointmentID) &&
                         <UpdateManager

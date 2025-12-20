@@ -19,11 +19,11 @@ export default function useItemManager<BaseItem, Item, Items>(props: UseItemMana
 
 
     useEffect(() => {
-        const data = (props.itemsManager.forms as any)[props.itemID];
-        if (sameMap(itemForm.getData(), data, Object.keys(data)))
+        const data = (props.itemsManager.tempItems as any)[props.itemID];
+        if (!data || sameMap(itemForm.getData(), data, Object.keys(data)))
             return;
         itemForm.setData(makeFormData(data));
-    }, [props.itemsManager.forms]);
+    }, [props.itemsManager.tempItems]);
     
     
     const updateInputValue = async (inputName: string, inputValue: any) => {
@@ -32,7 +32,7 @@ export default function useItemManager<BaseItem, Item, Items>(props: UseItemMana
             props.itemID, 
             [itemForm.getState(false), ""]
         );
-        props.itemsManager.updateForm(props.itemID, itemForm.getData());
+        props.itemsManager.insertTempItem(props.itemID, itemForm.getData());
     }
 
 
@@ -41,22 +41,22 @@ export default function useItemManager<BaseItem, Item, Items>(props: UseItemMana
         props.itemsManager.itemsManagerForm.setInputState(props.itemID, [state, ""]);
         if (!state)
             return;
-        props.itemsManager.saveForm(props.itemID);
+        props.itemsManager.saveItemInEditor(props.itemID);
     }
 
 
     const resetItem = async () => {
-        props.itemsManager.resetForm(props.itemID);
+        props.itemsManager.resetItemInEditor(props.itemID);
     }
 
 
     const deleteItem = async () => {
-        props.itemsManager.deleteItemInForm(props.itemID);
+        props.itemsManager.deleteItemByEditor(props.itemID);
     }
 
 
     const closeItem = async () => {
-        props.itemsManager.closeForm(props.itemID);
+        props.itemsManager.closeEditor(props.itemID);
     }
 
 

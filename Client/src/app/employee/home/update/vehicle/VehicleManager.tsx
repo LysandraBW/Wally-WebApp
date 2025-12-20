@@ -30,11 +30,17 @@ export default function VehicleManager(props: VehicleManagerProps) {
     const [makes, setMakes] = useState<Options>([]);
     const [models, setModels] = useState<Options>([]);
     const [modelYears, setModelYears] = useState<Options>([]);
+    const [changesMade, setChangesMade] = useState(false);
     
 
     useEffect(() => {
         resetUpdates();
     }, []);
+
+
+    useEffect(() => {
+        props.setChangesMade && props.setChangesMade(VEHICLE, changesMade);
+    }, [changesMade]);
 
 
     const processUpdates = (oldVehicle: Vehicle, newVehicle: Vehicle) => {
@@ -59,7 +65,7 @@ export default function VehicleManager(props: VehicleManagerProps) {
 
         const newVehicle: Vehicle = form.getData() as Vehicle;
         processUpdates(oldVehicle, newVehicle);
-        props.setChangesMade && props.setChangesMade(VEHICLE, false);
+        setChangesMade(false);
     }
 
     
@@ -91,7 +97,7 @@ export default function VehicleManager(props: VehicleManagerProps) {
             getValues(vehicleModelYears)
         );        
         form.resetForm(makeForm(vehicle, test));
-        props.setChangesMade && props.setChangesMade(VEHICLE, false);
+        setChangesMade(false);
     }
 
 
@@ -135,13 +141,13 @@ export default function VehicleManager(props: VehicleManagerProps) {
         }
         form.updateInputData(name, value);
         props.updateManagerForm.setInputState(VEHICLE, [form.getState(), ""]);
-        props.setChangesMade && props.setChangesMade(VEHICLE, JSON.stringify(form.getData()) !== JSON.stringify(oldVehicle));
+        setChangesMade(JSON.stringify(form.getData()) !== JSON.stringify(oldVehicle));
     }
 
 
     return (
-        <div className="row-start-5 row-span-1 col-start-1 col-span-1 grow relative flex flex-col h-min">
-            <div className="bg-white relative after:absolute after:w-[1px] after:h-full after:top-0 after:left-[0px] after:bg-gray-300 before:absolute before:w-[1px] before:h-full after:top-0 before:right-[0px] before:bg-gray-300 h-full grow">
+        <div className="grow h-full relative flex flex-col shadow-sm rounded-b-md border border-gray-300">
+            <div className="bg-white relative h-full grow">
                 <table className="grow w-full border-collapse">
                     <tbody>
                         <TextFieldGrid
@@ -207,6 +213,7 @@ export default function VehicleManager(props: VehicleManagerProps) {
             <SaveResetButtons
                 onSave={saveUpdates}
                 onReset={resetUpdates}
+                changesMade={changesMade}
             />
         </div>
     )

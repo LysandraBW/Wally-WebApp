@@ -23,6 +23,7 @@ export default function ContactManager(props: ContactManagerProps) {
     const form = useForm(CONTACT);
     const [statuses, setStatuses] = useState<Options>([]);
     const [oldContact, setOldContact] = useState<Contact>();
+    const [changesMade, setChangesMade] = useState(false);
     
 
     useEffect(() => {
@@ -30,6 +31,11 @@ export default function ContactManager(props: ContactManagerProps) {
     }, []);
 
     
+    useEffect(() => {
+        props.setChangesMade && props.setChangesMade(CONTACT, changesMade);
+    }, [changesMade]);
+
+
     const refresh = async () => {
         const statuses = await GetStatusPairs();
         setStatuses(statuses);
@@ -58,7 +64,7 @@ export default function ContactManager(props: ContactManagerProps) {
             return;
         const newContact = form.getData() as Contact;
         processUpdates(oldContact, newContact);
-        props.setChangesMade && props.setChangesMade(CONTACT, false);
+        setChangesMade(false);
     }
 
     
@@ -67,21 +73,21 @@ export default function ContactManager(props: ContactManagerProps) {
         setOldContact(contact);
         form.resetForm(makeForm(contact, contactTest, true));
         props.updateManagerForm.setInputState(CONTACT, [form.getState(), ""]);
-        props.setChangesMade && props.setChangesMade(CONTACT, false);
+        setChangesMade(false);
     }
 
 
     const updateValue = async (name: string, value: any) => {
         form.updateInputData(name, value);
         props.updateManagerForm.setInputState(CONTACT, [form.getState(), ""]);
-        props.setChangesMade && props.setChangesMade(CONTACT, JSON.stringify(form.getData()) !== JSON.stringify(oldContact));
+        setChangesMade(JSON.stringify(form.getData()) !== JSON.stringify(oldContact));
     }
     
 
     return (
-        <div className="row-start-5 row-span-1 col-start-1 col-span-1 grow relative flex flex-col h-min">
-            <div className="bg-white relative after:absolute after:w-[1px] after:h-full after:top-0 after:left-[0px] after:bg-gray-300 before:absolute before:w-[1px] before:h-full after:top-0 before:right-[0px] before:bg-gray-300 h-full grow">
-                <table className="grow w-full border-collapse">
+        <div className="grow h-full relative flex flex-col shadow-sm rounded-b-md border border-gray-300">
+            <div className="bg-white relative h-full grow">
+                <table className="grow w-full border-collapse rounded">
                     <tbody>
                         <TextFieldGrid
                             type="text"
@@ -153,6 +159,7 @@ export default function ContactManager(props: ContactManagerProps) {
             <SaveResetButtons
                 onSave={saveUpdates}
                 onReset={resetUpdates}
+                changesMade={changesMade}
             />
         </div>
     )

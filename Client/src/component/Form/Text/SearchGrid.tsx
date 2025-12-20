@@ -54,9 +54,9 @@ export default function SearchGrid(props: SelectProps) {
 
     return (
         <Fragment>
-            <tr className="min-h-[36px] p-0">
-                <td className="p-0 text-c-enter bg-white w-[150px] font-medium px-4 text-sm tracking-wide border border-gray-300">{props.label}</td>
-                <td className="p-0 border border-gray-300">
+            <tr className="max-h-[32px] p-0">
+                <td className="p-0 text-c-enter bg-white w-[150px] font-medium px-4 text-02 text-gray-700 tracking-wide border-b border-gray-300">{props.label}</td>
+                <td className="p-0 border-l border-b border-gray-300">
                     <table className="w-full border-0 border-collapse">
                         <tbody>
                             <tr>
@@ -65,11 +65,11 @@ export default function SearchGrid(props: SelectProps) {
                                         <div
                                             tabIndex={0}
                                             onBlur={closeList}
-                                            className="relative h-10"
+                                            className="relative h-[32px]"
                                         >
                                             <div 
                                                 onMouseDown={openList}
-                                                className={clsx("grid grid-cols-[auto_13px] min-h-10 gap-3 justify-between items-center px-4 pr-4 cursor-pointer hover:bg-gray-50 text-sm tracking-wide text-gray-600", open && "!bg-blue-50 !text-blue-500")}
+                                                className={clsx("grid grid-cols-[auto_13px] h-full gap-3 justify-between items-center px-4 pr-4 cursor-pointer hover:bg-gray-50 tracking-wide text-02 text-gray-700", open && "!bg-blue-50 !text-blue-500")}
                                             >
                                                 {props.values[0] ? props.values[0] : props.toggleLabel}
                                             </div>
@@ -79,7 +79,7 @@ export default function SearchGrid(props: SelectProps) {
                                 {open &&
                                     <td className="p-0">
                                         <input 
-                                            className="focus:bg-blue-50 focus:text-blue-500 text-sm text-gray-600 tracking-wider px-4 outline-none w-full h-[36px]"
+                                            className="focus:bg-blue-50 focus:text-blue-500 text-02 text-gray-700 tracking-wider px-4 outline-none w-full h-[36px]"
                                             value={search} 
                                             placeholder="Search" 
                                             onChange={(event) => setSearch(event.target.value)}

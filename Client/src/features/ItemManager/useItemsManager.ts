@@ -1,7 +1,7 @@
 import useForm, { UseForm } from "@/features/Form/useForm/useForm";
 import { Define } from "@/features/ItemManager/Define";
 import { useEffect, useState } from "react";
-
+import { Tab, TabID } from "../TabManager/useTabsManager";
 
 export interface UseItemsManagerProps<BaseItem, Item, Items> {
     item: Define<BaseItem, Item, Items>;
@@ -13,8 +13,8 @@ export interface UseItemsManagerProps<BaseItem, Item, Items> {
     saveAuto?: boolean;
     saveUpdates: (oldItems: Items, newItems: Items) => void;
     
-    openForm: (keyForUpdateManager: string, itemID: string, mutation: "Create"|"Update") => void;
-    closeForm: (keyForUpdateManager: string, itemID: string) => void;
+    openTab: (tab: Tab) => void;
+    closeTab: (tabID: TabID, filterTab?: (tab: Tab) => boolean) => void;
 
     handleChangesMade?: (keyForUpdateManager: string, changesMade: boolean) => void;
     doNotManageChangesMade?: boolean;
@@ -24,7 +24,8 @@ export default function useItemsManager<BaseItem, Item, Items>(props: UseItemsMa
     const itemsManagerForm = useForm(props.keyForUpdateManagerForm);
     const [oldItems, setOldItems] = useState<Items>({} as any);
     const [newItems, setNewItems] = useState<Items>({} as any);
-    const [forms, setForms] = useState<{[itemID: string]: Item}>({});
+    // These are items that are "open" and being worked on.
+    const [tempItems, setTempItems] = useState<{[itemID: string]: Item}>({});
     const [counter, setCounter] = useState(-1);
 
 
@@ -45,6 +46,58 @@ export default function useItemsManager<BaseItem, Item, Items>(props: UseItemsMa
     }, [newItems]);
 
 
+    const insertNewItem = (item: Item) => {
+        const updatedItems = {...newItems} as any;
+        const itemID = (item as any)[props.item.itemID];
+        updatedItems[itemID] = {...item};
+        setNewItems(updatedItems);
+    }
+
+
+    const deleteNewItem = (itemID: string) => {
+        const updatedItems = {...newItems} as any;
+        delete updatedItems[itemID];
+        setNewItems(updatedItems);
+    }
+
+
+    const insertTempItem = (itemID: string, item: Item) => {
+        const updatedTemps = {...tempItems};
+        updatedTemps[itemID] = item;
+        setTempItems(updatedTemps);
+    }
+
+
+    const deleteTempItem = (itemID: string) => {
+        const updatedTemps = {...tempItems};
+        delete updatedTemps[itemID];
+        setTempItems(updatedTemps);
+    }
+
+
+    const getNewItemID = () => {
+        const itemID = counter.toString();
+        setCounter(c => c - 1);
+        return itemID;
+    }
+
+
+    const buildNewItem = (itemID: string) => {
+        const item = props.item.buildItem(null);
+        (item as any)[props.item.itemID] = itemID;
+        return item;
+    }
+
+
+    const saveUpdates = () => {
+        const state = itemsManagerForm.getState();
+        props.updateManagerForm.setInputState(props.keyForUpdateManagerForm, [state, ""]);
+        if (!state)
+            throw new Error();
+        props.saveUpdates(oldItems, newItems);
+    }
+
+
     const resetUpdates = () => {
         const items = props.item.buildItems(props.itemList);
         setOldItems(items);
@@ -54,108 +107,107 @@ export default function useItemsManager<BaseItem, Item, Items>(props: UseItemsMa
     }
 
 
-    const saveUpdates = () => {
-        const state = itemsManagerForm.getState();
-        props.updateManagerForm.setInputState(props.keyForUpdateManagerForm, [state, ""]);
-        if (!state)
-            throw new Error("Error in Form");
-        props.saveUpdates(oldItems, newItems);
-    }
-
-    
-    const deleteItem = (itemID: string) => {
-        const updatedItems = {...newItems} as any;
-        delete updatedItems[itemID];
-        setNewItems(updatedItems);
-    }
-    
-
-    const insertItem = (item: Item) => {
-        const updatedItems = {...newItems} as any;
-        const itemID = (item as any)[props.item.itemID];
-        updatedItems[itemID] = {...item};
-        setNewItems(updatedItems);
+    const openTabToCreateItem = (itemID: string) => {
+        props.openTab({
+            id: {
+                itemsManagerKey: props.keyForUpdateManagerForm,
+                itemID: itemID
+            },
+            header: `Create New ${props.item.itemName}`,
+            form: {
+                key: props.keyForUpdateManagerForm, 
+                itemID: itemID,
+                header: `Create New ${props.item.itemName}`,
+                mutation: "Create",
+                canDelete: false
+            }
+        });
     }
 
 
-    const handleCreateItem = () => {
-        const itemID = counter.toString();
-        const item: Item = createBlankItem(itemID);
-        console.log(item, props.keyForUpdateManagerForm, itemID);
-        setCounter(c => c - 1);
-        insertForm(itemID, item);
-        props.openForm(props.keyForUpdateManagerForm, itemID, "Create");
+    const openTabToUpdateItem = (itemID: string) => {
+        props.openTab({
+            id: {
+                itemsManagerKey: props.keyForUpdateManagerForm,
+                itemID: itemID
+            },
+            header: `Update ${props.item.itemName} #${itemID}`,
+            form: {
+                key: props.keyForUpdateManagerForm, 
+                itemID: itemID, 
+                header: `Update ${props.item.itemName} #${itemID}`,
+                mutation: "Update",
+                canDelete: true
+            }
+        });
     }
 
 
-    const handleUpdateItem = (itemID: string) => {
+    const closeTabForItem = (itemID: string) => {
+        props.closeTab({
+            itemsManagerKey: props.keyForUpdateManagerForm,
+            itemID: itemID
+        });
+    }
+
+
+    const startCreateEditor = () => {
+        const itemID = getNewItemID();
+        const item = buildNewItem(getNewItemID());
+        insertTempItem(itemID, item);
+        openTabToCreateItem(itemID);
+    }
+
+
+    const startUpdateEditor = (itemID: string) => {
         const item: Item = (newItems as any)[itemID];
-        insertForm(itemID, item);
-        props.openForm(props.keyForUpdateManagerForm, itemID, "Update");
+        insertTempItem(itemID, item);
+        openTabToUpdateItem(itemID);
     }
 
 
-    const createBlankItem = (itemID: string) => {
-        const item: Item = {
-            ...props.item.buildItem(null), 
-            [props.item.itemID]: itemID
-        }
-        return item;
+    const closeEditor = (itemID: string) => {
+        console.log("itemID", itemID);
+        closeTabForItem(itemID);
+        deleteTempItem(itemID);
     }
 
 
-    const insertForm = (itemID: string, item: Item) => {
-        const updatedForms = {...forms} as any;
-        updatedForms[itemID] = item;
-        setForms(updatedForms);
-    }
-
-
-    const deleteForm = (itemID: string) => {
-        const updatedForms = {...forms} as any;
-        delete updatedForms[itemID];
-        setForms(updatedForms);
-    }
-
-
-    const updateForm = (itemID: string, item: Item) => {
-        const updatedForms = {...forms};
-        updatedForms[itemID] = item;
-        setForms(updatedForms);
-    }
-
-
-    const saveForm = (itemID: string) => {
-        const item: Item = (forms as any)[itemID];
-        insertItem(item);
-        closeForm(itemID);
-    }
-
-
-    const closeForm = (itemID: string) => {
-        props.closeForm(props.keyForUpdateManagerForm, itemID);
-        deleteForm(itemID);
+    const saveItemInEditor = (itemID: string) => {
+        const item: Item = (tempItems as any)[itemID];
+        insertNewItem(item);
+        closeEditor(itemID);
     }
 
     
-    const resetForm = (itemID: string) => {
+    const resetItemInEditor = (itemID: string) => {
         const created = parseInt(itemID) < 0;
         if (created) {
-            const item: Item = createBlankItem(itemID);
-            insertForm(itemID, item);
+            const item: Item = buildNewItem(itemID);
+            insertTempItem(itemID, item);
         }
         else {
             const item: Item = (newItems as any)[itemID];
-            insertForm(itemID, item);
+            insertTempItem(itemID, item);
         }
     }
 
 
-    const deleteItemInForm = (itemID: string) => {
-        deleteItem(itemID);
+    const deleteItemByEditor = (itemID: string) => {
+        deleteNewItem(itemID);
+        closeEditor(itemID);
         itemsManagerForm.deleteInput(itemID);
         props.updateManagerForm.setInputState(props.keyForUpdateManagerForm, [itemsManagerForm.getState(), ""]);
-        closeForm(itemID);
+    }
+
+
+    const deleteItemByDisplay  = (itemID: string) => {
+        deleteNewItem(itemID);
+        if (itemID in tempItems) {
+            closeEditor(itemID);
+            itemsManagerForm.deleteInput(itemID);
+            props.updateManagerForm.setInputState(props.keyForUpdateManagerForm, [itemsManagerForm.getState(), ""]);
+        }
     }
 
 
@@ -166,23 +218,23 @@ export default function useItemsManager<BaseItem, Item, Items>(props: UseItemsMa
         keyForUpdateManagerForm: props.keyForUpdateManagerForm,
         oldItems,
         newItems,
+        tempItems,
         setNewItems,
-        forms,
-        counter,
-        setCounter,
-        resetUpdates,
+        getNewItemID,
+        buildNewItem,
         saveUpdates,
-        deleteItem,
-        insertItem,
-        handleCreateItem,
-        handleUpdateItem,
-        createBlankItem,
-        insertForm,
-        deleteForm,
-        updateForm,
-        saveForm,
-        closeForm,
-        resetForm,
-        deleteItemInForm
+        resetUpdates,
+        deleteNewItem,
+        insertNewItem,
+        insertTempItem,
+        deleteTempItem,
+        startCreateEditor,
+        startUpdateEditor,
+        closeEditor,
+        saveItemInEditor,
+        resetItemInEditor,
+        deleteItemByEditor,
+        deleteItemByDisplay,
+        openTab: props.openTab
     }
 }

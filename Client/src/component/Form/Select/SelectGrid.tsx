@@ -51,8 +51,8 @@ export default function SelectGrid(props: SelectProps) {
     return (
         <Fragment>
             <tr className="h-[32px] p-0">
-                <td className="w-0 p-0 text-c-enter bg-white font-medium px-4 text-03 tracking-wide border border-gray-300 align-top pt-1">{props.label}</td>
-                <td className="p-0 border border-gray-300">
+                <td className="w-0 p-0 text-c-enter bg-white font-medium px-4 text-03 tracking-wide border-b border-gray-300 align-top pt-1">{props.label}</td>
+                <td className="p-0 border-l border-b border-gray-300">
                     <table className="w-full border-0 border-collapse">
                         <tbody>
                             <tr>

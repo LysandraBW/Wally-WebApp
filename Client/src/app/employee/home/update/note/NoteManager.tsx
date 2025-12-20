@@ -31,10 +31,10 @@ export default function NoteManager(props: ItemManagerProps<DB_Note, Note, Notes
         if (!employees)
             return;
 
-        if (!props.itemsManager.forms || !(props.itemID in props.itemsManager.forms)) 
+        if (!props.itemsManager.tempItems || !(props.itemID in props.itemsManager.tempItems)) 
             return;
 
-        const note = props.itemsManager.forms[props.itemID] as Note;
+        const note = props.itemsManager.tempItems[props.itemID] as Note;
         const isCreator = !note.Sharees.includes(note.EmployeeID) || !note.NoteID;
         setIsCreator(isCreator);
 

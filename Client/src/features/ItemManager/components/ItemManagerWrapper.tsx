@@ -22,9 +22,9 @@ export interface ItemManagerWrapperProps {
 
 export function ItemManagerWrapper(props: ItemManagerWrapperProps) {
     return (
-        <div className="grow flex flex-col justify-between bg-white min-w-[400px] w-full border border-gray-300 rounded-tr-md rounded-b-md">
-            <div className="grow bg-white w-full rounded-tr-md">
-                <div className="bg-white flex justify-between items-center p-4 gap-1 border-b border-b-gray-300 rounded-tr-md">
+        <div className="grow flex flex-col justify-between bg-white min-w-[400px] w-full border border-gray-300 rounded-b-md">
+            <div className="grow bg-white w-full">
+                <div className="bg-white flex justify-between items-center p-4 gap-1 border-b border-b-gray-300">
                     <h6 className="font-medium">{props.header}</h6>
                     {
                         <CloseButton

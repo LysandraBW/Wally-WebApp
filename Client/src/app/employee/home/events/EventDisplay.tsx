@@ -12,9 +12,10 @@ import { toInteger } from "@/utils/convert";
 import GetEmployeeNamePairs from "@/services/DB/Employee/GetEmployeeNamePairs";
 import { DisplayProps } from "@/features/ItemManager/components/DisplayItems";
 import Box from "@/component/IconV2/Box";
+import getEventsWhen from "./getEventsWhen";
 
 interface EventDisplayProps<Items> extends  DisplayProps<Items> {
-    onClose: () => void;
+    onClose: (year: number, monthIndex: number, dateIndex: number) => void;
     year: number;
     monthIndex: number;
     dateIndex: number;
@@ -22,6 +23,7 @@ interface EventDisplayProps<Items> extends  DisplayProps<Items> {
 
 export default function EventDisplay(props: EventDisplayProps<Events>) {
     const [idToName, setIDToName] = useState<OptionMap>({});
+    const [eventsWhen, setEventsWhen] = useState<Events>(props.items);
 
     useEffect(() => {
         const load = async () => {
@@ -30,6 +32,10 @@ export default function EventDisplay(props: EventDisplayProps<Events>) {
         }
         load();
     }, []);
+
+    useEffect(() => {
+        setEventsWhen(getEventsWhen(props.year, props.monthIndex, props.dateIndex, props.items));
+    }, [props.items]);
 
     return (
         <div className="flex flex-col gap-4 border border-gray-300 w-full">
@@ -41,13 +47,13 @@ export default function EventDisplay(props: EventDisplayProps<Events>) {
                 </div>
                 <div className="w-min">
                     <CloseButton
-                        close={props.onClose}
+                        close={() => props.onClose(props.year, props.monthIndex, props.dateIndex)}
                     />
                 </div>
             </div>
             <div className="p-4 py-0 pb-4 flex flex-col gap-4">
                 {/* View/Update Events */}
-                {Object.entries(props.items).map(([itemID, item], i) => (
+                {Object.entries(eventsWhen).map(([itemID, item], i) => (
                     <div key={i}>
                         <UpdateItem
                             canDelete={true}

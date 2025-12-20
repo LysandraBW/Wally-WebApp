@@ -11,19 +11,32 @@ import { UpdateEmployeeEvents } from "@/services/DB/Employee/UpdateEmployeeEvent
 import { Event as DB_Event } from "waltronics-types";
 import { useContext, useEffect, useReducer, useState } from "react";
 import { EmployeeContext } from "../layout";
-import { ItemManagerForm } from "../update/UpdateManager";
-import EventsManager from "./EventsManager";
 import useEventsManager from "./useEventsManager";
 import EventManager from "./EventManager";
+import EventModal from "./EventModal";
+import EventDisplay from "./EventDisplay";
+import getEventsWhen from "./getEventsWhen";
+import Calendar from "./Calendar";
+import CalendarSearch from "./CalendarSearch";
+import clsx from "clsx";
+import useTabsManager, { Tab } from "@/features/TabManager/useTabsManager";
 
-export default function EventUpdateManager() {
-    const updateManagerForm = useForm("Calendar");
+export interface EventsTab extends Tab {
+    event?: {
+        eventID: string;
+    };
+    events?: {
+        year: number;
+        monthIndex: number;
+        dateIndex: number;
+    }
+}
+
+export default function EventsManager() {
     const [alert, alertDispatch] =  useReducer(alertReducer, startAlert);
     const [events, setEvents] = useState<Array<DB_Event>>([]);
-    const [itemManagerForms, setItemManagerForms] = useState<Array<ItemManagerForm<DB_Event, Event, Events>>>([]);
-    const [currentItemManagerForm, setCurrentItemManagerForm] = useState<ItemManagerForm<DB_Event, Event, Events>|null>();
-    const [currentItemManagerHeader, setCurrentItemManagerHeader] = useState("");
-    const [currentItemManagerCanDelete, setCurrentItemManagerCanDelete] = useState(false);
+    const updateManagerForm = useForm("Calendar");
+    const tabsManager = useTabsManager<EventsTab>();
     const employeeContext = useContext(EmployeeContext);
     
 
@@ -37,59 +50,34 @@ export default function EventUpdateManager() {
     }, [employeeContext]);
 
 
-    useEffect(() => {
-        if (!currentItemManagerForm) {
-            setCurrentItemManagerHeader("");
-            return;
-        }
-
-        let item: string = currentItemManagerForm.itemsManagerKey;
-        let action: string = currentItemManagerForm.mutation === "Update" ? "Update" : "Create"
-        let itemID: string = currentItemManagerForm.itemID;
-        itemID = parseInt(itemID) < 0 ? "(New)" : "#" + itemID;
-        
-        const formTabName = `${action} ${item} ${itemID}`;
-        setCurrentItemManagerHeader(formTabName);
-        setCurrentItemManagerCanDelete(currentItemManagerForm.mutation === "Update");
-
-    }, [currentItemManagerForm]);
+    const eventsManager = useEventsManager({
+        item: new DefineEvent(),
+        itemList: events,
+        updateManagerForm: updateManagerForm,
+        keyForUpdateManagerForm: "Event",
+        saveAuto: true,
+        saveUpdates: async (oldItems: Events, newItems: Events) => {
+            const updates = buildEventUpdates(oldItems, newItems);
+            const output = await UpdateEmployeeEvents(updates);
+            alertMessage(output);
+        },
+        alertDispatch,
+        openTab: tabsManager.openTab,
+        closeTab: tabsManager.closeTab,
+        filterTabs: tabsManager.filterTabs
+    });
 
 
     const refresh = async () => {
         const events = await SelectEvents();
+        console.log(events);
         setEvents(events);
-    }
-    
-
-    const openForm = (itemsManagerKey: string, itemID: string, mutation: "Create"|"Update") => {
-        const form: ItemManagerForm<DB_Event, Event, Events> = {itemsManagerKey, itemID, mutation};
-        setItemManagerForms([...itemManagerForms, form]);
-        setCurrentItemManagerForm(form);
-    }
-
-
-    const closeForm = (itemsManagerKey: string, itemID: string) => {
-        const formIndex = itemManagerForms.findIndex(f => f.itemsManagerKey == itemsManagerKey && f.itemID == itemID);
-        if (formIndex === -1)
-            return;
-        
-        const updatedFormInfos = [...itemManagerForms];
-        updatedFormInfos.splice(formIndex, 1);
-        setItemManagerForms(updatedFormInfos);
-        
-        if (updatedFormInfos.length === 0)
-            setCurrentItemManagerForm(null);
-        if (updatedFormInfos.length === 1)
-            setCurrentItemManagerForm(updatedFormInfos[0]);
-        if (updatedFormInfos.length > 1)
-            setCurrentItemManagerForm(updatedFormInfos[formIndex-1]);  
     }
 
 
     const alertMessage = async (good: boolean) => {
-        console.log("alertMessage");
         const key = randomKey();
-        console.log("\tgood: ", good);
+
         if (good) {
             const dispatch = saveTDispatch(key, alertDispatch);
             alertDispatch(dispatch);
@@ -102,47 +90,92 @@ export default function EventUpdateManager() {
     }
 
 
-    const eventsManager = useEventsManager({
-        item: new DefineEvent(),
-        itemList: events,
-        updateManagerForm: updateManagerForm,
-        keyForUpdateManagerForm: "Event",
-        saveAuto: true,
-        saveUpdates: async (oldItems: Events, newItems: Events) => {
-            const updates = buildEventUpdates(oldItems, newItems);
-            const output = await UpdateEmployeeEvents(updates);
-            alertMessage(output);
-        },
-        openForm,
-        closeForm
-    });
-
-
     return (
         <div className="flex flex-col overflow-x-clip grow">
             <Alert
                 alert={alert}
             />
-            {itemManagerForms &&
-                itemManagerForms.map((form, i) => (
-                    <div key={i} onClick={() => setCurrentItemManagerForm(form)}>
-                        {form.itemsManagerKey} {form.itemID}
+            <div className="flex grow">
+                <div className="p-4 flex flex-col grow gap-4">
+                    <div className="flex flex-col gap-4 row-start-1 row-span-1 col-start-1 w-full grow">
+                        <div className="w-full flex justify-between">
+                            <CalendarSearch
+                                year={eventsManager.year}
+                                monthIndex={eventsManager.monthIndex}
+                                goToNextMonth={eventsManager.goToNextMonth}
+                                goToPrevMonth={eventsManager.goToPrevMonth}
+                                onYearChange={eventsManager.setYear}
+                                onMonthChange={eventsManager.setMonthIndex}
+                            />
+                            <button 
+                                className={clsx(
+                                    "w-full max-w-[10rem] !h-[26px]",
+                                    "p-4 py-2 bg-white rounded",
+                                    "border border-gray-300 hover:stroke-black hover:fill-blue-500 stroke-gray-400 fill-gray-400 hover:text-black",
+                                    "hover:border hover:bg-gray-50",
+                                    "fill-gray-300 stroke-gray-300",
+                                    "shadow-sm flex items-center justify-center gap-2"
+                                )}
+                                onClick={eventsManager.startCreateEditor}
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" className="stroke-inherit fill-inherit size-4">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                                </svg>
+                            </button>
+                        </div>
+                        <Calendar
+                            year={eventsManager.year}
+                            monthIndex={eventsManager.monthIndex}
+                            events={eventsManager.newItems}
+                            onOpenEvent={eventsManager.openEvent}
+                            onOpenEvents={eventsManager.openEvents}
+                        />
                     </div>
-                ))
-            }
-            {itemManagerForms && currentItemManagerForm &&
-                <EventManager
-                    itemID={currentItemManagerForm.itemID}
-                    itemsManager={eventsManager as any}
-                    header={currentItemManagerHeader}
-                    canDelete={currentItemManagerCanDelete}
-                />
-            }
-            <div className="p-4 flex flex-col grow gap-4">
-                <h6 className="font-medium leading-5">Calendar</h6>
-                <EventsManager
-                    eventsManager={eventsManager}
-                />
+                </div>
+                <div>
+                    {tabsManager.tabs && (
+                        <>
+                            {
+                                tabsManager.tabs.map((tab, i) => (
+                                    <div key={i} onClick={() => tabsManager.openTab(tab)}>
+                                        {tab.header}
+                                    </div>
+                                ))
+                            }
+                            {tabsManager.currentTab && (
+                                <>
+                                    {tabsManager.currentTab.form &&
+                                        <EventManager
+                                            itemsManager={eventsManager as any}
+                                            itemID={tabsManager.currentTab.form.itemID}
+                                            header={tabsManager.currentTab.form.header}
+                                            canDelete={tabsManager.currentTab.form.canDelete}
+                                        />
+                                    }
+                                    {tabsManager.currentTab.event &&
+                                        <EventModal
+                                            event={eventsManager.newItems[tabsManager.currentTab.event.eventID]}
+                                            onClose={eventsManager.closeOpenedEventTab}
+                                            onUpdate={eventsManager.startUpdateEditor}
+                                            onDelete={eventsManager.deleteFromOpenedEvent}
+                                        />
+                                    }
+                                    {tabsManager.currentTab.events &&
+                                        <EventDisplay
+                                            items={eventsManager.newItems}
+                                            year={tabsManager.currentTab.events.year}
+                                            monthIndex={tabsManager.currentTab.events.monthIndex}
+                                            dateIndex={tabsManager.currentTab.events.dateIndex}
+                                            onClose={eventsManager.closeOpenedEventsTab}
+                                            onUpdate={eventsManager.startUpdateEditor}
+                                            onDelete={eventsManager.deleteFromOpenedEvents}
+                                        />
+                                    }
+                                </>
+                            )}
+                        </>
+                    )}
+                </div>
             </div>
         </div>
     )

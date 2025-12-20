@@ -132,7 +132,7 @@ export default function Page({children}: Readonly<{children: React.ReactNode}>) 
                                             currentPage !== value[0] && "!text-[0.75rem] tracking-wide"
                                         )}
                                     >
-                                        {value[2]}
+                                        {/* {value[2]} */}
                                         {value[0] as string}
                                     </div>
                                 </a>

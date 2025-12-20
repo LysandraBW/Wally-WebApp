@@ -3,7 +3,7 @@ import randomKey from "@/features/Alert/randomKey";
 import saveFDispatch from "@/features/Alert/saveFDispatch";
 import saveTDispatch from "@/features/Alert/saveTDispatch";
 import SelectAppointment from "@/services/DB/Appointment/SelectAppointment";
-import { useCallback, useEffect, useReducer, useState } from "react";
+import { Fragment, useCallback, useEffect, useReducer, useState } from "react";
 import { Appointment as DB_Appointment } from "waltronics-types";
 import { Diagnosis as DB_AppointmentDiagnosis } from "waltronics-types";
 import useItemsManager from "../../../../features/ItemManager/useItemsManager";
@@ -55,6 +55,10 @@ import Alert from "@/features/Alert/Alert";
 import { useRouter, useSearchParams } from "next/navigation";
 import { AnimatePresence, motion } from "motion/react";
 import useInterval from "@/features/Alert/useInterval";
+import clsx from "clsx";
+import CloseButton from "@/component/Button/CloseButton";
+import { sameSemanticMap } from "@/lib";
+import useTabsManager, { Tab, TabID } from "@/features/TabManager/useTabsManager";
 
 
 interface UpdateManagerProps {
@@ -63,51 +67,31 @@ interface UpdateManagerProps {
     close: () => void;
 }
 
-export interface ItemManagerForm<BaseItem, Item, Items> {
-    itemsManagerKey: string;
-    itemID: string;
-    mutation: "Create"|"Update";
-}
-
 export default function UpdateManager<BaseItem, Item, Items>(props: UpdateManagerProps) {
     const router = useRouter();
     const searchParams = useSearchParams();
     const updateManagerForm = useForm("Update", MasterForm);
     const [alert, alertDispatch] =  useReducer(alertReducer, startAlert);
     const [appointment, setAppointment] = useState<DB_Appointment>(props.appointment);
-    const [tab, setTab] = useState(CONTACT);
-    const [tabs] = useState([[CONTACT, "General"], [VEHICLE, "Vehicle"], [PAYMENT, "Finances"], [DIAGNOSIS, "Diagnoses"], [PART, "Parts"], [REPAIR, "Repairs"], [SERVICE, "Services"], [NOTE, "Notes"]]);
-    const [itemManagerForms, setItemManagerForms] = useState<Array<ItemManagerForm<BaseItem, Item, Items>>>([]);
-    const [currentItemManagerForm, setCurrentItemManagerForm] = useState<ItemManagerForm<BaseItem, Item, Items>|null>();
-    const [currentItemManagerHeader, setCurrentItemManagerHeader] = useState("");
-    const [currentItemManagerCanDelete, setCurrentItemManagerCanDelete] = useState(false);
     const [changesMade, setChangesMade] = useState<{[k: string]: boolean}>({});
+    // These are the static tabs that a user can click to
+    // interact with different parts of an appointment.
+    // I'm calling them "parts" so as to not confuse it with
+    // the other tabs.
+    const [partID, setPartID] = useState(CONTACT);
+    const [parts] = useState([[CONTACT, "General"], [VEHICLE, "Vehicle"], [PAYMENT, "Finances"], [DIAGNOSIS, "Diagnoses"], [PART, "Parts"], [REPAIR, "Repairs"], [SERVICE, "Services"], [NOTE, "Notes"]]);
+    // These are the dynamic tabs that a user opens and closes
+    // to mutate an appointment's information. Its functionality
+    // is stored in a hook since it's used elsewhere.
+    const tabsManager = useTabsManager();
 
-    
+
     useEffect(() => {
         if (searchParams) {
             const tab = searchParams.get("tab") || "";
-            setTab(tab || CONTACT);
+            setPartID(tab || CONTACT);
         }
     }, []);
-
-
-    useEffect(() => {
-        if (!currentItemManagerForm) {
-            setCurrentItemManagerHeader("");
-            return;
-        }
-
-        let item: string = currentItemManagerForm.itemsManagerKey;
-        let action: string = currentItemManagerForm.mutation === "Update" ? "Update" : "Create"
-        let itemID: string = currentItemManagerForm.itemID;
-        itemID = parseInt(itemID) < 0 ? "(New)" : "#" + itemID;
-        
-        const formTabName = `${action} ${item} ${itemID}`;
-        setCurrentItemManagerHeader(formTabName);
-        setCurrentItemManagerCanDelete(currentItemManagerForm.mutation === "Update");
-
-    }, [currentItemManagerForm]);
 
 
     useInterval(() => {
@@ -126,34 +110,9 @@ export default function UpdateManager<BaseItem, Item, Items>(props: UpdateManage
 
     
     const handleTabChange = async (tab: string) => {
-        setTab(tab);
+        setPartID(tab);
         const URL = `/employee/home/update?appointmentID=${props.appointmentID}&tab=${tab}`;
         router.replace(URL);
-    }
-
-
-    const openForm = (itemsManagerKey: string, itemID: string, mutation: "Create"|"Update") => {
-        const form: ItemManagerForm<BaseItem, Item, Items> = {itemsManagerKey, itemID, mutation};
-        setItemManagerForms([...itemManagerForms, form]);
-        setCurrentItemManagerForm(form);
-    }
-
-
-    const closeForm = (itemsManagerKey: string, itemID: string) => {
-        const formIndex = itemManagerForms.findIndex(f => f.itemsManagerKey == itemsManagerKey && f.itemID == itemID);
-        if (formIndex === -1)
-            return;
-        
-        const updatedFormInfos = [...itemManagerForms];
-        updatedFormInfos.splice(formIndex, 1);
-        setItemManagerForms(updatedFormInfos);
-        
-        if (updatedFormInfos.length === 0)
-            setCurrentItemManagerForm(null);
-        if (updatedFormInfos.length === 1)
-            setCurrentItemManagerForm(updatedFormInfos[0]);
-        if (updatedFormInfos.length > 1)
-            setCurrentItemManagerForm(updatedFormInfos[formIndex-1]);  
     }
 
 
@@ -175,7 +134,7 @@ export default function UpdateManager<BaseItem, Item, Items>(props: UpdateManage
         setChangesMade(changesMade => ({
             ...changesMade,
             [`${itemManagerKey}`]: changeMade
-        }))
+        }));
     }, []);
     
 
@@ -204,8 +163,8 @@ export default function UpdateManager<BaseItem, Item, Items>(props: UpdateManage
             const output = await UpdateAppointmentRepairs(props.appointmentID, updates);
             await alertMessage(output);
         },
-        openForm: openForm,
-        closeForm: closeForm,
+        openTab: tabsManager.openTab,
+        closeTab: tabsManager.closeTab,
         handleChangesMade
     });
 
@@ -223,8 +182,8 @@ export default function UpdateManager<BaseItem, Item, Items>(props: UpdateManage
             const output = await UpdateAppointmentParts(props.appointmentID, updates);
             await alertMessage(output);
         },
-        openForm,
-        closeForm,
+        openTab: tabsManager.openTab,
+        closeTab: tabsManager.closeTab,
         handleChangesMade
     });
 
@@ -242,8 +201,8 @@ export default function UpdateManager<BaseItem, Item, Items>(props: UpdateManage
             const output = await UpdateAppointmentDiagnoses(props.appointmentID, updates);
             await alertMessage(output);
         },
-        openForm,
-        closeForm,
+        openTab: tabsManager.openTab,
+        closeTab: tabsManager.closeTab,
         handleChangesMade
     });
 
@@ -262,8 +221,8 @@ export default function UpdateManager<BaseItem, Item, Items>(props: UpdateManage
             const output = await UpdateAppointmentServices(props.appointmentID, updates);
             await alertMessage(output);
         },
-        openForm,
-        closeForm,
+        openTab: tabsManager.openTab,
+        closeTab: tabsManager.closeTab,
         handleChangesMade
     });
 
@@ -291,8 +250,8 @@ export default function UpdateManager<BaseItem, Item, Items>(props: UpdateManage
             const output = await UpdateAppointmentCost(props.appointmentID, updates);
             await alertMessage(output);
         },
-        openForm,
-        closeForm,
+        openTab: tabsManager.openTab,
+        closeTab: tabsManager.closeTab,
         handleChangesMade
     });
 
@@ -308,140 +267,176 @@ export default function UpdateManager<BaseItem, Item, Items>(props: UpdateManage
             const output = await UpdateEmployeeNotes(updates);
             await alertMessage(output);
         },
-        openForm,
-        closeForm,
+        openTab: tabsManager.openTab,
+        closeTab: tabsManager.closeTab,
         handleChangesMade
     });
 
 
     return (
-        <div>
+        <div className="flex flex-col grow">
             <Alert
                 alert={alert}
             />
-            {tabs &&
-                tabs.map(([tabID, tab], i) => (
-                    <div key={i} onClick={() => handleTabChange(tabID)}>
-                        {tab}
-                        {(changesMade[tabID] && changesMade[tabID]) &&
-                            <div className="w-1 h-1 rounded-full bg-blue-500"></div>
-                        }
+            <div className="flex justify-between items-center p-2 rounded-md border border-gray-300 shadow-sm mb-2">
+                <p className="text-md text-gray-700 font-medium">Appointment {props.appointmentID}</p>
+                <CloseButton
+                    close={() => null}
+                />
+            </div>
+            <div className="flex gap-x-4 grow">
+                <div className="grow flex flex-col gap-1">
+                    {parts &&
+                        <div
+                            className="flex justify-between gap-1 p-1 border border-gray-300 shadow-sm rounded-t-md bg-white"
+                        >
+                            {parts.map(([_tabID, _tab], i) => (
+                                <div 
+                                    key={i} 
+                                    onClick={() => handleTabChange(_tabID)}
+                                    className={clsx(
+                                        "flex items-center gap-2",
+                                        "px-2 py-1 rounded text-03 text-gray-400 tracking-wide cursor-pointer",
+                                        partID !== _tabID && "hover:bg-gray-100",
+                                        partID === _tabID && "bg-white border border-gray-300 shadow-sm font-medium text-gray-700"
+                                    )}
+                                >
+                                    {_tab}
+                                    {(changesMade[_tabID]) &&
+                                        <div className="w-1 h-1 rounded-full bg-blue-500"></div>
+                                    }
+                                </div>
+                            ))}
+                        </div>
+                    }
+                    {/* Quick Fix Else Contact, Vehicle Managers Will Lose State */}
+                    <div className={partID != CONTACT ? "hidden flex grow" : "flex grow"}>
+                        <ContactManager
+                            updateManagerForm={updateManagerForm}
+                            appointment={appointment}
+                            onSaveUpdates={saveContactUpdates}
+                            setChangesMade={handleChangesMade}
+                        />
                     </div>
-                ))
-            }
-            {itemManagerForms &&
-                itemManagerForms.map((form, i) => (
-                    <div key={i} onClick={() => setCurrentItemManagerForm(form)}>
-                       {form.itemsManagerKey} {form.itemID}
+                    <div className={partID != VEHICLE ? "hidden flex grow" : "flex grow"}>
+                        <VehicleManager
+                            updateManagerForm={updateManagerForm}
+                            appointment={appointment}
+                            onSaveUpdates={saveVehicleUpdates}
+                            setChangesMade={handleChangesMade}
+                        />
                     </div>
-                ))
-            }
-            {itemManagerForms && currentItemManagerForm &&
+                    {partID == REPAIR &&
+                        <RepairsManager
+                            repairsManager={repairsManager}
+                        />
+                    }
+                    {partID == PART &&
+                        <PartsManager
+                            partsManager={partsManager}
+                        />
+                    }
+                    {partID == DIAGNOSIS &&
+                        <DiagnosesManager
+                            diagnosesManager={diagnosesManager}
+                        />
+                    }
+                    {partID == SERVICE &&
+                        <ServicesManager
+                            servicesManager={servicesManager}
+                        />
+                    }
+                    {partID == PAYMENT &&
+                        <PaymentsManager
+                            paymentsManager={paymentsManager}
+                        />
+                    }
+                    {partID == NOTE &&
+                        <NotesManager
+                            notesManager={notesManager}
+                        />
+                    }
+                </div>
                 <AnimatePresence>
-                    <motion.div
-                        initial={{width: "0px", opacity: 0}}
-                        animate={{width: "400px", opacity: 1}}
-                        exit={{width: "0px", opacity: 0}}
-                        className=""
-                    >
-                        {currentItemManagerForm.itemsManagerKey === REPAIR &&
-                            <RepairManager
-                                itemID={currentItemManagerForm.itemID}
-                                itemsManager={repairsManager as any}
-                                header={currentItemManagerHeader}
-                                canDelete={currentItemManagerCanDelete}
-                            />
-                        }
-                        {currentItemManagerForm.itemsManagerKey === PART &&
-                            <PartManager
-                                itemID={currentItemManagerForm.itemID}
-                                itemsManager={partsManager as any}
-                                header={currentItemManagerHeader}
-                                canDelete={currentItemManagerCanDelete}
-                            />
-                        }
-                        {currentItemManagerForm.itemsManagerKey === DIAGNOSIS &&
-                            <DiagnosisManager
-                                itemID={currentItemManagerForm.itemID}
-                                itemsManager={diagnosesManager as any}
-                                header={currentItemManagerHeader}
-                                canDelete={currentItemManagerCanDelete}
-                            />
-                        }
-                        {currentItemManagerForm.itemsManagerKey === SERVICE &&
-                            <ServiceManager
-                                itemID={currentItemManagerForm.itemID}
-                                itemsManager={servicesManager as any}
-                                header={currentItemManagerHeader}
-                                canDelete={currentItemManagerCanDelete}
-                            />
-                        }
-                        {currentItemManagerForm.itemsManagerKey === PAYMENT &&
-                            <PaymentManager
-                                itemID={currentItemManagerForm.itemID}
-                                itemsManager={paymentsManager as any}
-                                header={currentItemManagerHeader}
-                                canDelete={currentItemManagerCanDelete}
-                            />
-                        }
-                        {currentItemManagerForm.itemsManagerKey === NOTE &&
-                            <NoteManager
-                                itemID={currentItemManagerForm.itemID}
-                                itemsManager={notesManager as any}
-                                header={currentItemManagerHeader}
-                                canDelete={currentItemManagerCanDelete}
-                            />
-                        }
-                    </motion.div>
+                    {tabsManager.tabs && tabsManager.currentTab &&
+                        <motion.div
+                            initial={{width: "0px", opacity: 0}}
+                            animate={{width: "400px", opacity: 1}}
+                            exit={{width: "0px", opacity: 0}}
+                            className="flex flex-col gap-1"
+                        >
+                            <div className="flex gap-1 p-1 border border-gray-300 shadow-sm rounded-t-md bg-white overflow-x-auto scroll-hide">
+                                {tabsManager.tabs.filter(tab => tab.form).map((tab, i) => (
+                                    <Fragment>
+                                        {(tab.form && tabsManager.currentTab?.form) && 
+                                            <div 
+                                                key={i} 
+                                                onClick={() => tabsManager.setCurrentTab(tab)}
+                                                className={clsx(
+                                                    "whitespace-nowrap",
+                                                    "flex items-center gap-2",
+                                                    "px-2 py-1 rounded text-03 text-gray-400 tracking-wide cursor-pointer",
+                                                    (tab.form.itemID !== tabsManager.currentTab.form.itemID || tab.form.key != tabsManager.currentTab.form.key) && "hover:bg-gray-100",
+                                                    (tab.form.itemID === tabsManager.currentTab.form.itemID && tab.form.key == tabsManager.currentTab.form.key) && "bg-white border border-gray-300 shadow-sm font-medium text-gray-700"
+                                                )}
+                                            >
+                                                {tab.form.mutation} {tab.form.key} {parseInt(tab.form.itemID) < 0 ? "" : `#${tab.form.itemID}`}
+                                            </div>
+                                        }
+                                    </Fragment>
+                                ))}
+                            </div>
+                            {(tabsManager.currentTab.form?.key === REPAIR) &&
+                                <RepairManager
+                                    itemID={tabsManager.currentTab.form.itemID}
+                                    itemsManager={repairsManager as any}
+                                    header={tabsManager.currentTab.form.header}
+                                    canDelete={tabsManager.currentTab.form.canDelete}
+                                />
+                            }
+                            {(tabsManager.currentTab.form?.key === PART) &&
+                                <PartManager
+                                    itemID={tabsManager.currentTab.form.itemID}
+                                    itemsManager={partsManager as any}
+                                    header={tabsManager.currentTab.form.header}
+                                    canDelete={tabsManager.currentTab.form.canDelete}
+                                />
+                            }
+                            {(tabsManager.currentTab.form?.key === DIAGNOSIS) &&
+                                <DiagnosisManager
+                                    itemID={tabsManager.currentTab.form.itemID}
+                                    itemsManager={diagnosesManager as any}
+                                    header={tabsManager.currentTab.form.header}
+                                    canDelete={tabsManager.currentTab.form.canDelete}
+                                />
+                            }
+                            {(tabsManager.currentTab.form?.key === SERVICE) &&
+                                <ServiceManager
+                                    itemID={tabsManager.currentTab.form.itemID}
+                                    itemsManager={servicesManager as any}
+                                    header={tabsManager.currentTab.form.header}
+                                    canDelete={tabsManager.currentTab.form.canDelete}
+                                />
+                            }
+                            {(tabsManager.currentTab.form?.key === PAYMENT) &&
+                                <PaymentManager
+                                    itemID={tabsManager.currentTab.form.itemID}
+                                    itemsManager={paymentsManager as any}
+                                    header={tabsManager.currentTab.form.header}
+                                    canDelete={tabsManager.currentTab.form.canDelete}
+                                />
+                            }
+                            {(tabsManager.currentTab.form?.key === NOTE) &&
+                                <NoteManager
+                                    itemID={tabsManager.currentTab.form.itemID}
+                                    itemsManager={notesManager as any}
+                                    header={tabsManager.currentTab.form.header}
+                                    canDelete={tabsManager.currentTab.form.canDelete}
+                                />
+                            }
+                        </motion.div>
+                    }
                 </AnimatePresence>
-            }
-            <div>
-                {tab == CONTACT &&
-                    <ContactManager
-                        updateManagerForm={updateManagerForm}
-                        appointment={appointment}
-                        onSaveUpdates={saveContactUpdates}
-                        setChangesMade={handleChangesMade}
-                    />
-                }
-                {tab == VEHICLE &&
-                    <VehicleManager
-                        updateManagerForm={updateManagerForm}
-                        appointment={appointment}
-                        onSaveUpdates={saveVehicleUpdates}
-                        setChangesMade={handleChangesMade}
-                    />
-                }
-                {tab == REPAIR &&
-                    <RepairsManager
-                        repairsManager={repairsManager}
-                    />
-                }
-                {tab == PART &&
-                    <PartsManager
-                        partsManager={partsManager}
-                    />
-                }
-                {tab == DIAGNOSIS &&
-                    <DiagnosesManager
-                        diagnosesManager={diagnosesManager}
-                    />
-                }
-                {tab == SERVICE &&
-                    <ServicesManager
-                        servicesManager={servicesManager}
-                    />
-                }
-                {tab == PAYMENT &&
-                    <PaymentsManager
-                        paymentsManager={paymentsManager}
-                    />
-                }
-                {tab == NOTE &&
-                    <NotesManager
-                        notesManager={notesManager}
-                    />
-                }
             </div>
         </div>
     )

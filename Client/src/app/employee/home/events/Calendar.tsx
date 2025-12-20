@@ -10,8 +10,6 @@ interface CalendarProps {
     events: Events;
     onOpenEvent: (eventID: string) => void;
     onOpenEvents: (dateIndex: number) => void;
-    closeOpenedEvent: () => void;
-    closeOpenedEvents: () => void;
 }
 
 interface EventMap {
@@ -71,7 +69,7 @@ export default function Calendar(props: CalendarProps) {
                     <div 
                         key={i} 
                         className={clsx(
-                            "first:rounded-l-md last:rounded-r-md",
+                            "first:rounded-l last:rounded-r",
                             "flex items-center justify-center p-1",
                             "border-t first:border-l last:border-r border-gray-300 border-b",
                             "text-center shadow-sm bg-white mb-2"
@@ -103,7 +101,7 @@ export default function Calendar(props: CalendarProps) {
                                     "aspect-square",
                                     "border-r border-b",
                                     "border-gray-300",
-                                    "hover:bg-gray-50 cursor-pointer", 
+                                    "hover:bg-blue-50 cursor-pointer", 
                                     i < 7 && "border-t",
                                     35 - i <= 7 && "border-b border-b-gray-300",
                                     i == 28 && "rounded-bl", 

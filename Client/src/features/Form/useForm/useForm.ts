@@ -73,9 +73,9 @@ export default function useForm(fName: string, startForm: Form = {data: {}, test
     const updateInputData = (name: string, data: InputData): void => {
         if (!form)
             return;
+        
         let state: InputState = [true, ""];
         const output = form.test.safeParse({[name]: data});
-        
         if (!output.success)
             state = processTestResults(output.error.issues)[name];
         

@@ -85,9 +85,8 @@ export default function useServicesManager(props: UseItemsManagerProps<DB_Appoin
         });
 
         const updatedItems = {...itemsManager.newItems as any};
-        updatedItems[itemsManager.counter] = item;
+        updatedItems[itemsManager.getNewItemID()] = item;
         itemsManager.setNewItems(updatedItems);
-        itemsManager.setCounter(i => i - 1);
     }
 
 
