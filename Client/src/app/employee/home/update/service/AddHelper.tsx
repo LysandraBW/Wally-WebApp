@@ -4,10 +4,10 @@ import { Options } from "@/features/Form/DEF";
 import { Field } from "@/component/Form/Field";
 import clsx from "clsx";
 import useServicesManager from "./useServicesManager";
-import ChevronLeft from "@/component/Icon/ChevronLeft";
-import ChevronDownIcon from "@/component/Icon/ChevronDown";
+import ChevronLeft from "@/component/Icon/Icons/ChevronLeft";
+import ChevronDownIcon from "@/component/Icon/Icons/ChevronDown";
 import Checkmark from "@/component/IconV2/Checkmark";
-import Plus from "@/component/IconV2/Plus";
+import Plus from "@/component/Icon/Icons/Plus";
 
 interface AddHelperProps {
     servicesManager: ReturnType<typeof useServicesManager>;

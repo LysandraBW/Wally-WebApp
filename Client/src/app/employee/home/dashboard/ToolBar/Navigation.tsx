@@ -1,6 +1,6 @@
 "use client";
-import ChevronRight from "@/component/Icon/ChevonRight";
-import ChevronLeft from "@/component/Icon/ChevronLeft";
+import ChevronRight from "@/component/Icon/Icons/ChevonRight";
+import ChevronLeft from "@/component/Icon/Icons/ChevronLeft";
 import { FilterManager } from "../managers/useFilterManager";
 import { ReactNode, useEffect } from "react";
 import clsx from "clsx";

@@ -1,4 +1,4 @@
-import ArrowClockwiseIcon from "@/component/Icon/ArrowClockwise";
+import ArrowClockwiseIcon from "@/component/Icon/Icons/ArrowPath";
 import TrashIcon from "@/component/Icon/Trash";
 import clsx from "clsx";
 

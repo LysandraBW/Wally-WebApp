@@ -18,27 +18,18 @@
         @apply 
             font-normal
             tracking-tight
-            text-gray-950;
+            text-gray-700;
     }
-
-    h1 { @apply text-11; }
-    h2 { @apply text-10; }
-    h3 { @apply text-09; }
-    h4 { @apply text-08; }
-    h5 { @apply text-07; }
-    h6 { @apply text-06; }
     
     /* Non-Heading Text */
     p, ul, ol, li, a, span, label, input, button { 
         @apply 
-            text-04
             font-normal
             text-gray-400;
     }
 }
 
 @layer components {
-    /* Form Field */
     .field {
         @apply
             w-full
@@ -52,13 +43,9 @@
             shadow-sm
             tracking-wide
             h-[36px]
-            ;
+        ;
     }
 
-    .error .field {
-        @apply
-            border-red-400;
-    }
 
     .field:focus {
         @apply
@@ -68,73 +55,20 @@
             ring-blue-100
     }
 
-    /* Small Pieces of Text */
-    .tag {
+    
+    .error .field {
         @apply
-            block
-            w-min
-            py-0.5 px-1
-            bg-white
-            border
-            border-gray-200
-            whitespace-nowrap
-            rounded;
+            border-red-400;
     }
 
-    /* Hide Scrollbar */
-    .scroll-hide::-webkit-scrollbar { display: none; }
+
+    .scroll-hide::-webkit-scrollbar { 
+        display: none; 
+    }
+
+
     .scroll-hide {
         -ms-overflow-style: none;
         scrollbar-width: none; 
-    }
-
-    /* Buttons  */
-    .icon {
-        @apply
-            p-1
-            w-min
-            rounded
-            bg-gray-100
-            fill-gray-400
-            text-gray-400
-            stroke-gray-400
-            hover:bg-gray-200;
-    }
-
-    .icon * {
-        @apply
-            !fill-inherit
-            !stroke-inherit
-            !text-inherit
-            !cursor-pointer;
-    }
-}
-
-@layer utilities {
-    @keyframes scrolling {
-        0% {
-        transform: translateX(0);
-        }
-        100% {
-        transform: translateX(-100%);
-        }
-    }
-
-    @keyframes scrolling-reverse {
-        0% {
-        transform: translateX(-100%);
-        }
-        100% {
-        transform: translateX(0);
-        }
-    }
-
-    @keyframes slide-left {
-        from { transform: translateX(0) }
-        to { transform: translateX(-100%) }
-    }
-
-    .slide-left {
-        animation: slide-left 30s linear infinite;
     }
 }

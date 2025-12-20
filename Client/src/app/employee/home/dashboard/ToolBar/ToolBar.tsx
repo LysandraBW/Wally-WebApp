@@ -1,4 +1,4 @@
-import ArrowClockwiseIcon from "@/component/Icon/ArrowClockwise";
+import ArrowClockwiseIcon from "@/component/Icon/Icons/ArrowPath";
 import TrashIcon from "@/component/Icon/Trash";
 import { AppointmentManager } from "../managers/useAppointmentManager";
 import { DeleteManager } from "../managers/useDeleteManager";

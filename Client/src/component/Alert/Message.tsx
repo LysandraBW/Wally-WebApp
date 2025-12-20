@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import CloseButton from "../Button/CloseButton";
-import CrossIcon from "../Icon/Cross";
+import CrossIcon from "../Icon/Icons/XMark";
 
 interface MessageProps {
     head: React.ReactNode;

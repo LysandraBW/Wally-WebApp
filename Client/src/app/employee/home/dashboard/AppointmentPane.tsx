@@ -8,7 +8,7 @@ import { navigate } from "@/utils/navigate";
 import { PAGE_EDIT_APPOINTMENT, PAGE_VIEW_APPOINTMENT } from '@/utils/constants';
 import { AnimatePresence, motion } from "motion/react";
 import Card from "@/component/IconV2/Card";
-import Date from "@/component/IconV2/Date";
+import Date from "@/component/Icon/Icons/Calendar";
 import { AppointmentManager } from "./managers/useAppointmentManager";
 
 interface AppointmentPaneProps {
