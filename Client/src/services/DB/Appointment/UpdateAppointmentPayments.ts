@@ -3,28 +3,33 @@ import { request } from "../request";
 
 export async function UpdateAppointmentPayments(appointmentID: string, updates: PaymentUpdates) {
     try {
+        let allOutput = true;
+
         for (const INSERT of updates.Insert) {
             if (!INSERT.Name) {
-                request("PUT", `/appointment/${appointmentID}/payment`, {
+                const {output} = await request("PUT", `/appointment/${appointmentID}/payment`, {
                     payment: INSERT.Payment
                 });
+                allOutput = allOutput && output === false;
             }
             else {
-                request("PUT", `/appointment/${appointmentID}/payment?type=Digital`, {
+                const {output} = await request("PUT", `/appointment/${appointmentID}/payment?type=Digital`, {
                     name: INSERT.Name,
                     type: INSERT.Type,
                     ccn: INSERT.CCN,
                     exp: INSERT.EXP,
                     payment: INSERT.Payment,
                 });
+                allOutput = allOutput && output === false;
             }
         }
 
         for (const DELETE of updates.Delete) {
-            request("DELETE", `/appointment/${appointmentID}/payment/${DELETE.PaymentID}`);
+            const {output} = await request("DELETE", `/appointment/${appointmentID}/payment/${DELETE.PaymentID}`);
+            allOutput = allOutput && output === false;
         }
         
-        return true;
+        return allOutput;
     }
     catch (error) {
         console.error(error);

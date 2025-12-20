@@ -1,100 +1,101 @@
-import { NoteUpdates } from "@/pages/employee/edit/note/_DEF";
 import { request } from "../request";
 import { uploadFile } from "@/services/Cloud/uploadFile";
 import { generateURL } from "@/services/Cloud/generateURL";
+import { NoteUpdates } from "@/app/employee/home/update/note/_DEF";
 
 export async function UpdateEmployeeNotes(updates: NoteUpdates) {
     try {
+        let allOutput = true;
+
         for (const UPDATE of updates.Update) {
-            console.log(1);
-            request("POST", `/appointment/${UPDATE.AppointmentID}/note/${UPDATE.NoteID}`, {
+            const {output} = await request("POST", `/appointment/${UPDATE.AppointmentID}/note/${UPDATE.NoteID}`, {
                 head: UPDATE.Head,
                 body: UPDATE.Body,
                 showCustomer: UPDATE.ShowCustomer
             });
+            allOutput = allOutput && output;
         }
 
-        for (const INSERT of updates.Insert.Attachment) {
-            console.log(2);
-            const files = INSERT.Files.getAll("Files");
-            for (const file of files) {
-                if (!(file instanceof File))
-                    continue;
-                const _file = file as File;
-                const URL = await uploadFile(await generateURL(), _file);
-                request("PUT", `/appointment/note/${INSERT.NoteID}/attachment`, {
-                    name: _file.name,
-                    type: _file.type,
-                    url: URL
-                });
-            }
-        }
+        // for (const INSERT of updates.Insert.Attachment) {
+        //     const files = INSERT.Files.getAll("Files");
+        //     for (const file of files) {
+        //         if (!(file instanceof File))
+        //             continue;
+        //         const _file = file as File;
+        //         const URL = await uploadFile(await generateURL(), _file);
+        //         request("PUT", `/appointment/note/${INSERT.NoteID}/attachment`, {
+        //             name: _file.name,
+        //             type: _file.type,
+        //             url: URL
+        //         });
+        //     }
+        // }
 
         for (const INSERT of updates.Insert.Note) {
-            console.log(3);
             const output = await request("PUT", `/appointment/${INSERT.AppointmentID}/note`, {
                 head: INSERT.Head,
                 body: INSERT.Body,
                 showCustomer: INSERT.ShowCustomer
             });
 
-            // console.log("NOTE OUTPUT", output);
-            if (!output || !output.output)
-                throw "Error";
-
-            if (INSERT.Files) {
-                const files = INSERT.Files.getAll("Files");
-                for (const file of files) {
-                    if (!(file instanceof File))
-                        continue;
-                    const _file = file as File;
-                    const URL = await uploadFile(await generateURL(), _file);
-                    console.log(3.1);
-                    request("PUT", `/appointment/note/${output.output}/attachment`, {
-                        name: _file.name,
-                        type: _file.type,
-                        url: URL
-                    });
-                }
+            if (!output || output.output === false) {
+                allOutput = false;
+                continue;
             }
 
+            // if (INSERT.Files) {
+            //     const files = INSERT.Files.getAll("Files");
+            //     for (const file of files) {
+            //         if (!(file instanceof File))
+            //             continue;
+            //         const _file = file as File;
+            //         const URL = await uploadFile(await generateURL(), _file);
+            //         console.log(3.1);
+            //         request("PUT", `/appointment/note/${output.output}/attachment`, {
+            //             name: _file.name,
+            //             type: _file.type,
+            //             url: URL
+            //         });
+            //     }
+            // }
+
             if (INSERT.Sharees) {
-                console.log(3.2);
                 for (const noteShareeID of INSERT.Sharees) {
-                    request("PUT", `/appointment/note/${output.output}/sharee`, {
+                    const insertShareeOutput = await request("PUT", `/appointment/note/${output.output}/sharee`, {
                         noteShareeID
                     });
+                    allOutput = allOutput && insertShareeOutput.output === false;
                 }
             }
         }
 
         for (const INSERT of updates.Insert.Sharee) {
-            console.log(4);
-            request("PUT", `/appointment/note/${INSERT.NoteID}/sharee`, {
+            const {output} = await request("PUT", `/appointment/note/${INSERT.NoteID}/sharee`, {
                 noteShareeID: INSERT.NoteShareeID
             });
+            allOutput = allOutput && output === false;
         }
 
         for (const DELETE of updates.Delete.Attachment) {
-            console.log(5);
-            request("DELETE", `/appointment/note/${DELETE.NoteID}/attachment`, {
+            const {output} = await request("DELETE", `/appointment/note/${DELETE.NoteID}/attachment`, {
                 attachmentID: DELETE.AttachmentID
             });
+            allOutput = allOutput && output === false;
         }
 
         for (const DELETE of updates.Delete.Sharee) {
-            console.log(6);
-            request("DELETE", `/appointment/note/${DELETE.NoteID}/sharee`, {
+            const {output} = await request("DELETE", `/appointment/note/${DELETE.NoteID}/sharee`, {
                 noteShareeID: DELETE.NoteShareeID
             });
+            allOutput = allOutput && output === false;
         }
 
         for (const DELETE of updates.Delete.Note) {
-            console.log(7);
-            request("DELETE", `/appointment/${DELETE.AppointmentID}/note/${DELETE.NoteID}`);
+            const {output} = await request("DELETE", `/appointment/${DELETE.AppointmentID}/note/${DELETE.NoteID}`);
+            allOutput = allOutput && output === false;
         }
 
-        return true;
+        return allOutput;
     }
     catch (error) {
         console.error(error);

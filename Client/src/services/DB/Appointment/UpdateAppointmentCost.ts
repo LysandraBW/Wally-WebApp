@@ -3,12 +3,12 @@ import { request } from "../request";
 
 export async function UpdateAppointmentCost(appointmentID: string, updates: CostUpdates) {
     try {
-        request("POST", `/appointment/${appointmentID}/cost`, {
+        const {output} = await request("POST", `/appointment/${appointmentID}/cost`, {
             appointmentID,
             cost: updates.Cost
         });
 
-        return true;
+        return output;
     }
     catch (error) {
         console.error(error);

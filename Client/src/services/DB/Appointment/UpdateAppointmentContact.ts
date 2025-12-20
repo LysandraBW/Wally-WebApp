@@ -3,7 +3,7 @@ import { request } from "../request";
 
 export async function UpdateAppointmentContact(appointmentID: string, updates: ContactUpdates) {
     try {
-        request("POST", `/appointment/${appointmentID}/customer`, {
+        const output1 = await request("POST", `/appointment/${appointmentID}/customer`, {
             fName: updates.FName,
             lName: updates.LName,
             email: updates.Email,
@@ -17,16 +17,17 @@ export async function UpdateAppointmentContact(appointmentID: string, updates: C
         let endDate = updates.EndDate;
         if (endDate)
             endDate = endDate.replace("T", " ") + ":00"
-        request("POST", `/appointment/${appointmentID}/date`, {
+        
+        const output2 = await request("POST", `/appointment/${appointmentID}/date`, {
             startDate,
             endDate
         });
 
-        request("POST", `/appointment/${appointmentID}/status`, {
+        const output3 = await request("POST", `/appointment/${appointmentID}/status`, {
             statusID: updates.StatusID
         });
 
-        return true;
+        return output1.output && output2.output && output3.output;
     }
     catch (error) {
         console.error(error);

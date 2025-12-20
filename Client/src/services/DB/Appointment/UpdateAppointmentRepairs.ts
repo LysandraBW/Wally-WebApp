@@ -1,28 +1,33 @@
-import { RepairUpdates } from "@/pages/employee/edit/service/repair/_DEF";
+import { RepairUpdates } from "@/app/employee/home/update/repair/_DEF";
 import { request } from "../request";
 
 export async function UpdateAppointmentRepairs(appointmentID: string, updates: RepairUpdates) {
     try {
+        let allOutput = true;
+
         for (const UPDATE of updates.Update) {
-            request("POST", `/appointment/${appointmentID}/repair/${UPDATE.RepairID}`, {
+            const {output} = await request("POST", `/appointment/${appointmentID}/repair/${UPDATE.RepairID}`, {
                 repairID: UPDATE.RepairID,
                 repair: UPDATE.Repair
             });
+            allOutput = allOutput && output === false;
         }
 
         for (const INSERT of updates.Insert) {
-            request("PUT", `/appointment/${appointmentID}/repair`, {
+            const {output} = await request("PUT", `/appointment/${appointmentID}/repair`, {
                 repair: INSERT.Repair,
             });
+            allOutput = allOutput && output === false;
         }
 
         for (const DELETE of updates.Delete) {
-            request("DELETE", `/appointment/${appointmentID}/repair/${DELETE.RepairID}`, {
+            const {output} = await request("DELETE", `/appointment/${appointmentID}/repair/${DELETE.RepairID}`, {
                 repairID: DELETE.RepairID
             });
+            allOutput = allOutput && output === false;
         }
 
-        return true;
+        return allOutput;
     }
     catch (error) {
         console.error(error);

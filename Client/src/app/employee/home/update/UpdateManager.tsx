@@ -140,6 +140,7 @@ export default function UpdateManager<BaseItem, Item, Items>(props: UpdateManage
 
     const saveContactUpdates = async (updates: ContactUpdates) => {
         const output = await UpdateAppointmentContact(props.appointmentID, updates);
+        console.log(output);
         await alertMessage(output);
     }
     

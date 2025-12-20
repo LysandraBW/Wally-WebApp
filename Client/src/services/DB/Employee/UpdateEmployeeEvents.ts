@@ -1,14 +1,18 @@
+import { EventUpdates } from "@/app/employee/home/events/_DEF";
 import { request, Body } from "../request";
-import { EventUpdates } from "@/pages/employee/events/_DEF";
 
 export async function UpdateEmployeeEvents(updates: EventUpdates) {
     try {
+        let allOutput = true;
+
         for (const UPDATE of updates.Update) {
-            request("POST", `/employee/event/${UPDATE.EventID}`, {
+            const {output} = await request("POST", `/employee/event/${UPDATE.EventID}`, {
                 name: UPDATE.Name,
                 date: UPDATE.Date,
                 summary: UPDATE.Summary
             });
+
+            allOutput = allOutput && output === false;
         }
 
         for (const INSERT of updates.Insert.Event) {
@@ -18,8 +22,10 @@ export async function UpdateEmployeeEvents(updates: EventUpdates) {
                 summary: INSERT.Summary
             });
 
-            if (!output || !output.output)
-                throw "Error";
+            if (!output || !output.output) {
+                allOutput = false;
+                continue;
+            }
 
             if (INSERT.Sharees) {
                 for (const eventShareeID of INSERT.Sharees) {
@@ -31,22 +37,25 @@ export async function UpdateEmployeeEvents(updates: EventUpdates) {
         }
 
         for (const INSERT of updates.Insert.Sharee) {
-            request("PUT", `/employee/event/${INSERT.EventID}/sharee`, {
+            const {output} = await request("PUT", `/employee/event/${INSERT.EventID}/sharee`, {
                 eventShareeID: INSERT.EventShareeID
             });
+            allOutput = allOutput && output === false;
         }
 
         for (const DELETE of updates.Delete.Sharee) {
-            request("DELETE", `/employee/event/${DELETE.EventID}/sharee`, {
+            const {output} = await request("DELETE", `/employee/event/${DELETE.EventID}/sharee`, {
                 eventShareeID: DELETE.EventShareeID
             });
+            allOutput = allOutput && output === false;
         }
 
         for (const DELETE of updates.Delete.Event) {
-            request("DELETE", `/employee/event/${DELETE.EventID}`);
+            const {output} = await request("DELETE", `/employee/event/${DELETE.EventID}`);
+            allOutput = allOutput && output === false;
         }
 
-        return true;
+        return allOutput;
     }
     catch (error) {
         console.error(error);

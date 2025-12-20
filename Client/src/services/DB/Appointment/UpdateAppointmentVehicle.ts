@@ -3,7 +3,7 @@ import { request } from "../request";
 
 export async function UpdateAppointmentVehicle(appointmentID: string, updates: VehicleUpdates) {
     try {
-        request("POST", `/appointment/${appointmentID}/vehicle`, {
+        const {output} = await request("POST", `/appointment/${appointmentID}/vehicle`, {
             make: updates.Make,
             model: updates.Model,
             modelYear: updates.ModelYear,
@@ -11,7 +11,7 @@ export async function UpdateAppointmentVehicle(appointmentID: string, updates: V
             mileage: updates.Mileage,
             licensePlate: updates.LicensePlate
         });
-        return true;
+        return output;
     }
     catch (error) {
         console.error(error);
