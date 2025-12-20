@@ -13,7 +13,7 @@ export async function UpdateEmployeeNotes(updates: NoteUpdates) {
                 body: UPDATE.Body,
                 showCustomer: UPDATE.ShowCustomer
             });
-            allOutput = allOutput && output;
+            allOutput = allOutput && output !== false;
         }
 
         // for (const INSERT of updates.Insert.Attachment) {
@@ -64,7 +64,7 @@ export async function UpdateEmployeeNotes(updates: NoteUpdates) {
                     const insertShareeOutput = await request("PUT", `/appointment/note/${output.output}/sharee`, {
                         noteShareeID
                     });
-                    allOutput = allOutput && insertShareeOutput.output === false;
+                    allOutput = allOutput && insertShareeOutput.output !== false;
                 }
             }
         }
@@ -73,31 +73,32 @@ export async function UpdateEmployeeNotes(updates: NoteUpdates) {
             const {output} = await request("PUT", `/appointment/note/${INSERT.NoteID}/sharee`, {
                 noteShareeID: INSERT.NoteShareeID
             });
-            allOutput = allOutput && output === false;
+            allOutput = allOutput && output !== false;
         }
 
         for (const DELETE of updates.Delete.Attachment) {
             const {output} = await request("DELETE", `/appointment/note/${DELETE.NoteID}/attachment`, {
                 attachmentID: DELETE.AttachmentID
             });
-            allOutput = allOutput && output === false;
+            allOutput = allOutput && output !== false;
         }
 
         for (const DELETE of updates.Delete.Sharee) {
             const {output} = await request("DELETE", `/appointment/note/${DELETE.NoteID}/sharee`, {
                 noteShareeID: DELETE.NoteShareeID
             });
-            allOutput = allOutput && output === false;
+            allOutput = allOutput && output !== false;
         }
 
         for (const DELETE of updates.Delete.Note) {
             const {output} = await request("DELETE", `/appointment/${DELETE.AppointmentID}/note/${DELETE.NoteID}`);
-            allOutput = allOutput && output === false;
+            allOutput = allOutput && output !== false;
         }
 
         return allOutput;
     }
     catch (error) {
+        console.log("helllur? WTF")
         console.error(error);
         return false;
     }

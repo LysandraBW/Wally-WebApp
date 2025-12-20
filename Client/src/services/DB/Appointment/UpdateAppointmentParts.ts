@@ -14,7 +14,7 @@ export async function UpdateAppointmentParts(appointmentID: string, updates: Par
                 quantity: UPDATE.Quantity,
                 unitCost: UPDATE.UnitCost
             });
-            allOutput = allOutput && output === false;
+            allOutput = allOutput && output !== false;
         }
 
         for (const INSERT of updates.Insert) {
@@ -24,12 +24,12 @@ export async function UpdateAppointmentParts(appointmentID: string, updates: Par
                 quantity: INSERT.Quantity,
                 unitCost: INSERT.UnitCost
             });
-            allOutput = allOutput && output === false;
+            allOutput = allOutput && output !== false;
         }
 
         for (const DELETE of updates.Delete) {
             const {output} = await request("DELETE", `/appointment/${appointmentID}/part/${DELETE.PartID}`);
-            allOutput = allOutput && output === false;
+            allOutput = allOutput && output !== false;
         }
         
         return allOutput;

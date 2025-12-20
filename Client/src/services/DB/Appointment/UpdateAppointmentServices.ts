@@ -11,7 +11,7 @@ export async function UpdateAppointmentServices(appointmentID: string, updates: 
                 division: UPDATE.Division,
                 service: UPDATE.Service,
             });
-            allOutput = allOutput && output === false;
+            allOutput = allOutput && output !== false;
         }
 
         for (const INSERT of updates.Insert) {
@@ -20,12 +20,12 @@ export async function UpdateAppointmentServices(appointmentID: string, updates: 
                 division: INSERT.Division,
                 service: INSERT.Service,
             });
-            allOutput = allOutput && output === false;
+            allOutput = allOutput && output !== false;
         }
 
         for (const DELETE of updates.Delete) {
             const {output} = await request("DELETE", `/appointment/${appointmentID}/service/${DELETE.AppointmentServiceID}`);
-            allOutput = allOutput && output === false;
+            allOutput = allOutput && output !== false;
         }
 
         return allOutput;

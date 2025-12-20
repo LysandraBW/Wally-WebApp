@@ -10,7 +10,7 @@ export async function UpdateAppointmentDiagnoses(appointmentID: string, updates:
                 code: UPDATE.Code,
                 message: UPDATE.Message
             });
-            allOutput = allOutput && output === false;
+            allOutput = allOutput && output !== false;
         }
 
         for (const INSERT of updates.Insert) {
@@ -18,12 +18,12 @@ export async function UpdateAppointmentDiagnoses(appointmentID: string, updates:
                 code: INSERT.Code,
                 message: INSERT.Message
             });
-            allOutput = allOutput && output === false;
+            allOutput = allOutput && output !== false;
         }
 
         for (const DELETE of updates.Delete) {
             const {output} = await request("DELETE", `/appointment/${appointmentID}/diagnosis/${DELETE.DiagnosisID}`);
-            allOutput = allOutput && output === false;
+            allOutput = allOutput && output !== false;
         }
 
         return allOutput;

@@ -10,21 +10,21 @@ export async function UpdateAppointmentRepairs(appointmentID: string, updates: R
                 repairID: UPDATE.RepairID,
                 repair: UPDATE.Repair
             });
-            allOutput = allOutput && output === false;
+            allOutput = allOutput && output !== false;
         }
 
         for (const INSERT of updates.Insert) {
             const {output} = await request("PUT", `/appointment/${appointmentID}/repair`, {
                 repair: INSERT.Repair,
             });
-            allOutput = allOutput && output === false;
+            allOutput = allOutput && output !== false;
         }
 
         for (const DELETE of updates.Delete) {
             const {output} = await request("DELETE", `/appointment/${appointmentID}/repair/${DELETE.RepairID}`, {
                 repairID: DELETE.RepairID
             });
-            allOutput = allOutput && output === false;
+            allOutput = allOutput && output !== false;
         }
 
         return allOutput;

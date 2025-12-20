@@ -10,7 +10,7 @@ export async function UpdateAppointmentPayments(appointmentID: string, updates: 
                 const {output} = await request("PUT", `/appointment/${appointmentID}/payment`, {
                     payment: INSERT.Payment
                 });
-                allOutput = allOutput && output === false;
+                allOutput = allOutput && output !== false;
             }
             else {
                 const {output} = await request("PUT", `/appointment/${appointmentID}/payment?type=Digital`, {
@@ -20,13 +20,13 @@ export async function UpdateAppointmentPayments(appointmentID: string, updates: 
                     exp: INSERT.EXP,
                     payment: INSERT.Payment,
                 });
-                allOutput = allOutput && output === false;
+                allOutput = allOutput && output !== false;
             }
         }
 
         for (const DELETE of updates.Delete) {
             const {output} = await request("DELETE", `/appointment/${appointmentID}/payment/${DELETE.PaymentID}`);
-            allOutput = allOutput && output === false;
+            allOutput = allOutput && output !== false;
         }
         
         return allOutput;

@@ -12,7 +12,7 @@ export async function UpdateEmployeeEvents(updates: EventUpdates) {
                 summary: UPDATE.Summary
             });
 
-            allOutput = allOutput && output === false;
+            allOutput = allOutput && output !== false;
         }
 
         for (const INSERT of updates.Insert.Event) {
@@ -40,19 +40,19 @@ export async function UpdateEmployeeEvents(updates: EventUpdates) {
             const {output} = await request("PUT", `/employee/event/${INSERT.EventID}/sharee`, {
                 eventShareeID: INSERT.EventShareeID
             });
-            allOutput = allOutput && output === false;
+            allOutput = allOutput && output !== false;
         }
 
         for (const DELETE of updates.Delete.Sharee) {
             const {output} = await request("DELETE", `/employee/event/${DELETE.EventID}/sharee`, {
                 eventShareeID: DELETE.EventShareeID
             });
-            allOutput = allOutput && output === false;
+            allOutput = allOutput && output !== false;
         }
 
         for (const DELETE of updates.Delete.Event) {
             const {output} = await request("DELETE", `/employee/event/${DELETE.EventID}`);
-            allOutput = allOutput && output === false;
+            allOutput = allOutput && output !== false;
         }
 
         return allOutput;
