@@ -18,10 +18,9 @@ export default function CreateItemButton(props: CreateItemButtonProps) {
             )}
             onClick={props.onCreate}
         >
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" className="stroke-inherit fill-inherit size-4">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-            </svg>
-            {/* <label className="tracking-wide font-medium text-inherit">Add {props.itemName}</label> */}
+            <PlusIcon
+                class="stroke-inherit fill-inherit size-4"
+            />
         </button>
     )
 }

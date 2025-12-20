@@ -2,6 +2,7 @@ import Copy from "@/component/Copy/Copy";
 import ScheduledHeader from "./ScheduledHeader";
 import ConfettiGenerator from "confetti-js";
 import { useEffect } from "react";
+import CheckCircleIcon from "@/component/Icon/Icons/CheckCircleIcon";
 
 interface SchedulePassedProps {
     output: [string, string];
@@ -30,20 +31,9 @@ export default function SchedulePassed(props: SchedulePassedProps) {
                 className="w-[calc(100%+2rem)] h-[calc(100%+2rem)] absolute top-[-1rem] left-[-1rem] z-[0]"
             />
             <div className="w-15 h-15 mb-10 flex justify-center items-center">
-                <svg 
-                    xmlns="http://www.w3.org/2000/svg" 
-                    fill="none" 
-                    viewBox="0 0 24 24" 
-                    strokeWidth={1.5} 
-                    stroke="currentColor" 
-                    className="size-20 drop-shadow/50 stroke-blue-500 stroke-1"
-                >
-                    <path 
-                        strokeLinecap="round" 
-                        strokeLinejoin="round" 
-                        d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-                    />
-                </svg>
+                <CheckCircleIcon
+                    class="size-20 drop-shadow/50 stroke-blue-500 stroke-1"
+                />
             </div>
             <ScheduledHeader
                 header="Appointment Scheduled"

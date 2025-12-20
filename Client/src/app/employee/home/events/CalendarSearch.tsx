@@ -8,6 +8,8 @@ import getValues from "@/features/Form/helpers/getValues";
 import makeForm from "@/features/Form/useForm/makeForm";
 import clsx from "clsx";
 import CalendarSelect from "./CalendarSelect";
+import ArrowLeft from "@/component/Icon/Icons/ArrowLeft";
+import ArrowRight from "@/component/Icon/Icons/ArrowRight";
 
 interface CalendarSearchProps {
     year: number;
@@ -54,9 +56,7 @@ export default function CalendarSearch(props: CalendarSearchProps) {
                     "bg-white border border-gray-300 rounded cursor-pointer hover:bg-gray-50 shadow-sm stroke-gray-400 hover:stroke-black"
                 )}
             >
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2.5" stroke="currentColor" className="size-3 stroke-inherit">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
-                </svg>
+                <ArrowLeft/>
             </button>
             <div className="min-w-[5rem]">
                 <CalendarSelect
@@ -91,10 +91,7 @@ export default function CalendarSearch(props: CalendarSearchProps) {
                     "border border-gray-300 rounded cursor-pointer hover:bg-gray-50 shadow-sm stroke-gray-400 hover:stroke-black"
                 )}
             >
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2.5" stroke="currentColor" className="size-3 stroke-inherit">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
-                </svg>
-
+                <ArrowRight/>
             </button>
         </div>
     )

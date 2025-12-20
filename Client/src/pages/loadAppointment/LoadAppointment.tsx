@@ -1,6 +1,7 @@
 import clsx from "clsx";
 import { UseForm } from "../../features/Form/useForm/useForm";
 import { Tooltip } from "react-tooltip";
+import ArrowRight from "@/component/Icon/Icons/ArrowRight";
 
 interface LoadAppointmentProps {
     form: UseForm;
@@ -53,9 +54,9 @@ export default function LoadAppointment(props: LoadAppointmentProps) {
                             "transition-all cursor-pointer hover:bg-gray-300 peer-focus:bg-blue-100 hover:peer-focus:bg-blue-200 peer-focus:stroke-blue-400"
                         )}
                     >
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2.5" stroke="currentColor" className="size-4 stroke-inherit cursor-pointer transition-all">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
-                        </svg>
+                        <ArrowRight
+                            class="size-4 stroke-inherit cursor-pointer transition-all"
+                        />
                     </div>
                 </div>
                 {!props.form.getInput("id").state[0] &&

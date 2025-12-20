@@ -20,6 +20,7 @@ import Calendar from "./Calendar";
 import CalendarSearch from "./CalendarSearch";
 import clsx from "clsx";
 import useTabsManager, { Tab } from "@/features/TabManager/useTabsManager";
+import Plus from "@/component/Icon/Icons/Plus";
 
 export interface EventsTab extends Tab {
     event?: {
@@ -118,9 +119,7 @@ export default function EventsManager() {
                                 )}
                                 onClick={eventsManager.startCreateEditor}
                             >
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" className="stroke-inherit fill-inherit size-4">
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                                </svg>
+                                <Plus/>
                             </button>
                         </div>
                         <Calendar

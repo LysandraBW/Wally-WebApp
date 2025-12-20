@@ -9,6 +9,7 @@ import toggleValue from "@/features/Form/helpers/toggleValue";
 import { Field } from "@/component/Form/Field";
 import CrossIcon from "@/component/Icon/Icons/XMark";
 import ArrowLeft from "@/component/Icon/Icons/ArrowRight";
+import ChevronDownIcon from "@/component/Icon/Icons/ChevronDown";
 
 interface SearchServicesProps extends Omit<ReadWriteArrayInputProps, "options"> {
     options: {[serviceClass: string]: Options};
@@ -62,9 +63,7 @@ export default function SearchServices(props: SearchServicesProps) {
                         >
                             <label className="text-[0.85rem]">Click to View Services</label>
                             <div className="flex justify-center items-center cursor-pointer rounded hover:bg-gray-50">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="black" className="size-6">
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 15 12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9" />
-                                </svg>
+                                <ChevronDownIcon/>
                             </div>
                         </div>
                         {/* Service Type */}
