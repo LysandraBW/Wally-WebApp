@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import { Fragment } from "react";
 import ScheduledHeader from "./ScheduledHeader";
-import XCircleIcon from "@/component/Icon/Icons/XCircle";
+import XCircleIcon from "@/component/Icon/Icons/XCircleIcon";
 
 interface ScheduleFailedProps {
     restart: () => void;

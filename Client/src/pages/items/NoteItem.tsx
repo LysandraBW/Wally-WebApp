@@ -1,10 +1,10 @@
 import { EmployeeNote as DB_EmployeeNote } from "waltronics-types";
 import { Note } from "../edit/note/_DEF";
-import Person from "@/component/Icon/Icons/User";
+import Person from "@/component/Icon/Icons/UserIcon";
 import { Fragment, ReactNode, useEffect, useState } from "react";
 import { getCookie } from "@/utils/cookies/getCookie";
 import getValuesToLabels from "@/features/Form/helpers/getValuesToLabels";
-import Paperclip from "@/component/Icon/Icons/Paperclip";
+import Paperclip from "@/component/Icon/Icons/PaperclipIcon";
 import Item from "@/features/ItemManager/components/Item";
 import GetEmployeeNamePairs from "@/services/DB/Employee/GetEmployeeNamePairs";
 

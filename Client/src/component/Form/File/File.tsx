@@ -3,7 +3,7 @@ import { Field } from "../Field";
 import { useState } from "react";
 import UploadIcon from "@/component/Icon/Upload";
 import clsx from "clsx";
-import CrossIcon from "@/component/Icon/Icons/XMark";
+import CrossIcon from "@/component/Icon/Icons/XMarkIcon";
 import { toBytes } from "@/utils/convert";
 
 interface FileProps extends ReadInputProps {

@@ -2,7 +2,7 @@
 import { Events, Months } from "./_DEF";
 import CloseButton from "@/component/Button/CloseButton";
 import UpdateItem from "@/features/ItemManager/components/UpdateItem";
-import Person from "@/component/Icon/Icons/User";
+import Person from "@/component/Icon/Icons/UserIcon";
 import { toDisplayDate } from "@/utils/convert";
 import { Fragment, useEffect, useState } from "react";
 import { OptionMap } from "@/features/Form/DEF";

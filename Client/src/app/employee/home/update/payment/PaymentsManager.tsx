@@ -3,7 +3,7 @@ import CreateItemButton from "@/features/ItemManager/components/CreateItemButton
 import SaveResetButtons from "@/features/ItemManager/components/SaveResetButtons";
 import usePaymentsManager from "./usePaymentsManager";
 import TextFieldGrid from "@/component/Form/Text/TextFieldGrid";
-import ArchiveBox from "@/component/Icon/Icons/ArchiveBox";
+import ArchiveBox from "@/component/Icon/Icons/ArchiveBoxIcon";
 
 interface PaymentsManagerProps {
     paymentsManager: ReturnType<typeof usePaymentsManager>;

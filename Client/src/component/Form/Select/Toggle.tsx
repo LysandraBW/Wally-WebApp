@@ -1,4 +1,4 @@
-import ExpandIcon from "@/component/Icon/Icons/ChevronUpDown";
+import ExpandIcon from "@/component/Icon/Icons/ChevronUpDownIcon";
 import { ReactNode } from "react";
 import clsx from "clsx";
 

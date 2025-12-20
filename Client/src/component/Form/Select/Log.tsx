@@ -1,4 +1,4 @@
-import CrossIcon from "@/component/Icon/Icons/XMark";
+import CrossIcon from "@/component/Icon/Icons/XMarkIcon";
 import { OptionMap, Value, Values } from "@/features/Form/DEF";
 import clsx from "clsx";
 

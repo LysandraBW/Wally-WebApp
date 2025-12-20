@@ -8,10 +8,10 @@ import { navigate } from "@/utils/navigate";
 import { PAGE_EDIT_APPOINTMENT, PAGE_VIEW_APPOINTMENT } from '@/utils/constants';
 import { AnimatePresence, motion } from "motion/react";
 import Card from "@/component/IconV2/Card";
-import Date from "@/component/Icon/Icons/Calendar";
+import Date from "@/component/Icon/Icons/CalendarIcon";
 import { AppointmentManager } from "./managers/useAppointmentManager";
-import ArrowLeft from "@/component/Icon/Icons/ArrowLeft";
-import ArrowRight from "@/component/Icon/Icons/ArrowRight";
+import ArrowLeft from "@/component/Icon/Icons/ArrowLeftIcon";
+import ArrowRight from "@/component/Icon/Icons/ArrowRightIcon";
 
 interface AppointmentPaneProps {
     appointmentManager: AppointmentManager;

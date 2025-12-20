@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import CrossIcon from "../Icon/Icons/XMark";
+import CrossIcon from "../Icon/Icons/XMarkIcon";
 
 export enum Style {Error};
 

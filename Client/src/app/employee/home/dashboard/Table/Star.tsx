@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import StarIcon from "@/component/Icon/Icons/Star";
+import StarIcon from "@/component/Icon/Icons/StarIcon";
 
 export default function Star(props: {seen: boolean; starred: boolean; markAsStarred: () => void, i?: number}) {
     return (

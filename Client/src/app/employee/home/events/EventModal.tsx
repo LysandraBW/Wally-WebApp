@@ -4,7 +4,7 @@ import { toDisplayDate } from "@/utils/convert";
 import { useEffect, useState } from "react";
 import { OptionMap } from "@/features/Form/DEF";
 import getValuesToLabels from "@/features/Form/helpers/getValuesToLabels";
-import Person from "@/component/Icon/Icons/User";
+import Person from "@/component/Icon/Icons/UserIcon";
 import EditButton from "./EditButton";
 import DeleteButton from "@/features/ItemManager/components/DeleteButton";
 import clsx from "clsx";

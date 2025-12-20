@@ -20,7 +20,7 @@ import Calendar from "./Calendar";
 import CalendarSearch from "./CalendarSearch";
 import clsx from "clsx";
 import useTabsManager, { Tab } from "@/features/TabManager/useTabsManager";
-import Plus from "@/component/Icon/Icons/Plus";
+import Plus from "@/component/Icon/Icons/PlusIcon";
 
 export interface EventsTab extends Tab {
     event?: {

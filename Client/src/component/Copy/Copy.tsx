@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import { useState } from "react";
 import Clipboard from "../IconV2/Clipboard";
-import Check from "../Icon/Icons/Checkmark";
+import Check from "../Icon/Icons/CheckmarkIcon";
 
 interface CopyProps {
     label: string;

@@ -4,7 +4,7 @@ import useItemsManager from "../../../../../features/ItemManager/useItemsManager
 import CreateItemButton from "@/features/ItemManager/components/CreateItemButton";
 import SaveResetButtons from "@/features/ItemManager/components/SaveResetButtons";
 import { Part, Parts } from "./_DEF";
-import ArchiveBox from "@/component/Icon/Icons/ArchiveBox";
+import ArchiveBox from "@/component/Icon/Icons/ArchiveBoxIcon";
 
 interface PartsManagerProps {
     partsManager: ReturnType<typeof useItemsManager<DB_AppointmentPart, Part, Parts>>;

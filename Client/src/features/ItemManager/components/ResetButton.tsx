@@ -1,5 +1,5 @@
-import ArrowPath from "@/component/Icon/Icons/ArrowPath";
-import ArrowClockwiseIcon from "@/component/Icon/Icons/ArrowPath";
+import ArrowPath from "@/component/Icon/Icons/ArrowPathIcon";
+import ArrowClockwiseIcon from "@/component/Icon/Icons/ArrowPathIcon";
 import TrashIcon from "@/component/Icon/Trash";
 import clsx from "clsx";
 

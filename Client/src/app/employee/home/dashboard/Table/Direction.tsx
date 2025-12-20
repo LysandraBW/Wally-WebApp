@@ -1,5 +1,5 @@
-import ChevronDownIcon from "@/component/Icon/Icons/ChevronDown";
-import ChevronUpIcon from "@/component/Icon/Icons/ChevronUp";
+import ChevronDownIcon from "@/component/Icon/Icons/ChevronDownIcon";
+import ChevronUpIcon from "@/component/Icon/Icons/ChevronUpIcon";
 
 interface DirectionProps {
     direction: "1" | "0" | null;

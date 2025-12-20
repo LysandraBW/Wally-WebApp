@@ -7,7 +7,7 @@ import List from "@/component/Form/Select/List";
 import ListElement from "@/component/Form/Select/List/ListElement";
 import Toggle from "@/component/Form/Select/Toggle";
 import CheckIcon from "@/component/Icon/Check";
-import ExpandIcon from "@/component/Icon/Icons/ChevronUpDown";
+import ExpandIcon from "@/component/Icon/Icons/ChevronUpDownIcon";
 import { OptionMap } from "@/features/Form/DEF";
 import getValuesToLabels from "@/features/Form/helpers/getValuesToLabels";
 import toggleValue from "@/features/Form/helpers/toggleValue";

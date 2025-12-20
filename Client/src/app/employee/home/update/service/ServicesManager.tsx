@@ -3,7 +3,7 @@ import CreateItemButton from "@/features/ItemManager/components/CreateItemButton
 import AddHelper from "./AddHelper";
 import SaveResetButtons from "@/features/ItemManager/components/SaveResetButtons";
 import useServicesManager from "./useServicesManager";
-import ArchiveBox from "@/component/Icon/Icons/ArchiveBox";
+import ArchiveBox from "@/component/Icon/Icons/ArchiveBoxIcon";
 
 interface ServicesManagerProps {
     servicesManager: ReturnType<typeof useServicesManager>;

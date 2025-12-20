@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import { UseForm } from "../../features/Form/useForm/useForm";
 import { Tooltip } from "react-tooltip";
-import ArrowRight from "@/component/Icon/Icons/ArrowRight";
+import ArrowRight from "@/component/Icon/Icons/ArrowRightIcon";
 
 interface LoadAppointmentProps {
     form: UseForm;
