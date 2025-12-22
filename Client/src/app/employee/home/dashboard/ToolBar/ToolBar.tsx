@@ -1,11 +1,9 @@
-import ArrowClockwiseIcon from "@/component/Icon/Icons/ArrowPathIcon";
-import TrashIcon from "@/component/Icon/Trash";
+import TrashIcon from "@/component/Icon/Icons/TrashIcon";
 import { AppointmentManager } from "../managers/useAppointmentManager";
 import { DeleteManager } from "../managers/useDeleteManager";
 import Navigation from "./Navigation";
 import { FilterManager } from "../managers/useFilterManager";
 import clsx from "clsx";
-import ArrowUpOnSquareStack from "@/component/Icon/ArrowUpOnSquareStack";
 import Search from "./Search";
 import { Fragment } from "react";
 import ArrowPath from "@/component/Icon/Icons/ArrowPathIcon";

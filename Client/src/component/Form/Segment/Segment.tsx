@@ -1,43 +1,40 @@
-import { ReadWriteArrayInputProps } from "@/features/Form/DEF";
+import { OptionsWithNode, ReadWriteArrayInputProps } from "@/features/Form/DEF";
 import { Field } from "../Field";
 import clsx from "clsx";
 
-export default function Segment(props: ReadWriteArrayInputProps) {
+interface SegmentProps extends Omit<ReadWriteArrayInputProps, "options"> {
+    options: OptionsWithNode;
+}
+
+export default function Segment(props: SegmentProps) {
     return (
         <Field
             state={props.state}
             label={props.label}
             input={
                 <div 
-                    className={clsx(
-                        "flex gap-4 rounded-md",
-                        "border border-gray-200",
-                        "bg-gray-50 w-full",
-                        "shadow-[inset_0px_0px_2px_0px_rgb(0,0,0,0.02)]"
-                    )}>
+                    className="rounded-md shadow-sm flex justify-between"
+                >
                     {props.options.map((option, i) => (
                         <button 
                             key={i}
                             type="button"
-                            onClick={() => {
-                                props.onChange(props.name, [option[0]]);
-                            }}
+                            onClick={() => props.onChange(props.name, [option[0]])}
                             className={clsx(
-                                "py-2 px-3 w-full rounded-md",
-                                props.values[0].includes(option[0])  && `
-                                    bg-white 
-                                    shadow-[0px_0px_0px_1px_#000] 
-                                    shadow-gray-300
-                                `,
+                                "w-full field-padding",
+                                "first:border-l first:border-l-base-300 first:rounded-l-[5px] last:rounded-r-[5px]",
+                                "border-t border-t-base-300 border-b border-b-base-300 border-r border-r-base-300 rounded-none",
+                                "flex items-center justify-center gap-2",
+                                props.values.includes(option[0]) && "bg-blue-500 !border-blue-500",
+                                !props.values.includes(option[0]) && "hover:bg-base-50 dark:hover:bg-base-100",
+                                (props.state && props.state[0] === false) && "!border-red-500"
                             )}
                         >
+                            {option[2] && option[2]}
                             <span
                                 className={clsx(
-                                    "relative",
-                                    "font-medium whitespace-nowrap",
-                                    props.values[0].includes(option[0]) && `
-                                        text-gray-950
-                                    `
+                                    "field-text",
+                                    props.values.includes(option[0]) && "!text-white"
                                 )}
                             >
                                 {option[1]}

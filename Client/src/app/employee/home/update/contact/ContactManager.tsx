@@ -8,7 +8,7 @@ import GetStatusPairs from "@/services/DB/Information/GetStatusPairs";
 import { Contact, contactTest, ContactUpdates, makeContact } from "@/app/employee/home/update/contact/_DEF";
 import makeForm from "@/features/Form/useForm/makeForm";
 import SaveResetButtons from "@/features/ItemManager/components/SaveResetButtons";
-import SelectGrid from "@/component/Form/Select/SelectGrid";
+import SelectGrid from "@/component/Form/Select/SelectGrid/SelectGrid";
 import TextFieldGrid from "@/component/Form/Text/TextFieldGrid";
 
 

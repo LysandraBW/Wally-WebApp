@@ -1,9 +1,12 @@
 "use client";
-import DashIcon from "@/component/Icon/Dash";
+import DashIcon from "@/component/Icon/Icons/MinusIcon";
 import PhoneNumberPart from "./PhoneNumberPart";
 import { useState, useEffect } from "react";
 import { ReadWriteInputProps } from "@/features/Form/DEF";
 import { Field } from "../../Field";
+import MinusIcon from "@/component/Icon/Icons/MinusIcon";
+import clsx from "clsx";
+import PhoneNumberDash from "./PhoneNumberDash";
 
 interface PhoneNumberProps extends ReadWriteInputProps {
     forceUpdate?: number;
@@ -97,17 +100,15 @@ export default function PhoneNumber(props: PhoneNumberProps) {
             label={props.label}
             state={props.state}
             input={
-                <div className="flex items-center gap-1">
+                <div className="grid grid-cols-[repeat(5,auto)] gap-1 items-center">
                     <PhoneNumberPart
                         part={0}
                         name={props.name}
                         value={phoneNumber1}
                         onChange={handlePhoneNumberPart}
                     />
-                    <DashIcon
-                        fill="#E5E7EB"
-                        stroke="#E5E7EB"
-                        strokeWidth="0.5"
+                    <PhoneNumberDash
+                        error={(props.state && props.state[0] === false) as boolean}
                     />
                     <PhoneNumberPart
                         part={1}
@@ -115,10 +116,8 @@ export default function PhoneNumber(props: PhoneNumberProps) {
                         value={phoneNumber2}
                         onChange={handlePhoneNumberPart}
                     />
-                    <DashIcon
-                        fill="#E5E7EB"
-                        stroke="#E5E7EB"
-                        strokeWidth="0.5"
+                    <PhoneNumberDash
+                        error={(props.state && props.state[0] === false) as boolean}
                     />
                     <PhoneNumberPart
                         part={2}

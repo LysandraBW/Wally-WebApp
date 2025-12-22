@@ -1,6 +1,6 @@
 import clsx from "clsx";
-import CheckIcon from "@/component/Icon/Check";
 import { ReadWriteInputProps } from "@/features/Form/DEF";
+import CheckmarkIcon from "@/component/Icon/Icons/CheckIcon";
 
 export interface CheckboxProps extends ReadWriteInputProps {
     name: string;
@@ -9,7 +9,6 @@ export interface CheckboxProps extends ReadWriteInputProps {
 
 export default function Checkbox(props: CheckboxProps) {
     const onClick = (event: any) => {
-        // event.preventDefault();
         event.stopPropagation();
         props.onChange(props.name, props.value);
     }
@@ -19,32 +18,21 @@ export default function Checkbox(props: CheckboxProps) {
             <span
                 onClick={onClick}
                 className={clsx(
-                    "w-[14px] h-[14px] bg-white",
-                    "flex items-center justify-center hover:bg-gray-100",
-                    "border border-gray-300 shadow-sm rounded-[2.5px] cursor-pointer",
-                    props.checked && `
-                        !bg-blue-600 
-                        !border-blue-500 
-                        text-white
-                    `)}
+                    "w-4 h-4 flex items-center justify-center",
+                    "surface clickable border rounded",
+                    "cursor-pointer",
+                    props.checked && "!bg-blue-500 !border-blue-500"
+                )}
             >
                 {props.checked && 
-                    <CheckIcon
-                        width="10"
-                        height="10"
-                        fill="#FFF"
-                        stroke="#FFF"
-                        strokeWidth="1"
-                        cursor="pointer"
+                    <CheckmarkIcon
+                        class="stroke-white stroke-[3.5px] w-[10px] h-[10px]"
                     />
                 }
             </span>
-            {/* Label */}
-            {props.label && 
-                <span>
-                    {props.label}
-                </span>
-            }
+            <p className="text-base-700 text-sm tracking-wide">
+                {props.label}
+            </p>
         </div>
     )
 }

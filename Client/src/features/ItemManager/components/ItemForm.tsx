@@ -47,7 +47,7 @@ export default function ItemForm(props: ItemFormProps)  {
                     {!props.expanded &&
                         <div>
                             <CloseButton
-                                close={props.onCancel}
+                                onClose={props.onCancel}
                             />
                         </div>
                     }

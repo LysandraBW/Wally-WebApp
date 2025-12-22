@@ -1,9 +1,8 @@
 "use client";
-import clsx from "clsx";
 import { Field } from "../Field";
 import { TextProps } from "./DEF";
 
-export default function InlineText(props: TextProps) {
+export default function Text(props: TextProps) {
     const onChange = (event: any) => {
         props.onChange(event.target.name, event.target.value);
     }
@@ -12,6 +11,7 @@ export default function InlineText(props: TextProps) {
         <Field
             label={props.label}
             state={props.state}
+            wrapLabel={true}
             input={
                 <input
                     type={props.type}
@@ -20,11 +20,7 @@ export default function InlineText(props: TextProps) {
                     onBlur={props.onBlur}
                     onChange={onChange}
                     placeholder={props.placeholder}
-                    className={clsx(
-                        "field !shadow-none !rounded-none",
-                        "!border-none !outline-none",
-                        props.style
-                    )}
+                    className="surface clickable field field-text !cursor-auto border"
                 />
             }
         />

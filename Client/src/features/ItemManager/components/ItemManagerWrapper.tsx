@@ -28,7 +28,7 @@ export function ItemManagerWrapper(props: ItemManagerWrapperProps) {
                     <h6 className="font-medium">{props.header}</h6>
                     {
                         <CloseButton
-                            close={props.closeItem}
+                            onClose={props.closeItem}
                         />
                     }
                 </div>

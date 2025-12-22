@@ -4,11 +4,10 @@ import { fetchModels } from "@/services/NHTSA/fetchModels";
 import { fetchVehicle } from "@/services/NHTSA/fetchVehicle";
 import VehicleMakePairs from "@/services/DB/Information/SelectVehicleMakePairs";
 import { loadModelYears } from "@/services/NHTSA/loadModelYears";
-import Search from "@/component/Form/Select/Search/Search";
 import { UseForm } from "@/features/Form/useForm/useForm";
 import { Options } from "@/features/Form/DEF";
 import getValues from "@/features/Form/helpers/getValues";
-import TextField from "@/component/Form/Text/TextField";
+import TextField from "@/component/Form/Text/Text";
 import { MAKE_ERR_MSG, MODEL_ERR_MSG, MODEL_YEAR_ERR_MSG } from "./_DEF";
 
 interface VehicleFormProps {
@@ -107,7 +106,7 @@ export default function VehicleForm(props: VehicleFormProps) {
                 state={props.form.getInput("vin").state}
                 onChange={updateVIN}
             />
-            <Search
+            {/* <Search
                 name="modelYear"
                 label="Year"
                 toggleLabel="Select Model Year"
@@ -136,7 +135,7 @@ export default function VehicleForm(props: VehicleFormProps) {
                 options={models}
                 onChange={props.form.updateInputData}
                 disabled={false}
-            />
+            /> */}
         </Fragment>
     )
 }

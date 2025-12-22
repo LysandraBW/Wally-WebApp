@@ -3,7 +3,7 @@ import Button from "@/component/Form/Button/Button";
 import { getCookie } from "@/utils/cookies/getCookie";
 import { Options } from "@/features/Form/DEF";
 import getValues from "@/features/Form/helpers/getValues";
-import TextField from "@/component/Form/Text/TextField";
+import TextField from "@/component/Form/Text/Text";
 import MultipleSelect from "@/component/Form/Select/Select/MultipleSelect";
 import ItemForm from "@/features/ItemManager/components/ItemForm";
 import ItemFormGroup from "@/features/ItemManager/components/ItemFormGroup";

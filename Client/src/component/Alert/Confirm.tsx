@@ -1,6 +1,9 @@
-
 import CloseButton from "../Button/CloseButton";
-import Button from "../Form/Button/Button";
+import SecondaryButton from "../Button/SecondaryButton";
+import PrimaryButton from "../Button/PrimaryButton";
+import clsx from "clsx";
+import ExclamationCircleIcon from "../Icon/Icons/ExclamationCircleIcon";
+import InformationCircleIcon from "../Icon/Icons/InformationCircleIcon";
 
 interface ConfirmProps {
     head: React.ReactNode;
@@ -10,26 +13,80 @@ interface ConfirmProps {
     onY: () => void;
     onN: () => void;
     onClose: () => void;
+    absolute?: boolean;
+    irreversible?: boolean;
 }
 
 export default function Confirm(props: ConfirmProps) {
     return (
-        <div>
-            <div className="flex flex-col gap-4 rounded-md border border-gray-300 shadow-sm p-4 bg-white">
-                <div className="flex justify-end">
+        <div 
+            className={clsx(
+                "flex",
+                props.absolute && "fixed z-[10] top-0 left-0 w-screen h-screen bg-black/80 flex justify-center items-center"
+            )}
+        >
+            <div 
+                className={clsx(
+                    "flex flex-col",
+                    "[--width:700px] w-[var(--width)]",
+                    "bg-base-0 border border-base-300 rounded-lg shadow-sm"
+                )}
+            >
+                <div className="p-3 grid grid-cols-[min-content_auto_min-content] grid-rows-[min-content_auto] gap-x-2 gap-y-0 items-center">
+                    {!props.irreversible &&
+                        <InformationCircleIcon
+                            style={{
+                                width: "18px",
+                                height: "18px"
+                            }}
+                            class="col-start-1 stroke-base-900"
+                        />
+                    }
+                    {props.irreversible &&
+                        <ExclamationCircleIcon
+                            style={{
+                                width: "18px",
+                                height: "18px"
+                            }}
+                            class="col-start-1 stroke-red-500"
+                        />
+                    }
+                    <h3 
+                        className={clsx(
+                            "alert-head col-start-2",
+                            props.irreversible && "!text-red-500"
+                        )}
+                    >
+                        {props.head}
+                    </h3>
                     <CloseButton
-                        close={props.onClose}
+                        size={2}
+                        onClick={props.onClose}
                     />
+                    <p className="alert-body col-start-2">
+                        {props.body}
+                    </p>
                 </div>
-                <div>
-                    <h6 className="font-medium text-06">{props.head}</h6>
-                    <p className="tracking-wide max-w-[440px] text-04">{props.body}</p>
-                </div>
-                <div className="flex justify-end gap-4">
-                    <div className="flex gap-2">
-                        <button onClick={props.onN} className="px-4 w-min rounded-md py-2 border border-gray-300 shadow-sm hover:bg-gray-50 hover:text-black">{props.nLabel}</button>
-                        <button onClick={props.onY} className="px-4 w-min rounded-md py-2 border border-gray-300 shadow-sm hover:bg-gray-50 hover:text-black">{props.yLabel}</button>
-                    </div>
+                <div className="flex justify-end gap-3 p-3 border-t border-base-300 bg-base-50 dark:bg-base-0 rounded-b-lg">
+                    <SecondaryButton
+                        class="text-xs"
+                        onClick={props.onN}
+                    >
+                        {props.nLabel}
+                    </SecondaryButton>
+                    <PrimaryButton
+                        class={clsx(
+                            "text-xs",
+                            props.irreversible && `
+                                bg-red-500 border-red-500 dark:!bg-red-600 dark:!border-red-600
+                                hover:!bg-red-600 hover:!border-red-600
+                                dark:hover:!bg-red-700 dark:hover:!border-red-700
+                            `
+                        )}
+                        onClick={props.onY}
+                    >
+                        {props.yLabel}
+                    </PrimaryButton>
                 </div>
             </div>
         </div>

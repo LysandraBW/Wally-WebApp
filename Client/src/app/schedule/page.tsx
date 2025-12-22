@@ -1,10 +1,8 @@
 "use client";
-import ButtonTwo from "@/component/Form/Button/Button2";
 import NavBar from "@/component/NavBar/NavBar";
 import useForm from "@/features/Form/useForm/useForm";
 import ScheduleAppointment from "@/services/DB/Appointment/ScheduleAppointment";
 import { useState } from "react";
-import ButtonThree from "@/component/Form/Button/Button3";
 import { startContactForm, startServiceForm, startVehicleForm } from "./_DEF";
 import SchedulePassed from "./SchedulePassed";
 import ScheduleFailed from "./ScheduleFailed";
@@ -12,6 +10,8 @@ import ProgressBar from "./ProgressBar";
 import ContactForm from "./ContactForm";
 import VehicleForm from "./VehicleForm";
 import ServiceForm from "./ServiceForm";
+import SecondaryButton from "@/component/Button/SecondaryButton";
+import PrimaryButton from "@/component/Button/PrimaryButton";
 
 // The step at which a user is in the form
 // is correlated with some variables.
@@ -169,15 +169,17 @@ export default function Page() {
                                 {step === 2 && <ServiceForm form={serviceForm}/>}
                                 <div className="flex gap-4">
                                     {step !== 0 &&
-                                        <ButtonThree
-                                            label="Previous"
+                                        <SecondaryButton
                                             onClick={goToPrevForm} 
-                                        />
+                                        >
+                                            Previous
+                                        </SecondaryButton>
                                     }
-                                    <ButtonTwo
-                                        label={step === 2 ? "Schedule" : `Continue to ${step == 0 ? "Vehicle" : "Service"}`}
+                                    <PrimaryButton
                                         onClick={step == 2 ? submitForm : goToNextForm}
-                                    />
+                                    >
+                                        {step === 2 ? "Schedule" : `Continue to ${step == 0 ? "Vehicle" : "Service"}`}
+                                    </PrimaryButton>
                                 </div>
                             </form>
                         </div>

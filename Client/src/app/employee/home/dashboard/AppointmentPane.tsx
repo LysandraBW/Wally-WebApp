@@ -6,9 +6,7 @@ import clsx from "clsx";
 import { Appointment as DB_Appointment } from "waltronics-types";
 import { navigate } from "@/utils/navigate";
 import { PAGE_EDIT_APPOINTMENT, PAGE_VIEW_APPOINTMENT } from '@/utils/constants';
-import { AnimatePresence, motion } from "motion/react";
-import Card from "@/component/IconV2/Card";
-import Date from "@/component/Icon/Icons/CalendarIcon";
+import { motion } from "motion/react";
 import { AppointmentManager } from "./managers/useAppointmentManager";
 import ArrowLeft from "@/component/Icon/Icons/ArrowLeftIcon";
 import ArrowRight from "@/component/Icon/Icons/ArrowRightIcon";
@@ -85,7 +83,7 @@ export default function AppointmentPane(props: AppointmentPaneProps) {
         >
             {/* Close Button */}
             <div className="flex justify-between px-4 py-3 border-b border-gray-300">
-                <CloseButton close={props.appointmentManager.closeAppointment}/>
+                <CloseButton onClose={props.appointmentManager.closeAppointment}/>
                 <div className="flex gap-2">
                     <div className="bg-gray-100 rounded p-0.5 px-1 cursor-pointer hover:bg-gray-200 flex items-center justify-center" onClick={props.appointmentManager.goToPrevAppointment}>
                         <ArrowLeft/>

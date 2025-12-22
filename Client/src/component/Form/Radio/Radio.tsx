@@ -2,6 +2,7 @@ import { ReadWriteArrayInputProps } from "@/features/Form/DEF";
 import { OptionsWithNode } from "@/features/Form/DEF";
 import clsx from "clsx";
 import { Field } from "../Field";
+import RadioButton from "./RadioButton";
 
 interface RadioProps extends Omit<ReadWriteArrayInputProps, "options"> {
     options: OptionsWithNode;
@@ -18,52 +19,22 @@ export default function Radio(props: RadioProps) {
                         <button
                             key={i}
                             className={clsx(
-                                "flex items-start gap-3 px-3 py-3",
-                                "rounded-md border border-gray-200",
-                                "shadow-sm",
-                                props.values.includes(option[0]) && `
-                                    !border-blue-500 
-                                    !shadow-[0px_0px_0px_2px_black]
-                                    !shadow-blue-100
-                                `
+                                "flex items-center gap-2 px-2 py-2",
+                                "surface clickable depth-surface border",
+                                (props.state && props.state[0] === false) && "!border-red-500"
                             )}
-                            onClick={() => {
-                                props.onChange(props.name, [option[0]]);
-                            }}
+                            onClick={() => props.onChange(props.name, [option[0]])}
                         >
-                            <div 
-                                className={clsx(
-                                    "flex items-center justify-center",
-                                    "border border-gray-200",
-                                    "shadow rounded-full",
-                                    "aspect-square w-4 h-4 p-0.5",
-                                    props.values.includes(option[0]) && `
-                                        !bg-blue-500 
-                                        !border-blue-700
-                                    `,
-                                )}
-                            >
-                                {props.values.includes(option[0]) &&
-                                    <div 
-                                        className={clsx(
-                                            "w-2 h-2",
-                                            "aspect-square bg-white",
-                                            "shadow rounded-full",
-                                            "border-blue-700"
-                                        )}
-                                    />
-                                }
-                            </div>
+                            <RadioButton
+                                checked={props.values.includes(option[0])}
+                            />
                             {/* Custom Input */}
-                            {option[2] && option[2]}
-                            {/* 
-                            Default Label
-                            Thinking of how the buttons are
-                            currently styled, I'm not sure if
-                            this would ever be a thing.
-                            */}
-                            {!option[2] && 
-                                <span>{option[1]}</span>
+                            {option[2] ?
+                                option[2]
+                                :
+                                <span className="text-sm text-base-700 leading-[14px] tracking-wide">
+                                    {option[1]}
+                                </span>
                             }
                         </button>
                     ))}

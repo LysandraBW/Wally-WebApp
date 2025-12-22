@@ -1,30 +1,34 @@
-import ExpandIcon from "@/component/Icon/Icons/ChevronUpDownIcon";
-import { ReactNode } from "react";
+import ChevronDownIcon from "@/component/Icon/Icons/ChevronDownIcon";
 import clsx from "clsx";
+import { ReactNode } from "react";
 
 interface ToggleProps {
-    open: boolean;
-    label: ReactNode;
-    multiple: boolean;
-    style?: string;
+    icon?: ReactNode;
+    label?: string;
+    onClick: () => void;
 }
 
 export default function Toggle(props: ToggleProps) {
     return (
-        <div 
-            // tabIndex={0}
+        <button
+            onClick={() => props.onClick}
             className={clsx(
-                "field grid grid-cols-[auto_13px] h-[36px]",
-                "gap-3 justify-between items-center p-1 pr-3 cursor-pointer hover:bg-gray-50",
-                props.style
+                "w-full h-min px-2 py-1",
+                "flex items-center justify-between gap-2",
+                "surface clickable field",
+                "border shadow-sm"
             )}
         >
-            <div className="overflow-x-auto scroll-hide font-normal !text-gray-400">
-                {props.label}
-            </div>
-            <ExpandIcon
-                stroke="#1F2937"
-            />
-        </div>
+            <span className="field-text">
+                {props.label || "Select"}
+            </span>
+            {props.icon ?
+                props.icon 
+                :
+                <ChevronDownIcon
+                    class="w-4 h-4 stroke-base-500 stroke-[2.5px]"
+                />
+            }
+        </button>
     )
 }

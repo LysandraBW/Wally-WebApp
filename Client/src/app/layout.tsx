@@ -7,8 +7,8 @@ export default function RootLayout({
 	children: React.ReactNode;
 }>) {
 	return (
-		<html lang="en" className="snap-y snap-mandatory scroll-hide h-full">
-			<body className={`${Instrumental.className} snap-y snap-mandatory overflow-y-auto h-full flex flex-col`}>
+		<html lang="en" className="bg-background-1">
+			<body className={Inter.className}>
 				{children}
 			</body>
 		</html>

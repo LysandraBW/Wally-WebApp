@@ -28,7 +28,7 @@ export default function View(props: ViewProps) {
                     <div className="flex w-full gap-2 items-center justify-between mb-1">
                         <p className="text-05 text-black font-medium flex">Appointment</p>
                         <CloseButton
-                            close={props.close}
+                            onClose={props.close}
                         />
                     </div>
                     <p className="tracking-wide text-xs font-medium-">{props.appointmentID}</p>

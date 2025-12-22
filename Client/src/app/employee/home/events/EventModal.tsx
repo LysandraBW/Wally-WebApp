@@ -38,7 +38,7 @@ export default function EventModal(props: EventModalProps) {
                         <h6 className="font-medium">Showing Event</h6>
                         <div>
                             <CloseButton
-                                close={() => {
+                                onClose={() => {
                                     props.onClose(props.event.EventID);
                                 }}
                             />

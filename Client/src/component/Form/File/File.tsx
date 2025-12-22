@@ -1,10 +1,11 @@
 import { ReadInputProps } from "@/features/Form/DEF";
 import { Field } from "../Field";
 import { useState } from "react";
-import UploadIcon from "@/component/Icon/Upload";
 import clsx from "clsx";
 import CrossIcon from "@/component/Icon/Icons/XMarkIcon";
 import { toBytes } from "@/utils/convert";
+import ArrowUpTrayIcon from "@/component/Icon/Icons/ArrowUpTrayIcon";
+import CloseButton from "@/component/Button/CloseButton";
 
 interface FileProps extends ReadInputProps {
     accept: string;
@@ -29,14 +30,13 @@ export default function File(props: FileProps) {
                 <div className="flex flex-col gap-1">
                     <label 
                         className={clsx(
-                            "border-gray-300 rounded",
-                            "border-[1.0px] border-dashed",
-                            "bg-white w-full p-4 text-center",
-                            "flex justify-center",
-                            "inline-block cursor-pointer",
-                            "hover:border-blue-600 hover:bg-blue-50",
-                            "hover:!text-blue-600"
-                        )}>
+                            "inline-block w-full px-4 py-4",
+                            "flex flex-col items-center justify-center gap-y-2",
+                            "surface clickable border rounded-md",
+                            "cursor-pointer group",
+                            (props.state && props.state[0] === false) && "!border-red-500"
+                        )}
+                    >
                         <input
                             type="file"
                             name={props.name}
@@ -45,62 +45,46 @@ export default function File(props: FileProps) {
                             multiple={props.multiple}
                             className="hidden"
                         />
-                        <div 
-                            className={clsx(
-                                "flex flex-col",
-                                "items-center gap-3"
-                            )}>
-                            <span 
-                                className={clsx(
-                                    "block text-02",
-                                    "font-medium",
-                                    "text-inherit"
-                                )}
-                            >
-                                Click to Upload
-                            </span>
-                        </div>
+                        <ArrowUpTrayIcon
+                            class="size-5 stroke-inherit"
+                        />
+                        <p 
+                            className="block text-sm tracking-wide text-inherit"
+                        >
+                            Click to Upload
+                        </p>
                     </label>
                     {/* FileList */}
-                    {fileList && Array.from(fileList).map((file, i) => (
-                        <div
-                            key={i}
-                            className={clsx(
-                                "flex items-center justify-between",
-                                "w-full p-2 border rounded"
-                            )}
-                        >
-                            {/* File */}
-                            <div className="flex flex-col ">
-                                <span className="block">
-                                    {file.name}
-                                </span>
-                                <span className="block">
-                                    {toBytes(file.size)}
-                                </span>
-                            </div>
-                            {/* Delete File Button */}
-                            <button 
-                                // There's no functionality
-                                // for this right now. 
-                                onClick={() => null}
-                                className={clsx(
-                                    "icon !rounded-full",
-                                    "!p-0.5 bg-gray-100",
-                                    "fill-white stroke-white"
-                                )}
-                            >
-                                <CrossIcon
-                                    width={"10"}
-                                    height={"10"}
-                                    fill="inherit"
-                                    stroke="inherit"
-                                    strokeWidth="1"
-                                    cursor="pointer"
-                                />
-                            </button>
+                    {(fileList && Array.from(fileList).length) &&
+                        <div className="flex gap-1 p-1 bg-base-100 rounded-md">
+                            {fileList && Array.from(fileList).map((file, i) => (
+                                <div
+                                    key={i}
+                                    className={clsx(
+                                        "flex items-center justify-between gap-1",
+                                        "w-min border rounded-md",
+                                        "border border-base-300",
+                                        "shadow-sm bg-base-0 dark:bg-base-100"
+                                    )}
+                                >
+                                    {/* File */}
+                                    <div className="flex">
+                                        <div className="block text-xs text-base-500 tracking-wide p-1 whitespace-nowrap">
+                                            {file.name}
+                                        </div>
+                                        {/* Delete File Button */}
+                                        {/* Not Implemented! */}
+                                        <div className="border-l border-l-base-300 p-1 flex items-center justify-center">
+                                            <CloseButton
+                                                size={1}
+                                                onClick={() => null}
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
                         </div>
-                    ))}
+                    }
                 </div>
             }
         />

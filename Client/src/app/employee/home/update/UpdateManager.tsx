@@ -283,7 +283,7 @@ export default function UpdateManager<BaseItem, Item, Items>(props: UpdateManage
             <div className="flex justify-between items-center p-2 rounded-md border border-gray-300 shadow-sm mb-2">
                 <p className="text-md text-gray-700 font-medium">Appointment {props.appointmentID}</p>
                 <CloseButton
-                    close={() => null}
+                    onClose={() => null}
                 />
             </div>
             <div className="flex gap-x-4 grow">

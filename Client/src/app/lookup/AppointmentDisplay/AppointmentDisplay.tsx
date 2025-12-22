@@ -39,7 +39,7 @@ export default function AppointmentDisplay(props: AppointmentDisplayProps) {
             >
                 <div className="h-min w-min">
                     <CloseButton
-                        close={props.closeAppointment}
+                        onClose={props.closeAppointment}
                     />
                 </div>
             </div> 

@@ -1,4 +1,4 @@
-import TextField from "@/component/Form/Text/TextField";
+import TextField from "@/component/Form/Text/Text";
 import ItemFormGroup from "@/features/ItemManager/components/ItemFormGroup";
 import { ItemManagerProps, ItemManagerWrapper } from "@/features/ItemManager/components/ItemManagerWrapper";
 import useItemManager from "@/features/ItemManager/useItemManager";

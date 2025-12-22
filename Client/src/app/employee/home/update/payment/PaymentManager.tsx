@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import TextField from "@/component/Form/Text/TextField";
+import TextField from "@/component/Form/Text/Text";
 import Radio from "@/component/Form/Radio/Radio";
 import ItemFormGroup from "@/features/ItemManager/components/ItemFormGroup";
 import { Payment as DB_Payment} from "waltronics-types"

@@ -11,7 +11,7 @@ import Item from "@/features/ItemManager/components/Item";
 import { toInteger } from "@/utils/convert";
 import GetEmployeeNamePairs from "@/services/DB/Employee/GetEmployeeNamePairs";
 import { DisplayProps } from "@/features/ItemManager/components/DisplayItems";
-import Box from "@/component/IconV2/Box";
+import ArchiveBoxIcon from "@/component/Icon/Icons/ArchiveBoxIcon";
 import getEventsWhen from "./getEventsWhen";
 
 interface EventDisplayProps<Items> extends  DisplayProps<Items> {
@@ -47,7 +47,7 @@ export default function EventDisplay(props: EventDisplayProps<Events>) {
                 </div>
                 <div className="w-min">
                     <CloseButton
-                        close={() => props.onClose(props.year, props.monthIndex, props.dateIndex)}
+                        onClose={() => props.onClose(props.year, props.monthIndex, props.dateIndex)}
                     />
                 </div>
             </div>
@@ -74,11 +74,7 @@ export default function EventDisplay(props: EventDisplayProps<Events>) {
                                     [...item.Sharees.map((sharee, i) => (
                                         <Fragment>
                                             <Person
-                                                    width="14"
-                                                    height="14"
-                                                    fill="#94a3b8"
-                                                    stroke="#94a3b8"
-                                                    strokeWidth="0.25"
+                                                    
                                                 />
                                                 {idToName[sharee]}
                                                 {item.EmployeeID === sharee && 
@@ -95,8 +91,8 @@ export default function EventDisplay(props: EventDisplayProps<Events>) {
                 ))}
                 {Object.keys(props.items).length === 0 &&
                     <div className="h-[100px] flex flex-col justify-center gap-1 items-center justify-center">
-                        <Box
-                            style="size-6 stroke-gray-400"
+                        <ArchiveBoxIcon
+                            class="size-6 stroke-gray-400"
                         />
                         <span className="text-gray-400 tracking-wide font-medium text-04">
                             No Events Found

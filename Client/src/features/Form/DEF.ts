@@ -20,7 +20,7 @@ export interface ReadWriteInputProps extends ReadInputProps {
     onChange: (name: string, value: Value) => void;
 }
 
-export interface ReadWriteArrayInputProps extends Omit<ReadInputProps, "value"> {
+export interface ReadWriteArrayInputProps extends ReadInputProps {
     values: Values;
     options: Options;
     onChange: (name: string, values: Values) => void;

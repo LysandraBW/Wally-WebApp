@@ -8,31 +8,38 @@ export interface FieldProps {
     input: ReactNode;
     label?: string;
     state?: InputState;
+    wrapLabel?: boolean;
 }
 
 export function Field(props: FieldProps) {
+    const Wrapper = props.wrapLabel ? "label" : "div";
+
     return (
-        <label className={clsx("flex flex-col gap-0.5", props.state && props.state[0] === false && "error")}>
+        <Wrapper 
+            className={clsx(
+                "flex flex-col gap-[4px]", 
+                props.state && props.state[0] === false && "error"
+            )}
+        >
             {/* Input Label */}
             {props.label &&
-                <span className={clsx(
-                    "text-gray-600 font-normal text-03",
-                    "whitespace-nowrap tracking-wide"
-                )}>{props.label}</span>
+                <span 
+                    className={clsx(
+                        "text-base-700 font-normal text-sm",
+                        "whitespace-nowrap tracking-wide"
+                    )}
+                >
+                    {props.label}
+                </span>
             }
             {/* Input */}
             {props.input}
             {/* Error Message */}
             {props.state && props.state[0] === false &&
-                <span 
-                    className={clsx(
-                        Instrumental.className, 
-                        "text-01 text-red-500 font-medium tracking-wide"
-                    )}
-                >
+                <span className="text-xs text-red-500 tracking-wide">
                     {props.state[1]}
                 </span>
             }
-        </label>
+        </Wrapper>
     )
 }

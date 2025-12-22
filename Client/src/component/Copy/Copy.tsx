@@ -1,7 +1,8 @@
 import clsx from "clsx";
-import { useState } from "react";
-import Clipboard from "../IconV2/Clipboard";
-import Check from "../Icon/Icons/CheckmarkIcon";
+import { useEffect, useState } from "react";
+import Check from "../Icon/Icons/CheckIcon";
+import ClipboardIcon from "../Icon/Icons/ClipboardIcon";
+import IconButton from "../Button/IconButton";
 
 interface CopyProps {
     label: string;
@@ -11,36 +12,37 @@ interface CopyProps {
 export default function Copy(props: CopyProps) {
     const [clicked, setClicked] = useState(false);
 
+
     const copyValue = () => {
         navigator.clipboard.writeText(props.value);
+        setClicked(true);
     }
+
+
+    useEffect(() => {
+        if (!clicked)
+            return;
+        setTimeout(() => {
+            setClicked(false);
+        }, 5*1000);
+    }, [clicked]);
+
 
     return (
         <div 
-            onClick={() => {
-                copyValue();
-                // To show that the user has copied the
-                // value, we change the board to a check.
-                setClicked(true);
-                setTimeout(() => {
-                    setClicked(false);
-                }, 1*1000);
-
-            }}
             className={clsx(
-                "w-min",
-                "flex justify-between items-center",
-                "border border-gray-200 rounded-md",
-                "bg-white shadow-sm",
-                "transition-all hover:bg-gray-50 cursor-pointer"
+                "w-min h-min",
+                "grid grid-cols-[min-content_min-content_min-content]",
+                "border border-base-300 rounded-md",
+                "bg-base-0 shadow-sm"
             )}
         >
             <span 
                 className={clsx(
                     "py-1 px-2",
-                    "border-r border-r-gray-200 rounded-l-[5px]",
-                    "font-medium text-gray-400 text-xs tracking-wide",
-                    "bg-gray-100"
+                    "border-r border-r-base-300 rounded-l-[5px]",
+                    "text-base-500 text-sm",
+                    "bg-base-100"
                 )}
             >
                 {props.label}
@@ -48,32 +50,45 @@ export default function Copy(props: CopyProps) {
             <span 
                 className={clsx(
                     "py-1 px-2",
-                    "font-medium text-xs text-gray-700",
+                    "font-medium text-sm text-base-700",
                     "tracking-wide whitespace-nowrap"
                 )}
             >
                 {props.value}
             </span>
-            <span 
+            <button 
+                onClick={copyValue}
                 className={clsx(
-                    "h-full",
                     "py-1 px-2",
-                    "font-medium text-gray-400 text-xs tracking-wide",
-                    "border-l border-l-gray-200 rounded-r-[5px]",
-                    "bg-gray-100"
+                    "flex justify-between items-center",
+                    "border-l border-l-base-300 rounded-none rounded-r-[5px]",
+                    "surface clickable !bg-base-100",
+                    "cursor-pointer transition-all"
                 )}
             >
                 {clicked &&
                     <Check
-                        style="size-3.5 stroke-2 stroke-emerald-500"
+                        style={{
+                            width: "16px",
+                            height: "16px",
+                            cursor: "pointer",
+                            strokeWidth: "2px"
+                        }}
+                        class="stroke-green-500"
                     />
                 }
                 {!clicked &&
-                    <Clipboard
-                        style="size-3.5 stroke-1.5 stroke-gray-400"
+                    <ClipboardIcon
+                        style={{
+                            width: "16px",
+                            height: "16px",
+                            cursor: "pointer",
+                            strokeWidth: "1.5px"
+                        }}
+                        class="stroke-inherit"
                     />
                 }
-            </span>
+            </button>
         </div>
     )
 }

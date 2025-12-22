@@ -2,8 +2,63 @@
 @tailwind components;
 @tailwind utilities;
 
+
+:root {
+    --neutral-0000: #ffffff;
+    --neutral-0050: #f9fafb;
+    --neutral-0100: #f3f4f6;
+    --neutral-0200: #e5e7eb;
+    --neutral-0300: #d1d5db;
+    --neutral-0400: #9ca3af;
+    --neutral-0500: #6b7280;
+    --neutral-0600: #4b5563;
+    --neutral-0700: #374151;
+    --neutral-0800: #1f2937;
+    --neutral-0900: #111827;
+    --neutral-0950: #030712;
+    --neutral-1000: #000000;
+}
+
+
+html {
+    --base-0000: var(--neutral-0000);
+    --base-0050: var(--neutral-0050);
+    --base-0100: var(--neutral-0100);
+    --base-0200: var(--neutral-0200);
+    --base-0300: var(--neutral-0300);
+    --base-0400: var(--neutral-0400);
+    --base-0500: var(--neutral-0500);
+    --base-0600: var(--neutral-0600);
+    --base-0700: var(--neutral-0700);
+    --base-0800: var(--neutral-0800);
+    --base-0900: var(--neutral-0900);
+    --base-0950: var(--neutral-0950);
+    --base-1000: var(--neutral-1000);
+}
+
+
+*.dark {
+    --base-0000: var(--neutral-1000);
+    --base-0050: var(--neutral-0950);
+    --base-0100: var(--neutral-0900);
+    --base-0200: var(--neutral-0800);
+    --base-0300: var(--neutral-0700);
+    --base-0400: var(--neutral-0600);
+    --base-0500: var(--neutral-0500);
+    --base-0600: var(--neutral-0400);
+    --base-0700: var(--neutral-0300);
+    --base-0800: var(--neutral-0200);
+    --base-0900: var(--neutral-0100);
+    --base-0950: var(--neutral-0050);
+    --base-1000: var(--neutral-0000);
+}
+
+
 @layer base {
-    * { cursor: inherit; }
+    * { 
+        cursor: inherit; 
+        box-sizing: border-box;
+    }
 
     /* Removing Autofill Background */
     input:-webkit-autofill,
@@ -17,58 +72,178 @@
     h1, h2, h3, h4, h5, h6 {
         @apply 
             font-normal
-            tracking-tight
-            text-gray-700;
     }
     
     /* Non-Heading Text */
     p, ul, ol, li, a, span, label, input, button { 
         @apply 
             font-normal
-            text-gray-400;
+    }
+
+    button {
+        @apply
+            py-1
+            px-2
+            rounded-md
+    }
+
+    svg {
+        stroke: inherit;
     }
 }
 
+
 @layer components {
-    .field {
-        @apply
-            w-full
-            py-2 px-3
-            border border-gray-300
-            rounded-md
-            text-[0.85rem]
-            text-gray-600
-            font-normal
-            bg-white
-            shadow-sm
-            tracking-wide
-            h-[36px]
-        ;
+    .scroll-hide {
+        scrollbar-width: none;
+        -ms-overflow-style: none;
     }
-
-
-    .field:focus {
-        @apply
-            outline-none
-            border-blue-500
-            ring-2
-            ring-blue-100
-    }
-
-    
-    .error .field {
-        @apply
-            border-red-400;
-    }
-
 
     .scroll-hide::-webkit-scrollbar { 
         display: none; 
     }
+}
 
 
-    .scroll-hide {
-        -ms-overflow-style: none;
-        scrollbar-width: none; 
+@layer utilities {
+    /* Surfaces */
+    .surface {
+        @apply
+            bg-base-0
+            text-base-500
+            stroke-base-500
+            border-base-300
+        ;
+    }
+
+    .surface.clickable {
+        @apply
+            cursor-pointer
+            hover:bg-base-100
+            hover:text-base-700
+            hover:stroke-base-700
+        ;
+    }
+
+    /* Border Beam */
+    .border-beam-wrapper {
+        --color-1: 0, 0, 0, 0;
+        --color-2: 255, 255, 255, 0.33;
+        --parent-width: 100px;
+        --parent-height: 100px;
+        
+        width: var(--parent-width);
+        height: var(--parent-height);
+
+        @apply
+            relative
+            overflow-hidden
+    }
+
+    .border-beam-wrapper::before, 
+    .border-beam-wrapper::after {
+        mix-blend-mode: color-dodge;
+        @apply
+            h-[40px]
+            w-[40px]
+            aspect-square
+            content-['']
+            absolute
+            rounded-full
+    }
+
+    .border-beam-wrapper::before {
+        background: linear-gradient(
+            to right, 
+            rgb(var(--color-1)) 0%, 
+            rgb(var(--color-2)) 100%
+        );
+        @apply
+            top-[calc(-10*0.25rem/2)]
+            left-[calc(-10*0.25rem/2)]
+            animate-border-cover
+    }
+
+    .border-beam-wrapper::after {
+        background: linear-gradient(
+            to right, 
+            rgb(var(--color-2)) 0%, 
+            rgb(var(--color-1)) 100%
+        );
+        @apply
+            bottom-[calc(-10*0.25rem/2)]
+            right-[calc(-10*0.25rem/2)]
+            animate-border-cover-reverse
+    }
+
+    .border-beam-content {
+        @apply
+            w-[calc(100%-2px)]
+            h-[calc(100%-2px)]
+            m-[1px]
+            relative
+            z-[1]
+        ;
+    }
+
+    /* Alert */
+    .alert-head {
+        @apply
+            text-sm 
+            text-base-900 
+            font-medium 
+            leading-[1rem]
+        ;
+    }
+
+    .alert-body {
+        @apply
+            tracking-wide 
+            text-xs
+            text-base-500
+        ;
+    }
+
+    /* Fields (Input) */
+    .field-padding {
+        @apply
+            px-2 
+            py-1
+        ;
+    }
+
+    .field-border {
+        @apply
+            border 
+            border-base-300
+            outline-none
+            rounded-md 
+        ;
+    }
+
+    .field {
+        @apply
+            px-2 
+            py-1
+            border 
+            border-base-300
+            shadow-sm
+            outline-none
+            rounded-md 
+            bg-base-0
+        ;
+    }
+
+    .field-text {
+        @apply
+            text-sm 
+            tracking-wide
+            text-base-700
+        ;
+    }
+
+    .error .field {
+        @apply
+            border-red-500
     }
 }

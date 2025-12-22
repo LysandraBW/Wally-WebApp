@@ -1,5 +1,5 @@
 "use client";
-import TextField from "@/component/Form/Text/TextField";
+import TextField from "@/component/Form/Text/Text";
 import { UseForm } from "@/features/Form/useForm/useForm";
 import ButtonTwo from "@/component/Form/Button/Button2";
 import { Fragment } from "react";

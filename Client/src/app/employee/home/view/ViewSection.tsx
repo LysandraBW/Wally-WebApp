@@ -1,4 +1,4 @@
-import Box from "@/component/IconV2/Box";
+import ArchiveBoxIcon from "@/component/Icon/Icons/ArchiveBoxIcon";
 import clsx from "clsx";
 import { Fragment, ReactNode } from "react";
 
@@ -55,8 +55,8 @@ export function NonScalarViewSection({head, data}: {
                         }
                         {data.length === 0 &&
                             <div className="w-full bg-gray-5-0 rounded-md h-[100px] flex flex-col justify-center gap-1 items-center justify-center">
-                                <Box
-                                    style="size-6 stroke-gray-400"
+                                <ArchiveBoxIcon
+                                    class="size-6 stroke-gray-400"
                                 />
                                 <span className="text-gray-400 tracking-wide font-medium text-04">
                                     No {head} Found

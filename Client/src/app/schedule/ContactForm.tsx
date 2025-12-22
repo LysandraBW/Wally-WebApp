@@ -1,5 +1,5 @@
 import PhoneNumber from "@/component/Form/Text/PhoneNumber/PhoneNumber";
-import TextField from "@/component/Form/Text/TextField";
+import TextField from "@/component/Form/Text/Text";
 import { UseForm } from "@/features/Form/useForm/useForm";
 import { Fragment } from "react";
 
