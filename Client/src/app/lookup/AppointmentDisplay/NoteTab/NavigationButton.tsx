@@ -1,5 +1,5 @@
-import ArrowLeft from "@/component/Icon/Icons/ArrowRightIcon";
-import ArrowRight from "@/component/Icon/Icons/ArrowLeftIcon";
+import ArrowLeft from "@/component/Icons/Icons/ArrowRightIcon";
+import ArrowRight from "@/component/Icons/Icons/ArrowLeftIcon";
 
 interface NavigationButtonProps {
     onClick: () => void;

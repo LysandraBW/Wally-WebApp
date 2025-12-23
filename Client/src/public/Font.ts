@@ -1,5 +1,23 @@
 import localFont from 'next/font/local';
 import { DM_Sans as _DM_Sans, Inter as _Inter, Rubik as _Rubik, Be_Vietnam_Pro, Hanken_Grotesk, Host_Grotesk, IBM_Plex_Sans, Instrument_Sans, Libre_Franklin, Manrope, Poppins, Schibsted_Grotesk, Space_Grotesk} from "next/font/google";
+import { Kanit as _Kanit } from 'next/font/google';
+import { Saira as _Saira } from 'next/font/google';
+import { Public_Sans } from 'next/font/google';
+
+export const PublicSans = Public_Sans({
+  subsets: ["latin"],
+  weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900']
+});
+
+export const Kanit = _Kanit({
+  subsets: ["latin"],
+  weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900']
+});
+
+export const Saira = _Saira({
+  subsets: ["latin"],
+  weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900']
+});
 
 export const DM_Sans = _DM_Sans({
     subsets: ["latin"],

@@ -2,7 +2,7 @@
 import { Events, Months } from "./_DEF";
 import CloseButton from "@/component/Button/CloseButton";
 import UpdateItem from "@/features/ItemManager/components/UpdateItem";
-import Person from "@/component/Icon/Icons/UserIcon";
+import Person from "@/component/Icons/Icons/UserIcon";
 import { toDisplayDate } from "@/utils/convert";
 import { Fragment, useEffect, useState } from "react";
 import { OptionMap } from "@/features/Form/DEF";
@@ -11,7 +11,7 @@ import Item from "@/features/ItemManager/components/Item";
 import { toInteger } from "@/utils/convert";
 import GetEmployeeNamePairs from "@/services/DB/Employee/GetEmployeeNamePairs";
 import { DisplayProps } from "@/features/ItemManager/components/DisplayItems";
-import ArchiveBoxIcon from "@/component/Icon/Icons/ArchiveBoxIcon";
+import ArchiveBoxIcon from "@/component/Icons/Icons/ArchiveBoxIcon";
 import getEventsWhen from "./getEventsWhen";
 
 interface EventDisplayProps<Items> extends  DisplayProps<Items> {

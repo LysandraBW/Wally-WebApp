@@ -1,4 +1,4 @@
-import EditIcon from "@/component/Icon/Icons/PencilSquareIcon";
+import EditIcon from "@/component/Icons/Icons/PencilSquareIcon";
 import TrashIcon from "@/component/Icon/Trash";
 import clsx from "clsx";
 import { ReactNode } from "react";

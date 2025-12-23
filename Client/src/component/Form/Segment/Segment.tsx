@@ -13,7 +13,7 @@ export default function Segment(props: SegmentProps) {
             label={props.label}
             input={
                 <div 
-                    className="rounded-md shadow-sm flex justify-between"
+                    className="flex justify-between rounded-md shadow-sm"
                 >
                     {props.options.map((option, i) => (
                         <button 
@@ -22,12 +22,11 @@ export default function Segment(props: SegmentProps) {
                             onClick={() => props.onChange(props.name, [option[0]])}
                             className={clsx(
                                 "w-full field-padding",
+                                "flex items-center justify-center gap-2",
                                 "first:border-l first:border-l-base-300 first:rounded-l-[5px] last:rounded-r-[5px]",
                                 "border-t border-t-base-300 border-b border-b-base-300 border-r border-r-base-300 rounded-none",
-                                "flex items-center justify-center gap-2",
                                 props.values.includes(option[0]) && "bg-blue-500 !border-blue-500",
                                 !props.values.includes(option[0]) && "hover:bg-base-50 dark:hover:bg-base-100",
-                                (props.state && props.state[0] === false) && "!border-red-500"
                             )}
                         >
                             {option[2] && option[2]}

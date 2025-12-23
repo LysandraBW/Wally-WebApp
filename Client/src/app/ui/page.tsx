@@ -16,7 +16,8 @@ import Select from "@/component/Form/Select/Select";
 import PhoneNumber from "@/component/Form/Text/PhoneNumber/PhoneNumber";
 import Text from "@/component/Form/Text/Text";
 import TextArea from "@/component/Form/Text/TextArea";
-import ArrowLongLeftIcon from "@/component/Icon/Icons/ArrowLongLeftIcon";
+import ArrowLongLeftIcon from "@/component/Icons/Icons/ArrowLongLeftIcon";
+import Logo from "@/component/NavBar/Logo";
 import { ArrowLeft } from "lucide-react";
 
 function Elements() {
@@ -323,6 +324,16 @@ function Elements() {
                     value=""
                     onChange={(name, value) => 1}
                     state={[false, "You must enter a phone number."]}
+                />
+            </div>
+            <div className="flex flex-col gap-2">
+                <p className="text-base-900">Text</p>
+                <Logo/>
+                <Logo
+                    size={2}
+                />
+                <Logo
+                    size={1}
                 />
             </div>
         </div>

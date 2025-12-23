@@ -8,7 +8,7 @@ import clsx from "clsx";
 import Logo from "@/component/NavBar/Logo";
 import { Tooltip } from "react-tooltip";
 import { DM_Sans, IBM, Instrumental } from "@/public/Font";
-import ArrowLeftStartOnRectangle from "@/component/Icon/Icons/ArrowLeftStartOnRectangleIcon";
+import ArrowLeftStartOnRectangle from "@/component/Icons/Icons/ArrowLeftStartOnRectangleIcon";
 
 export const EmployeeContext = createContext<{employee?: DB_Employee, setCurrentPage?: (page: string) => void}>({});
 

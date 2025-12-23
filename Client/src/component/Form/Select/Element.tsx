@@ -1,4 +1,4 @@
-import CheckIcon from "@/component/Icon/Icons/CheckIcon";
+import CheckIcon from "@/component/Icons/Icons/CheckIcon";
 import clsx from "clsx";
 import { ReactNode } from "react";
 
@@ -16,13 +16,13 @@ export default function Element(props: ElementProps) {
             onClick={props.selectValue}
             className={clsx(
                 "flex justify-between items-center px-2 py-1",
-                "surface clickable",
+                "surface surface-hover",
                 "!border-none !rounded-none"
             )}
         >
             <span
                 className={clsx(
-                    "text-sm tracking-wide text-base-700",
+                    "field-text",
                     props.checked && "text-blue-500"
                 )}
             >
@@ -37,7 +37,7 @@ export default function Element(props: ElementProps) {
                         props.CheckedIcon
                         :
                         <CheckIcon
-                            class="w-4 h-4 stroke-blue-500 stroke-[2.5px]"
+                            class="size-3 stroke-blue-500 stroke-[2.5px]"
                         />
                     }
                 </>

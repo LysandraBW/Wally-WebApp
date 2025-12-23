@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import XMarkIcon from "../Icon/Icons/XMarkIcon";
+import XMarkIcon from "../Icons/Icons/XMarkIcon";
 import IconButton, { IconButtonProps } from "./IconButton";
 
 export default function CloseButton(props: IconButtonProps) {

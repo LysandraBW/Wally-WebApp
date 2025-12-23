@@ -1,6 +1,6 @@
 "use client";
 import clsx from "clsx";
-import { TextProps } from "./DEF";
+import { TextProps } from "./TextProps";
 import { Field } from "../Field";
 
 export default function TextArea(props: TextProps) {
@@ -20,7 +20,7 @@ export default function TextArea(props: TextProps) {
                     onBlur={props.onBlur}
                     onChange={onChange}
                     className={clsx(
-                        "field field-text"
+                        "field-bg-shadow field-padding field-border field-text"
                     )}
                 />
             }

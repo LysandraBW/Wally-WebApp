@@ -106,26 +106,126 @@ html {
 
 
 @layer utilities {
-    /* Surfaces */
     .surface {
         @apply
             bg-base-0
             text-base-500
             stroke-base-500
-            border-base-300
         ;
     }
 
-    .surface.clickable {
+
+    .surface-hover {
         @apply
-            cursor-pointer
             hover:bg-base-100
             hover:text-base-700
             hover:stroke-base-700
         ;
     }
 
-    /* Border Beam */
+
+    .surface-border {
+        @apply
+            border
+            border-base-300
+        ;
+    }
+
+
+    .surface-border-radius {
+        @apply
+            rounded-md
+        ;
+    }
+
+
+    .alert-head {
+        @apply
+            text-sm 
+            text-base-900 
+            font-medium 
+            leading-[1rem]
+        ;
+    }
+
+
+    .alert-body {
+        @apply
+            tracking-wide 
+            text-xs
+            text-base-500
+        ;
+    }
+
+
+    .field-padding {
+        @apply
+            px-2 
+            py-1
+        ;
+    }
+
+
+    .field-bg-shadow {
+        @apply
+            bg-base-0
+            shadow-sm
+        ;
+    }
+
+
+    .field-border {
+        @apply
+            border 
+            border-base-300
+            outline-none
+            rounded-md
+        ;
+    }
+
+
+    .error .field-border {
+        @apply
+            border-red-500
+    }
+
+
+    .field-text {
+        @apply
+            text-sm 
+            tracking-wide
+            text-base-700
+        ;
+    }
+
+
+    .field-focus:focus {
+        @apply
+            border-blue-500
+            !bg-blue-100
+            dark:!bg-blue-500/20
+        ;
+    }
+
+
+    .error .field-focus:focus {
+        @apply
+            border-red-500
+            bg-red-100
+            dark:!bg-red-500/20
+        ;
+    }
+
+    
+    :not(.error) .field-focus:not(.error .field-focus):focus {
+        @apply
+            border-blue-500
+            !bg-blue-100
+            dark:!bg-blue-500/20
+        ;
+    }
+
+
     .border-beam-wrapper {
         --color-1: 0, 0, 0, 0;
         --color-2: 255, 255, 255, 0.33;
@@ -140,6 +240,7 @@ html {
             overflow-hidden
     }
 
+
     .border-beam-wrapper::before, 
     .border-beam-wrapper::after {
         mix-blend-mode: color-dodge;
@@ -151,6 +252,7 @@ html {
             absolute
             rounded-full
     }
+
 
     .border-beam-wrapper::before {
         background: linear-gradient(
@@ -164,6 +266,7 @@ html {
             animate-border-cover
     }
 
+
     .border-beam-wrapper::after {
         background: linear-gradient(
             to right, 
@@ -176,6 +279,7 @@ html {
             animate-border-cover-reverse
     }
 
+
     .border-beam-content {
         @apply
             w-[calc(100%-2px)]
@@ -184,66 +288,5 @@ html {
             relative
             z-[1]
         ;
-    }
-
-    /* Alert */
-    .alert-head {
-        @apply
-            text-sm 
-            text-base-900 
-            font-medium 
-            leading-[1rem]
-        ;
-    }
-
-    .alert-body {
-        @apply
-            tracking-wide 
-            text-xs
-            text-base-500
-        ;
-    }
-
-    /* Fields (Input) */
-    .field-padding {
-        @apply
-            px-2 
-            py-1
-        ;
-    }
-
-    .field-border {
-        @apply
-            border 
-            border-base-300
-            outline-none
-            rounded-md 
-        ;
-    }
-
-    .field {
-        @apply
-            px-2 
-            py-1
-            border 
-            border-base-300
-            shadow-sm
-            outline-none
-            rounded-md 
-            bg-base-0
-        ;
-    }
-
-    .field-text {
-        @apply
-            text-sm 
-            tracking-wide
-            text-base-700
-        ;
-    }
-
-    .error .field {
-        @apply
-            border-red-500
     }
 }

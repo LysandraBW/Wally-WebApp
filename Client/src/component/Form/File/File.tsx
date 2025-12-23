@@ -2,10 +2,11 @@ import { ReadInputProps } from "@/features/Form/DEF";
 import { Field } from "../Field";
 import { useState } from "react";
 import clsx from "clsx";
-import CrossIcon from "@/component/Icon/Icons/XMarkIcon";
+import CrossIcon from "@/component/Icons/Icons/XMarkIcon";
 import { toBytes } from "@/utils/convert";
-import ArrowUpTrayIcon from "@/component/Icon/Icons/ArrowUpTrayIcon";
+import ArrowUpTrayIcon from "@/component/Icons/Icons/ArrowUpTrayIcon";
 import CloseButton from "@/component/Button/CloseButton";
+import XMarkIcon from "@/component/Icons/Icons/XMarkIcon";
 
 interface FileProps extends ReadInputProps {
     accept: string;
@@ -32,9 +33,8 @@ export default function File(props: FileProps) {
                         className={clsx(
                             "inline-block w-full px-4 py-4",
                             "flex flex-col items-center justify-center gap-y-2",
-                            "surface clickable border rounded-md",
-                            "cursor-pointer group",
-                            (props.state && props.state[0] === false) && "!border-red-500"
+                            "surface surface-hover surface-border surface-border-radius",
+                            "cursor-pointer group"
                         )}
                     >
                         <input
@@ -48,15 +48,13 @@ export default function File(props: FileProps) {
                         <ArrowUpTrayIcon
                             class="size-5 stroke-inherit"
                         />
-                        <p 
-                            className="block text-sm tracking-wide text-inherit"
-                        >
+                        <span className="text-base-500 text-sm tracking-wide text-inherit">
                             Click to Upload
-                        </p>
+                        </span>
                     </label>
                     {/* FileList */}
                     {(fileList && Array.from(fileList).length) &&
-                        <div className="flex gap-1 p-1 bg-base-100 rounded-md">
+                        <div className="flex gap-1 p-1 bg-base-100 border border-base-300 rounded-md">
                             {fileList && Array.from(fileList).map((file, i) => (
                                 <div
                                     key={i}
@@ -64,20 +62,26 @@ export default function File(props: FileProps) {
                                         "flex items-center justify-between gap-1",
                                         "w-min border rounded-md",
                                         "border border-base-300",
-                                        "shadow-sm bg-base-0 dark:bg-base-100"
+                                        "shadow-sm bg-base-0"
                                     )}
                                 >
                                     {/* File */}
                                     <div className="flex">
-                                        <div className="block text-xs text-base-500 tracking-wide p-1 whitespace-nowrap">
+                                        <div className="text-xs text-base-500 tracking-wide p-1 whitespace-nowrap">
                                             {file.name}
                                         </div>
                                         {/* Delete File Button */}
                                         {/* Not Implemented! */}
-                                        <div className="border-l border-l-base-300 p-1 flex items-center justify-center">
-                                            <CloseButton
-                                                size={1}
-                                                onClick={() => null}
+                                        <div 
+                                            className={clsx(
+                                                "p-1",
+                                                "flex items-center justify-center",
+                                                "border-l border-l-base-300 rounded-r-[5px]",
+                                                "surface-hover group cursor-pointer"
+                                            )}
+                                        >
+                                            <XMarkIcon
+                                                class="size-3 stroke-base-500 group-hover:stroke-base-700 stroke-[2px]"
                                             />
                                         </div>
                                     </div>

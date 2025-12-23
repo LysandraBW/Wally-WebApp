@@ -4,8 +4,8 @@ import { OptionMap } from "@/features/Form/DEF";
 import getValuesToLabels from "@/features/Form/helpers/getValuesToLabels";
 import toggleValue from "@/features/Form/helpers/toggleValue";
 import { Field } from "@/component/Form/Field";
-import { SelectProps } from "@/component/Form/Select/DEF";
-import ExpandIcon from "@/component/Icon/Icons/ChevronUpDownIcon";
+import { SelectProps } from "@/component/Form/Select/SelectProps";
+import ExpandIcon from "@/component/Icons/Icons/ChevronUpDownIcon";
 
 export default function CalendarSelect(props: SelectProps) {
     const [open, setOpen] = useState(false);

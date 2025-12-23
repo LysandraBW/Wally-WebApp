@@ -8,8 +8,8 @@ import getValues from "@/features/Form/helpers/getValues";
 import makeForm from "@/features/Form/useForm/makeForm";
 import clsx from "clsx";
 import CalendarSelect from "./CalendarSelect";
-import ArrowLeft from "@/component/Icon/Icons/ArrowLeftIcon";
-import ArrowRight from "@/component/Icon/Icons/ArrowRightIcon";
+import ArrowLeft from "@/component/Icons/Icons/ArrowLeftIcon";
+import ArrowRight from "@/component/Icons/Icons/ArrowRightIcon";
 
 interface CalendarSearchProps {
     year: number;

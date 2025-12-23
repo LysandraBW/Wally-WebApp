@@ -1,24 +1,14 @@
-import { ReactNode, useState } from "react";
-import { Label, Options, ReadWriteArrayInputProps, Value } from "@/features/Form/DEF";
+import { Fragment, useState } from "react";
+import { Label, Value } from "@/features/Form/DEF";
 import toggleValue from "@/features/Form/helpers/toggleValue";
 import Toggle from "./Toggle";
 import Wrapper from "./Wrapper";
 import Element from "./Element";
 import { Field } from "../Field";
+import { SelectProps } from "./SelectProps";
 
 
-export interface SelectV2Props extends Omit<ReadWriteArrayInputProps, "options"> {
-    options: Options;
-    toggleLabel: string;
-    ToggleIcon?: ReactNode;
-    ListHeader?: React.ComponentType<{ children?: React.ReactNode }>;
-    CheckedIcon?: ReactNode;
-    NotCheckedIcon?: ReactNode;
-    disabled: boolean;
-}
-
-
-export default function Select(props: SelectV2Props) {
+export default function Select(props: SelectProps) {
     const [open, setOpen] = useState(false);
     
     const openList = () => {
@@ -60,13 +50,15 @@ export default function Select(props: SelectV2Props) {
                                 <props.ListHeader/>
                             }
                             {props.options.map(([value, label], i) => (
-                                <Element
-                                    label={label}
-                                    selectValue={() => selectValue(value)}
-                                    checked={props.values.includes(value)}
-                                    CheckedIcon={props.CheckedIcon}
-                                    NotCheckedIcon={props.NotCheckedIcon}
-                                />
+                                <Fragment key={i}>
+                                    <Element
+                                        label={label}
+                                        selectValue={() => selectValue(value)}
+                                        checked={props.values.includes(value)}
+                                        CheckedIcon={props.CheckedIcon}
+                                        NotCheckedIcon={props.NotCheckedIcon}
+                                    />
+                                </Fragment>
                             ))}
                         </Wrapper>
                     }

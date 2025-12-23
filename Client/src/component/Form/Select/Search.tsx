@@ -1,15 +1,15 @@
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import toggleValue from "@/features/Form/helpers/toggleValue";
 import Toggle from "./Toggle";
 import Wrapper from "./Wrapper";
 import Element from "./Element";
 import { Field } from "../Field";
-import { SelectV2Props } from "./Select";
 import searchLabels from "@/features/Form/helpers/searchLabels";
 import SearchBar from "./SearchInput";
+import { SelectProps } from "./SelectProps";
 
 
-export interface SearchProps extends SelectV2Props {
+export interface SearchProps extends SelectProps {
     searchPlaceholder?: string;
 }
 
@@ -74,7 +74,6 @@ export default function Search(props: SearchProps) {
                                     searchPlaceholder={props.searchPlaceholder}
                                 />
                             }
-
                             {matched.length === 0 &&
                                 <ul className="px-2 py-1">
                                     <li className="text-center text-base-500 text-sm">
@@ -83,13 +82,15 @@ export default function Search(props: SearchProps) {
                                 </ul>
                             }
                             {matched.length > 0 && matched.map(([value, label], i) => (
-                                <Element
-                                    label={label}
-                                    selectValue={() => selectValue(value)}
-                                    checked={props.values.includes(value)}
-                                    CheckedIcon={props.CheckedIcon}
-                                    NotCheckedIcon={props.NotCheckedIcon}
-                                />
+                                <Fragment key={i}>
+                                    <Element
+                                        label={label}
+                                        selectValue={() => selectValue(value)}
+                                        checked={props.values.includes(value)}
+                                        CheckedIcon={props.CheckedIcon}
+                                        NotCheckedIcon={props.NotCheckedIcon}
+                                    />
+                                </Fragment>
                             ))}
                         </Wrapper>
                     }

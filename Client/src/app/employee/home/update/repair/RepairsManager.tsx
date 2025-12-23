@@ -4,7 +4,7 @@ import useItemsManager from "../../../../../features/ItemManager/useItemsManager
 import SaveResetButtons from "@/features/ItemManager/components/SaveResetButtons";
 import CreateItemButton from "@/features/ItemManager/components/CreateItemButton";
 import { Repair, Repairs } from "./_DEF";
-import ArchiveBox from "@/component/Icon/Icons/ArchiveBoxIcon";
+import ArchiveBox from "@/component/Icons/Icons/ArchiveBoxIcon";
 
 interface RepairsManagerProps {
     repairsManager: ReturnType<typeof useItemsManager<DB_Repair, Repair, Repairs>>;

@@ -7,9 +7,9 @@ import getValuesToLabels from "@/features/Form/helpers/getValuesToLabels";
 import searchLabels from "@/features/Form/helpers/searchLabels";
 import toggleValue from "@/features/Form/helpers/toggleValue";
 import { Field } from "@/component/Form/Field";
-import CrossIcon from "@/component/Icon/Icons/XMarkIcon";
-import ArrowLeft from "@/component/Icon/Icons/ArrowRightIcon";
-import ChevronDownIcon from "@/component/Icon/Icons/ChevronDownIcon";
+import CrossIcon from "@/component/Icons/Icons/XMarkIcon";
+import ArrowLeft from "@/component/Icons/Icons/ArrowRightIcon";
+import ChevronDownIcon from "@/component/Icons/Icons/ChevronDownIcon";
 
 interface SearchServicesProps extends Omit<ReadWriteArrayInputProps, "options"> {
     options: {[serviceClass: string]: Options};

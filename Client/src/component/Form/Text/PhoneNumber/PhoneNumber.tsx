@@ -1,10 +1,10 @@
 "use client";
-import DashIcon from "@/component/Icon/Icons/MinusIcon";
+import DashIcon from "@/component/Icons/Icons/MinusIcon";
 import PhoneNumberPart from "./PhoneNumberPart";
 import { useState, useEffect } from "react";
 import { ReadWriteInputProps } from "@/features/Form/DEF";
 import { Field } from "../../Field";
-import MinusIcon from "@/component/Icon/Icons/MinusIcon";
+import MinusIcon from "@/component/Icons/Icons/MinusIcon";
 import clsx from "clsx";
 import PhoneNumberDash from "./PhoneNumberDash";
 

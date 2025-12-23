@@ -2,7 +2,7 @@ import Copy from "@/component/Copy/Copy";
 import ScheduledHeader from "./ScheduledHeader";
 import ConfettiGenerator from "confetti-js";
 import { useEffect } from "react";
-import CheckCircleIcon from "@/component/Icon/Icons/CheckCircleIcon";
+import CheckCircleIcon from "@/component/Icons/Icons/CheckCircleIcon";
 
 interface SchedulePassedProps {
     output: [string, string];

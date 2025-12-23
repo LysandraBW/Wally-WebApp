@@ -1,4 +1,4 @@
-import TrashIcon from "@/component/Icon/Icons/TrashIcon";
+import TrashIcon from "@/component/Icons/Icons/TrashIcon";
 import { AppointmentManager } from "../managers/useAppointmentManager";
 import { DeleteManager } from "../managers/useDeleteManager";
 import Navigation from "./Navigation";
@@ -6,8 +6,8 @@ import { FilterManager } from "../managers/useFilterManager";
 import clsx from "clsx";
 import Search from "./Search";
 import { Fragment } from "react";
-import ArrowPath from "@/component/Icon/Icons/ArrowPathIcon";
-import ArrowUpOnSquareIcon from "@/component/Icon/Icons/ArrowUpOnSquareIcon";
+import ArrowPath from "@/component/Icons/Icons/ArrowPathIcon";
+import ArrowUpOnSquareIcon from "@/component/Icons/Icons/ArrowUpOnSquareIcon";
 
 interface ToolBarProps {
     deleteManager: DeleteManager;

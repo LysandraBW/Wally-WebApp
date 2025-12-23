@@ -1,6 +1,6 @@
 "use client";
 import { Field } from "../Field";
-import { TextProps } from "./DEF";
+import { TextProps } from "./TextProps";
 
 export default function Text(props: TextProps) {
     const onChange = (event: any) => {
@@ -20,7 +20,7 @@ export default function Text(props: TextProps) {
                     onBlur={props.onBlur}
                     onChange={onChange}
                     placeholder={props.placeholder}
-                    className="surface clickable field field-text !cursor-auto border"
+                    className="surface surface-hover surface-border field-bg-shadow field-padding field-border field-text !cursor-auto"
                 />
             }
         />

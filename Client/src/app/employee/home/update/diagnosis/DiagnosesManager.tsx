@@ -4,7 +4,7 @@ import { Diagnosis, Diagnoses } from "@/app/employee/home/update/diagnosis/_DEF"
 import useItemsManager from "../../../../../features/ItemManager/useItemsManager";
 import CreateItemButton from "@/features/ItemManager/components/CreateItemButton";
 import SaveResetButtons from "@/features/ItemManager/components/SaveResetButtons";
-import ArchiveBox from "@/component/Icon/Icons/ArchiveBoxIcon";
+import ArchiveBox from "@/component/Icons/Icons/ArchiveBoxIcon";
 
 
 interface DiagnosesManagerProps {

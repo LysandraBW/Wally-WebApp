@@ -1,4 +1,4 @@
-import { DM_Sans, Instrumental, Inter, Jakarta, Satoshi, IBM, Rubik } from "@/public/Font";
+import { DM_Sans, Instrumental, Inter, Jakarta, Satoshi, IBM, Rubik, PublicSans } from "@/public/Font";
 import "./globals.css";
 
 export default function RootLayout({
@@ -8,7 +8,7 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang="en" className="bg-background-1">
-			<body className={Inter.className}>
+			<body className={PublicSans.className}>
 				{children}
 			</body>
 		</html>

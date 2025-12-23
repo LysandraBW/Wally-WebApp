@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import ButtonProps from "./_DEF";
+import ButtonProps from "./ButtonProps";
 
 interface CallToActionButtonProps extends ButtonProps {
     label: string;

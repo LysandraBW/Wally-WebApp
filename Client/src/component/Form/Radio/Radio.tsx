@@ -20,8 +20,7 @@ export default function Radio(props: RadioProps) {
                             key={i}
                             className={clsx(
                                 "flex items-center gap-2 px-2 py-2",
-                                "surface clickable depth-surface border",
-                                (props.state && props.state[0] === false) && "!border-red-500"
+                                "surface surface-hover surface-border"
                             )}
                             onClick={() => props.onChange(props.name, [option[0]])}
                         >
@@ -32,7 +31,7 @@ export default function Radio(props: RadioProps) {
                             {option[2] ?
                                 option[2]
                                 :
-                                <span className="text-sm text-base-700 leading-[14px] tracking-wide">
+                                <span className="field-text leading-[14px]">
                                     {option[1]}
                                 </span>
                             }

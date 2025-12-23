@@ -1,4 +1,4 @@
-import EditIcon from "@/component/Icon/Icons/PencilSquareIcon";
+import EditIcon from "@/component/Icons/Icons/PencilSquareIcon";
 import clsx from "clsx";
 
 export default function EditButton({onUpdate}: {onUpdate: () => void}) {

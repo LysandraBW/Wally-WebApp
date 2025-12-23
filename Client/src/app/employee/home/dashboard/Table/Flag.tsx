@@ -1,4 +1,4 @@
-import Bookmark from "@/component/Icon/Icons/BookmarkIcon";
+import Bookmark from "@/component/Icons/Icons/BookmarkIcon";
 import clsx from "clsx";
 
 export default function Flag(props: {seen: boolean, flagged: boolean, markAsFlagged: () => void, i?: number}) {

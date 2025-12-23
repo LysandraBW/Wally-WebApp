@@ -1,8 +1,8 @@
 import clsx from "clsx";
 import CloseButton from "../Button/CloseButton";
-import InformationCircleIcon from "../Icon/Icons/InformationCircleIcon";
-import ExclamationCircleIcon from "../Icon/Icons/ExclamationCircleIcon";
-import CheckCircleIcon from "../Icon/Icons/CheckCircleIcon";
+import InformationCircleIcon from "../Icons/Icons/InformationCircleIcon";
+import ExclamationCircleIcon from "../Icons/Icons/ExclamationCircleIcon";
+import CheckCircleIcon from "../Icons/Icons/CheckCircleIcon";
 
 interface MessageProps {
     head: React.ReactNode;
@@ -26,29 +26,17 @@ export default function Message(props: MessageProps) {
             <div className="p-3 grid grid-cols-[min-content_auto_min-content] grid-rows-[min-content_min-content] gap-x-2 gap-y-0 items-center">
                 {props.type === "Default" &&
                     <InformationCircleIcon
-                        style={{
-                            width: "18px",
-                            height: "18px"
-                        }}
-                        class="col-start-1 stroke-base-900"
+                        class="size-4 stroke-base-900 col-start-1"
                     />
                 }
                 {props.type === "Error" &&
                     <ExclamationCircleIcon
-                        style={{
-                            width: "18px",
-                            height: "18px"
-                        }}
-                        class="col-start-1 stroke-red-500"
+                        class="size-4 stroke-red-500 col-start-1"
                     />
                 }
                 {props.type === "Success" &&
                     <CheckCircleIcon
-                        style={{
-                            width: "18px",
-                            height: "18px"
-                        }}
-                        class="col-start-1 stroke-green-500"
+                        class="size-4 stroke-green-500 col-start-1"
                     />
                 }
                 <h3 

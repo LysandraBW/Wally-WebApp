@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import ButtonProps from "./_DEF";
+import ButtonProps from "./ButtonProps";
 
 export interface IconButtonProps extends Omit<ButtonProps, "class"> {
     size?: 3 | 2 | 1;
@@ -12,7 +12,7 @@ export default function IconButton(props: IconButtonProps) {
             onClick={props.onClick}
             className={clsx(
                 "flex justify-center items-center",
-                "surface clickable aspect-square border",
+                "surface surface-hover surface-border aspect-square shadow-sm",
                 "transition-all",
                 (props.size === 3 || !props.size) && "p-[4px]",
                 props.size === 2 && "p-[2px]",

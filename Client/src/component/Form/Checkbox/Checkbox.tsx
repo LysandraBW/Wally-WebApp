@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import { ReadWriteInputProps } from "@/features/Form/DEF";
-import CheckmarkIcon from "@/component/Icon/Icons/CheckIcon";
+import CheckmarkIcon from "@/component/Icons/Icons/CheckIcon";
 
 export interface CheckboxProps extends ReadWriteInputProps {
     name: string;
@@ -18,19 +18,20 @@ export default function Checkbox(props: CheckboxProps) {
             <span
                 onClick={onClick}
                 className={clsx(
-                    "w-4 h-4 flex items-center justify-center",
-                    "surface clickable border rounded",
+                    "w-4 h-4",
+                    "flex items-center justify-center",
+                    "surface surface-hover surface-border rounded",
                     "cursor-pointer",
                     props.checked && "!bg-blue-500 !border-blue-500"
                 )}
             >
                 {props.checked && 
                     <CheckmarkIcon
-                        class="stroke-white stroke-[3.5px] w-[10px] h-[10px]"
+                        class="stroke-white stroke-[3.5px] size-2.5"
                     />
                 }
             </span>
-            <p className="text-base-700 text-sm tracking-wide">
+            <p className="field-text">
                 {props.label}
             </p>
         </div>

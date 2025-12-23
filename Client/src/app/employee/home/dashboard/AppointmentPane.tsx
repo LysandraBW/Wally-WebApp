@@ -8,8 +8,8 @@ import { navigate } from "@/utils/navigate";
 import { PAGE_EDIT_APPOINTMENT, PAGE_VIEW_APPOINTMENT } from '@/utils/constants';
 import { motion } from "motion/react";
 import { AppointmentManager } from "./managers/useAppointmentManager";
-import ArrowLeft from "@/component/Icon/Icons/ArrowLeftIcon";
-import ArrowRight from "@/component/Icon/Icons/ArrowRightIcon";
+import ArrowLeft from "@/component/Icons/Icons/ArrowLeftIcon";
+import ArrowRight from "@/component/Icons/Icons/ArrowRightIcon";
 
 interface AppointmentPaneProps {
     appointmentManager: AppointmentManager;

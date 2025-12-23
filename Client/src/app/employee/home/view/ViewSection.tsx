@@ -1,4 +1,4 @@
-import ArchiveBoxIcon from "@/component/Icon/Icons/ArchiveBoxIcon";
+import ArchiveBoxIcon from "@/component/Icons/Icons/ArchiveBoxIcon";
 import clsx from "clsx";
 import { Fragment, ReactNode } from "react";
 

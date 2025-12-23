@@ -2,8 +2,8 @@ import CloseButton from "../Button/CloseButton";
 import SecondaryButton from "../Button/SecondaryButton";
 import PrimaryButton from "../Button/PrimaryButton";
 import clsx from "clsx";
-import ExclamationCircleIcon from "../Icon/Icons/ExclamationCircleIcon";
-import InformationCircleIcon from "../Icon/Icons/InformationCircleIcon";
+import ExclamationCircleIcon from "../Icons/Icons/ExclamationCircleIcon";
+import InformationCircleIcon from "../Icons/Icons/InformationCircleIcon";
 
 interface ConfirmProps {
     head: React.ReactNode;
@@ -27,28 +27,19 @@ export default function Confirm(props: ConfirmProps) {
         >
             <div 
                 className={clsx(
-                    "flex flex-col",
-                    "[--width:700px] w-[var(--width)]",
+                    "flex flex-col w-[700px]",
                     "bg-base-0 border border-base-300 rounded-lg shadow-sm"
                 )}
             >
                 <div className="p-3 grid grid-cols-[min-content_auto_min-content] grid-rows-[min-content_auto] gap-x-2 gap-y-0 items-center">
                     {!props.irreversible &&
                         <InformationCircleIcon
-                            style={{
-                                width: "18px",
-                                height: "18px"
-                            }}
-                            class="col-start-1 stroke-base-900"
+                            class="size-4 stroke-base-900 col-start-1"
                         />
                     }
                     {props.irreversible &&
                         <ExclamationCircleIcon
-                            style={{
-                                width: "18px",
-                                height: "18px"
-                            }}
-                            class="col-start-1 stroke-red-500"
+                            class="size-4 stroke-red-500 col-start-1"
                         />
                     }
                     <h3 
@@ -78,7 +69,8 @@ export default function Confirm(props: ConfirmProps) {
                         class={clsx(
                             "text-xs",
                             props.irreversible && `
-                                bg-red-500 border-red-500 dark:!bg-red-600 dark:!border-red-600
+                                bg-red-500 border-red-500
+                                dark:!bg-red-600 dark:!border-red-600
                                 hover:!bg-red-600 hover:!border-red-600
                                 dark:hover:!bg-red-700 dark:hover:!border-red-700
                             `

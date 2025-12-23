@@ -1,4 +1,4 @@
-import ChevronDownIcon from "@/component/Icon/Icons/ChevronDownIcon";
+import ChevronDownIcon from "@/component/Icons/Icons/ChevronDownIcon";
 import clsx from "clsx";
 import { ReactNode } from "react";
 
@@ -15,8 +15,7 @@ export default function Toggle(props: ToggleProps) {
             className={clsx(
                 "w-full h-min px-2 py-1",
                 "flex items-center justify-between gap-2",
-                "surface clickable field",
-                "border shadow-sm"
+                "surface-hover surface-border field-bg-shadow field-border",
             )}
         >
             <span className="field-text">
@@ -26,7 +25,7 @@ export default function Toggle(props: ToggleProps) {
                 props.icon 
                 :
                 <ChevronDownIcon
-                    class="w-4 h-4 stroke-base-500 stroke-[2.5px]"
+                    class="size-3 stroke-base-500 stroke-[2.5px]"
                 />
             }
         </button>
