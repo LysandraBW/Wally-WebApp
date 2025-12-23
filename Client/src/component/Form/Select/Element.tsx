@@ -37,7 +37,7 @@ export default function Element(props: ElementProps) {
                         props.CheckedIcon
                         :
                         <CheckIcon
-                            class="size-3 stroke-blue-500 stroke-[2.5px]"
+                            class="size-3 stroke-blue-500 stroke-[3px]"
                         />
                     }
                 </>

@@ -28,12 +28,12 @@ export default function File(props: FileProps) {
             label={props.label}
             state={props.state}
             input={
-                <div className="flex flex-col gap-1">
+                <div className="flex flex-col gap-0">
                     <label 
                         className={clsx(
                             "inline-block w-full px-4 py-4",
                             "flex flex-col items-center justify-center gap-y-2",
-                            "surface surface-hover surface-border surface-border-radius",
+                            "surface surface-hover surface-border rounded-t-md",
                             "cursor-pointer group"
                         )}
                     >
@@ -54,13 +54,13 @@ export default function File(props: FileProps) {
                     </label>
                     {/* FileList */}
                     {(fileList && Array.from(fileList).length) &&
-                        <div className="flex gap-1 p-1 bg-base-100 border border-base-300 rounded-md">
+                        <div className="flex gap-1 p-1 bg-base-100 dark:bg-base-0 border border-t-0 border-base-300 rounded-b-md">
                             {fileList && Array.from(fileList).map((file, i) => (
                                 <div
                                     key={i}
                                     className={clsx(
                                         "flex items-center justify-between gap-1",
-                                        "w-min border rounded-md",
+                                        "w-min border rounded-[5px]",
                                         "border border-base-300",
                                         "shadow-sm bg-base-0"
                                     )}
@@ -81,7 +81,7 @@ export default function File(props: FileProps) {
                                             )}
                                         >
                                             <XMarkIcon
-                                                class="size-3 stroke-base-500 group-hover:stroke-base-700 stroke-[2px]"
+                                                class="size-2 stroke-base-500 group-hover:stroke-base-700 stroke-[3px]"
                                             />
                                         </div>
                                     </div>

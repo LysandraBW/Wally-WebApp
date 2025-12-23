@@ -20,7 +20,7 @@ export default function Text(props: TextProps) {
                     onBlur={props.onBlur}
                     onChange={onChange}
                     placeholder={props.placeholder}
-                    className="surface surface-hover surface-border field-bg-shadow field-padding field-border field-text !cursor-auto"
+                    className="surface surface-hover surface-border field-bg-shadow field-padding field-border field-focus field-text !cursor-auto"
                 />
             }
         />

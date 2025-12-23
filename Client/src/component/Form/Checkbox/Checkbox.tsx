@@ -20,14 +20,14 @@ export default function Checkbox(props: CheckboxProps) {
                 className={clsx(
                     "w-4 h-4",
                     "flex items-center justify-center",
-                    "surface surface-hover surface-border rounded",
+                    "surface surface-hover surface-border field-focus rounded",
                     "cursor-pointer",
                     props.checked && "!bg-blue-500 !border-blue-500"
                 )}
             >
                 {props.checked && 
                     <CheckmarkIcon
-                        class="stroke-white stroke-[3.5px] size-2.5"
+                        class="stroke-white stroke-[3px] size-2.5"
                     />
                 }
             </span>

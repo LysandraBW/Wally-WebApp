@@ -26,7 +26,8 @@ export function Field(props: FieldProps) {
                 <span 
                     className={clsx(
                         "text-base-700 font-normal text-sm",
-                        "whitespace-nowrap tracking-wide"
+                        "whitespace-nowrap tracking-wide",
+                        props.state && props.state[0] === false && "text-red-500"
                     )}
                 >
                     {props.label}

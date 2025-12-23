@@ -100,7 +100,7 @@ export default function PhoneNumber(props: PhoneNumberProps) {
             label={props.label}
             state={props.state}
             input={
-                <div className="grid grid-cols-[repeat(5,auto)] gap-1 items-center">
+                <div className="flex gap-1 items-center justify-between">
                     <PhoneNumberPart
                         part={0}
                         name={props.name}

@@ -135,12 +135,14 @@ function Elements() {
             <div className="flex flex-col gap-2">
                 <p className="text-base-900">File</p>
                 <File
+                    label="Select File"
                     name="file"
                     accept=""
                     multiple={true}
                     onChange={() => null}
                 />
                 <File
+                    label="Select File"
                     name="file"
                     accept=""
                     multiple={true}

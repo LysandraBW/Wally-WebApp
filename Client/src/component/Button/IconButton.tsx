@@ -24,7 +24,7 @@ export default function IconButton(props: IconButtonProps) {
                 className={clsx(
                     "overflow-hidden flex justify-center items-center",
                     (props.size === 3 || !props.size) && "w-[16px] h-[16px]",
-                    props.size === 2 && "w-[14px] h-[14px]",
+                    props.size === 2 && "w-[10px] h-[10px]",
                     props.size === 1 && "w-[8px] h-[8px]"
                 )}    
             >

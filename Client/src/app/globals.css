@@ -210,8 +210,8 @@ html {
 
     .error .field-focus:focus {
         @apply
-            border-red-500
-            bg-red-100
+            !border-red-500
+            !bg-red-100
             dark:!bg-red-500/20
         ;
     }

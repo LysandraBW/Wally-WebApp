@@ -24,7 +24,7 @@ export default function PhoneNumberPart(props: PhoneNumberPartProps) {
                 if (key == "Backspace" && props.value == "")
                     props.onChange(props.part, "");
             }}
-            className="field-bg-shadow field-border field-padding field-text"
+            className="field-bg-shadow field-border field-focus field-padding field-text grow"
         />
     )
 }

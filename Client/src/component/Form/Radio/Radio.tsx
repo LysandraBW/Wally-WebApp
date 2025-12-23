@@ -20,7 +20,7 @@ export default function Radio(props: RadioProps) {
                             key={i}
                             className={clsx(
                                 "flex items-center gap-2 px-2 py-2",
-                                "surface surface-hover surface-border"
+                                "surface surface-hover surface-border field-focus"
                             )}
                             onClick={() => props.onChange(props.name, [option[0]])}
                         >

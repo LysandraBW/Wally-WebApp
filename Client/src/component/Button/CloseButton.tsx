@@ -11,9 +11,9 @@ export default function CloseButton(props: IconButtonProps) {
         >
             <XMarkIcon
                 class={clsx(
-                    "stroke-[2.5px]",
+                    "stroke-[3px]",
                     (props.size === 3 || !props.size) && "w-[14px] h-[14px]",
-                    props.size === 2 && "w-[10px] h-[10px]",
+                    props.size === 2 && "w-[8px] h-[8px]",
                     props.size === 1 && "w-[6px] h-[6px]"
                 )}
             />
