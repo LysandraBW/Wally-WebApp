@@ -16,7 +16,7 @@ export default function Element(props: ElementProps) {
             onClick={props.selectValue}
             className={clsx(
                 "flex justify-between items-center px-2 py-1",
-                "surface surface-hover",
+                "field-background field-hover",
                 "!border-none !rounded-none"
             )}
         >
@@ -37,7 +37,7 @@ export default function Element(props: ElementProps) {
                         props.CheckedIcon
                         :
                         <CheckIcon
-                            class="size-3 stroke-blue-500 stroke-[3px]"
+                            className="size-3 stroke-blue-500 stroke-[3px]"
                         />
                     }
                 </>

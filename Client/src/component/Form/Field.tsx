@@ -1,6 +1,6 @@
 "use client";
 import { InputState } from "@/features/Form/useForm/Input";
-import { Instrumental } from "@/public/Font";
+import { Instrumental } from "@/public/fonts/Font";
 import clsx from "clsx";
 import { ReactNode } from "react";
 
@@ -17,7 +17,7 @@ export function Field(props: FieldProps) {
     return (
         <Wrapper 
             className={clsx(
-                "flex flex-col gap-[4px]", 
+                "flex flex-col gap-[2px]", 
                 props.state && props.state[0] === false && "error"
             )}
         >
@@ -25,6 +25,7 @@ export function Field(props: FieldProps) {
             {props.label &&
                 <span 
                     className={clsx(
+                        "block",
                         "text-base-700 font-normal text-sm",
                         "whitespace-nowrap tracking-wide",
                         props.state && props.state[0] === false && "text-red-500"
@@ -37,7 +38,7 @@ export function Field(props: FieldProps) {
             {props.input}
             {/* Error Message */}
             {props.state && props.state[0] === false &&
-                <span className="text-xs text-red-500 tracking-wide">
+                <span className="block text-xs text-red-500 tracking-wide">
                     {props.state[1]}
                 </span>
             }

@@ -26,17 +26,17 @@ export default function Message(props: MessageProps) {
             <div className="p-3 grid grid-cols-[min-content_auto_min-content] grid-rows-[min-content_min-content] gap-x-2 gap-y-0 items-center">
                 {props.type === "Default" &&
                     <InformationCircleIcon
-                        class="size-4 stroke-base-900 col-start-1"
+                        className="size-4 stroke-base-900 col-start-1"
                     />
                 }
                 {props.type === "Error" &&
                     <ExclamationCircleIcon
-                        class="size-4 stroke-red-500 col-start-1"
+                        className="size-4 stroke-red-500 col-start-1"
                     />
                 }
                 {props.type === "Success" &&
                     <CheckCircleIcon
-                        class="size-4 stroke-green-500 col-start-1"
+                        className="size-4 stroke-green-500 col-start-1"
                     />
                 }
                 <h3 
@@ -49,7 +49,8 @@ export default function Message(props: MessageProps) {
                     {props.head}
                 </h3>
                 <CloseButton
-                    size={2}
+                    size={10}
+                    paddingLess={true}
                     onClick={props.onClose}
                 />
                 {props.body &&

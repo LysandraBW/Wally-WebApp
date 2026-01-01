@@ -1,17 +1,15 @@
 "use client";
-import NavBar from "@/component/NavBar/NavBar";
 import useForm from "@/features/Form/useForm/useForm";
 import ScheduleAppointment from "@/services/DB/Appointment/ScheduleAppointment";
 import { useState } from "react";
 import { startContactForm, startServiceForm, startVehicleForm } from "./_DEF";
-import SchedulePassed from "./SchedulePassed";
-import ScheduleFailed from "./ScheduleFailed";
-import ProgressBar from "./ProgressBar";
-import ContactForm from "./ContactForm";
-import VehicleForm from "./VehicleForm";
-import ServiceForm from "./ServiceForm";
-import SecondaryButton from "@/component/Button/SecondaryButton";
-import PrimaryButton from "@/component/Button/PrimaryButton";
+import ShowResultsPassed from "./ShowResultsPassed";
+import ShowResultsFailed from "./ShowResultsFailed";
+import GoBackHeader from "../../component/GoBackHeader";
+import Form from "./Form";
+import clsx from "clsx";
+import Logo from "@/component/NavBar/Logo";
+import { navigate } from "@/utils/navigate";
 
 // The step at which a user is in the form
 // is correlated with some variables.
@@ -41,6 +39,7 @@ const stepData: any = {
     }
 }
 
+
 export default function Page() {
     // Output of Scheduling Function
     //      == NULL:             No Output
@@ -54,10 +53,12 @@ export default function Page() {
     const vehicleForm = useForm("Vehicle", startVehicleForm());
     const serviceForm = useForm("Service", startServiceForm());
 
+
     const goToPrevForm = () => {
         const prevStep = Math.max(0, step - 1);
         setStep(prevStep);
     }
+
 
     const goToNextForm = () => {
         const steps = [contactForm, vehicleForm, serviceForm];
@@ -66,6 +67,7 @@ export default function Page() {
         const nextStep = Math.min(2, step + 1);
         setStep(nextStep);
     }
+
 
     const submitForm = async () => {
         // Check if Data is Valid
@@ -95,101 +97,52 @@ export default function Page() {
         serviceForm.resetForm(startServiceForm());
     }
     
+
     return (
-        <div className="relative bg-white flex flex-col min-h-screen">
-            <NavBar sticky={true} border={true} background={true} shadow={true}/>
-            <div className="flex grow">
-                <div className="flex flex-col grow p-4">
-                    {(output !== null && output[0]) &&
-                        <SchedulePassed
-                            output={output}
-                        />
-                    }
-                    {(output !== null && !output[0]) &&
-                        <ScheduleFailed
-                            restart={() => setOutput(null)}
-                        />
-                    }
-                    {output === null &&
-                        <div className="relative w-full py-16 px-16 flex flex-col items-center gap-8">
-                            <header className="flex flex-col items-center w-min">
-                                <h3 className="text-center font-medium whitespace-nowrap">
-                                    Schedule Appointment
-                                </h3>
-                                <p className="max-w-[440px] text-md text-gray-600 text-center tracking-wide">
-                                    To schedule an appointment, complete the form below.<br/>
-                                    After completion, your appointment will be shortly confirmed.
-                                </p>
-                            </header>
-                            <div className="w-[400px] px-4 py-4 pb-5 flex flex-col gap-2 bg-blue-600 rounded-lg shadow-sm">
-                                <div>
-                                    <span 
-                                        style={{lineHeight: "0.72rem"}}
-                                        className="text-01 font-medium text-blue-200" 
-                                    >
-                                        STEP {step + 1}
-                                    </span>
-                                    <h6 
-                                        style={{lineHeight: "1.125rem"}}
-                                        className="mb-2 tracking-wide !text-05 font-medium text-white"
-                                    >
-                                        {stepData[step].header}
-                                    </h6>
-                                </div>
-                                <div className="flex h-2.5 justify-between gap-2">
-                                    <ProgressBar
-                                        id="bar0"
-                                        rank={0}
-                                        step={step}
-                                        tooltipLabel="Back to Contact Information"
-                                        canShowTooltip={step > 0}
-                                    />
-                                    <ProgressBar
-                                        id="bar1"
-                                        rank={1}
-                                        step={step}
-                                        tooltipLabel="Back to Vehicle Information"
-                                        canShowTooltip={step > 1}
-                                    />
-                                    <ProgressBar
-                                        id="bar2"
-                                        rank={2}
-                                        step={step}
-                                        tooltipLabel="Back to Service Information"
-                                        canShowTooltip={step > 2}
-                                    />
-                                </div>
-                            </div>
-                            <form 
-                                onSubmit={(e) => e.preventDefault()}
-                                className="flex flex-col gap-4 w-[400px]"
-                            >
-                                {step === 0 && <ContactForm form={contactForm}/>}
-                                {step === 1 && <VehicleForm form={vehicleForm}/>}
-                                {step === 2 && <ServiceForm form={serviceForm}/>}
-                                <div className="flex gap-4">
-                                    {step !== 0 &&
-                                        <SecondaryButton
-                                            onClick={goToPrevForm} 
-                                        >
-                                            Previous
-                                        </SecondaryButton>
-                                    }
-                                    <PrimaryButton
-                                        onClick={step == 2 ? submitForm : goToNextForm}
-                                    >
-                                        {step === 2 ? "Schedule" : `Continue to ${step == 0 ? "Vehicle" : "Service"}`}
-                                    </PrimaryButton>
-                                </div>
-                            </form>
-                        </div>
-                    }
+        <div className="relative grow grid grid-cols-[60%_40%] max-lg:grid-cols-1">
+            <div className="relative w-[100%] h-[100vh] max-lg:hidden">
+                <div className="absolute top-8 left-8">
+                    <Logo
+                        white={true}
+                    />
                 </div>
-                {/* Picture */}
-                <div className="relative w-[50%] h-[calc(100vh-53px)] max-sm:hidden">
-                    <div className="fixed top-[53px] w-full h-[calc(100%-53px)] bg-gray-200 bg-cover bg-top">
-                    </div>
+                <div className="static w-full h-full top-0 left-0">
+                    <img 
+                        src="../pexels-stas-tsibro-268729-811029.jpg" 
+                        className="object-cover object-center w-full h-full block dark:!hidden"
+                    />
+                    <img 
+                        src="../jakob-owens-Il--NpJ4zyc-unsplash.jpg" 
+                        className="object-cover object-center w-full h-full hidden dark:!block"
+                    />
                 </div>
+            </div>
+            <div className="py-8 px-12 grow max-lg:px-4">
+                <div className="mb-8">
+                    <GoBackHeader onGoBack={() => navigate("/")}/>
+                </div>
+                {(output !== null && output[0]) &&
+                    <ShowResultsPassed
+                        output={output}
+                    />
+                }
+                {(output !== null && !output[0]) &&
+                    <ShowResultsFailed
+                        restart={() => setOutput(null)}
+                    />
+                }
+                {output === null &&
+                    <Form
+                        step={step}
+                        stepData={stepData}
+                        contactForm={contactForm}
+                        serviceForm={serviceForm}
+                        vehicleForm={vehicleForm}
+                        goToNextForm={goToNextForm}
+                        goToPrevForm={goToPrevForm}
+                        submitForm={submitForm}
+                    />
+                }
             </div>
         </div>
     )

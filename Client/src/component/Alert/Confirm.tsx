@@ -31,15 +31,15 @@ export default function Confirm(props: ConfirmProps) {
                     "bg-base-0 border border-base-300 rounded-lg shadow-sm"
                 )}
             >
-                <div className="p-3 grid grid-cols-[min-content_auto_min-content] grid-rows-[min-content_auto] gap-x-2 gap-y-0 items-center">
+                <div className="p-3 py-4 grid grid-cols-[min-content_auto_min-content] grid-rows-[min-content_auto] gap-x-2 gap-y-0 items-center">
                     {!props.irreversible &&
                         <InformationCircleIcon
-                            class="size-4 stroke-base-900 col-start-1"
+                            className="size-4 stroke-base-900 col-start-1"
                         />
                     }
                     {props.irreversible &&
                         <ExclamationCircleIcon
-                            class="size-4 stroke-red-500 col-start-1"
+                            className="size-4 stroke-red-500 col-start-1"
                         />
                     }
                     <h3 
@@ -51,7 +51,8 @@ export default function Confirm(props: ConfirmProps) {
                         {props.head}
                     </h3>
                     <CloseButton
-                        size={2}
+                        size={10}
+                        paddingLess={true}
                         onClick={props.onClose}
                     />
                     <p className="alert-body col-start-2">
@@ -60,13 +61,13 @@ export default function Confirm(props: ConfirmProps) {
                 </div>
                 <div className="flex justify-end gap-3 p-3 border-t border-base-300 bg-base-50 dark:bg-base-0 rounded-b-lg">
                     <SecondaryButton
-                        class="text-xs"
+                        className="text-xs"
                         onClick={props.onN}
                     >
                         {props.nLabel}
                     </SecondaryButton>
                     <PrimaryButton
-                        class={clsx(
+                        className={clsx(
                             "text-xs",
                             props.irreversible && `
                                 bg-red-500 border-red-500

@@ -25,6 +25,7 @@ export default function Segment(props: SegmentProps) {
                                 "flex items-center justify-center gap-2",
                                 "first:border-l first:border-l-base-300 first:rounded-l-[5px] last:rounded-r-[5px] field-focus",
                                 "border-t border-t-base-300 border-b border-b-base-300 border-r border-r-base-300 rounded-none",
+                                "dark:!border-base-200",
                                 props.values.includes(option[0]) && "bg-blue-500 !border-blue-500",
                                 !props.values.includes(option[0]) && "hover:bg-base-50 dark:hover:bg-base-100",
                             )}

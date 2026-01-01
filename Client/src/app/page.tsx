@@ -1,6 +1,6 @@
 "use client";
 import clsx from "clsx";
-import { Instrumental } from "@/public/Font";
+import { Instrumental } from "@/public/fonts/Font";
 import { HREF_SCHEDULE } from "@/utils/constants";
 import NavBarLanding from "@/component/NavBar/NavBarLanding";
 

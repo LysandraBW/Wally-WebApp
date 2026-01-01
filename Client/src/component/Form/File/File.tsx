@@ -33,8 +33,9 @@ export default function File(props: FileProps) {
                         className={clsx(
                             "inline-block w-full px-4 py-4",
                             "flex flex-col items-center justify-center gap-y-2",
-                            "surface surface-hover surface-border rounded-t-md",
-                            "cursor-pointer group"
+                            "surface-color field-hover field-border rounded-t-md",
+                            "cursor-pointer group",
+                            (!fileList || !Array.from(fileList).length) && "rounded-md"
                         )}
                     >
                         <input
@@ -46,7 +47,7 @@ export default function File(props: FileProps) {
                             className="hidden"
                         />
                         <ArrowUpTrayIcon
-                            class="size-5 stroke-inherit"
+                            className="size-5 stroke-inherit"
                         />
                         <span className="text-base-500 text-sm tracking-wide text-inherit">
                             Click to Upload
@@ -77,11 +78,11 @@ export default function File(props: FileProps) {
                                                 "p-1",
                                                 "flex items-center justify-center",
                                                 "border-l border-l-base-300 rounded-r-[5px]",
-                                                "surface-hover group cursor-pointer"
+                                                "field-hover group cursor-pointer"
                                             )}
                                         >
                                             <XMarkIcon
-                                                class="size-2 stroke-base-500 group-hover:stroke-base-700 stroke-[3px]"
+                                                className="size-2 stroke-base-500 group-hover:stroke-base-700 stroke-[3px]"
                                             />
                                         </div>
                                     </div>

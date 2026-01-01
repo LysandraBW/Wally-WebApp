@@ -7,7 +7,7 @@ import { Employee as DB_Employee } from "waltronics-types";
 import clsx from "clsx";
 import Logo from "@/component/NavBar/Logo";
 import { Tooltip } from "react-tooltip";
-import { DM_Sans, IBM, Instrumental } from "@/public/Font";
+import { DM_Sans, IBM, Instrumental } from "@/public/fonts/Font";
 import ArrowLeftStartOnRectangle from "@/component/Icons/Icons/ArrowLeftStartOnRectangleIcon";
 
 export const EmployeeContext = createContext<{employee?: DB_Employee, setCurrentPage?: (page: string) => void}>({});

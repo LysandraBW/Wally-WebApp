@@ -34,17 +34,19 @@ html {
     --base-0900: var(--neutral-0900);
     --base-0950: var(--neutral-0950);
     --base-1000: var(--neutral-1000);
+    
+    background: var(--base-0000);
 }
 
 
 *.dark {
     --base-0000: var(--neutral-1000);
-    --base-0050: var(--neutral-0950);
-    --base-0100: var(--neutral-0900);
-    --base-0200: var(--neutral-0800);
+    --base-0050: #0F0F0F;
+    --base-0100: #191B1F;
+    --base-0200: #1B1D1F;
     --base-0300: var(--neutral-0700);
     --base-0400: var(--neutral-0600);
-    --base-0500: var(--neutral-0500);
+    --base-0500: #51565D;
     --base-0600: var(--neutral-0400);
     --base-0700: var(--neutral-0300);
     --base-0800: var(--neutral-0200);
@@ -59,14 +61,6 @@ html {
         cursor: inherit; 
         box-sizing: border-box;
     }
-
-    /* Removing Autofill Background */
-    input:-webkit-autofill,
-	input:-webkit-autofill:focus,
-	input:-webkit-autofill:hover,
-	input:-webkit-autofill:active {
-		transition: background-color 0s 600000s, color 0s 600000s !important;
-	}
 
     /* Heading */
     h1, h2, h3, h4, h5, h6 {
@@ -85,6 +79,7 @@ html {
             py-1
             px-2
             rounded-md
+        ;
     }
 
     svg {
@@ -106,20 +101,17 @@ html {
 
 
 @layer utilities {
-    .surface {
+    .surface-color {
         @apply
-            bg-base-0
             text-base-500
             stroke-base-500
         ;
     }
 
 
-    .surface-hover {
+    .surface-background {
         @apply
-            hover:bg-base-100
-            hover:text-base-700
-            hover:stroke-base-700
+            bg-base-0
         ;
     }
 
@@ -139,21 +131,39 @@ html {
     }
 
 
-    .alert-head {
+    .surface-color-hover:hover {
         @apply
-            text-sm 
-            text-base-900 
-            font-medium 
-            leading-[1rem]
+            text-base-700
+            stroke-base-700
         ;
     }
 
 
-    .alert-body {
+    .surface-background-hover:hover {
         @apply
-            tracking-wide 
-            text-xs
-            text-base-500
+            !bg-base-100
+        ;
+    }
+
+
+    .dark .surface-border {
+        @apply
+            border-base-200
+        ;
+    }    
+
+
+    .dark .surface-background-hover:hover {
+        @apply
+            !bg-black
+        ;
+    }
+
+
+    .field-background {
+        @apply
+            bg-base-0
+            shadow-sm
         ;
     }
 
@@ -162,14 +172,6 @@ html {
         @apply
             px-2 
             py-1
-        ;
-    }
-
-
-    .field-bg-shadow {
-        @apply
-            bg-base-0
-            shadow-sm
         ;
     }
 
@@ -184,17 +186,20 @@ html {
     }
 
 
-    .error .field-border {
-        @apply
-            border-red-500
-    }
-
-
     .field-text {
         @apply
             text-sm 
             tracking-wide
             text-base-700
+        ;
+    }
+
+
+    .field-hover:hover {
+        @apply
+            bg-base-100
+            text-base-700
+            stroke-base-700
         ;
     }
 
@@ -205,6 +210,36 @@ html {
             !bg-blue-100
             dark:!bg-blue-500/20
         ;
+    }
+
+
+    .dark .field-background {
+        @apply
+            bg-base-50
+        ;
+    }
+
+
+    .dark .field-border {
+        @apply
+            border
+            border-base-200
+            outline-none
+            rounded-md
+        ;
+    }
+
+
+    .dark .field-hover:hover {
+        @apply
+            bg-gray-800/10
+        ;
+    }
+
+
+    .error .field-border {
+        @apply
+            border-red-500
     }
 
 
@@ -222,6 +257,25 @@ html {
             border-blue-500
             !bg-blue-100
             dark:!bg-blue-500/20
+        ;
+    }
+
+
+    .alert-head {
+        @apply
+            text-sm 
+            text-base-900 
+            font-medium 
+            leading-[1rem]
+        ;
+    }
+
+
+    .alert-body {
+        @apply
+            tracking-wide 
+            text-xs
+            text-base-500
         ;
     }
 

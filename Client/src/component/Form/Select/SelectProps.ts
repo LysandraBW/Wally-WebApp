@@ -9,4 +9,5 @@ export interface SelectProps extends Omit<ReadWriteArrayInputProps, "options"> {
     CheckedIcon?: ReactNode;
     NotCheckedIcon?: ReactNode;
     disabled: boolean;
+    multiple?: boolean;
 }

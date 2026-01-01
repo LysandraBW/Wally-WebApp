@@ -114,7 +114,7 @@ export default function useFilterManager(setLoadedTable: Dispatch<SetStateAction
             search,
             deleted: labelID === "Deleted" ? "1" : "0",
             statusID: statusID === "-1" || statusID === null ? "" : statusID,
-            labelID: labelID in ["Deleted", ""] ? "" : labelID,
+            labelID: (labelID === "Deleted" || labelID === "") ? "" : labelID,
             pageSize: pageLength,
             pageNumber: pageIndex + 1
         }

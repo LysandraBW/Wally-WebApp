@@ -40,11 +40,14 @@ function Elements() {
             </div>
             <div>
                 <p className="text-base-900">Secondary Button</p>
-                <SecondaryButton
-                    onClick={() => console.log("Clicked!")}
-                >
-                    Hello
-                </SecondaryButton>
+                <div className="flex gap-2">
+                    <SecondaryButton onClick={() => console.log("Clicked!")}>
+                        Hello
+                    </SecondaryButton>
+                    <SecondaryButton onClick={() => console.log("Clicked!")}>
+                        Hello
+                    </SecondaryButton>
+                </div>
             </div>
             <div>
                 <p className="text-base-900">Icon Button</p>
@@ -56,9 +59,24 @@ function Elements() {
             </div>
             <div>
                 <p className="text-base-900">Close Button</p>
-                <CloseButton
-                    onClick={() => console.log("Clicked!")}
-                />
+                <div className="flex gap-2 items-center">
+                    <CloseButton
+                        size={16}
+                        onClick={() => console.log("Clicked!")}
+                    />
+                    <CloseButton
+                        size={14}
+                        onClick={() => console.log("Clicked!")}
+                    />
+                    <CloseButton
+                        size={12}
+                        onClick={() => console.log("Clicked!")}
+                    />
+                    <CloseButton
+                        size={10}
+                        onClick={() => console.log("Clicked!")}
+                    />
+                </div>
             </div>
             <div className="flex flex-col gap-2">
                 <p className="text-base-900">Alert Confirm</p>
@@ -221,7 +239,7 @@ function Elements() {
                         >
                             <div className="border-b border-b-base-300 px-1 py-1">
                                 <IconButton
-                                    size={2}
+                                    size={12}
                                     onClick={() => 1}
                                 >
                                     <ArrowLongLeftIcon
@@ -273,11 +291,11 @@ function Elements() {
                         <div onClick={(event) => event.stopPropagation()}>
                             <div className="border-b border-b-base-300 px-1 py-1">
                                 <IconButton
-                                    size={2}
+                                    size={12}
                                     onClick={() => 1}
                                 >
                                     <ArrowLongLeftIcon
-                                        class="w-inherit h-inherit stroke-[2px]"
+                                        className="w-inherit h-inherit stroke-[2px]"
                                     />
                                 </IconButton>
                             </div>

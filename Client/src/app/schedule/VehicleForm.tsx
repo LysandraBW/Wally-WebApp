@@ -9,6 +9,7 @@ import { Options } from "@/features/Form/DEF";
 import getValues from "@/features/Form/helpers/getValues";
 import TextField from "@/component/Form/Text/Text";
 import { MAKE_ERR_MSG, MODEL_ERR_MSG, MODEL_YEAR_ERR_MSG } from "./_DEF";
+import Search from "@/component/Form/Select/Search";
 
 interface VehicleFormProps {
     form: UseForm;
@@ -106,7 +107,7 @@ export default function VehicleForm(props: VehicleFormProps) {
                 state={props.form.getInput("vin").state}
                 onChange={updateVIN}
             />
-            {/* <Search
+            <Search
                 name="modelYear"
                 label="Year"
                 toggleLabel="Select Model Year"
@@ -135,7 +136,7 @@ export default function VehicleForm(props: VehicleFormProps) {
                 options={models}
                 onChange={props.form.updateInputData}
                 disabled={false}
-            /> */}
+            />
         </Fragment>
     )
 }

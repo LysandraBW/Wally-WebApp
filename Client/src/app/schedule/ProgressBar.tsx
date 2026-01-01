@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import { Fragment } from "react"
+import { Fragment, useState } from "react"
 import { Tooltip } from "react-tooltip";
 
 interface ProgressBarProps {
@@ -19,40 +19,29 @@ export default function ProgressBar(props: ProgressBarProps) {
                 className={clsx(
                     "w-full h-full",
                     "flex justify-center items-center",
-                    "bg-white shadow-sm border border-white rounded",
-                    "group",
-                    props.step >= props.rank && "!bg-blue-700 !border-blue-800",
-                    props.canShowTooltip && "cursor-pointer hover:bg-black hover:border-black transition-all"
+                    "bg-base-200 rounded-[2.5px] hover:bg-base-200",
+                    props.step >= props.rank && "!bg-blue-500 hover:!bg-blue-600"
                 )}
+            />
+            <Tooltip
+                anchorSelect={`#${props.id}`}
+                opacity={1}
+                style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    gap: "0.25rem",
+                    backgroundColor: "white",
+                    boxShadow: "0px 2px 2px 0px #00000006",
+                    borderRadius: "6px"
+                }}
+                className="!bg-base-0 dark:!bg-base-100 !color-white"
+                border="1px solid #d1d5db"
             >
-                <div 
-                    className={clsx(
-                        "w-1 h-1", 
-                        "bg-gray-300 rounded-full",
-                        props.step >= props.rank && "bg-white"
-                    )}
-                />
-            </div>
-            {
-                props.canShowTooltip &&
-                    <Tooltip
-                        anchorSelect={`#${props.id}`}
-                        border="1px solid rgb(229 231 235)"
-                        opacity={1}
-                        style={{
-                            display: "flex",
-                            flexDirection: "column",
-                            alignItems: "center",
-                            gap: "0.25rem",
-                            backgroundColor: "white",
-                            boxShadow: "0px 2px 2px 0px #00000010",
-                        }}
-                    >
-                        <h6 className="text-sm text-gray-700">
-                            {props.tooltipLabel}
-                        </h6>
-                    </Tooltip> 
-            }
+                <h6 className="text-xs text-base-700 font-medium tracking-wide">
+                    {props.tooltipLabel}
+                </h6>
+            </Tooltip> 
         </Fragment>
     )
 }

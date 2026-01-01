@@ -7,6 +7,8 @@ import { Field } from "../Field";
 import searchLabels from "@/features/Form/helpers/searchLabels";
 import SearchBar from "./SearchInput";
 import { SelectProps } from "./SelectProps";
+import { OptionMap } from "@/features/Form/DEF";
+import getValuesToLabels from "@/features/Form/helpers/getValuesToLabels";
 
 
 export interface SearchProps extends SelectProps {
@@ -18,7 +20,21 @@ export default function Search(props: SearchProps) {
     const [open, setOpen] = useState(false);
     const [search, setSearch] = useState("");
     const [matched, setMatched] = useState(props.options.slice(0, 10));
+    const [optionMap, setOptionMap] = useState<OptionMap>();
+    const [toggleLabel, setToggleLabel] = useState(props.toggleLabel);
     
+    useEffect(() => {
+        setOptionMap(getValuesToLabels(props.options));
+    }, [props.options]);
+
+    useEffect(() => {
+        if (props.multiple || !props.values.length || !optionMap) {
+            setToggleLabel(props.toggleLabel);
+            return;
+        }
+        setToggleLabel(optionMap[props.values[0]]);
+    }, []);
+
     useEffect(() => {
         const matched = searchLabels(search, props.options);
         setMatched(matched);
@@ -55,7 +71,7 @@ export default function Search(props: SearchProps) {
                     <Toggle
                         onClick={() => setOpen(true)}
                         icon={props.ToggleIcon}
-                        label={props.toggleLabel}
+                        label={props.multiple ? props.toggleLabel : props.values[0]}
                     />
                     {open &&
                         <Wrapper>

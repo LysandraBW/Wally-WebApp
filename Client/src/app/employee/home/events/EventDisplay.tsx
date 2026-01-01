@@ -92,7 +92,7 @@ export default function EventDisplay(props: EventDisplayProps<Events>) {
                 {Object.keys(props.items).length === 0 &&
                     <div className="h-[100px] flex flex-col justify-center gap-1 items-center justify-center">
                         <ArchiveBoxIcon
-                            class="size-6 stroke-gray-400"
+                            className="size-6 stroke-gray-400"
                         />
                         <span className="text-gray-400 tracking-wide font-medium text-04">
                             No Events Found

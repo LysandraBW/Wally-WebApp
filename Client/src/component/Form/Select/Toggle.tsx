@@ -11,11 +11,11 @@ interface ToggleProps {
 export default function Toggle(props: ToggleProps) {
     return (
         <button
-            onClick={() => props.onClick}
+            onClick={props.onClick}
             className={clsx(
                 "w-full h-min px-2 py-1",
                 "flex items-center justify-between gap-2",
-                "surface-hover surface-border field-bg-shadow field-border field-focus",
+                "field-hover field-border field-background field-border field-focus",
             )}
         >
             <span className="field-text">
@@ -25,7 +25,7 @@ export default function Toggle(props: ToggleProps) {
                 props.icon 
                 :
                 <ChevronDownIcon
-                    class="size-3 stroke-base-500 stroke-[3px]"
+                    className="size-3 stroke-base-500 stroke-[3px]"
                 />
             }
         </button>

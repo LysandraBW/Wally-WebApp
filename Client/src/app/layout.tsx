@@ -1,5 +1,6 @@
-import { DM_Sans, Instrumental, Inter, Jakarta, Satoshi, IBM, Rubik, PublicSans } from "@/public/Font";
+import { GeneralSans } from "@/public/fonts/Font";
 import "./globals.css";
+import clsx from "clsx";
 
 export default function RootLayout({
 	children,
@@ -7,8 +8,13 @@ export default function RootLayout({
 	children: React.ReactNode;
 }>) {
 	return (
-		<html lang="en" className="bg-background-1">
-			<body className={PublicSans.className}>
+		<html lang="en" className="h-full">
+			<body 
+				className={clsx(
+					GeneralSans.className,
+					"h-full"
+				)}
+			>
 				{children}
 			</body>
 		</html>

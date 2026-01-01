@@ -13,12 +13,12 @@ export default function Star(props: {seen: boolean; starred: boolean; markAsStar
         >
             {!props.starred &&
                 <StarIcon
-                    class="fill-white stroke stroke-gray-300 cursor-pointer"
+                    className="fill-white stroke stroke-gray-300 cursor-pointer"
                 />
             }
             {props.starred &&
                 <StarIcon
-                    class="fill-blue-500 stroke-blue-500 cursor-pointer"
+                    className="fill-blue-500 stroke-blue-500 cursor-pointer"
                 />
             }
         </div>

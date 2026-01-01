@@ -20,7 +20,7 @@ export default function TextArea(props: TextProps) {
                     onBlur={props.onBlur}
                     onChange={onChange}
                     className={clsx(
-                        "surface surface-hover field-bg-shadow field-padding field-border field-focus field-text"
+                        "field-hover field-background field-padding field-border field-focus field-text"
                     )}
                 />
             }

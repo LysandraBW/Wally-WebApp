@@ -13,12 +13,12 @@ export default function Flag(props: {seen: boolean, flagged: boolean, markAsFlag
         >
             {!props.flagged &&
                 <Bookmark
-                    class="fill-white stroke stroke-gray-300 cursor-pointer"
+                    className="fill-white stroke stroke-gray-300 cursor-pointer"
                 />
             }
             {props.flagged &&
                 <Bookmark
-                    class="fill-red-500 stroke-red-600 cursor-pointer"
+                    className="fill-red-500 stroke-red-600 cursor-pointer"
                 />
             }
         </div>

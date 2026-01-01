@@ -23,7 +23,7 @@ export default function NavBar(props: NavBarProps) {
                 props.sticky ? "sticky top-0" : "snap-start-"
             )}
         >
-            <Logo/>
+            <Logo size={1}/>
             <div className="flex gap-4">
                 <Link link="Schedule" href={HREF_SCHEDULE}/>
                 <Link link="Lookup" href={HREF_LOOKUP}/>

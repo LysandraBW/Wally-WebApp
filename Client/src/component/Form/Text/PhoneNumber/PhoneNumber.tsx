@@ -29,6 +29,7 @@ export default function PhoneNumber(props: PhoneNumberProps) {
         while (phoneNumberParts.length < 3)
             phoneNumberParts.push("");
         phoneNumberParts = phoneNumberParts.slice(0, 3);
+        console.log("Phone Number Parts", phoneNumberParts);
 
         setPhoneNumber1(phoneNumberParts[0]);
         setPhoneNumber2(phoneNumberParts[1]);
@@ -58,26 +59,39 @@ export default function PhoneNumber(props: PhoneNumberProps) {
 
     const handleAutoFocus = (part: 0|1|2, phoneNumberParts: string[]) => {
         const field = document.getElementsByName(props.name + (part).toString())[0] as any;
-        const autoFocusNext = field && field.selectionStart == 3;
-        const autoFocusPrev = field && field.selectionStart == 0;
+        const autoFocusNext = field && (field.selectionStart === 3 || field.selectionStart === 4);
+        const autoFocusPrev = field && field.selectionStart === 0;
         
+        console.log("Field", field);
+        console.log("Field Selection Start", field.selectionStart);
+        console.log("Auto Focus Next", autoFocusNext);
+        console.log("Auto Focus Prev", autoFocusPrev);
+        console.log("Part", part);
+        console.log("Part Length", phoneNumberParts[part].length);
+
         if (autoFocusNext && part < 2 && phoneNumberParts[part].length === 3) {
+            console.log("Auto Focus Next");
             const nextField = document.getElementsByName(props.name + (part + 1).toString())[0];
             nextField && nextField.focus();
         }
         
         if (autoFocusPrev && part > 0 && phoneNumberParts[part].length === 0) {
+            console.log("Auto Focus Prev");
             const prevField = document.getElementsByName(props.name + (part - 1).toString())[0];
             prevField && prevField.focus();
         }
     }
 
     const updatePhoneNumberPart = (part: 0|1|2, value: string) => {
+        console.log("Part", part);
+        console.log("Value", value);
+
         const phoneNumberParts = [phoneNumber1, phoneNumber2, phoneNumber3];
         const setPhoneNumberPart = [setPhoneNumber1, setPhoneNumber2, setPhoneNumber3][part];
         
         // Update Part
         phoneNumberParts[part] = value.replaceAll("[^0-9]", "").slice(0, part < 2 ? 3 : 4);
+        console.log("Processed Value", phoneNumberParts[part]);
         setPhoneNumberPart(phoneNumberParts[part]);
 
         // Update Value
@@ -90,7 +104,7 @@ export default function PhoneNumber(props: PhoneNumberProps) {
     const handlePhoneNumberPart = (part: 0|1|2, value: string) => {
         if (handleAutoFill(part, value))
             return;
-        
+        console.log("handlePhoneNumberPart")
         const phoneNumberParts = updatePhoneNumberPart(part, value);
         handleAutoFocus(part, phoneNumberParts);
     }
@@ -100,7 +114,7 @@ export default function PhoneNumber(props: PhoneNumberProps) {
             label={props.label}
             state={props.state}
             input={
-                <div className="flex gap-1 items-center justify-between">
+                <div className="grid grid-cols-[auto_auto_auto_auto_auto] gap-1 items-center">
                     <PhoneNumberPart
                         part={0}
                         name={props.name}

@@ -1,4 +1,3 @@
-import PhoneNumber from "@/component/Form/Text/PhoneNumber/PhoneNumber";
 import TextField from "@/component/Form/Text/Text";
 import { UseForm } from "@/features/Form/useForm/useForm";
 import { Fragment } from "react";
@@ -34,9 +33,10 @@ export default function ContactForm(props: ContactFormProps) {
                 state={props.form.getInput("email").state}
                 onChange={props.form.updateInputData}
             />
-            <PhoneNumber
+            <TextField
                 name="phone"
                 label="Phone Number"
+                placeholder="123-456-7890"
                 value={props.form.getInput("phone").data}
                 state={props.form.getInput("phone").state}
                 onChange={props.form.updateInputData}

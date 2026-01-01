@@ -10,7 +10,7 @@ export const SQL_DATE = /^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}(:[0-9]{2}
 export type UnitTest = z.ZodType;
 export const isName: UnitTest = z.string().refine(s => validator.isAlpha(s, undefined, {ignore: " -"}) && s.length > 0 && s.length <= 50, {message: "Must enter a name less than 50 characters and without symbols."});
 export const isEmail: UnitTest = z.string().email({message: "Must be a valid email."}).max(320, {message: "Must enter an email less than 320 characters."});
-export const isPhone: UnitTest = z.string().refine(s => validator.isMobilePhone(s), {message: "Must enter a valid phone number."});
+export const isPhone: UnitTest = z.string().refine(s => validator.isMobilePhone("1" + s.replaceAll("-", ""), "en-US"), {message: "Must enter a valid phone number."});
 export const isDate: UnitTest = z.string().refine(s => !!s.match(SQL_DATE));
 export const isMoney: UnitTest = z.string().refine(s => validator.isNumeric(s));
 export const isVIN: UnitTest = z.string().refine(s => !!s.match(VIN), {message: "Must enter a valid VIN."});

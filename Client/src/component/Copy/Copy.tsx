@@ -2,7 +2,6 @@ import clsx from "clsx";
 import { useEffect, useState } from "react";
 import Check from "../Icons/Icons/CheckIcon";
 import ClipboardIcon from "../Icons/Icons/ClipboardIcon";
-import IconButton from "../Button/IconButton";
 
 interface CopyProps {
     label: string;
@@ -33,16 +32,16 @@ export default function Copy(props: CopyProps) {
             className={clsx(
                 "w-min h-min",
                 "grid grid-cols-[min-content_min-content_min-content]",
-                "border border-base-300 rounded-md",
+                "surface-border rounded-md",
                 "bg-base-0 shadow-sm"
             )}
         >
             <span 
                 className={clsx(
                     "py-1 px-2",
-                    "border-r border-r-base-300 rounded-l-[5px]",
-                    "text-base-500 text-sm",
-                    "bg-base-100"
+                    "surface-border !border-y-0 !border-l-0 border-r border-r-base-300 rounded-l-[5px]",
+                    "text-base-500 text-xs",
+                    "bg-base-100 dark:bg-base-50"
                 )}
             >
                 {props.label}
@@ -50,7 +49,7 @@ export default function Copy(props: CopyProps) {
             <span 
                 className={clsx(
                     "py-1 px-2",
-                    "font-medium text-sm text-base-700",
+                    "font-medium text-xs text-base-700",
                     "tracking-wide whitespace-nowrap"
                 )}
             >
@@ -61,19 +60,19 @@ export default function Copy(props: CopyProps) {
                 className={clsx(
                     "py-1 px-2",
                     "flex justify-between items-center",
-                    "border-l border-l-base-300 rounded-none rounded-r-[5px]",
-                    "surface surface-hover !bg-base-100",
+                    "surface-border !border-y-0 !border-r-0 border-l border-l-base-300 rounded-none rounded-r-[5px]",
+                    "surface-color surface-background-hover surface-color-hover !bg-base-100 dark:!bg-base-50",
                     "cursor-pointer transition-all"
                 )}
             >
                 {clicked &&
                     <Check
-                        class="size-4 stroke-green-500 stroke-[2px]"
+                        className="size-4 stroke-green-500 stroke-[2px]"
                     />
                 }
                 {!clicked &&
                     <ClipboardIcon
-                        class="size-4 stroke-inherit stroke-[1.5px]"
+                        className="size-3.5 stroke-inherit stroke-[1.5px]"
                     />
                 }
             </button>

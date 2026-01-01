@@ -26,7 +26,7 @@
     "tailwind-merge": "^3.4.0",
     "tailwindcss-animate": "^1.0.7",
     "validator": "^13.15.15",
-    "waltronics-types": "^1.0.0",
+    "waltronics-types": "^1.0.1",
     "zod": "^3.24.1"
   },
   "devDependencies": {

@@ -55,7 +55,7 @@ export default function LoadAppointment(props: LoadAppointmentProps) {
                         )}
                     >
                         <ArrowRight
-                            class="size-4 stroke-inherit cursor-pointer transition-all"
+                            className="size-4 stroke-inherit cursor-pointer transition-all"
                         />
                     </div>
                 </div>

@@ -13,6 +13,6 @@ export interface IconStyleProps {
 }
 
 export default interface IconProps {
-    class?: string;
+    className?: string;
     style?: IconStyleProps;
 }

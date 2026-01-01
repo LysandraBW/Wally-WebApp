@@ -30,7 +30,7 @@ export default function ToolBar(props: ToolBarProps) {
                     )}
                 >
                     <TrashIcon
-                        class="stroke-inherit group-hover:stroke-gray-700"
+                        className="stroke-inherit group-hover:stroke-gray-700"
                     />
                 </button>
                 {/* Refresh Button */}
@@ -44,7 +44,7 @@ export default function ToolBar(props: ToolBarProps) {
                     onClick={props.appointmentManager.loadAppointments}
                 >
                     <ArrowPath
-                        class="stroke-inherit"
+                        className="stroke-inherit"
                     />
                 </button>
                 {/* Recover Button */}
@@ -59,7 +59,7 @@ export default function ToolBar(props: ToolBarProps) {
                         onClick={props.deleteManager.recoverSelectedAppointments}
                     >
                         <ArrowUpOnSquareIcon
-                            class="stroke-inherit"
+                            className="stroke-inherit"
                         />
                     </button>
                 }

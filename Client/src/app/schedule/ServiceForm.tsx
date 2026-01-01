@@ -16,7 +16,10 @@ export default function ServiceForm(props: ServiceFormProps) {
 
     useEffect(() => {
         const initialize = async () => {
-            const services: {[name: string]: Options} = {...await GetT1Services(), "Other": [["0", "I Don't Know"]]};
+            const services: {[name: string]: Options} = {
+                ...await GetT1Services(), 
+                "Other": [["0", "I Don't Know"]]
+            };
             setServices(services);
 
             const serviceValues = getValues(Object.values(services).flat())
