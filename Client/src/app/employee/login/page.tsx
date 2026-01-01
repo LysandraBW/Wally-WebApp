@@ -61,7 +61,7 @@ export default function Page() {
                                     boxShadow: "0px 2px 2px 0px #00000010",
                                 }}
                             >
-                                <h6 className="text-02 tracking-wide text-gray-600">
+                                <h6 className="text-xs tracking-wide text-gray-500">
                                     No login matches this information. 
                                     Please try again.
                                 </h6>
