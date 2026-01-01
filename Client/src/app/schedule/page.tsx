@@ -99,25 +99,23 @@ export default function Page() {
     
 
     return (
-        <div className="relative grow grid grid-cols-[60%_40%] max-lg:grid-cols-1">
-            <div className="relative w-[100%] h-[100vh] max-lg:hidden">
-                <div className="absolute top-8 left-8">
+        <div className="relative grow h-full grid lg:grid-cols-[60%_40%] md:grid-cols-[33%_auto] max-md:grid-cols-1">
+            <div className="relative w-full h-full top-0 left-0 max-md:hidden">
+                <div className="absolute top-8 left-8 z-10">
                     <Logo
                         white={true}
                     />
                 </div>
-                <div className="static w-full h-full top-0 left-0">
-                    <img 
-                        src="../pexels-stas-tsibro-268729-811029.jpg" 
-                        className="object-cover object-center w-full h-full block dark:!hidden"
-                    />
-                    <img 
-                        src="../jakob-owens-Il--NpJ4zyc-unsplash.jpg" 
-                        className="object-cover object-center w-full h-full hidden dark:!block"
-                    />
-                </div>
+                <img 
+                    src="../pexels-pixabay-210115.jpg" 
+                    className="fixed object-cover object-center lg:w-[60%] md:w-[33%] h-screen block dark:!hidden"
+                />
+                <img 
+                    src="../shubham-dhage-KWj4NPwSQkc-unsplash.jpg" 
+                    className="fixed object-cover object-center lg:w-[60%] md:w-[33%] h-screen hidden dark:!block"
+                />
             </div>
-            <div className="py-8 px-12 grow max-lg:px-4">
+            <div className="flex flex-col py-8 px-12 grow max-md:p-8">
                 <div className="mb-8">
                     <GoBackHeader onGoBack={() => navigate("/")}/>
                 </div>
@@ -132,16 +130,33 @@ export default function Page() {
                     />
                 }
                 {output === null &&
-                    <Form
-                        step={step}
-                        stepData={stepData}
-                        contactForm={contactForm}
-                        serviceForm={serviceForm}
-                        vehicleForm={vehicleForm}
-                        goToNextForm={goToNextForm}
-                        goToPrevForm={goToPrevForm}
-                        submitForm={submitForm}
-                    />
+                    <div className="flex flex-col max-md:items-center gap-6">
+                        <div className="flex flex-col items-center gap-4">
+                            <div className="md:hidden">
+                                <Logo/>
+                            </div>
+                            <header className="text-center">
+                                <h3 className="mb-1 text-base-900 text-2xl tracking-tight font-medium">
+                                    Schedule Appointment
+                                </h3>
+                                <p className="text-base-500 text-sm tracking-wide">
+                                    To schedule an appointment, complete the form below.
+                                </p>
+                            </header>
+                        </div>
+                        <div className="flex flex-col self-center w-full">
+                            <Form
+                                step={step}
+                                stepData={stepData}
+                                contactForm={contactForm}
+                                serviceForm={serviceForm}
+                                vehicleForm={vehicleForm}
+                                goToNextForm={goToNextForm}
+                                goToPrevForm={goToPrevForm}
+                                submitForm={submitForm}
+                            />
+                        </div>
+                    </div>
                 }
             </div>
         </div>

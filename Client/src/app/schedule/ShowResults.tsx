@@ -1,3 +1,4 @@
+import Logo from "@/component/NavBar/Logo";
 import { ReactNode } from "react";
 
 interface ShowResultProps {
@@ -9,16 +10,19 @@ interface ShowResultProps {
 
 export default function ShowResults(props: ShowResultProps) {
     return (
-        <div className="flex flex-col items-center justify-center grow gap-10">
+        <div className="h-full flex flex-col grow items-center justify-center grow gap-10">
             <div className="flex justify-center items-center">
                 {props.Icon}
             </div>
             <div className="flex flex-col justify-self-center items-center relative">
                 <header className="flex flex-col gap-2 items-center relative">
-                    <h1 className="text-2xl text-base-900 font-medium text-center tracking-tight whitespace-nowrap">
+                    <div className="md:hidden">
+                        <Logo/>
+                    </div>
+                    <h1 className="text-2xl text-base-900 font-medium text-center tracking-tight">
                         {props.head}
                     </h1>
-                    <p className="text-sm text-base-500 text-center font-normal tracking-wide max-w-[400px]">
+                    <p className="text-base text-base-500 text-center font-normal tracking-wide max-w-[420px]">
                         {props.body}
                     </p>
                 </header>

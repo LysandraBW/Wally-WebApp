@@ -63,19 +63,19 @@ export default function Page() {
         >
             {!appointment &&
                 <>
-                    <div className="relative w-full h-full px-4 flex flex-col gap-4 justify-center">
-                        <div className="w-full flex justify-center">
+                    <div className="relative w-full h-full px-8 flex flex-col gap-6 justify-center">
+                        <div className="flex flex-col items-center gap-4">
                             <Logo/>
-                        </div>
-                        <div className="w-full flex flex-col items-center gap-6">
                             <header className="text-center flex flex-col gap-1 items-center">
-                                <h3 className="text-base-900 text-2xl tracking-tight font-medium">
+                                <h3 className="text-base-900 text-2xl tracking-tight font-medium mb-1">
                                     Lookup Appointment
                                 </h3>
                                 <p className="text-base-500 text-sm tracking-wide">
                                     Learn more about your appointment
                                 </p>
                             </header>
+                        </div>
+                        <div className="w-full flex flex-col items-center">
                             <Form
                                 user={user}
                                 form={form}

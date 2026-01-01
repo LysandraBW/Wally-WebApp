@@ -50,7 +50,7 @@ export default function Copy(props: CopyProps) {
                 className={clsx(
                     "py-1 px-2",
                     "font-medium text-xs text-base-700",
-                    "tracking-wide whitespace-nowrap"
+                    "tracking-wide whitespace-nowrap max-md:text-ellipsis max-md:w-[100px] max-md:overflow-x-clip"
                 )}
             >
                 {props.value}

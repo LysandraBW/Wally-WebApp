@@ -4,6 +4,7 @@ import Progress from "./Progress";
 import ServiceForm from "./ServiceForm";
 import VehicleForm from "./VehicleForm";
 import SecondaryButton from "@/component/Button/SecondaryButton";
+import { Fragment } from "react";
 
 interface FormProps {
     step: number;
@@ -19,15 +20,7 @@ interface FormProps {
 
 export default function Form(props: FormProps) {
     return (
-        <div className="w-[min(500px,100%)] relative flex flex-col self-center gap-4 max-lg:w-full">
-            <header className="text-center">
-                <h3 className="mb-1 text-base-900 text-2xl whitespace-nowrap tracking-tight font-medium">
-                    Schedule Appointment
-                </h3>
-                <p className="text-base-500 text-sm tracking-wide">
-                    To schedule an appointment, complete the form below.
-                </p>
-            </header>
+        <div className="flex flex-col gap-4">
             <Progress
                 step={props.step}
                 header={props.stepData[props.step].header}

@@ -6,6 +6,7 @@ import NavBar from "@/component/NavBar/NavBar";
 import { Tooltip } from "react-tooltip";
 import { navigate } from "@/utils/navigate";
 import { PAGE_DASHBOARD } from "@/utils/constants";
+import Logo from "@/component/NavBar/Logo";
 
 export default function Page() {
     const [sessionID, setSessionID] = useState<string>();
@@ -18,25 +19,31 @@ export default function Page() {
     }, [sessionID]);
 
     return (
-        <div className="relative min-h-screen flex flex-col bg-white">
-            <NavBar sticky={true} border={true}/>
-            <div className="grid grid-cols-2 grow">
-                <div className="py-20 flex flex-col justify-center items-start justify-self-center gap-6 relative bg-white">
-                    <header className="flex flex-col max-w-[400px]">
-                        <h3 className="font-medium whitespace-nowrap">Log In</h3>
-                        <p className="max-w-[440px] text-md text-gray-600 font-medium tracking-wide">
-                            Welcome back!
-                        </p>
-                    </header>
-                    <div className="w-full min-w-[350px] flex justify-center">
-                        <form
-                            onSubmit={(e) => e.preventDefault()}
-                            className="w-full flex flex-col gap-4"
-                        >
-                            <LoginForm 
-                                setSessionID={setSessionID}
-                            />
-                        </form>
+        <div className="relative min-h-screen flex flex-col">
+            <div className="grid grid-cols-[60%_40%] grow max-md:grid-cols-1">
+                <div className="relative bg-[url('../public/pexels-kelly-1179532-4066863.jpg')] dark:bg-[url('../public/pexels-karoldach-409701.jpg')] bg-center bg-cover max-md:hidden">
+                    <div className="relative top-8 left-8">
+                        <Logo
+                            white={true}
+                        />
+                    </div>
+                </div>
+                <div className="px-4 flex flex-col justify-center items-start gap-6">
+                    <div className="w-full flex flex-col items-center gap-4">
+                        <div className="md:hidden">
+                            <Logo/>
+                        </div>
+                        <header className="flex flex-col w-full">
+                            <h3 className="text-base-900 text-2xl tracking-tight font-medium text-center mb-1">Welcome Back</h3>
+                            <p className="text-sm text-gray-500 tracking-wide text-center">
+                                Log in to your account here.
+                            </p>
+                        </header>
+                    </div>
+                    <div className="w-full flex flex-col items-center">
+                        <LoginForm 
+                            setSessionID={setSessionID}
+                        />
                         {sessionID === "" && 
                             <Tooltip
                                 isOpen={true}
@@ -62,7 +69,6 @@ export default function Page() {
                         }
                     </div>
                 </div>
-                <div className="bg-[url('../public/Sparks.jpg')] bg-center bg-cover"/>
             </div>
         </div>
     )

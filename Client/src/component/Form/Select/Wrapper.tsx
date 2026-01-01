@@ -7,7 +7,7 @@ export default function Wrapper(props: {children: ReactNode}) {
             className={clsx(
                 "w-full overflow-hidden max-h-[200px] overflow-y-scroll",
                 "absolute top-[calc(100%+0.25rem)] z-[2]",
-                "border border-base-300 rounded-md bg-base-0 shadow-sm"
+                "surface-border rounded-md bg-base-0 shadow-sm"
             )}
         >
             {props.children}

@@ -90,7 +90,7 @@ export default function SearchServices(props: SearchServicesProps) {
                                     <Wrapper>
                                         <div className="m-1">
                                             <IconButton
-                                                size={2.5}
+                                                size={16}
                                                 roundedLess={true}
                                                 onClick={() => setTab("")}
                                             >
