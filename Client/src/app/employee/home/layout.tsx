@@ -59,7 +59,7 @@ export default function Page({children}: Readonly<{children: React.ReactNode}>) 
                     value={{employee, setCurrentPage: setCurrPage}}
                 >
                     <Wrapper
-                        outerClassName="w-[192px]"
+                        outerClassName="w-[192px_!important] min-w-[192px_!important]"
                         innerClassName="p-2 flex flex-col gap-2"
                     >
                         <div className="py-1 px-2 flex justify-center bg-base-0 dark:bg-base-50 border border-base-300 dark:border-base-200 rounded-[5px] shadow-sm">
@@ -113,9 +113,9 @@ export default function Page({children}: Readonly<{children: React.ReactNode}>) 
                     <div className="h-full flex flex-col grow gap-y-4">
                         <Wrapper
                             outerClassName="h-min"
-                            innerClassName="h-min p-2 flex items-center justify-between gap-2"
+                            innerClassName="h-min p-2 flex items-center justify-between gap-2 overflow-y-auto"
                         >
-                            <span className="block text-sm text-base-500">
+                            <span className="block text-sm text-base-500 tracking-wide">
                                 {currPage}
                             </span>
                             <div className="flex items-center gap-2">
@@ -126,8 +126,12 @@ export default function Page({children}: Readonly<{children: React.ReactNode}>) 
                                 }
                             </div>
                         </Wrapper>
-                        <Wrapper>
-
+                        <Wrapper
+                            outerClassName={clsx(
+                                currPage === "Dashboard" && "!bg-base-300 dark:!bg-base-200"
+                            )}
+                        >
+                            {children}
                         </Wrapper>
                     </div>
                 </EmployeeContext>

@@ -14,7 +14,7 @@ interface TableProps {
 
 export default function Table(props: TableProps) {
     return (
-        <div className="grow bg-gray-100">
+        <div className="">
             {props.appointmentManager.appointments && props.appointmentManager.appointments.length > 0 &&
                 <div className="grid grid-cols-[min-content_min-content_min-content_repeat(13,1fr)] overflow-x-scroll scroll-hide">
                     <TableHead

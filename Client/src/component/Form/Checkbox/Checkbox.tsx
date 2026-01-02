@@ -5,6 +5,7 @@ import CheckmarkIcon from "@/component/Icons/Icons/CheckIcon";
 export interface CheckboxProps extends ReadWriteInputProps {
     name: string;
     checked: boolean;
+    className?: string;
 }
 
 export default function Checkbox(props: CheckboxProps) {
@@ -14,7 +15,12 @@ export default function Checkbox(props: CheckboxProps) {
     }
 
     return (
-        <div className="flex items-center gap-1">
+        <div 
+            className={clsx(
+                "flex items-center",
+                props.label && "gap-1"
+            )}
+        >
             <span
                 onClick={onClick}
                 className={clsx(
@@ -22,7 +28,8 @@ export default function Checkbox(props: CheckboxProps) {
                     "flex items-center justify-center",
                     "field-hover field-border field-focus rounded",
                     "cursor-pointer",
-                    props.checked && "!bg-blue-500 !border-blue-500"
+                    props.checked && "!bg-blue-500 !border-blue-500",
+                    props.className
                 )}
             >
                 {props.checked && 

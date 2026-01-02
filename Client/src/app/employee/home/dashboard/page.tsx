@@ -14,7 +14,18 @@ import { Fragment, useContext, useEffect, useReducer, useState } from "react";
 import { BarLoader } from "react-spinners";
 import { AnimatePresence } from "motion/react";
 import { EmployeeContext } from "../layout";
-import LabelTabs from "./TabsL1";
+import TabsL1 from "./TabL1";
+import TabL1 from "./TabL1";
+import InboxStackIcon from "@/component/Icons/Icons/InboxStackIcon";
+import TrashIcon from "@/component/Icons/Icons/TrashIcon";
+import StarIcon from "@/component/Icons/Icons/StarIcon";
+import BookmarkIcon from "@/component/Icons/Icons/BookmarkIcon";
+import EyeIcon from "@/component/Icons/Icons/EyeIcon";
+import SparklesIcon from "@/component/Icons/Icons/SparklesIcon";
+
+// after:absolute after:right-[-1px] after:top-0 after:w-[1px] after:h-full after:bg-gradient-to-b after:from-base-300 dark:after:from-base-200 dark:to-transparent
+// grid grid-cols-[minmax(0,1fr)_minmax(0,5fr)]
+// after:absolute after:left-[0px] after:top-0 after:w-[1px] after:h-full after:bg-gradient-to-b after:from-base-300 dark:after:from-base-200 dark:to-transparent
 
 export default function Page() {
     const [alert, alertDispatch] =  useReducer(alertReducer, startAlert);
@@ -53,37 +64,103 @@ export default function Page() {
 
 
     return (
-        <div className="grow">
-            {/* <Alert
+        <div className="w-full h-full flex flex-col grow">
+            <Alert
                 alert={alert}
             />
-            <div className="p-4 pb-0 grid grid-cols-[100px_calc(100%-100px-1rem)] gap-4 grow h-full">
-                <LabelTabs
-                    filterManager={filterManager}
-                    labels={filterManager.labels}
-                    onClick={filterManager.setLabelID}
-                />
-                <div className="flex flex-col grow border border-gray-300 border-b-0 rounded-t-md h-full">
-                    <div className="flex p-2 items-center gap-2 border-b border-gray-300 bg-white rounded-t-lg">
-                        <ToolBar
-                            deleteManager={deleteManager}
+            <div className="w-full h-full flex flex-col grow">
+                <div className="p-2 flex items-center gap-2 border-b border-base-300 dark:border-base-200">
+                    <ToolBar
+                        deleteManager={deleteManager}
+                        filterManager={filterManager}
+                        appointmentManager={appointmentManager}
+                    />
+                </div>
+                <div className="grid grid-cols-[repeat(1,minmax(0,1fr))]">
+                    <div className="h-min p-2 flex gap-2 border-b border-base-300 dark:border-base-200">
+                        <TabL1
+                            icon={
+                                <InboxStackIcon 
+                                    className="size-4 stroke-inherit"
+                                />
+                            }
+                            label="General"
+                            labelID=""
                             filterManager={filterManager}
-                            appointmentManager={appointmentManager}
+                            onClick={filterManager.setLabelID}
+                        />
+                        <TabL1
+                            icon={
+                                <SparklesIcon 
+                                    className="size-4 stroke-inherit"
+                                />
+                            }
+                            label="New"
+                            labelID="-1"
+                            filterManager={filterManager}
+                            onClick={filterManager.setLabelID}
+                        />
+                        <TabL1
+                            icon={
+                                <EyeIcon 
+                                    className="size-4 stroke-inherit"
+                                />
+                            }
+                            label="Seen"
+                            labelID="1"
+                            filterManager={filterManager}
+                            onClick={filterManager.setLabelID}
+                        />
+                        <TabL1
+                            icon={
+                                <BookmarkIcon 
+                                    className="size-4 stroke-inherit"
+                                />
+                            }
+                            label="Flagged"
+                            labelID="2"
+                            filterManager={filterManager}
+                            onClick={filterManager.setLabelID}
+                        />
+                        <TabL1
+                            icon={
+                                <StarIcon 
+                                    className="size-4 stroke-inherit"
+                                />
+                            }
+                            label="Starred"
+                            labelID="3"
+                            filterManager={filterManager}
+                            onClick={filterManager.setLabelID}
+                        />
+                        <TabL1
+                            icon={
+                                <TrashIcon 
+                                    className="size-4 stroke-inherit"
+                                />
+                            }
+                            label="Deleted"
+                            labelID="Deleted"
+                            filterManager={filterManager}
+                            onClick={filterManager.setLabelID}
                         />
                     </div>
-                    <div className="flex gap-4 px-2 py-2 border-b border-gray-300 bg-white">
+                     <div className="h-min p-2 flex gap-4 border-b border-base-300 dark:border-base-200">
                         <StatusTabs
                             filterManager={filterManager}
                         />
                     </div>
-                    <div className="flex flex-col grow">
+                    <div className="relative flex flex-col grow relative ">
                         {loaded && 
-                            <Table
-                                filterManager={filterManager}
-                                toggleManager={toggleManager}
-                                deleteManager={deleteManager}
-                                appointmentManager={appointmentManager}
-                            />
+                            <div className="h-min flex flex-col relative z-0 after:absolute after:z-[1000000] after:left-[-1px] after:top-0 after:w-[1px] after:h-full after:bg-base-300 dark:after:bg-base-200">
+                                <Table
+                                    filterManager={filterManager}
+                                    toggleManager={toggleManager}
+                                    deleteManager={deleteManager}
+                                    appointmentManager={appointmentManager}
+                                />
+                                <div className="grow relative after:absolute after:left-[0px] after:top-0 after:w-[1px] after:h-full after:bg-gradient-to-b after:from-base-300 dark:after:from-base-200 dark:to-transparent"/>
+                            </div>
                         }
                         {!loaded &&
                             <div className="flex flex-col grow w-full min-h-[200px] bg-white justify-center items-center">
@@ -98,11 +175,11 @@ export default function Page() {
             </div>     
             <AnimatePresence>            
                 {appointmentManager.openedAppointment &&
-                        <AppointmentPane
-                            appointmentManager={appointmentManager}
-                        />
+                    <AppointmentPane
+                        appointmentManager={appointmentManager}
+                    />
                 } 
-            </AnimatePresence> */}
+            </AnimatePresence>
         </div>
     )
 }

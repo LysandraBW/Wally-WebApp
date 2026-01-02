@@ -1,5 +1,6 @@
 import ChevronDownIcon from "@/component/Icons/Icons/ChevronDownIcon";
 import ChevronUpIcon from "@/component/Icons/Icons/ChevronUpIcon";
+import clsx from "clsx";
 
 interface DirectionProps {
     direction: "1" | "0" | null;
@@ -13,23 +14,26 @@ export default function Direction(props: DirectionProps) {
     return (
         <div 
             onClick={props.updateDirection}
-            className="grid grid-rows-2 bg-white p-[2.5px] cursor-pointer rounded-sm border border-gray-300 shadow-none stroke-gray-400 hover:stroke-gray-700 hover:bg-gray-50"
+            className={clsx(
+                "grid grid-rows-2 p-[2.5px]",
+                "bg-base-0 dark:bg-base-50 border border-base-300 dark:border-base-200 rounded-[3px] shadow-none",
+                "hover:stroke-gray-700 hover:bg-gray-50",
+                "cursor-pointer"
+            )}
         >
             <ChevronUpIcon
-                width="4"
-                height="4"
-                cursor="pointer"
-                fill={props.direction === "1" ? BLUE : (props.direction === "0" ? GRAY : "inherit")}
-                stroke={props.direction === "1" ? BLUE : (props.direction === "0" ? GRAY : "inherit")}
-                strokeWidth="2"
+                className={clsx(
+                    "size-1 stroke-[4px] cursor-pointer",
+                    props.direction === "1" && "stroke-blue-500",
+                    (props.direction === "0" || !props.direction) && "stroke-base-500",
+                )}
             />
             <ChevronDownIcon
-                width="4"
-                height="4"
-                cursor="pointer"
-                fill={props.direction === "0" ? BLUE : (props.direction === "1" ? GRAY : "inherit")}
-                stroke={props.direction === "0" ? BLUE : (props.direction === "1" ? GRAY : "inherit")}
-                strokeWidth="2"
+                className={clsx(
+                    "size-1 stroke-[4px] cursor-pointer",
+                    props.direction === "1" && "stroke-blue-500",
+                    (props.direction === "0" || !props.direction) && "stroke-base-500",
+                )}
             />
         </div>
     )

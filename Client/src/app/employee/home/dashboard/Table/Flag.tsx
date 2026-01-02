@@ -6,19 +6,23 @@ export default function Flag(props: {seen: boolean, flagged: boolean, markAsFlag
         <div 
             data-row={props.i || ""}
             className={clsx(
-                "p-2 !border-l-0 border-r border-r-gray-300 border-b border-b-gray-300 cursor-pointer",
-                !props.seen && "bg-white"
+                "flex justify-center items-center",
+                "border-r border-b border-base-300 dark:border-base-200",
+                "cursor-pointer",
+                "hover:!bg-white dark:hover:!bg-base-200",
+                !props.seen && "bg-base-100 dark:bg-base-0",
+                props.seen && "!bg-base-200 dark:!bg-base-50",
             )}
             onClick={props.markAsFlagged}
         >
             {!props.flagged &&
                 <Bookmark
-                    className="fill-white stroke stroke-gray-300 cursor-pointer"
+                    className="size-4 fill-base-100 dark:fill-base-50 stroke-[1.25px] stroke-base-300 dark:stroke-base-200 cursor-pointer"
                 />
             }
             {props.flagged &&
                 <Bookmark
-                    className="fill-red-500 stroke-red-600 cursor-pointer"
+                    className="size-4 fill-blue-500 stroke-[1.25px] stroke-blue-500 cursor-pointer"
                 />
             }
         </div>

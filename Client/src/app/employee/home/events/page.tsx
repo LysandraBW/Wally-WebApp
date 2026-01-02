@@ -96,7 +96,7 @@ export default function EventsManager() {
             <Alert
                 alert={alert}
             />
-            <div className="flex grow">
+            {/* <div className="flex grow">
                 <div className="p-4 flex flex-col grow gap-4">
                     <div className="flex flex-col gap-4 row-start-1 row-span-1 col-start-1 w-full grow">
                         <div className="w-full flex justify-between">
@@ -175,7 +175,7 @@ export default function EventsManager() {
                         </>
                     )}
                 </div>
-            </div>
+            </div> */}
         </div>
     )
 }

@@ -22,11 +22,12 @@ interface TableRowProps {
 }
 
 const statusColor = {
-    "Pending": "bg-red-500",
-    "Evaluation": "bg-orange-500",
-    "Scheduled": "bg-yellow-500",
-    "In Progress": "bg-green-500",
-    "Done": "bg-blue-500",
+    "Pending": "bg-sky-500",
+    "Evaluation": "bg-sky-100",
+    "Scheduled for Evaluation": "bg-blue-200",
+    "Scheduled for Service": "bg-blue-700",
+    "In Evaluation": "bg-green-500",
+    "In Service": "bg-green-400",
     "Completed": "bg-purple-500"
 }
 

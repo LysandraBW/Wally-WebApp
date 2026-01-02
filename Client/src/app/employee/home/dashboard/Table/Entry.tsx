@@ -54,20 +54,27 @@ export default function TableEntry(props: TableEntryProps) {
             data-row={props.i || ""}
             className={clsx(
                 "w-full h-full px-2 py-0 flex gap-2 items-center overflow-clip",
-                "border-r border-r-gray-300 bg-gray-100 border-b border-b-gray-300",
-                "whitespace-nowrap cursor-pointer hover:!bg-white",
-                !props.seen && "!bg-white",
+                "border-r border-b border-base-300 dark:border-base-200",
+                "hover:!bg-white dark:hover:!bg-base-200",
+                "cursor-pointer",
+                !props.seen && "bg-base-100 dark:bg-base-0",
+                props.seen && "bg-base-200 dark:bg-base-50",
                 props.style,
             )}
             onClick={props.onClick}
         >
             {(props.showNewFlag && !props.seen) &&
-                <span className="bg-white border border-gray-300 text-blue-500 tracking-wide font-semibold text-[0.4rem] py-[2px] px-[4px] rounded-sm">NEW</span>
+                <div className="bg-blue-500 size-1"/>
             }
             {props.children}
-            <p className="w-min text-gray-700 tracking-wider text-[0.8rem] whitespace-nowrap group-hover:text-blue-500 overflow-hidden text-ellipsis">
+            <p 
+                className={clsx(
+                    "w-min text-gray-700 tracking-wide text-xs whitespace-nowrap group-hover:text-blue-500 overflow-hidden text-ellipsis",
+                    !props.seen && "font-medium"
+                )}
+            >
                 {stringL}
-                <b className="font-medium">{stringM}</b>
+                <b className="bg-blue-500 text-white">{stringM}</b>
                 {stringR}
             </p>
         </div>

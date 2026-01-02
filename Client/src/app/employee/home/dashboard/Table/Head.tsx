@@ -61,31 +61,33 @@ export default function TableHead(props: TableHeadProps) {
 
     return (
         <Fragment>
-            <div className="p-2 flex justify-center items-center border-l-0 border-r border-r-gray-300 border-b border-b-gray-300 bg-white relative h-8">
+            <div className="size-8 aspect-square flex justify-center items-center border-r border-b border-base-300 dark:border-base-200">
                 <Checkbox
                     name=""
                     value=""
+                    className="bg-base-100 dark:bg-base-50 !size-3 !rounded-sm"
                     checked={props.toggleManager.allSelected}
                     onChange={props.toggleManager.toggleAllSelections}
                 />
             </div>
-            <div className="border-b border-b-gray-300 border-r border-r-gray-300 bg-white h-8"></div>
-            <div className="border-b border-b-gray-300 border-r border-r-gray-300 bg-white h-8"></div>
+            <div className="border-b border-r border-base-300 dark:border-base-200 size-8 aspect-square"></div>
+            <div className="border-b border-r border-base-300 dark:border-base-200 size-8 aspect-square"></div>
             {columns.map((col, i) => (
                 <div 
                     key={i}
                     className={clsx(
-                        col[0],
-                        "p-2",
-                        "whitespace-nowrap flex items-center w-full", 
-                        "border-r border-r-gray-300 border-b border-b-gray-300 bg-white h-8", 
+                        col[0], // This is here for the stickiness
+                        "w-full p-2",
+                        "flex items-center",
+                        "bg-base-100 dark:bg-base-50 border-r border-b border-base-300 dark:border-base-200 h-8",
+                        "whitespace-nowrap",
                         i === columns.length - 1 && "!border-r-0",
                         col[0] === "FName" && "sticky left-0 z-10",
                         col[0] === "LName" && "sticky left-0 z-10"
                     )}
                 >
                     <div className="flex gap-2 justify-between items-center w-full">
-                        <span className="text-[0.8rem] font-medium tracking-wide">
+                        <span className="text-xs text-base-500 font-medium tracking-wide">
                             {col[1]}
                         </span>
                         {/* Sort Direction */}

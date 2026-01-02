@@ -20,7 +20,8 @@ export default function TableBody(props: TableBodyProps) {
                 const row = (cell as any).dataset.row;
                 const rowCells = document.querySelectorAll(`[data-row="${row}"]`);
                 for (const rowCell of rowCells) {
-                    rowCell.classList.add("!bg-gray-200");
+                    rowCell.classList.add("!bg-slate-200");
+                    rowCell.classList.add("dark:!bg-[#121214]");
                 }
             });
 
@@ -28,7 +29,8 @@ export default function TableBody(props: TableBodyProps) {
                 const row = (cell as any).dataset.row;
                 const rowCells = document.querySelectorAll(`[data-row="${row}"]`);
                 for (const rowCell of rowCells) {
-                    rowCell.classList.remove("!bg-gray-200");
+                    rowCell.classList.remove("!bg-slate-200");
+                    rowCell.classList.remove("dark:!bg-[#121214]");
                 }
             });
         }

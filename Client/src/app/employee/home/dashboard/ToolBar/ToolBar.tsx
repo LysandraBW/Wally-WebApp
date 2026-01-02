@@ -1,13 +1,15 @@
 import TrashIcon from "@/component/Icons/Icons/TrashIcon";
-import { AppointmentManager } from "../managers/useAppointmentManager";
 import { DeleteManager } from "../managers/useDeleteManager";
-import Navigation from "./Navigation";
 import { FilterManager } from "../managers/useFilterManager";
+import { AppointmentManager } from "../managers/useAppointmentManager";
 import clsx from "clsx";
-import Search from "./Search";
 import { Fragment } from "react";
 import ArrowPath from "@/component/Icons/Icons/ArrowPathIcon";
 import ArrowUpOnSquareIcon from "@/component/Icons/Icons/ArrowUpOnSquareIcon";
+import Search from "./Search";
+import Navigation from "./Navigation";
+import IconButton from "@/component/Button/IconButton";
+import ArrowPathIcon from "@/component/Icons/Icons/ArrowPathIcon";
 
 interface ToolBarProps {
     deleteManager: DeleteManager;
@@ -18,54 +20,39 @@ interface ToolBarProps {
 export default function ToolBar(props: ToolBarProps) {
     return (
         <Fragment>
-            <div className="flex gap-1">
+            <div className="flex gap-2">
                 {/* Delete Button */}
-                <button 
+                <IconButton
+                    className="w-[28px] dark:!bg-base-50"
                     onClick={props.deleteManager.safelyDeleteSelectedAppointments}
-                    className={clsx(
-                        "flex justify-center items-center",
-                        "rounded aspect-square !w-[28px] bg-white",
-                        "border border-gray-300 shadow-sm",
-                        "hover:!bg-gray-100 group !hover:stroke-gray-700"
-                    )}
                 >
                     <TrashIcon
-                        className="stroke-inherit group-hover:stroke-gray-700"
+                        className="size-4 stroke-inherit group-hover:stroke-gray-700"
                     />
-                </button>
+                </IconButton>
                 {/* Refresh Button */}
-                <button
-                    className={clsx(
-                        "flex justify-center items-center",
-                        "border border-gray-300 shadow-sm",
-                        "bg-white rounded !w-[28px] aspect-square stroke-gray-400",
-                        "hover:!bg-gray-100 hover:stroke-gray-700"
-                    )}
+                <IconButton
+                    className="w-[28px] dark:!bg-base-50"
                     onClick={props.appointmentManager.loadAppointments}
                 >
-                    <ArrowPath
-                        className="stroke-inherit"
+                    <ArrowPathIcon
+                        className="size-4 stroke-inherit group-hover:stroke-gray-700"
                     />
-                </button>
+                </IconButton>
                 {/* Recover Button */}
                 {props.filterManager.labelID === "Deleted" &&
-                    <button
-                        className={clsx(
-                            "flex justify-center items-center",
-                            "border border-gray-300 shadow-sm",
-                            "bg-white rounded !w-[28px] aspect-square stroke-gray-400",
-                            "hover:!bg-gray-100 hover:stroke-gray-700"
-                        )}
+                    <IconButton
+                        className="w-[28px] dark:!bg-base-50"
                         onClick={props.deleteManager.recoverSelectedAppointments}
                     >
                         <ArrowUpOnSquareIcon
-                            className="stroke-inherit"
+                            className="size-4 stroke-inherit group-hover:stroke-gray-700"
                         />
-                    </button>
+                    </IconButton>
                 }
             </div>
             {/* Search Bar */}
-            <div className="mr-1 w-full">
+            <div className="w-full">
                 <Search
                     filterManager={props.filterManager}
                 />
