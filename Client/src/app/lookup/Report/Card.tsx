@@ -20,7 +20,7 @@ export default function Card(props: CardProps) {
             )}
         >
             <div className="bg-base-0 rounded-[5px] h-full">
-                <div className="block px-2 py-2 border-b border-b-base-300 dark:border-b-base-200 flex items-center gap-1.5 shadow-xs dark:bg-base-50 rounded-t-[5px]">
+                <div className="block px-2 py-2 border-b border-b-base-300 dark:border-b-base-200 flex items-center gap-1.5 shadow-xs bg-base-100 dark:bg-base-50 rounded-t-[5px]">
                     <div 
                         className={clsx(
                             "size-5",

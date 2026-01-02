@@ -7,17 +7,29 @@ import { Employee as DB_Employee } from "waltronics-types";
 import clsx from "clsx";
 import Logo from "@/component/NavBar/Logo";
 import { Tooltip } from "react-tooltip";
-import { DM_Sans, IBM, Instrumental } from "@/public/fonts/Font";
+import { DM_Sans, IBM, Instrumental, PublicSans } from "@/public/fonts/Font";
 import ArrowLeftStartOnRectangle from "@/component/Icons/Icons/ArrowLeftStartOnRectangleIcon";
+import Wrapper from "./Wrapper";
+import SquaresPlusIcon from "@/component/Icons/Icons/SquaresPlusIcon";
+import Squares2By2Icon from "@/component/Icons/Icons/Squares2By2Icon";
+import AdjustmentsHorizontalIcon from "@/component/Icons/Icons/AdjustmentsHorizontalIcon";
+import Bars3BottomLeftIcon from "@/component/Icons/Icons/Bars3BottomLeftIcon";
+import CalendarIcon from "@/component/Icons/Icons/CalendarIcon";
+import Tab from "./Tab";
+import PencilSquareIcon from "@/component/Icons/Icons/PencilSquareIcon";
+import Profile from "./Profile";
+import SunIcon from "@/component/Icons/Icons/SunIcon";
+import MoonIcon from "@/component/Icons/Icons/MoonIcon";
+import ThemeButton from "./ThemeButton";
 
 export const EmployeeContext = createContext<{employee?: DB_Employee, setCurrentPage?: (page: string) => void}>({});
 
 export default function Page({children}: Readonly<{children: React.ReactNode}>) {
     const [employee, setEmployee] = useState<DB_Employee>();
-    const [currentPage, setCurrentPage] = useState("Dashboard");
+    const [currPage, setCurrPage] = useState("Dashboard");
     const [authenticated, setAuthenticated] = useState<boolean>();
-    const [openProfile, setOpenProfile] = useState(false);
  
+
     useEffect(() => {
         const load = async () => {
             const employee = await AuthenticatedEmployee();
@@ -28,172 +40,95 @@ export default function Page({children}: Readonly<{children: React.ReactNode}>) 
         load();
     }, []);
 
+
     useEffect(() => {
         if (authenticated !== undefined && !authenticated)
             navigate(PAGE_EMPLOYEE_LOGIN);
     }, [authenticated]);
 
+
     return (
-        <div className="flex flex-col grow">
+        <div 
+            className={clsx(
+                "h-full flex grow gap-x-4 p-4",
+                Instrumental.className
+            )}
+        >
             {authenticated &&
-                <EmployeeContext value={{employee, setCurrentPage}}>
-                    <div 
-                        className={clsx(
-                            "h-full",
-                            "grow",
-                            "grid grid-cols-[256px_calc(100%-256px)] grid-rows-[64px_calc(100%-64px)]"
-                        )}
+                <EmployeeContext 
+                    value={{employee, setCurrentPage: setCurrPage}}
+                >
+                    <Wrapper
+                        outerClassName="w-[192px]"
+                        innerClassName="p-2 flex flex-col gap-2"
                     >
-                        <div 
-                            className={clsx(
-                                "h-full w-full",
-                                "flex items-center justify-center",
-                                "row-start-1 row-span-1",
-                                "col-start-1 col-span-1",
-                                "bg-gray-200-",
-                                "border-r border-r-gray-300",
-                                "border-b border-b-gray-300",
-                                "shadow"
-                            )}
-                        >
+                        <div className="py-1 px-2 flex justify-center bg-base-0 dark:bg-base-50 border border-base-300 dark:border-base-200 rounded-[5px] shadow-sm">
                             <Logo
-                                svgClassName="fill-blue-600 stroke-blue-600"
-                                textClassName={clsx(DM_Sans.className, "tracking-tighter font-black")}
+                                metallic={true}
                             />
                         </div>
-                        <div 
-                            className={clsx(
-                                "h-full p-4",
-                                "flex flex-col gap-2",
-                                "col-start-1 col-span-1",
-                                "row-start-2 row-span-1",
-                                "bg-gray-100",
-                                "border-r border-r-gray-300",
-                            )}
-                        >
-                            {[
-                                [
-                                    "Dashboard", 
-                                    "/employee/home/dashboard"
-                                ], 
-                                [
-                                    "View Appointment", 
-                                    "/employee/home/view"
-                                ], 
-                                [
-                                    "Edit Appointment", 
-                                    "/employee/home/update"
-                                ], 
-                                [
-                                    "Calendar", 
-                                    "/employee/home/events"
-                                ]
-                            ].map((value, i) => (
-                                <a 
-                                    key={i} 
-                                    href={value[1] as string}
-                                    className={clsx(
-                                        "w-full block",
-                                        "pr-2 px-2 py-2",
-                                        "rounded-md",
-                                        "transition-all group ",
-                                        "cursor-pointer bg-gray-50 border border-gray-300 shadow-sm",
-                                        currentPage !== value[0] && `
-                                            hover:bg-gray-100 !py-1
-                                        `,
-                                        currentPage === value[0] && `
-                                            !bg-white border !border-gray-300 shadow-sm
-                                        `
-                                    )}
-                                >
-                                    <div
-                                        className={clsx(
-                                            "flex items-center gap-1",
-                                            "text-sm text-gray-400",
-                                            "stroke-gray-400", 
-                                            "group-hover:stroke-black group-hover:text-gray-700",
-                                            currentPage === value[0] && "!text-gray-700 !font-medium !stroke-gray-700",
-                                            currentPage !== value[0] && "!text-[0.75rem] tracking-wide"
-                                        )}
-                                    >
-                                        {/* {value[2]} */}
-                                        {value[0] as string}
-                                    </div>
-                                </a>
-                            ))}
+                        <div className="w-full h-full pt-2 flex flex-col gap-2 border-t border-base-300 dark:border-base-200">
+                            <Tab
+                                icon={
+                                    <Squares2By2Icon 
+                                        className="size-4 stroke-inherit"
+                                    />
+                                }
+                                name="Dashboard"
+                                href="/employee/home/dashboard"
+                                currentTab={currPage === "Dashboard"}
+                            />
+                            <Tab
+                                icon={
+                                    <Bars3BottomLeftIcon 
+                                        className="size-4 stroke-inherit"
+                                    />
+                                }
+                                name="View Appointment"
+                                href="/employee/home/view"
+                                currentTab={currPage === "View Appointment"}
+                            />
+                            <Tab
+                                icon={
+                                    <PencilSquareIcon 
+                                        className="size-4 stroke-inherit"
+                                    />
+                                }
+                                name="Edit Appointment"
+                                href="/employee/home/update"
+                                currentTab={currPage === "Edit Appointment"}
+                            />
+                            <Tab
+                                icon={
+                                    <CalendarIcon 
+                                        className="size-4 stroke-inherit"
+                                    />
+                                }
+                                name="Calendar"
+                                href="/employee/home/events"
+                                currentTab={currPage === "Calendar"}
+                            />
                         </div>
-                        <nav 
-                            className={clsx(
-                                "h-full w-full px-4",
-                                "flex items-center justify-end",
-                                "col-start-2 col-span-1",
-                                "row-start-1 row-span-1",
-                                "border-b border-b-gray-300",
-                                "bg-gray-100"
-                            )}
+                    </Wrapper>
+                    <div className="h-full flex flex-col grow gap-y-4">
+                        <Wrapper
+                            outerClassName="h-min"
+                            innerClassName="h-min p-2 flex items-center justify-between gap-2"
                         >
-                            <div 
-                                id="profile" 
-                                className={clsx(
-                                    "w-10 h-10 aspect-square",
-                                    "border border-gray-300 rounded-md",
-                                    "bg-white shadow-sm",
-                                    "overflow-hidden",
-                                    "cursor-pointer",
-                                    "hover:bg-gray-50"
-                                )}
-                                tabIndex={0}
-                                onClick={() => setOpenProfile(true)}
-                                onBlur={(event) => {
-                                    if (event.currentTarget.contains(event.relatedTarget))
-                                        return;
-                                    setOpenProfile(false);
-                                }}
-                            >
-                                <Tooltip 
-                                    anchorSelect="#profile" 
-                                    isOpen={openProfile}
-                                    opacity={1}
-                                    place="bottom-end"
-                                    border="1px solid #D1D5DB"
-                                    style={{
-                                        width: "300px",
-                                        backgroundColor: "white",
-                                        borderRadius: "6px",
-                                        padding: 0,
-                                        boxShadow: "0px 2px 2px 0px #00000010",
-                                        zIndex: 200,
-                                        pointerEvents: "auto"
-                                    }}
-                                >
-                                    <div className="w-full cursor-auto">
-                                        <div className="flex flex-col items-center p-4 ">
-                                            <div className="aspect-square w-10 h-10 mb-2 rounded-lg border border-gray-300 bg-white shadow-sm"></div>
-                                            <span className="tracking-wide font-medium text-black text-sm">{employee?.FName} {employee?.LName}</span>
-                                            <span className="tracking-wider font-medium text-gray-400 text-xs">{employee?.Email}</span>
-                                        </div>
-                                        <div className="p-2 border-t border-t-gray-300 flex flex-col items-end">
-                                            <button className="flex tracking-wide text-xs items-center gap-1 px-2 py-1 border border-gray-300 rounded-md shadow-sm w-min whitespace-nowrap hover:cursor-pointer hover:bg-gray-50 hover:stroke-black hover:text-black stroke-gray-400">
-                                                <ArrowLeftStartOnRectangle/>
-                                                
-                                                Log Out
-                                            </button>
-                                        </div>
-                                    </div>
-                                </Tooltip>
+                            <span className="block text-sm text-base-500">
+                                {currPage}
+                            </span>
+                            <div className="flex items-center gap-2">
+                                {employee &&
+                                    <Profile
+                                        employee={employee}
+                                    />
+                                }
                             </div>
-                        </nav>
-                        <section 
-                            className={clsx(
-                                "h-full",
-                                "flex flex-col grow",
-                                "col-start-2 col-span-1",
-                                "row-start-2 row-span-1",
-                                "overflow-x-hidden"
-                            )}
-                        >
-                            {children}
-                        </section>
+                        </Wrapper>
+                        <Wrapper>
+
+                        </Wrapper>
                     </div>
                 </EmployeeContext>
             }

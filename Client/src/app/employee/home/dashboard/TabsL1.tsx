@@ -2,13 +2,13 @@ import { Options } from "@/features/Form/DEF";
 import useFilterManager from "./managers/useFilterManager";
 import clsx from "clsx";
 
-interface LabelTabsProps {
+interface TabsL1Props {
     labels: Options;
     filterManager: ReturnType<typeof useFilterManager>;
     onClick: (labelID: string) => void;
 }
 
-export default function LabelTabs(props: LabelTabsProps) {
+export default function TabsL1(props: TabsL1Props) {
     return (
         <div className="flex flex-col gap-2 bg-gray-100 p-1 rounded-t-md border border-gray-300">
             {props.labels.map(([labelID, label], i) => (

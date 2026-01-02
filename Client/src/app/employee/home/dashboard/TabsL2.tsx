@@ -2,11 +2,11 @@ import clsx from "clsx";
 import { FilterManager } from "./managers/useFilterManager";
 import { Fragment } from "react";
 
-interface StatusTabsProps {
+interface TabsL2Props {
     filterManager: FilterManager;
 }
 
-export default function StatusTabs(props: StatusTabsProps) {
+export default function TabsL2(props: TabsL2Props) {
     return (
         <Fragment>
             {props.filterManager.statuses.map((status, i) => (

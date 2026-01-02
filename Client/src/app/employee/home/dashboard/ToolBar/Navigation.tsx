@@ -4,7 +4,7 @@ import ChevronLeft from "@/component/Icons/Icons/ChevronLeftIcon";
 import { FilterManager } from "../managers/useFilterManager";
 import { ReactNode, useEffect } from "react";
 import clsx from "clsx";
-import Dash from "@/component/IconV2/Dash";
+import MinusIcon from "@/component/Icons/Icons/MinusIcon";
 
 
 function NavigationButton(props: {onClick: () => void; children?: ReactNode}) {
@@ -61,8 +61,8 @@ export default function Navigation(props: NavigationProps) {
                     onBlur={props.filterManager.fixStringPageIndex}
                     onChange={(event) => onPageIndexChange(event.target.name, event.target.value)}
                 />
-                <Dash
-                    style="size-2 stroke-gray-400"
+                <MinusIcon
+                    className="size-2 stroke-gray-400"
                 />                
                 <span 
                     className={clsx(

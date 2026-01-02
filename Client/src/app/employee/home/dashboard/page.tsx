@@ -2,19 +2,19 @@
 import Alert from "@/features/Alert/Alert";
 import alertReducer, { startAlert, AlertActionType } from "@/features/Alert/alertReducer";
 import useInterval from "@/features/Alert/useInterval";
-import ToolBar from "@/app/employee/home/dashboard/ToolBar/ToolBar";
+import ToolBar from "@/app/employee/home/dashboard/Toolbar/ToolBar";
 import useAppointmentManager from "@/app/employee/home/dashboard/managers/useAppointmentManager";
 import useDeleteManager from "@/app/employee/home/dashboard/managers/useDeleteManager";
 import useFilterManager from "@/app/employee/home/dashboard/managers/useFilterManager";
 import useToggleManager from "@/app/employee/home/dashboard/managers/useToggleManager";
 import AppointmentPane from "@/app/employee/home/dashboard/AppointmentPane";
-import StatusTabs from "@/app/employee/home/dashboard/StatusTabs";
+import StatusTabs from "@/app/employee/home/dashboard/TabsL2";
 import Table from "@/app/employee/home/dashboard/Table/Table";
 import { Fragment, useContext, useEffect, useReducer, useState } from "react";
 import { BarLoader } from "react-spinners";
 import { AnimatePresence } from "motion/react";
 import { EmployeeContext } from "../layout";
-import LabelTabs from "./LabelTabs";
+import LabelTabs from "./TabsL1";
 
 export default function Page() {
     const [alert, alertDispatch] =  useReducer(alertReducer, startAlert);
@@ -53,8 +53,8 @@ export default function Page() {
 
 
     return (
-        <div className=" grow">
-            <Alert
+        <div className="grow">
+            {/* <Alert
                 alert={alert}
             />
             <div className="p-4 pb-0 grid grid-cols-[100px_calc(100%-100px-1rem)] gap-4 grow h-full">
@@ -102,7 +102,7 @@ export default function Page() {
                             appointmentManager={appointmentManager}
                         />
                 } 
-            </AnimatePresence>
+            </AnimatePresence> */}
         </div>
     )
 }

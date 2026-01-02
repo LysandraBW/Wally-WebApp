@@ -25,3 +25,8 @@ export interface ReadWriteArrayInputProps extends ReadInputProps {
     options: Options;
     onChange: (name: string, values: Values) => void;
 }
+
+export interface ReadWriteBooleanInputProps extends ReadInputProps {
+    value: boolean;
+    onChange: (name: string, value: boolean) => void;
+}
