@@ -7,11 +7,11 @@ import useAppointmentManager from "@/app/employee/home/dashboard/managers/useApp
 import useDeleteManager from "@/app/employee/home/dashboard/managers/useDeleteManager";
 import useFilterManager from "@/app/employee/home/dashboard/managers/useFilterManager";
 import useToggleManager from "@/app/employee/home/dashboard/managers/useToggleManager";
-import AppointmentPane from "@/app/employee/home/dashboard/AppointmentPane";
+import AppointmentPane from "@/app/employee/home/dashboard/AppointmentPane/AppointmentPane";
 import StatusTabs from "@/app/employee/home/dashboard/TabsL2";
 import Table from "@/app/employee/home/dashboard/Table/Table";
 import { Fragment, useContext, useEffect, useReducer, useState } from "react";
-import { BarLoader } from "react-spinners";
+import { BarLoader, FadeLoader, MoonLoader, SquareLoader } from "react-spinners";
 import { AnimatePresence } from "motion/react";
 import { EmployeeContext } from "../layout";
 import TabsL1 from "./TabL1";
@@ -76,8 +76,8 @@ export default function Page() {
                         appointmentManager={appointmentManager}
                     />
                 </div>
-                <div className="grid grid-cols-[repeat(1,minmax(0,1fr))]">
-                    <div className="h-min p-2 flex gap-2 border-b border-base-300 dark:border-base-200">
+                <div className="grid grid-cols-[repeat(1,minmax(0,1fr))] grid-rows-[min-content_min-content_auto] grow">
+                    <div className="h-fit p-2 flex gap-2 border-b border-base-300 dark:border-base-200 overflow-x-auto">
                         <TabL1
                             icon={
                                 <InboxStackIcon 
@@ -145,27 +145,28 @@ export default function Page() {
                             onClick={filterManager.setLabelID}
                         />
                     </div>
-                     <div className="h-min p-2 flex gap-4 border-b border-base-300 dark:border-base-200">
+                     <div className="h-fit p-2 flex gap-4 border-b border-base-300 dark:border-base-200 overflow-x-auto overflow-y-clip">
                         <StatusTabs
                             filterManager={filterManager}
                         />
                     </div>
-                    <div className="relative flex flex-col grow relative ">
+                    <div className="relative flex flex-col grow relative h-full ">
                         {loaded && 
-                            <div className="h-min flex flex-col relative z-0 after:absolute after:z-[1000000] after:left-[-1px] after:top-0 after:w-[1px] after:h-full after:bg-base-300 dark:after:bg-base-200">
+                            <div className="h-full flex flex-col grow relative z-0">
                                 <Table
                                     filterManager={filterManager}
                                     toggleManager={toggleManager}
                                     deleteManager={deleteManager}
                                     appointmentManager={appointmentManager}
                                 />
-                                <div className="grow relative after:absolute after:left-[0px] after:top-0 after:w-[1px] after:h-full after:bg-gradient-to-b after:from-base-300 dark:after:from-base-200 dark:to-transparent"/>
+                                <div className="grow relative"/>
                             </div>
                         }
                         {!loaded &&
-                            <div className="flex flex-col grow w-full min-h-[200px] bg-white justify-center items-center">
+                            <div className="flex flex-col grow w-full justify-center items-center">
                                 <BarLoader
-                                    color={"#000"}
+                                    color={"#3b82f6"}
+                                    speedMultiplier={0.5}
                                     loading={true}
                                 />
                             </div>

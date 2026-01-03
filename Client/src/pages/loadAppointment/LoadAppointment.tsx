@@ -2,11 +2,13 @@ import clsx from "clsx";
 import { UseForm } from "../../features/Form/useForm/useForm";
 import { Tooltip } from "react-tooltip";
 import ArrowRight from "@/component/Icons/Icons/ArrowRightIcon";
+import ArrowLongRightIcon from "@/component/Icons/Icons/ArrowLongRightIcon";
+import SearchIcon from "@/component/Icons/Icons/SearchIcon";
 
 interface LoadAppointmentProps {
     form: UseForm;
     head: string;
-    paragraph: string;
+    body: string;
     loadAppointment: () => void;
     appointmentNotFound: boolean;
     setAppointmentNotFound: (b: boolean) => void;
@@ -14,22 +16,22 @@ interface LoadAppointmentProps {
 
 export default function LoadAppointment(props: LoadAppointmentProps) {
     return (
-         <div className="flex flex-col gap-6 grow p-8 items-center justify-center border border-gray-300">
+         <div className="flex flex-col gap-4 grow items-center justify-center">
             <div>
-                <p className="whitespace-nowrap text-center text-xl text-gray-700 font-medium">
+                <p className="text-base text-center text-base-900 font-medium whitespace-nowrap">
                     {props.head}
                 </p>
-                <span className="text-center block tracking-wide text-gray-400 font-normal max-w-[350px]">
-                    {props.paragraph}
+                <span className="block text-sm text-center tracking-wide text-base-500 font-normal">
+                    {props.body}
                 </span>
             </div>
             <div>
                 <div 
                     id="loadInput"
                     className={clsx(
-                        "w-[350px] flex gap-1 p-1 pl-2 h-[36px]",
-                        "bg-white border border-gray-300 shadow-sm rounded-lg",
-                        "focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-100"
+                        "w-[350px] flex gap-1 h-[32px]",
+                        "surface-background surface-border shadow-sm rounded-md",
+                        "focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-200 dark:focus-within:!ring-blue-700/10 focus-within:border-blue-500 dark:focus-within:shadow-blue-500/25"
                     )}
                 >
                     <input
@@ -42,25 +44,25 @@ export default function LoadAppointment(props: LoadAppointmentProps) {
                             props.appointmentNotFound &&  props.setAppointmentNotFound(false);
                             props.form.updateInputData(event.target.name, event.target.value);
                         }}
-                        className="rounded-md w-full outline-none peer tracking-wider text-03"
+                        className="rounded-[5px] surface-background w-full pl-2 outline-none peer text-sm text-base-700 tracking-wider"
                     />
                     <div 
                         onClick={props.loadAppointment}
                         className={clsx(
                             "ml-2 h-full aspect-square",
                             "flex items-center justify-center",
-                            "rounded-md",
-                            "group bg-gray-100 stroke-gray-400",
-                            "transition-all cursor-pointer hover:bg-gray-300 peer-focus:bg-blue-100 hover:peer-focus:bg-blue-200 peer-focus:stroke-blue-400"
+                            "bg-base-50 border-l border-l-base-300 dark:border-base-200 rounded-r-[5px]",
+                            "group stroke-base-500",
+                            "cursor-pointer hover:bg-base-100 dark:hover:bg-base-50 peer-focus:bg-blue-500- "
                         )}
                     >
-                        <ArrowRight
-                            className="size-4 stroke-inherit cursor-pointer transition-all"
+                        <ArrowLongRightIcon
+                            className="size-4 stroke-[2px] stroke-inherit cursor-pointer rotate-[360deg]"
                         />
                     </div>
                 </div>
                 {!props.form.getInput("id").state[0] &&
-                    <span className="text-03 text-red-500 font-medium tracking-wide">
+                    <span className="text-sm text-red-500 tracking-wide">
                         {props.form.getInput("id").state[1]}
                     </span>
                 }

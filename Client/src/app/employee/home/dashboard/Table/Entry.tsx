@@ -74,7 +74,7 @@ export default function TableEntry(props: TableEntryProps) {
                 )}
             >
                 {stringL}
-                <b className="bg-blue-500 text-white">{stringM}</b>
+                <b className="bg-blue-500 font-medium text-white">{stringM}</b>
                 {stringR}
             </p>
         </div>

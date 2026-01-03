@@ -20,7 +20,7 @@ export default function TabsL2(props: TabsL2Props) {
                             after:absolute
                             after:w-full after:h-[1px]
                             after:bg-blue-500
-                            after:bottom-[-10px] after:left-0
+                            after:top-[calc(100%+8px)] after:left-0
                         `
                     )}
                     onClick={() => props.filterManager.setStatusID(status[0])}

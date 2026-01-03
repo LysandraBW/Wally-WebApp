@@ -27,7 +27,7 @@ export default function TabL1(props: TabL1Props) {
             <label
                 className={clsx(
                     "text-xs tracking-wide",
-                    props.filterManager.labelID !== props.labelID && "text-base-400",
+                    props.filterManager.labelID !== props.labelID && "text-base-400 dark:text-base-300",
                     props.filterManager.labelID === props.labelID && "text-base-500"
                 )}
             >

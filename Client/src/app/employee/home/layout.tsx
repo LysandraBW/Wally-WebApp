@@ -59,6 +59,7 @@ export default function Page({children}: Readonly<{children: React.ReactNode}>) 
                     value={{employee, setCurrentPage: setCurrPage}}
                 >
                     <Wrapper
+                        id="VNavBar"
                         outerClassName="w-[192px_!important] min-w-[192px_!important]"
                         innerClassName="p-2 flex flex-col gap-2"
                     >
@@ -112,10 +113,11 @@ export default function Page({children}: Readonly<{children: React.ReactNode}>) 
                     </Wrapper>
                     <div className="h-full flex flex-col grow gap-y-4">
                         <Wrapper
+                            id="HNavBar"
                             outerClassName="h-min"
                             innerClassName="h-min p-2 flex items-center justify-between gap-2 overflow-y-auto"
                         >
-                            <span className="block text-sm text-base-500 tracking-wide">
+                            <span className="block text-xs text-base-400 tracking font-medium">
                                 {currPage}
                             </span>
                             <div className="flex items-center gap-2">
@@ -127,9 +129,7 @@ export default function Page({children}: Readonly<{children: React.ReactNode}>) 
                             </div>
                         </Wrapper>
                         <Wrapper
-                            outerClassName={clsx(
-                                currPage === "Dashboard" && "!bg-base-300 dark:!bg-base-200"
-                            )}
+                            outerClassName="!bg-base-300 dark:!bg-base-200"
                         >
                             {children}
                         </Wrapper>

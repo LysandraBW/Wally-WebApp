@@ -1,6 +1,10 @@
 import SecondaryButton from "@/component/Button/SecondaryButton";
 import Toggle from "@/component/Form/Toggle";
 import ArrowLeftStartOnRectangleIcon from "@/component/Icons/Icons/ArrowLeftStartOnRectangleIcon";
+import UserIcon from "@/component/Icons/Icons/UserIcon";
+import { PAGE_EMPLOYEE_LOGIN } from "@/utils/constants";
+import { deleteCookie } from "@/utils/cookies/deleteCookie";
+import { navigate } from "@/utils/navigate";
 import clsx from "clsx";
 import { useEffect, useState } from "react";
 import { Tooltip as ToolTip } from "react-tooltip";
@@ -8,7 +12,7 @@ import { Employee } from "waltronics-types";
 
 export default function Profile(props: {employee: Employee}) {
     const [open, setOpen] = useState(false);
-    const [darkMode, setDarkMode] = useState(true);
+    const [darkMode, setDarkMode] = useState(false);
 
     useEffect(() => {
         const root = document.querySelector("html");
@@ -31,12 +35,18 @@ export default function Profile(props: {employee: Employee}) {
         setOpen(false);
     }
 
+    const logOut = () => {
+        deleteCookie("sessionID");
+        navigate(PAGE_EMPLOYEE_LOGIN);
+    }
+
     return (
         <div 
             id="profile" 
             className={clsx(
-                "size-10 aspect-square",
-                "bg-blue-500 rounded-full shadow-sm",
+                "size-8 aspect-square",
+                "flex justify-center items-center",
+                "bg-blue-500 rounded-full",
                 "overflow-hidden",
                 "cursor-pointer",
             )}
@@ -66,7 +76,7 @@ export default function Profile(props: {employee: Employee}) {
                         <div 
                             className={clsx(
                                 "aspect-square w-10 h-10 mb-2",
-                                "bg-blue-500 rounded-full shadow-sm"
+                                "bg-blue-500 rounded-full"
                             )}
                         />
                         <span className="text-base-900 text-sm font-medium tracking-wide">
@@ -105,7 +115,7 @@ export default function Profile(props: {employee: Employee}) {
                         )}
                     >
                         <SecondaryButton
-                            onClick={() => null}
+                            onClick={logOut}
                             className="w-min h-min flex items-center gap-2"
                         >
                             <ArrowLeftStartOnRectangleIcon

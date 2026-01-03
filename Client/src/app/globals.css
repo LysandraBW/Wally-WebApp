@@ -146,6 +146,13 @@ html {
     }
 
 
+    .dark .surface-background {
+        @apply
+            bg-base-50
+        ;
+    }
+
+
     .dark .surface-border {
         @apply
             border-base-200

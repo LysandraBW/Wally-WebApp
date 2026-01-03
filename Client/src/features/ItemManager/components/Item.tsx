@@ -11,15 +11,14 @@ interface ItemProps {
 export default function Item(props: ItemProps) {
     return (
         <div className={clsx(
-            "bg-white shadow-sm",
-            "rounded-md border border-gray-300"
+            "h-full flex flex-col justify-between"
         )}>
             <div className="p-2">
                 <div className="flex items-center">
                     <span 
                         className={clsx(
-                            "font-medium",
-                            "text-gray-400 text-00",
+                            "block",
+                            "text-gray-500 text-xs",
                             "tracking-wide"
                         )}
                     >
@@ -28,9 +27,9 @@ export default function Item(props: ItemProps) {
                 </div>
                 <span 
                     className={clsx(
-                        "font-medium",
-                        "text-gray-950 text-03",
-                        "tracking"
+                        "block",
+                        "font-medium tracking-wide",
+                        "text-base-900 text-xs",
                     )}
                 >
                     {props.head}
@@ -40,8 +39,8 @@ export default function Item(props: ItemProps) {
                 <div 
                     key={i}
                     className={clsx(
-                        "flex items-center p-2 gap-1",
-                        "rounded-b-lg bg-gray-50 border-t border-t-gray-200",
+                        "flex items-center p-2 gap-2",
+                        "bg-base-50 dark:bg-base-50 border-t border-t-base-200",
                         "scroll-hide"
                     )}
                 >
@@ -49,9 +48,9 @@ export default function Item(props: ItemProps) {
                         <span
                             key={i}
                             className={clsx(
-                                "text-00 font-medium tracking-wide",
-                                "tag shadow-xs",
-                                "border-solid border-gray-200 text-gray-400",
+                                "block px-2 py-0.5 text-xs tracking-wide",
+                                "tag shadow-sm bg-base-0 dark:bg-base-50",
+                                "border border-base-300 dark:border-base-200 rounded-full text-base-700",
                                 "flex gap-1"
                             )}
                         >

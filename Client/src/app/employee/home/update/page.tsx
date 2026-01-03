@@ -70,7 +70,7 @@ export default function Page() {
     
     return (
         <div className="flex flex-col grow">
-            <div className="p-4 flex flex-col grow">
+            {/* <div className="p-4 flex flex-col grow">
                 <div className="flex flex-col w-full h-full grow">
                     {(appointment && appointmentID) &&
                         <UpdateManager
@@ -94,7 +94,7 @@ export default function Page() {
                         />
                     }
                 </div>
-            </div>
+            </div> */}
         </div>
     )
 }

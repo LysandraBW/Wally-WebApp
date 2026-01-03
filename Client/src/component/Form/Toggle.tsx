@@ -11,10 +11,10 @@ export default function Toggle(props: ReadWriteBooleanInputProps) {
         <button 
             onClick={toggleValue}
             className={clsx(
-                "h-[16px] w-[32px] p-[1px] flex",
+                "h-[20px] w-[32px] p-[2px] flex",
                 "border rounded-full shadow-xs",
                 !props.value && "bg-base-100 border-base-200 hover:bg-base-200/50 justify-start",
-                props.value && "bg-blue-500 border-blue-500 hover:bg-blue-600 justify-end"
+                props.value && "bg-blue-500 border-blue-500 justify-end"
             )}
         >
             <div 

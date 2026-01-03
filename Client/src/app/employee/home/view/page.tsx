@@ -70,35 +70,30 @@ export default function Page() {
     
 
     return (
-        <div className="flex flex-col overflow-x-clip grow">
-            <div className="p-4 flex flex-col grow">
-                <h6 className={clsx("font-medium pb-4 leading-5")}>View Appointment</h6>
-                <div className="flex flex-col bg-white w-full h-full grow">
-                    <AnimatePresence>
-                        {(appointment && appointmentID) &&
-                            <View
-                                appointment={appointment}
-                                appointmentID={appointmentID}
-                                close={() => {
-                                    setAppointment(undefined);
-                                    setAppointmentID("");
-                                    router.replace("/employee/home/view");
-                                }}
-                            />
-                        }
-                    </AnimatePresence>
-                    {!appointmentID &&
-                        <LoadAppointment
-                            head="Load Appointment"
-                            paragraph="To update an appointment, enter its ID below."
-                            form={form}
-                            loadAppointment={loadAppointment}
-                            appointmentNotFound={appointmentNotFound}
-                            setAppointmentNotFound={setAppointmentNotFound}
-                        />
-                    }
-                </div>
-            </div>
+        <div className="flex flex-col grow w-full h-full">
+            <AnimatePresence>
+                {(appointment && appointmentID) &&
+                    <View
+                        appointment={appointment}
+                        appointmentID={appointmentID}
+                        close={() => {
+                            setAppointment(undefined);
+                            setAppointmentID("");
+                            router.replace("/employee/home/view");
+                        }}
+                    />
+                }
+            </AnimatePresence>
+            {!appointmentID &&
+                <LoadAppointment
+                    head="Load Appointment"
+                    body="To view an appointment, enter its ID below."
+                    form={form}
+                    loadAppointment={loadAppointment}
+                    appointmentNotFound={appointmentNotFound}
+                    setAppointmentNotFound={setAppointmentNotFound}
+                />
+            }
         </div>
     )
 }

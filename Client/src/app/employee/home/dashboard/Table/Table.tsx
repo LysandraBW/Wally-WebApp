@@ -14,7 +14,7 @@ interface TableProps {
 
 export default function Table(props: TableProps) {
     return (
-        <div className="">
+        <div className="h-full grow flex flex-col">
             {props.appointmentManager.appointments && props.appointmentManager.appointments.length > 0 &&
                 <div className="grid grid-cols-[min-content_min-content_min-content_repeat(13,1fr)] overflow-x-scroll scroll-hide">
                     <TableHead
@@ -31,7 +31,7 @@ export default function Table(props: TableProps) {
             }
             {props.appointmentManager.appointments && props.appointmentManager.appointments.length === 0 && 
                 <div className="grow h-full flex flex-col gap-2 justify-center items-center p-4 py-8">
-                    <span className="text-gray-400 tracking-wide font-medium text-03">
+                    <span className="text-gray-500 tracking-wide font-medium text-xs">
                         No Appointments Found
                     </span>
                 </div>

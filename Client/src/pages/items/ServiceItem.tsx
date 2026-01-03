@@ -1,8 +1,8 @@
 import { Service as DB_AppointmentService } from "waltronics-types";
 import { ReactNode, useEffect, useState } from "react";
-import { Service } from "../edit/service/service/_DEF";
 import Item from "@/features/ItemManager/components/Item";
 import { toInteger } from "@/utils/convert";
+import { Service } from "@/app/employee/home/update/service/_DEF";
 
 interface ServiceItemProps {
     service: DB_AppointmentService | Service;
