@@ -22,15 +22,15 @@ export default function OpenedTabs(props: OpenedTabsProps) {
                     "min-w-0 h-full py-[var(--containerPadding)]",
                     "flex gap-x-0 items-center",
                     "overflow-x-auto overflow-y-visible scroll-hide",
-                    "bg-white ",
-                    "relative after:fixed after:top-0 after:left-0 after:w-[calc(100%+2*var(--containerPadding))] after:h-[calc(100%-var(--containerPadding))] after:bg-base-100"
+                    "bg-base-0 dark:bg-base-50",
+                    "relative after:fixed after:top-0 after:left-0 after:w-[calc(100%+2*var(--containerPadding))] after:h-[calc(100%-var(--containerPadding))] after:bg-base-100 dark:after:bg-base-200"
                 )}
             >
                 <div
                     className={clsx(
                         "min-w-[8px] w-[8px] h-full",
                         "relative z-10",
-                        "before:absolute before:z-10 before:top-0 before:left-0 before:w-[calc(8px)] before:h-[calc(100%+var(--containerPadding))] before:bg-base-100",
+                        "before:absolute before:z-10 before:top-0 before:left-0 before:w-[calc(8px)] before:h-[calc(100%+var(--containerPadding))] before:bg-base-100 dark:before:bg-base-200",
                         (props.tabsManager.tabs.filter((tab: any) => tab.form)[0].form.itemID === props.tabsManager.currentTab.form.itemID && props.tabsManager.tabs.filter((tab: any) => tab.form)[0].form.key == props.tabsManager.currentTab.form.key) && "before:rounded-br-md"
                     )}
                 />
@@ -54,9 +54,9 @@ export default function OpenedTabs(props: OpenedTabsProps) {
                                 className={clsx(
                                     "h-full min-w-[48px] w-[200px]",
                                     "peer cursor-default",
-                                    (!selected && !nextTabSelected && !prevTabSelected) && "relative before:absolute before:z-10 before:top-0 before:left-[-1*var(--dividerWidth)] before:w-[calc(100%+var(--dividerWidth)+var(--dividerWidth))] before:h-[calc(100%+var(--containerPadding))] before:bg-base-100",
-                                    nextTabSelected && "relative before:absolute before:z-10 before:top-0 before:left-[calc(-1*var(--dividerWidth))] before:w-[calc(100%+2*var(--dividerWidth))] before:h-[calc(100%+var(--containerPadding))] before:rounded-br-[4px] before:bg-base-100",
-                                    prevTabSelected && "relative before:absolute before:z-10 before:top-0 before:left-[calc(-1*var(--dividerWidth))] before:w-[calc(100%+2*var(--dividerWidth))] before:h-[calc(100%+var(--containerPadding))] before:rounded-bl-[4px] before:bg-base-100"
+                                    (!selected && !nextTabSelected && !prevTabSelected) && "relative before:absolute before:z-10 before:top-0 before:left-[-1*var(--dividerWidth)] before:w-[calc(100%+var(--dividerWidth)+var(--dividerWidth))] before:h-[calc(100%+var(--containerPadding))] before:bg-base-100 dark:before:bg-base-200",
+                                    nextTabSelected && "relative before:absolute before:z-10 before:top-0 before:left-[calc(-1*var(--dividerWidth))] before:w-[calc(100%+2*var(--dividerWidth))] before:h-[calc(100%+var(--containerPadding))] before:rounded-br-[4px] before:bg-base-100 dark:before:bg-base-200",
+                                    prevTabSelected && "relative before:absolute before:z-10 before:top-0 before:left-[calc(-1*var(--dividerWidth))] before:w-[calc(100%+2*var(--dividerWidth))] before:h-[calc(100%+var(--containerPadding))] before:rounded-bl-[4px] before:bg-base-100 dark:before:bg-base-200"
                                 )}
                             >
                                 <div 
@@ -65,8 +65,8 @@ export default function OpenedTabs(props: OpenedTabsProps) {
                                         "grid grid-cols-[1fr_auto] items-center",
                                         "relative z-10 overflow-x-clip",
                                         "stroke-base-500",
-                                        selected && "rounded-t-md bg-white",
-                                        !selected && "rounded-[4px] bg-base-100 group hover:bg-base-200 hover:shadow-sm"
+                                        selected && "rounded-t-md bg-base-0 dark:bg-base-50",
+                                        !selected && "rounded-[4px] bg-base-100 dark:bg-base-200 group hover:bg-base-200 dark:hover:bg-base-50 hover:shadow-sm"
                                     )}
                                 >
                                     <span 
@@ -77,8 +77,8 @@ export default function OpenedTabs(props: OpenedTabsProps) {
                                             "[--shadingWidth:min(calc(100%-1px),max(20px,50%))]",
                                             "relative after:absolute after:top-0 after:left-[calc(100%-var(--shadingWidth))] after:w-[var(--shadingWidth)] after:h-full",
                                             "after:bg-gradient-to-l after:to-transparent after:from-40%",
-                                            !selected && "after:from-base-100 group-hover:after:from-base-200 text-base-500",
-                                            selected && "after:from-white text-base-700"
+                                            !selected && "after:from-base-100 dark:after:from-base-200 group-hover:after:from-base-200 dark:group-hover:after:from-base-50 text-base-500",
+                                            selected && "after:from-base-0 dark:after:from-base-50 text-base-700"
 
                                         )}
                                     >
@@ -105,7 +105,7 @@ export default function OpenedTabs(props: OpenedTabsProps) {
                             >
                                 <div
                                     className={clsx(
-                                        "min-w-[min(1.5px,var(--dividerWidth))] w-[min(1.5px,var(--dividerWidth))] h-[50%] bg-base-400 rounded-full relative z-20"
+                                        "min-w-[min(1.5px,var(--dividerWidth))] w-[min(1.5px,var(--dividerWidth))] h-[50%] bg-base-400 dark:bg-base-300 rounded-full relative z-20"
                                     )}
                                 />
                             </div>

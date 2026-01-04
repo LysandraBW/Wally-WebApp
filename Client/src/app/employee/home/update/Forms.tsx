@@ -52,7 +52,7 @@ export default function Forms(props: any) {
                 "w-full h-full overflow-x-clip overflow-y-auto",
                 "grid grid-rows-[auto_1fr]",
                 "bg-white shadow-md",
-                hasOverflow && "border-b border-base-300"
+                hasOverflow && "border-b border-base-300 dark:border-base-200"
             )}>
                 <OpenedTabs
                     tabsManager={props.tabsManager}
