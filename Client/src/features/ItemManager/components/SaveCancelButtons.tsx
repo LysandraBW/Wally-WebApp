@@ -12,7 +12,7 @@ export default function SaveCancelButtons(props: SaveCancelButtonsProps) {
             <div className="min-w-[6rem]">
                 <SecondaryButton
                     onClick={props.onCancel}
-                    className="text-sm w-full h-full"
+                    className="text-xs w-full h-full"
                 >
                     Cancel
                 </SecondaryButton>
@@ -20,7 +20,7 @@ export default function SaveCancelButtons(props: SaveCancelButtonsProps) {
             <div className="min-w-[6rem]">
                 <PrimaryButton
                     onClick={props.onMutate}
-                    className="text-sm w-full h-full"
+                    className="text-xs w-full h-full"
                 >
                     Save
                 </PrimaryButton>
