@@ -116,7 +116,7 @@ export default function OpenedTabs(props: OpenedTabsProps) {
                     className={clsx(
                         "min-w-[48px] grow  h-full",
                         "bg-base-100",
-                        "relative z-10 before:absolute before:z-10 before:top-0 before:left-[calc(-1*var(--dividerWidth))] before:w-[calc(100%+3*var(--dividerWidth))] before:h-[calc(100%+var(--containerPadding))] before:bg-base-100",
+                        "relative z-10 before:absolute before:z-10 before:top-0 before:left-[calc(-1*var(--dividerWidth))] before:w-[calc(100%+3*var(--dividerWidth))] before:h-[calc(100%+var(--containerPadding))] before:bg-base-100 dark:before:bg-base-200",
                         (props.tabsManager.tabs.filter((tab: any) => tab.form).at(-1).form.itemID === props.tabsManager.currentTab.form.itemID && props.tabsManager.tabs.filter((tab: any) => tab.form).at(-1).form.key == props.tabsManager.currentTab.form.key) && "before:rounded-bl-md"
                     )}
                 />
@@ -127,7 +127,7 @@ export default function OpenedTabs(props: OpenedTabsProps) {
                     "w-min aspect-square",
                     "relative z-50",
                     "flex justify-center items-center",
-                    "stroke-base-500 bg-base-100 cursor-default",
+                    "stroke-base-500 bg-base-100 dark:bg-base-200 cursor-default",
                     "hover:bg-red-500 hover:border-red-500 hover:stroke-white"
                 )}
             >
