@@ -9,6 +9,7 @@ export interface FieldProps {
     label?: string;
     state?: InputState;
     wrapLabel?: boolean;
+    smaller?: boolean;
 }
 
 export function Field(props: FieldProps) {
@@ -17,7 +18,8 @@ export function Field(props: FieldProps) {
     return (
         <Wrapper 
             className={clsx(
-                "flex flex-col gap-[2px]", 
+                "flex flex-col gap-[2px]",
+                "cursor-default", 
                 props.state && props.state[0] === false && "error"
             )}
         >
@@ -28,7 +30,8 @@ export function Field(props: FieldProps) {
                         "block",
                         "text-base-700 font-normal text-sm",
                         "whitespace-nowrap tracking-wide",
-                        props.state && props.state[0] === false && "text-red-500"
+                        props.state && props.state[0] === false && "text-red-500",
+                        props.smaller && "text-xs"
                     )}
                 >
                     {props.label}

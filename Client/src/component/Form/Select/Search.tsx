@@ -5,7 +5,7 @@ import Wrapper from "./Wrapper";
 import Element from "./Element";
 import { Field } from "../Field";
 import searchLabels from "@/features/Form/helpers/searchLabels";
-import SearchBar from "./SearchInput";
+import SearchBar from "./SearchBar";
 import { SelectProps } from "./SelectProps";
 import { OptionMap } from "@/features/Form/DEF";
 import getValuesToLabels from "@/features/Form/helpers/getValuesToLabels";

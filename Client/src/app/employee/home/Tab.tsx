@@ -16,7 +16,7 @@ export default function Tab(props: TabProps) {
             className={clsx(
                 "p-[0.5px] rounded-[5px] cursor-pointer",
                 !props.currentTab && `
-                    hover:bg-gray-200 dark:hover:bg-black/25
+                    hover:bg-base-200 dark:hover:bg-base-0
                 `,
                 props.currentTab && `
                     bg-gradient-to-b from-blue-200 to-blue-600/90 shadow

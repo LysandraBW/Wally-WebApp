@@ -2,7 +2,7 @@ import { Appointment as DB_Appointment } from "waltronics-types";
 import { updatedValue } from "@/features/ItemManager/helpers/updatedValue";
 import useForm, { UseForm } from "@/features/Form/useForm/useForm";
 import { VEHICLE } from "@/app/employee/home/update/_DEF";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Options } from "@/features/Form/DEF";
 import { makeVehicle, Vehicle, vehicleTest, VehicleUpdates } from "@/app/employee/home/update/vehicle/_DEF";
 import VehicleMakePairs from "@/services/DB/Information/SelectVehicleMakePairs";
@@ -12,9 +12,10 @@ import getValues from "@/features/Form/helpers/getValues";
 import makeForm from "@/features/Form/useForm/makeForm";
 import { fetchVehicle } from "@/services/NHTSA/fetchVehicle";
 import { subsetOf } from "@/lib/Zod/InputTest";
-import TextFieldGrid from "@/component/Form/Text/TextFieldGrid";
-import SearchGrid from "@/component/Form/Text/SearchGrid";
+import EntrySearchField from "@/pages/ReadWriteAppointment/Entry/EntrySearchField";
 import SaveResetButtons from "@/features/ItemManager/components/SaveResetButtons";
+import EntryTextField from "../../../../../pages/ReadWriteAppointment/Entry/EntryTextField";
+import resizeMainContent from "@/pages/ReadWriteAppointment/resizeMainContent";
 
 
 interface VehicleManagerProps {
@@ -23,6 +24,7 @@ interface VehicleManagerProps {
     onSaveUpdates: (updates: VehicleUpdates) => void;
     setChangesMade?: (keyForUpdateManager: string, changesMade: boolean) => void;
 }
+
 
 export default function VehicleManager(props: VehicleManagerProps) {
     const form = useForm(VEHICLE);
@@ -41,6 +43,12 @@ export default function VehicleManager(props: VehicleManagerProps) {
     useEffect(() => {
         props.setChangesMade && props.setChangesMade(VEHICLE, changesMade);
     }, [changesMade]);
+
+    
+    useEffect(() => {
+        resizeMainContent();
+        window.addEventListener("resize", resizeMainContent);
+    }, []);
 
 
     const processUpdates = (oldVehicle: Vehicle, newVehicle: Vehicle) => {
@@ -146,69 +154,68 @@ export default function VehicleManager(props: VehicleManagerProps) {
 
 
     return (
-        <div className="grow h-full relative flex flex-col shadow-sm rounded-b-md border border-gray-300">
-            <div className="bg-white relative h-full grow">
-                <table className="grow w-full border-collapse">
-                    <tbody>
-                        <TextFieldGrid
-                            name="VIN"
-                            type="text"
-                            label="VIN"
-                            value={form.getInput("VIN").data || ""}
-                            state={form.getInput("VIN").state}
-                            onChange={updateValue}
-                            onBlur={undefined}
-                        />
-                        <SearchGrid
-                            name="ModelYear"
-                            label="Model Year"
-                            toggleLabel="Select Model Year"
-                            values={form.getInput("ModelYear").data || []}
-                            state={form.getInput("ModelYear").state}
-                            options={modelYears}
-                            onChange={updateValue}
-                            disabled={false}
-                        />
-                        <SearchGrid
-                            name="Make"
-                            label="Make"
-                            toggleLabel="Select Make"
-                            values={form.getInput("Make").data || []}
-                            state={form.getInput("Make").state}
-                            options={makes}
-                            onChange={updateValue}
-                            disabled={false}
-                        />
-                        <SearchGrid
-                            name="Model"
-                            label="Model"
-                            toggleLabel="Select Model"
-                            values={form.getInput("Model").data || []}
-                            state={form.getInput("Model").state}
-                            options={models}
-                            onChange={updateValue}
-                            disabled={false}
-                        />
-                        <TextFieldGrid
-                            name="Mileage"
-                            type="text"
-                            label="Mileage"
-                            value={form.getInput("Mileage").data || ""}
-                            state={form.getInput("Mileage").state}
-                            onChange={updateValue}
-                            onBlur={undefined}
-                        />
-                        <TextFieldGrid
-                            name="LicensePlate"
-                            type="text"
-                            label="License Plate"
-                            value={form.getInput("LicensePlate").data || ""}
-                            state={form.getInput("LicensePlate").state}
-                            onChange={updateValue}
-                            onBlur={undefined}
-                        />
-                    </tbody>
-                </table>
+        <div 
+            id="MainContent"
+            className="w-full grow grid grid-rows-[auto_48px] overflow-y-clip"
+        >
+            <div className="w-full h-min grid grid-cols-[124px_auto] bg-base-0 dark:bg-base-50 overflow-y-auto">
+                <EntryTextField
+                    name="VIN"
+                    type="text"
+                    label="VIN"
+                    value={form.getInput("VIN").data || ""}
+                    state={form.getInput("VIN").state}
+                    onChange={updateValue}
+                    onBlur={undefined}
+                />
+                <EntrySearchField
+                    name="ModelYear"
+                    label="Model Year"
+                    toggleLabel="Select Model Year"
+                    values={form.getInput("ModelYear").data || []}
+                    state={form.getInput("ModelYear").state}
+                    options={modelYears}
+                    onChange={updateValue}
+                    disabled={false}
+                />
+                <EntrySearchField
+                    name="Make"
+                    label="Make"
+                    toggleLabel="Select Make"
+                    values={form.getInput("Make").data || []}
+                    state={form.getInput("Make").state}
+                    options={makes}
+                    onChange={updateValue}
+                    disabled={false}
+                />
+                <EntrySearchField
+                    name="Model"
+                    label="Model"
+                    toggleLabel="Select Model"
+                    values={form.getInput("Model").data || []}
+                    state={form.getInput("Model").state}
+                    options={models}
+                    onChange={updateValue}
+                    disabled={false}
+                />
+                <EntryTextField
+                    name="Mileage"
+                    type="text"
+                    label="Mileage"
+                    value={form.getInput("Mileage").data || ""}
+                    state={form.getInput("Mileage").state}
+                    onChange={updateValue}
+                    onBlur={undefined}
+                />
+                <EntryTextField
+                    name="LicensePlate"
+                    type="text"
+                    label="License Plate"
+                    value={form.getInput("LicensePlate").data || ""}
+                    state={form.getInput("LicensePlate").state}
+                    onChange={updateValue}
+                    onBlur={undefined}
+                />
             </div>
             <SaveResetButtons
                 onSave={saveUpdates}

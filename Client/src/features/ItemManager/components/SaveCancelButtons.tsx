@@ -1,4 +1,5 @@
-import Button from "@/component/Form/Button/Button";
+import PrimaryButton from "@/component/Button/PrimaryButton";
+import SecondaryButton from "@/component/Button/SecondaryButton";
 
 interface SaveCancelButtonsProps {
     onCancel: () => void;
@@ -7,22 +8,22 @@ interface SaveCancelButtonsProps {
 
 export default function SaveCancelButtons(props: SaveCancelButtonsProps) {
     return (
-        <div className="flex justify-end gap-4">
+        <div className="h-min flex justify-end gap-2">
             <div className="min-w-[6rem]">
-                <button
+                <SecondaryButton
                     onClick={props.onCancel}
-                    className="w-full px-4 py-1.5 rounded-md bg-white border border-gray-300  shadow-sm text-03 tracking-wide font-medium text-gray-400"
+                    className="text-sm w-full h-full"
                 >
                     Cancel
-                </button>
+                </SecondaryButton>
             </div>
             <div className="min-w-[6rem]">
-                <button
+                <PrimaryButton
                     onClick={props.onMutate}
-                    className="w-full px-4 py-1.5 rounded-md bg-white border border-gray-300 shadow-sm text-03 tracking-wide font-medium text-black"
+                    className="text-sm w-full h-full"
                 >
                     Save
-                </button>
+                </PrimaryButton>
             </div>
         </div>
     )

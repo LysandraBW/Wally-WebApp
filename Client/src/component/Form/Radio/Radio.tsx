@@ -6,6 +6,7 @@ import RadioButton from "./RadioButton";
 
 interface RadioProps extends Omit<ReadWriteArrayInputProps, "options"> {
     options: OptionsWithNode;
+    smaller?: boolean;
 }
 
 export default function Radio(props: RadioProps) {
@@ -13,13 +14,14 @@ export default function Radio(props: RadioProps) {
         <Field
             label={props.label}
             state={props.state}
+            smaller={props.smaller}
             input={(
-                <div className="flex gap-4">
+                <div className="flex gap-2 h-full">
                     {props.options.map((option, i) => (
                         <button
                             key={i}
                             className={clsx(
-                                "flex items-center gap-2 px-2 py-1",
+                                "w-full flex items-center gap-2 px-2 py-1",
                                 "field-hover surface-border field-focus"
                             )}
                             onClick={() => props.onChange(props.name, [option[0]])}

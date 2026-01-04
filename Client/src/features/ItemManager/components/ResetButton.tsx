@@ -1,7 +1,5 @@
-import ArrowPath from "@/component/Icons/Icons/ArrowPathIcon";
-import ArrowClockwiseIcon from "@/component/Icons/Icons/ArrowPathIcon";
-import TrashIcon from "@/component/Icon/Trash";
-import clsx from "clsx";
+import IconButton from "@/component/Button/IconButton";
+import ArrowPathIcon from "@/component/Icons/Icons/ArrowPathIcon";
 
 interface ResetButtonProps {
     onReset: () => void;
@@ -9,14 +7,12 @@ interface ResetButtonProps {
 
 export default function ResetButton(props: ResetButtonProps) {
     return (
-        <button
+        <IconButton
             onClick={props.onReset}
-            className={clsx(
-                "rounded p-1 bg-white w-min hover:bg-gray-50 hover:shadow-xs transition-all",
-                "border border-gray-300 shadow-sm stroke-gray-400 hover:stroke-black"
-            )}
         >
-            <ArrowPath/>
-        </button>
+            <ArrowPathIcon
+                className="size-3.5 stroke-inherit"
+            />
+        </IconButton>
     )
 }

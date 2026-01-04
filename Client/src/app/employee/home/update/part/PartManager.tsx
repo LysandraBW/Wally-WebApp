@@ -20,6 +20,7 @@ export default function PartManager<DB_AppointmentPart, Part, Parts>(props: Item
                     type="text"
                     name="PartName"
                     label="Part Name"
+                    smaller={true}
                     value={itemManager.itemForm.getInput("PartName").data}
                     state={itemManager.itemForm.getInput("PartName").state}
                     onChange={itemManager.updateInputValue}
@@ -29,6 +30,7 @@ export default function PartManager<DB_AppointmentPart, Part, Parts>(props: Item
                     type="text"
                     name="PartNumber"
                     label="Part Number"
+                    smaller={true}
                     value={itemManager.itemForm.getInput("PartNumber").data}
                     state={itemManager.itemForm.getInput("PartNumber").state}
                     onChange={itemManager.updateInputValue}
@@ -40,6 +42,7 @@ export default function PartManager<DB_AppointmentPart, Part, Parts>(props: Item
                     type="text"
                     name="Quantity"
                     label="Quantity"
+                    smaller={true}
                     value={itemManager.itemForm.getInput("Quantity").data}
                     state={itemManager.itemForm.getInput("Quantity").state}
                     onChange={itemManager.updateInputValue}
@@ -49,6 +52,7 @@ export default function PartManager<DB_AppointmentPart, Part, Parts>(props: Item
                     type="text"
                     name="UnitCost"
                     label="Unit Cost"
+                    smaller={true}
                     value={itemManager.itemForm.getInput("UnitCost").data}
                     state={itemManager.itemForm.getInput("UnitCost").state}
                     onChange={itemManager.updateInputValue}

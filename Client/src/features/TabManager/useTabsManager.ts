@@ -80,6 +80,12 @@ export default function useTabsManager<T extends Tab>() {
     }
 
 
+    const closeAllTabs = () => {
+        setTabs([]);
+        setCurrentTab(null);
+    }
+
+
     return {
         tabs,
         currentTab,
@@ -88,6 +94,7 @@ export default function useTabsManager<T extends Tab>() {
         closeTab,
         replaceTab,
         goToTab,
-        filterTabs
+        filterTabs,
+        closeAllTabs
     }
 }

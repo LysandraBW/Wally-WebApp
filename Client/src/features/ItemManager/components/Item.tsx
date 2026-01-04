@@ -11,25 +11,25 @@ interface ItemProps {
 export default function Item(props: ItemProps) {
     return (
         <div className={clsx(
-            "h-full flex flex-col justify-between"
+            "h-full w-full grid-cols-1 grid grid-rows-[min-content_auto_min-content] justify-between"
         )}>
-            <div className="p-2">
-                <div className="flex items-center">
-                    <span 
-                        className={clsx(
-                            "block",
-                            "text-gray-500 text-xs",
-                            "tracking-wide"
-                        )}
-                    >
-                        {props.ID === -1 ? "New" : `ID: ${props.ID}`}
-                    </span>
-                </div>
+            <div className="flex bg-base-100 dark:bg-base-50 items-center border-b border-base-200 dark:border-base-100 justify-start">
                 <span 
                     className={clsx(
-                        "block",
+                        "block  p-0.5 px-1",
+                        "text-base-400 text-[0.6rem] font-medium",
+                        "tracking"
+                    )}
+                >
+                    {props.ID === -1 ? "New" : `ID: ${props.ID}`}
+                </span>
+            </div>
+            <div className="">
+                <span 
+                    className={clsx(
+                        "block p-1 py-2",
                         "font-medium tracking-wide",
-                        "text-base-900 text-xs",
+                        "text-base-700 text-xs",
                     )}
                 >
                     {props.head}
@@ -39,7 +39,7 @@ export default function Item(props: ItemProps) {
                 <div 
                     key={i}
                     className={clsx(
-                        "flex items-center p-2 gap-2",
+                        "flex items-center px-1 py-0.5 gap-1",
                         "bg-base-50 dark:bg-base-50 border-t border-t-base-200",
                         "scroll-hide"
                     )}
@@ -48,9 +48,9 @@ export default function Item(props: ItemProps) {
                         <span
                             key={i}
                             className={clsx(
-                                "block px-2 py-0.5 text-xs tracking-wide",
-                                "tag shadow-sm bg-base-0 dark:bg-base-50",
-                                "border border-base-300 dark:border-base-200 rounded-full text-base-700",
+                                "block px-1 py-0 text-[0.6rem] tracking-wide text-base-500",
+                                "shadow-sm bg-base-0 dark:bg-base-50",
+                                "border border-base-300 dark:border-base-200 rounded-[3px]",
                                 "flex gap-1"
                             )}
                         >

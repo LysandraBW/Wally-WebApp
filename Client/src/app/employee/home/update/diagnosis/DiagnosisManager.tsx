@@ -20,6 +20,7 @@ export default function DiagnosisManager<DB_AppointmentDiagnosis, Diagnosis, Dia
                     type="text"
                     name="Code"
                     label="Code"
+                    smaller={true}
                     value={itemManager.itemForm.getInput("Code").data}
                     state={itemManager.itemForm.getInput("Code").state}
                     onChange={itemManager.updateInputValue}
@@ -29,6 +30,7 @@ export default function DiagnosisManager<DB_AppointmentDiagnosis, Diagnosis, Dia
                     type="text"
                     name="Message"
                     label="Message"
+                    smaller={true}
                     value={itemManager.itemForm.getInput("Message").data}
                     state={itemManager.itemForm.getInput("Message").state}
                     onChange={itemManager.updateInputValue}

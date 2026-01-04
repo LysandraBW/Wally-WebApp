@@ -32,6 +32,7 @@ export default function Select(props: SelectProps) {
         <Field
             label={props.label}
             state={props.state}
+            smaller={props.smaller}
             input={
                 <div 
                     className="relative"
@@ -43,6 +44,7 @@ export default function Select(props: SelectProps) {
                         onClick={() => setOpen(true)}
                         icon={props.ToggleIcon}
                         label={props.toggleLabel}
+                        smaller={props.smaller}
                     />
                     {open &&
                         <Wrapper>
@@ -57,6 +59,7 @@ export default function Select(props: SelectProps) {
                                         checked={props.values.includes(value)}
                                         CheckedIcon={props.CheckedIcon}
                                         NotCheckedIcon={props.NotCheckedIcon}
+                                        smaller={props.smaller}
                                     />
                                 </Fragment>
                             ))}

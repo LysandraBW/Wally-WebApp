@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import useForm from "@/features/Form/useForm/useForm";
 import makeForm from "@/features/Form/useForm/makeForm";
 import { Appointment as DB_Appointment } from "waltronics-types";
-import LoadAppointment from "@/pages/loadAppointment/LoadAppointment";
+import LoadAppointment from "@/pages/LoadAppointment/LoadAppointment";
 import SelectAppointment from "@/services/DB/Appointment/SelectAppointment";
 import { EmployeeContext } from "../layout";
 import clsx from "clsx";
@@ -19,6 +19,7 @@ export default function Page() {
     const [appointmentID, setAppointmentID] = useState("");
     const [appointmentNotFound, setAppointmentNotFound] = useState(false);
     const employeeContext = useContext(EmployeeContext);
+
 
     useEffect(() => {
         const load = async () => {
@@ -45,10 +46,12 @@ export default function Page() {
         load();
     }, []);
 
+
     useEffect(() => {
         employeeContext.setCurrentPage && employeeContext.setCurrentPage("Edit Appointment");
     }, [employeeContext]);
 
+    
     const loadAppointment = async () => {
         if (!form.getState())
             return;
@@ -69,32 +72,28 @@ export default function Page() {
     }
     
     return (
-        <div className="flex flex-col grow">
-            {/* <div className="p-4 flex flex-col grow">
-                <div className="flex flex-col w-full h-full grow">
-                    {(appointment && appointmentID) &&
-                        <UpdateManager
-                            appointment={appointment}
-                            appointmentID={appointmentID}
-                            close={() => {
-                                setAppointment(undefined);
-                                setAppointmentID("");
-                                router.replace("/employee/home/update");
-                            }}
-                        />
-                    }
-                    {!appointmentID &&
-                        <LoadAppointment
-                            head="Load Appointment"
-                            paragraph="To update an appointment, enter its ID below."
-                            form={form}
-                            loadAppointment={loadAppointment}
-                            appointmentNotFound={appointmentNotFound}
-                            setAppointmentNotFound={setAppointmentNotFound}
-                        />
-                    }
-                </div>
-            </div> */}
+        <div className="flex flex-col grow w-full h-full">
+            {(appointment && appointmentID) &&
+                <UpdateManager
+                    appointment={appointment}
+                    appointmentID={appointmentID}
+                    close={() => {
+                        setAppointment(undefined);
+                        setAppointmentID("");
+                        router.replace("/employee/home/update");
+                    }}
+                />
+            }
+            {!appointmentID &&
+                <LoadAppointment
+                    head="Load Appointment"
+                    body="To update an appointment, enter its ID below."
+                    form={form}
+                    loadAppointment={loadAppointment}
+                    appointmentNotFound={appointmentNotFound}
+                    setAppointmentNotFound={setAppointmentNotFound}
+                />
+            }
         </div>
     )
 }

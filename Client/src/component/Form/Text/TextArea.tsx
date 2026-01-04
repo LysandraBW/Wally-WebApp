@@ -13,6 +13,7 @@ export default function TextArea(props: TextProps) {
         <Field
             label={props.label}
             state={props.state}
+            smaller={props.smaller}
             input={
                 <textarea
                     name={props.name}
@@ -20,7 +21,8 @@ export default function TextArea(props: TextProps) {
                     onBlur={props.onBlur}
                     onChange={onChange}
                     className={clsx(
-                        "field-hover field-background field-padding field-border field-focus field-text"
+                        "field-hover field-background field-padding field-border field-focus field-text",
+                        props.smaller && "!text-xs"
                     )}
                 />
             }

@@ -1,9 +1,7 @@
 import { useEffect, useState } from "react";
-import FileManager from "./FileManager";
 import { Options } from "@/features/Form/DEF";
 import getValues from "@/features/Form/helpers/getValues";
 import TextField from "@/component/Form/Text/Text";
-import MultipleSelect from "@/component/Form/Select/Select/MultipleSelect";
 import Radio from "@/component/Form/Radio/Radio";
 import ItemFormGroup from "@/features/ItemManager/components/ItemFormGroup";
 import GetEmployeeNamePairs from "@/services/DB/Employee/GetEmployeeNamePairs";
@@ -12,6 +10,8 @@ import useItemManager from "../../../../../features/ItemManager/useItemManager";
 import { Note as DB_Note} from "waltronics-types";
 import { ItemManagerProps, ItemManagerWrapper } from "@/features/ItemManager/components/ItemManagerWrapper";
 import { Note, Notes } from "./_DEF";
+import Select from "@/component/Form/Select/Select";
+import TextArea from "@/component/Form/Text/TextArea";
 
 export default function NoteManager(props: ItemManagerProps<DB_Note, Note, Notes>) {
     const itemManager = useItemManager(props as any);
@@ -60,15 +60,17 @@ export default function NoteManager(props: ItemManagerProps<DB_Note, Note, Notes
                         type="text"
                         name="Head"
                         label="Head"
+                        smaller={true}
                         value={itemManager.itemForm.getInput("Head").data}
                         state={itemManager.itemForm.getInput("Head").state}
                         onChange={itemManager.updateInputValue}
                         onBlur={undefined}
                     />
-                    <TextField
+                    <TextArea
                         type="text"
                         name="Body"
                         label="Body"
+                        smaller={true}
                         value={itemManager.itemForm.getInput("Body").data}
                         state={itemManager.itemForm.getInput("Body").state}
                         onChange={itemManager.updateInputValue}
@@ -81,7 +83,8 @@ export default function NoteManager(props: ItemManagerProps<DB_Note, Note, Notes
                  Currently out of service, I don't have my AWS set up anymore. 
                 I was afraid that they'd randomly charge me an arm and a leg. 
             */}
-            {/* <ItemFormGroup head="Attachments">
+            {/* 
+            <ItemFormGroup head="Attachments">
                 <FileManager
                     files={itemManager.itemForm.getInput("Attachments").data || []}
                     updateFiles={(files) => {
@@ -91,16 +94,19 @@ export default function NoteManager(props: ItemManagerProps<DB_Note, Note, Notes
                         itemManager.updateInputValue("UploadedAttachments", fileList);
                     }}
                 />
-            </ItemFormGroup> */}
+            </ItemFormGroup> 
+            */}
             {/* Sharees */}
             {isCreator &&
                 <ItemFormGroup head="Control Access">
                     <div className="flex flex-col gap-2">
                         <div className="flex flex-col gap-4">
-                            <MultipleSelect
+                            <Select
                                 name="Sharees"
                                 label="Select Sharees"
                                 toggleLabel="Select Sharees"
+                                multiple={true}
+                                smaller={true}
                                 values={itemManager.itemForm.getInput("Sharees").data}
                                 state={itemManager.itemForm.getInput("Sharees").state}
                                 options={employees}
@@ -110,25 +116,40 @@ export default function NoteManager(props: ItemManagerProps<DB_Note, Note, Notes
                             <Radio
                                 name="ShowCustomer"
                                 label="Show to Customer"
+                                smaller={true}
                                 values={itemManager.itemForm.getInput("ShowCustomer").data}
                                 state={itemManager.itemForm.getInput("ShowCustomer").state}
                                 options={[
                                     ["0", "No", 
-                                        <div className="relative top-[-3px]">
-                                            <p className={clsx("tracking-wide text-left", itemManager.itemForm.getInput("ShowCustomer").data[0] === "0" && "text-blue-500 font-medium")}>
+                                        <div className="relative">
+                                            <p 
+                                                className={clsx(
+                                                    "tracking-wide text-xs text-base-700 text-left font-medium", 
+                                                    itemManager.itemForm.getInput("ShowCustomer").data[0] === "0" && "text-blue-500"
+                                                )}
+                                            >
                                                 Show
                                             </p>
-                                            <span className="block text-left text-01 tracking-wide font-medium">
+                                            <span 
+                                                className="block text-left text-xs text-base-500 tracking-wide"
+                                            >
                                                 The customer will be able to see this note.
                                             </span>
                                         </div>
                                     ], 
                                     ["1", "Yes",
-                                        <div className="relative top-[-3px]">
-                                            <p className={clsx("tracking-wide text-left", itemManager.itemForm.getInput("ShowCustomer").data[0] === "1" && "text-blue-500 font-medium")}>
+                                        <div className="relative">
+                                            <p 
+                                                className={clsx(
+                                                    "tracking-wide text-xs text-base-700 text-left font-medium", 
+                                                    itemManager.itemForm.getInput("ShowCustomer").data[0] === "1" && "text-blue-500"
+                                                )}
+                                            >
                                                 Hide
                                             </p>
-                                            <span className="block text-left text-01 tracking-wide font-medium">
+                                            <span 
+                                                className="block text-left text-xs text-base-500 tracking-wide"
+                                            >
                                                 The customer will not be able to see this note.
                                             </span>
                                         </div>

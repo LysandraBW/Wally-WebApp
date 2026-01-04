@@ -22,6 +22,7 @@ export default function ServiceManager(props: ItemManagerProps<DB_AppointmentSer
                     type="text"
                     name="Class"
                     label="Class"
+                    smaller={true}
                     value={itemManager.itemForm.getInput("Class").data}
                     state={itemManager.itemForm.getInput("Class").state}
                     onChange={itemManager.updateInputValue}
@@ -31,6 +32,7 @@ export default function ServiceManager(props: ItemManagerProps<DB_AppointmentSer
                     type="text"
                     name="Division"
                     label="Division"
+                    smaller={true}
                     value={itemManager.itemForm.getInput("Division").data}
                     state={itemManager.itemForm.getInput("Division").state}
                     onChange={itemManager.updateInputValue}
@@ -40,6 +42,7 @@ export default function ServiceManager(props: ItemManagerProps<DB_AppointmentSer
                     type="text"
                     name="Service"
                     label="Service"
+                    smaller={true}
                     value={itemManager.itemForm.getInput("Service").data}
                     state={itemManager.itemForm.getInput("Service").state}
                     onChange={itemManager.updateInputValue}

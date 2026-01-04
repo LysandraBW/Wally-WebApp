@@ -6,6 +6,7 @@ interface ToggleProps {
     icon?: ReactNode;
     label?: string;
     onClick: () => void;
+    smaller?: boolean;
 }
 
 export default function Toggle(props: ToggleProps) {
@@ -18,7 +19,12 @@ export default function Toggle(props: ToggleProps) {
                 "field-hover field-border field-background field-border field-focus",
             )}
         >
-            <span className="field-text">
+            <span 
+                className={clsx(
+                    "field-text",
+                    props.smaller && "!text-xs"
+                )}
+            >
                 {props.label || "Select"}
             </span>
             {props.icon ?

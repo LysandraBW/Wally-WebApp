@@ -287,6 +287,61 @@ html {
     }
 
 
+    .entry-text {
+        @apply text-xs text-base-700 tracking-wide whitespace-nowrap;
+    }
+
+
+    .entry-size {
+        @apply h-full;
+    }
+
+
+    .entry-padding {
+        @apply p-2;
+    }
+
+
+    .entry-border-l {
+        @apply border-l border-l-base-300;
+    }
+
+
+    .entry-border-r {
+        @apply border-r border-r-base-300;
+    }
+
+
+    .entry-border-t {
+        @apply border-t border-t-base-300;
+    }
+
+
+    .entry-border-b {
+        @apply border-b border-b-base-300;
+    }
+
+
+    .dark .entry-border-l {
+        @apply border-l border-l-base-200;
+    }
+
+
+    .dark .entry-border-r {
+        @apply border-r border-r-base-200;
+    }
+
+
+    .dark .entry-border-t {
+        @apply border-t border-t-base-200;
+    }
+
+
+    .dark .entry-border-b {
+        @apply border-b border-b-base-200;
+    }
+
+
     .border-beam-wrapper {
         --color-1: 0, 0, 0, 0;
         --color-2: 255, 255, 255, 0.33;

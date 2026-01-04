@@ -4,10 +4,12 @@ import { ReactNode } from "react";
 
 interface ElementProps {
     label: string;
-    selectValue: () => void;
+    selectValue: (event: any) => void;
     checked: boolean;
+    smallText?: boolean;
     CheckedIcon?: ReactNode;
     NotCheckedIcon?: ReactNode;
+    smaller?: boolean;
 }
 
 export default function Element(props: ElementProps) {
@@ -17,12 +19,14 @@ export default function Element(props: ElementProps) {
             className={clsx(
                 "flex justify-between items-center px-2 py-1",
                 "field-background field-hover",
-                "!border-none !rounded-none"
+                "!border-none !rounded-none",
+                (props.checked || (!props.checked && props.NotCheckedIcon)) && "gap-1"
             )}
         >
             <span
                 className={clsx(
                     "field-text",
+                    (props.smallText || props.smaller) && "!text-xs",
                     props.checked && "text-blue-500"
                 )}
             >

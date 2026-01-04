@@ -22,18 +22,15 @@ export interface ItemManagerWrapperProps {
 
 export function ItemManagerWrapper(props: ItemManagerWrapperProps) {
     return (
-        <div className="grow flex flex-col justify-between bg-white min-w-[400px] w-full border border-gray-300 rounded-b-md">
+        <div className="grow grid grid-cols-1 grid-rows-[1fr_auto] justify-between bg-white  w-full border border-t-0 border-gray-300">
             <div className="grow bg-white w-full">
-                <div className="bg-white flex justify-between items-center p-4 gap-1 border-b border-b-gray-300">
-                    <h6 className="font-medium">{props.header}</h6>
-                    {
-                        <CloseButton
-                            onClose={props.closeItem}
-                        />
-                    }
+                <div className="bg-white flex justify-start items-center px-2 py-4 border-b border-b-gray-300">
+                    <h6 className="font-medium text-sm tracking-wide text-base-700">
+                        {props.header}
+                    </h6>
                 </div>
                 {/* Action Bar */}
-                <div className="flex items-center p-2 px-4 gap-2 border-b bg-gray-50 border-b-gray-300">
+                <div className="flex items-center p-2 px-2 gap-2 border-b bg-gray-50 border-b-gray-300">
                     {/* Reset Button */}
                     <ResetButton
                         onReset={props.resetItem}
@@ -54,7 +51,7 @@ export function ItemManagerWrapper(props: ItemManagerWrapperProps) {
                 {props.children}
             </div>
             {/* Save and Cancel Buttons */}
-            <div className="p-2 border-t border-t-gray-300 relative after:bg-white after:absolute after:top-[-2px] after:left-0 after:w-full after:h-[1px]">
+            <div className="h-min p-2 border-t border-t-gray-300 relative">
                 <SaveCancelButtons
                     onCancel={props.closeItem}
                     onMutate={props.saveItem}

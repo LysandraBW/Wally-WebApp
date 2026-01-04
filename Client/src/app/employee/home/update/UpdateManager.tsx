@@ -59,6 +59,10 @@ import clsx from "clsx";
 import CloseButton from "@/component/Button/CloseButton";
 import { sameSemanticMap } from "@/lib";
 import useTabsManager, { Tab, TabID } from "@/features/TabManager/useTabsManager";
+import Header from "@/pages/ReadWriteAppointment/Header";
+import Tabs from "@/pages/ReadWriteAppointment/Tabs";
+import { DndContext as DNDContext } from "@dnd-kit/core";
+import Forms from "./Forms";
 
 
 interface UpdateManagerProps {
@@ -101,7 +105,7 @@ export default function UpdateManager<BaseItem, Item, Items>(props: UpdateManage
         alertDispatch({type: AlertActionType.Refresh});
     }, 1000*1);
 
-
+    
     const refreshAppointment = async () => {
         const appointmentID = props.appointmentID;
         const appointment = await SelectAppointment({appointmentID});
@@ -274,172 +278,83 @@ export default function UpdateManager<BaseItem, Item, Items>(props: UpdateManage
         handleChangesMade
     });
 
-
     return (
         <div className="flex flex-col grow">
             <Alert
                 alert={alert}
             />
-            <div className="flex justify-between items-center p-2 rounded-md border border-gray-300 shadow-sm mb-2">
-                <p className="text-md text-gray-700 font-medium">Appointment {props.appointmentID}</p>
-                <CloseButton
-                    onClose={() => null}
+            <div 
+                className="flex flex-col gap-x-4 grow"
+            >
+                <Header
+                    close={props.close}
+                    appointment={props.appointment}
+                    appointmentID={props.appointmentID}
                 />
-            </div>
-            <div className="flex gap-x-4 grow">
-                <div className="grow flex flex-col gap-1">
-                    {parts &&
-                        <div
-                            className="flex justify-between gap-1 p-1 border border-gray-300 shadow-sm rounded-t-md bg-white"
-                        >
-                            {parts.map(([_tabID, _tab], i) => (
-                                <div 
-                                    key={i} 
-                                    onClick={() => handleTabChange(_tabID)}
-                                    className={clsx(
-                                        "flex items-center gap-2",
-                                        "px-2 py-1 rounded text-03 text-gray-400 tracking-wide cursor-pointer",
-                                        partID !== _tabID && "hover:bg-gray-100",
-                                        partID === _tabID && "bg-white border border-gray-300 shadow-sm font-medium text-gray-700"
-                                    )}
-                                >
-                                    {_tab}
-                                    {(changesMade[_tabID]) &&
-                                        <div className="w-1 h-1 rounded-full bg-blue-500"></div>
-                                    }
-                                </div>
-                            ))}
-                        </div>
-                    }
-                    {/* Quick Fix Else Contact, Vehicle Managers Will Lose State */}
-                    <div className={partID != CONTACT ? "hidden flex grow" : "flex grow"}>
-                        <ContactManager
-                            updateManagerForm={updateManagerForm}
-                            appointment={appointment}
-                            onSaveUpdates={saveContactUpdates}
-                            setChangesMade={handleChangesMade}
-                        />
-                    </div>
-                    <div className={partID != VEHICLE ? "hidden flex grow" : "flex grow"}>
-                        <VehicleManager
-                            updateManagerForm={updateManagerForm}
-                            appointment={appointment}
-                            onSaveUpdates={saveVehicleUpdates}
-                            setChangesMade={handleChangesMade}
-                        />
-                    </div>
-                    {partID == REPAIR &&
-                        <RepairsManager
-                            repairsManager={repairsManager}
-                        />
-                    }
-                    {partID == PART &&
-                        <PartsManager
-                            partsManager={partsManager}
-                        />
-                    }
-                    {partID == DIAGNOSIS &&
-                        <DiagnosesManager
-                            diagnosesManager={diagnosesManager}
-                        />
-                    }
-                    {partID == SERVICE &&
-                        <ServicesManager
-                            servicesManager={servicesManager}
-                        />
-                    }
-                    {partID == PAYMENT &&
-                        <PaymentsManager
-                            paymentsManager={paymentsManager}
-                        />
-                    }
-                    {partID == NOTE &&
-                        <NotesManager
-                            notesManager={notesManager}
-                        />
-                    }
+                <Tabs
+                    tab={partID}
+                    tabs={parts}
+                    changesMade={changesMade}
+                    onClick={handleTabChange}
+                />
+                <div className={partID != CONTACT ? "hidden" : "flex grow"}>
+                    <ContactManager
+                        updateManagerForm={updateManagerForm}
+                        appointment={appointment}
+                        onSaveUpdates={saveContactUpdates}
+                        setChangesMade={handleChangesMade}
+                    />
                 </div>
-                <AnimatePresence>
-                    {tabsManager.tabs && tabsManager.currentTab &&
-                        <motion.div
-                            initial={{width: "0px", opacity: 0}}
-                            animate={{width: "400px", opacity: 1}}
-                            exit={{width: "0px", opacity: 0}}
-                            className="flex flex-col gap-1"
-                        >
-                            <div className="flex gap-1 p-1 border border-gray-300 shadow-sm rounded-t-md bg-white overflow-x-auto scroll-hide">
-                                {tabsManager.tabs.filter(tab => tab.form).map((tab, i) => (
-                                    <Fragment>
-                                        {(tab.form && tabsManager.currentTab?.form) && 
-                                            <div 
-                                                key={i} 
-                                                onClick={() => tabsManager.setCurrentTab(tab)}
-                                                className={clsx(
-                                                    "whitespace-nowrap",
-                                                    "flex items-center gap-2",
-                                                    "px-2 py-1 rounded text-03 text-gray-400 tracking-wide cursor-pointer",
-                                                    (tab.form.itemID !== tabsManager.currentTab.form.itemID || tab.form.key != tabsManager.currentTab.form.key) && "hover:bg-gray-100",
-                                                    (tab.form.itemID === tabsManager.currentTab.form.itemID && tab.form.key == tabsManager.currentTab.form.key) && "bg-white border border-gray-300 shadow-sm font-medium text-gray-700"
-                                                )}
-                                            >
-                                                {tab.form.mutation} {tab.form.key} {parseInt(tab.form.itemID) < 0 ? "" : `#${tab.form.itemID}`}
-                                            </div>
-                                        }
-                                    </Fragment>
-                                ))}
-                            </div>
-                            {(tabsManager.currentTab.form?.key === REPAIR) &&
-                                <RepairManager
-                                    itemID={tabsManager.currentTab.form.itemID}
-                                    itemsManager={repairsManager as any}
-                                    header={tabsManager.currentTab.form.header}
-                                    canDelete={tabsManager.currentTab.form.canDelete}
-                                />
-                            }
-                            {(tabsManager.currentTab.form?.key === PART) &&
-                                <PartManager
-                                    itemID={tabsManager.currentTab.form.itemID}
-                                    itemsManager={partsManager as any}
-                                    header={tabsManager.currentTab.form.header}
-                                    canDelete={tabsManager.currentTab.form.canDelete}
-                                />
-                            }
-                            {(tabsManager.currentTab.form?.key === DIAGNOSIS) &&
-                                <DiagnosisManager
-                                    itemID={tabsManager.currentTab.form.itemID}
-                                    itemsManager={diagnosesManager as any}
-                                    header={tabsManager.currentTab.form.header}
-                                    canDelete={tabsManager.currentTab.form.canDelete}
-                                />
-                            }
-                            {(tabsManager.currentTab.form?.key === SERVICE) &&
-                                <ServiceManager
-                                    itemID={tabsManager.currentTab.form.itemID}
-                                    itemsManager={servicesManager as any}
-                                    header={tabsManager.currentTab.form.header}
-                                    canDelete={tabsManager.currentTab.form.canDelete}
-                                />
-                            }
-                            {(tabsManager.currentTab.form?.key === PAYMENT) &&
-                                <PaymentManager
-                                    itemID={tabsManager.currentTab.form.itemID}
-                                    itemsManager={paymentsManager as any}
-                                    header={tabsManager.currentTab.form.header}
-                                    canDelete={tabsManager.currentTab.form.canDelete}
-                                />
-                            }
-                            {(tabsManager.currentTab.form?.key === NOTE) &&
-                                <NoteManager
-                                    itemID={tabsManager.currentTab.form.itemID}
-                                    itemsManager={notesManager as any}
-                                    header={tabsManager.currentTab.form.header}
-                                    canDelete={tabsManager.currentTab.form.canDelete}
-                                />
-                            }
-                        </motion.div>
-                    }
-                </AnimatePresence>
+                <div className={partID != VEHICLE ? "hidden" : "flex grow"}>
+                    <VehicleManager
+                        updateManagerForm={updateManagerForm}
+                        appointment={appointment}
+                        onSaveUpdates={saveVehicleUpdates}
+                        setChangesMade={handleChangesMade}
+                    />
+                </div>
+                {partID == REPAIR &&
+                    <RepairsManager
+                        repairsManager={repairsManager}
+                    />
+                }
+                {partID == PART &&
+                    <PartsManager
+                        partsManager={partsManager}
+                    />
+                }
+                {partID == DIAGNOSIS &&
+                    <DiagnosesManager
+                        diagnosesManager={diagnosesManager}
+                    />
+                }
+                {partID == SERVICE &&
+                    <ServicesManager
+                        servicesManager={servicesManager}
+                    />
+                }
+                {partID == PAYMENT &&
+                    <PaymentsManager
+                        paymentsManager={paymentsManager}
+                    />
+                }
+                {partID == NOTE &&
+                    <NotesManager
+                        notesManager={notesManager}
+                    />
+                }
             </div>
+            {tabsManager.tabs && tabsManager.currentTab &&
+                <Forms
+                    tabsManager={tabsManager}
+                    repairsManager={repairsManager}
+                    partsManager={partsManager}
+                    diagnosesManager={diagnosesManager}
+                    servicesManager={servicesManager}
+                    paymentsManager={paymentsManager}
+                    notesManager={notesManager}
+                />
+            }
         </div>
     )
 }

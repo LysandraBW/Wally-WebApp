@@ -1,5 +1,6 @@
+import IconButton from "@/component/Button/IconButton";
 import EditIcon from "@/component/Icons/Icons/PencilSquareIcon";
-import TrashIcon from "@/component/Icon/Trash";
+import TrashIcon from "@/component/Icons/Icons/TrashIcon";
 import clsx from "clsx";
 import { ReactNode } from "react";
 
@@ -20,73 +21,35 @@ export default function UpdateItem(props: UpdateItemProps) {
     return (
         <div 
             className={clsx(
-                "group !p-0 !shadow-none",
-                "grid grid-rows-1 grid-cols-[auto_auto]"
+                "h-full group !p-0 !shadow-none",
+                "grid grid-rows-1 grid-cols-[auto_min-content]"
             )}
         >
-            {/*
-            The "props.children" variable
-            refers to the item that we're
-            updating.
-            */}
             <div 
                 className={clsx(
                     "row-start-1",
-                    "col-start-1 col-span-2"
+                    "col-start-1 col-span-1"
                 )}
             >
                 {props.children}
             </div>
-            {/*
-            This is the overlay.
-            */}
-            <div 
-                // I should put this styling as a separate class,
-                // but I'm not going to do that right now.
+            <div
                 className={clsx(
-                    "hidden z-10",
-                    "row-start-1 col-start-2 col-span-1",
-                    "group-hover:flex flex justify-end gap-1 p-1"
+                    "hidden bg-base-100 z-10 w-min h-full",
+                    "row-start-1 col-start-2 col-span-1 border-l border-base-300 dark:border-base-200",
+                    "group-hover:grid grid-rows-2"
                 )}
             >
-                {/* Edit Button */}
-                {props.canEdit &&
-                    <button 
-                        onClick={props.onUpdate}
-                        className={clsx(
-                            "flex justify-center items-center gap-1",
-                            "h-min w-min aspect-square rounded",
-                            "bg-white hover:bg-gray-50 shadow-sm",
-                            "border border-gray-300 p-1"
-                        )}
-                    >
-                        <EditIcon
-                            width="16"
-                            height="16"
-                            fill="#94A3B8"
-                            cursor="pointer"
-                        />
-                    </button>
-                }
-                {/* Delete Button */}
-                {props.canDelete &&
-                    <button 
-                        onClick={props.onDelete}
-                        className={clsx(
-                            "flex justify-center items-center gap-1",
-                            "h-min w-min aspect-square rounded",
-                            "bg-white hover:bg-gray-50 shadow-sm",
-                            "border border-gray-300 p-1"
-                        )}
-                    >
-                        <TrashIcon
-                            width="16"
-                            height="16"
-                            fill="#94A3B8"
-                            cursor="pointer"
-                        />
-                    </button>
-                }
+                <div className="cursor-pointer bg-base-50 group hover:bg-base-100 w-[19.4px] border-b border-base-300 dark:border-base-200 stroke-base-700 flex justify-center items-center">
+                    <EditIcon
+                        className="size-3.5 stroke-inherit"
+                    />
+                </div>
+                <div className="cursor-pointer bg-base-50 group hover:bg-base-100 w-[19.4px] border-base-300 dark:border-base-200 stroke-base-700 flex justify-center items-center">
+                    <TrashIcon
+                        className="size-3.5 stroke-inherit"
+                    />
+                </div>
             </div>
         </div>
     )

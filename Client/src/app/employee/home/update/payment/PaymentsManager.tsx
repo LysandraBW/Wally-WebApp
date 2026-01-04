@@ -1,9 +1,13 @@
-import PaymentDisplay from "./PaymentDisplay";
-import CreateItemButton from "@/features/ItemManager/components/CreateItemButton";
 import SaveResetButtons from "@/features/ItemManager/components/SaveResetButtons";
 import usePaymentsManager from "./usePaymentsManager";
-import TextFieldGrid from "@/component/Form/Text/TextFieldGrid";
-import ArchiveBox from "@/component/Icons/Icons/ArchiveBoxIcon";
+import EntryTextField from "../../../../../pages/ReadWriteAppointment/Entry/EntryTextField";
+import { Fragment } from "react";
+import EntryCells from "@/pages/ReadWriteAppointment/Entry/EntryCells";
+import CellAddItem from "@/pages/ReadWriteAppointment/Cell/CellAddItem";
+import Cell from "@/pages/ReadWriteAppointment/Cell/Cell";
+import UpdateItem from "@/features/ItemManager/components/UpdateItem";
+import PaymentItem from "@/pages/items/PaymentItem";
+import PaddingCells from "@/pages/ReadWriteAppointment/Cell/PaddingCells";
 
 interface PaymentsManagerProps {
     paymentsManager: ReturnType<typeof usePaymentsManager>;
@@ -11,47 +15,51 @@ interface PaymentsManagerProps {
 
 export default function PaymentsManager(props: PaymentsManagerProps) {
     return (
-        <div className="relative flex flex-col grow shadow-sm border border-gray-300 rounded-b-md">
-            <div className="gap-4 bg-white relative h-full">
-                <table className="w-full">
-                    <tbody>
-                            <TextFieldGrid
-                                type="text"
-                                name="Cost"
-                                label="Cost USD"
-                                value={props.paymentsManager.costForm.getInput("Cost").data}
-                                state={props.paymentsManager.costForm.getInput("Cost").state}
-                                onChange={props.paymentsManager.updateCostValue}
-                                onBlur={undefined}
+        <div 
+            id="MainContent"
+            className="w-full grow grid grid-rows-[auto_48px] overflow-y-clip"
+        >
+            <div className="w-full h-min grid grid-cols-[124px_auto] bg-base-0 dark:bg-base-50 overflow-y-auto">
+                <EntryTextField
+                    type="text"
+                    name="Cost"
+                    label="Cost"
+                    prefix="$"
+                    value={props.paymentsManager.costForm.getInput("Cost").data}
+                    state={props.paymentsManager.costForm.getInput("Cost").state}
+                    onChange={props.paymentsManager.updateCostValue}
+                    onBlur={undefined}
+                />
+                <EntryCells
+                    label="Payments"
+                    cells={
+                        <Fragment>
+                            <CellAddItem
+                                onClick={props.paymentsManager.startCreateEditor}
                             />
-                        <tr>
-                            <td className="w-0 p-0 text--center bg-white font-medium px-4 text-02 text-gray-700 tracking-wide whitespace-nowrap border-b border-r border-gray-300 pt-2 align-top">Payments</td>
-                            <td className="p-0 border-b border-gray-300">
-                                <div className="relative bg-gray-50 flex flex-col gap-0 py-6 px-4  border-b border-b-gray-200">
-                                    <span className="absolute top-[calc(1rem-8px)] left-[calc(0.25rem*4)] text-00 font-medium tracking-wide text-gray-400">Add</span>
-                                    <CreateItemButton
-                                        onCreate={props.paymentsManager.startCreateEditor}
-                                    />
-                                </div>
-                                <div className="px-4 py-4">
-                                    <PaymentDisplay
-                                        items={props.paymentsManager.newItems}
-                                        onUpdate={props.paymentsManager.startUpdateEditor}
-                                        onDelete={(ID: string) => props.paymentsManager.deleteItemByDisplay(ID)}
-                                    />
-                                    {Object.keys(props.paymentsManager.newItems).length <= 0 &&
-                                        <div className="bg-gray-5-0 rounded-md h-[100px] flex flex-col justify-center gap-1 items-center justify-center">
-                                            <ArchiveBox/>
-                                        <span className="text-gray-400 tracking-wide font-medium text-04">
-                                                No Payment Found
-                                            </span>
-                                        </div>
-                                    }
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                            {Object.entries(props.paymentsManager.newItems).map(([itemID, item], i) => (
+                                <Fragment key={i}>
+                                    <Cell>
+                                        <UpdateItem
+                                            canEdit={true}
+                                            canDelete={true}
+                                            onUpdate={() => props.paymentsManager.startUpdateEditor(itemID)}
+                                            onDelete={() => props.paymentsManager.deleteItemByDisplay(itemID)}
+                                        >
+                                            <PaymentItem
+                                                payment={item}
+                                            />
+                                        </UpdateItem>
+                                    </Cell>
+                                </Fragment>
+                            ))}
+                            <PaddingCells
+                                offset={1}
+                                numberCells={Object.keys(props.paymentsManager.newItems).length}
+                            />
+                        </Fragment>
+                    }
+                />
             </div>
             <SaveResetButtons
                 onSave={props.paymentsManager.saveUpdates}

@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { Field } from "../Field";
 import { TextProps } from "./TextProps";
+import clsx from "clsx";
 
 export default function Text(props: TextProps) {
     const [showErrorMessage, setShowErrorMessage] = useState(false);
@@ -27,16 +28,44 @@ export default function Text(props: TextProps) {
             label={props.label}
             state={showErrorMessage ? props.state : [null, ""]}
             wrapLabel={true}
+            smaller={props.smaller}
             input={
-                <input
-                    type={props.type}
-                    name={props.name}
-                    value={props.value}
-                    onBlur={onBlur}
-                    onChange={onChange}
-                    placeholder={props.placeholder}
-                    className="field-hover field-border field-background field-padding field-border field-focus field-text !cursor-auto"
-                />
+                <div className="w-full flex">
+                    {props.prefix &&
+                        <div 
+                            className={clsx(
+                                "bg-base-100 field-text field-padding field-border !rounded-r-none !border-r-0",
+                                props.smaller && "!text-xs"
+                            )}
+                        >
+                            {props.prefix}
+                        </div>
+                    }
+                    <input
+                        type={props.type}
+                        name={props.name}
+                        value={props.value}
+                        onBlur={onBlur}
+                        onChange={onChange}
+                        placeholder={props.placeholder}
+                        className={clsx(
+                            "w-full field-hover field-border field-background field-padding field-border field-focus field-text !cursor-auto",
+                            props.prefix && "!rounded-l-none",
+                            props.suffix && "!rounded-r-none",
+                            props.smaller && "!text-xs"
+                        )}
+                    />
+                    {props.suffix &&
+                        <div 
+                            className={clsx(
+                                "bg-base-100 field-text field-padding field-border !rounded-l-none !border-l-0",
+                                props.smaller && "!text-xs"
+                            )}
+                        >
+                            {props.suffix}
+                        </div>
+                    }
+                </div>
             }
         />
     )

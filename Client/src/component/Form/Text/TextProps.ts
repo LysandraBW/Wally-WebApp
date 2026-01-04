@@ -4,4 +4,7 @@ export interface TextProps extends ReadWriteInputProps {
     type?: string;
     placeholder?: string;
     style?: string;
+    prefix?: string;
+    suffix?: string;
+    smaller?: boolean;
 }

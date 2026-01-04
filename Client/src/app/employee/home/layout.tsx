@@ -2,25 +2,18 @@
 import AuthenticatedEmployee from "@/services/DB/Employee/AuthenticatedEmployee";
 import { navigate } from "@/utils/navigate";
 import { PAGE_EMPLOYEE_LOGIN } from '@/utils/constants';
-import { useEffect, createContext, useState, JSX } from "react";
+import { useEffect, createContext, useState } from "react";
 import { Employee as DB_Employee } from "waltronics-types";
 import clsx from "clsx";
 import Logo from "@/component/NavBar/Logo";
-import { Tooltip } from "react-tooltip";
-import { DM_Sans, IBM, Instrumental, PublicSans } from "@/public/fonts/Font";
-import ArrowLeftStartOnRectangle from "@/component/Icons/Icons/ArrowLeftStartOnRectangleIcon";
+import { Instrumental } from "@/public/fonts/Font";
 import Wrapper from "./Wrapper";
-import SquaresPlusIcon from "@/component/Icons/Icons/SquaresPlusIcon";
 import Squares2By2Icon from "@/component/Icons/Icons/Squares2By2Icon";
-import AdjustmentsHorizontalIcon from "@/component/Icons/Icons/AdjustmentsHorizontalIcon";
 import Bars3BottomLeftIcon from "@/component/Icons/Icons/Bars3BottomLeftIcon";
 import CalendarIcon from "@/component/Icons/Icons/CalendarIcon";
 import Tab from "./Tab";
 import PencilSquareIcon from "@/component/Icons/Icons/PencilSquareIcon";
 import Profile from "./Profile";
-import SunIcon from "@/component/Icons/Icons/SunIcon";
-import MoonIcon from "@/component/Icons/Icons/MoonIcon";
-import ThemeButton from "./ThemeButton";
 
 export const EmployeeContext = createContext<{employee?: DB_Employee, setCurrentPage?: (page: string) => void}>({});
 
@@ -63,10 +56,12 @@ export default function Page({children}: Readonly<{children: React.ReactNode}>) 
                         outerClassName="w-[192px_!important] min-w-[192px_!important]"
                         innerClassName="p-2 flex flex-col gap-2"
                     >
-                        <div className="py-1 px-2 flex justify-center bg-base-0 dark:bg-base-50 border border-base-300 dark:border-base-200 rounded-[5px] shadow-sm">
-                            <Logo
-                                metallic={true}
-                            />
+                        <div className="w-full h-min p-[0.5px] pb-[1px] bg-gradient-to-b from-white dark:from-base-300 to-transparent border border-base-300 dark:border-base-200 rounded-[6px] shadow-sm">
+                            <div className="py-1 px-2 flex justify-center bg-base-0 dark:bg-base-50 rounded-[4px]">
+                                <Logo
+                                    metallic={true}
+                                />
+                            </div>
                         </div>
                         <div className="w-full h-full pt-2 flex flex-col gap-2 border-t border-base-300 dark:border-base-200">
                             <Tab

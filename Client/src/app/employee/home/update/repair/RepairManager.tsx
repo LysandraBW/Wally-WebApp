@@ -20,6 +20,7 @@ export default function RepairManager<DB_AppointmentRepair, Repair, Repairs>(pro
                     type="text"
                     name="Repair"
                     label="Repair"
+                    smaller={true}
                     value={itemManager.itemForm.getInput("Repair").data}
                     state={itemManager.itemForm.getInput("Repair").state}
                     onChange={itemManager.updateInputValue}
