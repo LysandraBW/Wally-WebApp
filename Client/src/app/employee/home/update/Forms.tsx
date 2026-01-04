@@ -38,6 +38,7 @@ export default function Forms(props: any) {
                 width: 400,
                 height: 300,
             }}
+            style={{ cursor: 'default' }}
             minWidth={200}
             minHeight={150}
             bounds="parent"
