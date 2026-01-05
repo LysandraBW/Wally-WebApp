@@ -5,11 +5,8 @@ export function sameSemanticMap(a: {[k: string]: string|number}, b: {[k: string]
     if (aKeys.length != bKeys.length)
         return false;
 
-    console.log(1);
     aKeys.sort();
     bKeys.sort();
-    console.log(aKeys);
-    console.log(bKeys);
     
     for (let i = 0; i < aKeys.length; i++) {
         if (aKeys[i] != bKeys[i])

@@ -35,7 +35,6 @@ export default function usePaymentsManager(props: UsePaymentsManagerProps) {
 
 
     const resetCostForm = async () => {
-        console.log(1);
         const cost = makeCost(props.cost);
         setOldCost(cost);
         costForm.resetForm(makeForm(cost, costTest, true));
@@ -43,7 +42,6 @@ export default function usePaymentsManager(props: UsePaymentsManagerProps) {
     }
 
     const saveCostForm = async () => {
-        console.log(2);
         const state = costForm.getState();
         itemsManager.updateManagerForm.setInputState(props.keyForUpdateManagerForm2, [state, ""]);
         if (!state || !oldCost)
@@ -52,7 +50,6 @@ export default function usePaymentsManager(props: UsePaymentsManagerProps) {
     }
     
     const updateCostValue = async (name: string, value: any) => {
-        console.log(3);
         costForm.updateInputData(name, value);
         itemsManager.updateManagerForm.setInputState(props.keyForUpdateManagerForm2, [costForm.getState(), ""]);
     }

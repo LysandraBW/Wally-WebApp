@@ -98,13 +98,6 @@ export default function useFilterManager(setLoadedTable: Dispatch<SetStateAction
 
 
     const updateStatus = (statusID: string) => {
-        // console.log("updateStatus");
-        // console.log(statusID);
-        // // Deleted Status
-        // if (statusID === "-1")
-        //     setDeleted("1");
-        // else
-        //     setDeleted("0");
         setStatusID(statusID);
     }
 

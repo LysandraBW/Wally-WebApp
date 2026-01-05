@@ -167,7 +167,6 @@ export default function useItemsManager<BaseItem, Item, Items>(props: UseItemsMa
 
 
     const closeEditor = (itemID: string) => {
-        console.log("itemID", itemID);
         closeTabForItem(itemID);
         deleteTempItem(itemID);
     }

@@ -32,7 +32,6 @@ export default function AppointmentPane(props: AppointmentPaneProps) {
 
     
     useEffect(() => {
-        console.log(props.appointmentManager.openedAppointment);
         const load = async () => {
             const appointment: DB_Appointment = await SelectAppointment({appointmentID: props.appointmentManager.openedAppointment});
             setAppointment(appointment);

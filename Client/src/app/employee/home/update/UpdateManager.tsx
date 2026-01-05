@@ -144,7 +144,6 @@ export default function UpdateManager<BaseItem, Item, Items>(props: UpdateManage
 
     const saveContactUpdates = async (updates: ContactUpdates) => {
         const output = await UpdateAppointmentContact(props.appointmentID, updates);
-        console.log(output);
         await alertMessage(output);
     }
     
@@ -270,7 +269,6 @@ export default function UpdateManager<BaseItem, Item, Items>(props: UpdateManage
         saveUpdates: async (oldItems: Notes, newItems: Notes) => {
             const updates = buildNoteUpdate(props.appointmentID, oldItems, newItems);
             const output = await UpdateEmployeeNotes(updates);
-            console.log("saveNoteUpdates", output);
             await alertMessage(output);
         },
         openTab: tabsManager.openTab,

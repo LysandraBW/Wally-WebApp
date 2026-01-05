@@ -35,9 +35,7 @@ export default function SearchServices(props: SearchServicesProps) {
 
 
     useEffect(() => {
-        console.log(props.options, tab, search)
         if (!tab) {
-            console.log("No Tab");
             return;
         }
         const matched = searchLabels(search, props.options[tab]);

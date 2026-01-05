@@ -35,7 +35,6 @@ export default function useTabsManager<T extends Tab>() {
     const closeTab = (tabID: TabID, filterTab?: (tab: T) => boolean) => {
         // Check if Tab Doesn't Exist
         let tabIndex = tabs.findIndex(tab => sameSemanticMap(tab.id, tabID));
-        console.log("closeTab - tabIndex", tabIndex);
         if (tabIndex === -1)
             return;
         

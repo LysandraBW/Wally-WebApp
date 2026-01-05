@@ -71,7 +71,6 @@ export default function EventsManager() {
 
     const refresh = async () => {
         const events = await SelectEvents();
-        console.log(events);
         setEvents(events);
     }
 

@@ -47,8 +47,6 @@ export default function TableHead(props: TableHeadProps) {
         const fName = fNameCells[0];
         const lName = lNameCells[0];
 
-        console.log(fName);
-        console.log(lName);
         if (!fName || !lName)
             return;
         

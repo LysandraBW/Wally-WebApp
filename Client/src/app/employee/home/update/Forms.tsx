@@ -16,9 +16,6 @@ export default function Forms(props: any) {
     const [hasOverflow, setHasOverflow] = useState(false);
 
     const checkOverflow = () => {
-        console.log("scrollHeight", (contentRef.current as any).scrollHeight);
-        console.log("clientHeight", (contentRef.current as any).clientHeight);
-
         if (contentRef.current) {
             setHasOverflow(
                 (contentRef.current as any).scrollHeight > (contentRef.current as any).clientHeight
