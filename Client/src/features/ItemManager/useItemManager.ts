@@ -15,7 +15,7 @@ export default function useItemManager<BaseItem, Item, Items>(props: UseItemMana
     
     useEffect(() => {
         itemForm.setTest(props.itemsManager.item.test());
-    }, []);
+    }, [props.itemID]);
 
 
     useEffect(() => {
@@ -23,7 +23,7 @@ export default function useItemManager<BaseItem, Item, Items>(props: UseItemMana
         if (!data || sameMap(itemForm.getData(), data, Object.keys(data)))
             return;
         itemForm.setData(makeFormData(data));
-    }, [props.itemsManager.tempItems]);
+    }, [props.itemID, props.itemsManager.tempItems]);
     
     
     const updateInputValue = async (inputName: string, inputValue: any) => {

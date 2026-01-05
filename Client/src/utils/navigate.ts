@@ -17,7 +17,7 @@ export async function navigate(page: string, data: {[k: string]: string} = {}) {
         redirect(`/employee/login`); 
     }
     else if (page === PAGE_EDIT_APPOINTMENT) {
-        redirect(`/employee/home/edit?appointmentID=${data.appointmentID}`);
+        redirect(`/employee/home/update?appointmentID=${data.appointmentID}`);
     }
     else if (page === PAGE_VIEW_APPOINTMENT) {
         redirect(`/employee/home/view?appointmentID=${data.appointmentID}`);

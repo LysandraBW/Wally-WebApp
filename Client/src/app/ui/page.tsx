@@ -106,6 +106,8 @@ function Elements() {
                     head="Message Head"
                     body="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
                     type="Default"
+                    absolute={true}
+                    spanScreenWidth={true}
                     onClose={() => console.log("Close")}
                 />
                 <Message
@@ -349,12 +351,6 @@ function Elements() {
             <div className="flex flex-col gap-2">
                 <p className="text-base-900">Text</p>
                 <Logo/>
-                <Logo
-                    size={2}
-                />
-                <Logo
-                    size={1}
-                />
             </div>
         </div>
     )

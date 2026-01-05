@@ -53,6 +53,7 @@ export default function PartsManager(props: PartsManagerProps) {
                 />
             </div>
             <SaveResetButtons
+                changesMade={JSON.stringify(props.partsManager.oldItems) !== JSON.stringify(props.partsManager.newItems)}
                 onSave={props.partsManager.saveUpdates}
                 onReset={props.partsManager.resetUpdates}
             />

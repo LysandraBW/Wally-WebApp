@@ -11,6 +11,7 @@ export default function saveTDispatch(key: Key, alertDispatch: Dispatch<AlertAct
                 head="Saved Changes"
                 body="Saved changes."
                 type="Success"
+                absolute={true}
                 onClose={() => {
                     alertDispatch({
                         type: AlertActionType.DeleteMessage,

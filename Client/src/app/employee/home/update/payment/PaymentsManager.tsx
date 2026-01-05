@@ -62,6 +62,7 @@ export default function PaymentsManager(props: PaymentsManagerProps) {
                 />
             </div>
             <SaveResetButtons
+                changesMade={props.paymentsManager.oldCost !== props.paymentsManager.costForm.getInput("Cost").data || JSON.stringify(props.paymentsManager.oldItems) !== JSON.stringify(props.paymentsManager.newItems)}
                 onSave={props.paymentsManager.saveUpdates}
                 onReset={props.paymentsManager.resetUpdates}
             />

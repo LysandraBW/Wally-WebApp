@@ -35,8 +35,8 @@ export class DefineDiagnosis extends Define<DB_AppointmentDiagnosis, Diagnosis, 
 
     test(..._: any[]): FormTest {
         return z.object({
-            Code: z.string({message: "Must enter a code."}),
-            Message: z.string({message: "Must enter a message."})
+            Code: z.string().min(1, {message: "Must enter a code."}),
+            Message: z.string().min(1, {message: "Must enter a message."})
         });
     }
 

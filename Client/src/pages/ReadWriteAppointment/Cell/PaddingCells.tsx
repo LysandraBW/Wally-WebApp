@@ -17,7 +17,7 @@ export default function PaddingCells(props: {numberCells: number; offset?: numbe
             setNArray(generateNArray(10 - n));
         else
             setNArray(generateNArray(n % 5));
-    }, []);
+    }, [props.numberCells]);
 
     return (
         <>

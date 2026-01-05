@@ -13,8 +13,6 @@ interface SaveResetButtonsProps {
 // a single Item. SaveResetButtons is used for the entire,
 // form across all Items.
 export default function SaveResetButtons(props: SaveResetButtonsProps) {
-    const disabled = props.changesMade !== undefined && !props.changesMade;
-
     return (
         <div 
             className={clsx(
@@ -25,14 +23,14 @@ export default function SaveResetButtons(props: SaveResetButtonsProps) {
             )}
         >
             <SecondaryButton
-                disabled={disabled}
+                disabled={!props.changesMade}
                 className="text-xs tracking-wide px-4"
                 onClick={props.onReset}
             >
-                Reset Changes
+                Save Changes
             </SecondaryButton>
             <PrimaryButton
-                disabled={disabled}
+                disabled={!props.changesMade}
                 className="text-xs tracking-wide px-4"
                 onClick={props.onSave}
             >

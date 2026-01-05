@@ -70,10 +70,11 @@ export default function Confirm(props: ConfirmProps) {
                         className={clsx(
                             "text-xs",
                             props.irreversible && `
-                                bg-red-500 border-red-500
-                                dark:!bg-red-600 dark:!border-red-600
-                                hover:!bg-red-600 hover:!border-red-600
-                                dark:hover:!bg-red-700 dark:hover:!border-red-700
+                                dark:shadow-red-700/30
+                                bg-gradient-to-b from-red-500 to-red-600 border border-red-600
+                                after:bg-gradient-to-b after:from-red-100 after:to-red-600
+                                before:bg-gradient-to-b before:from-red-500 before:to-red-600
+                                hover:before:!from-red-600 hover:before:!to-red-700
                             `
                         )}
                         onClick={props.onY}

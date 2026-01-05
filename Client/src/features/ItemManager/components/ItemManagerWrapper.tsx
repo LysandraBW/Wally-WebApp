@@ -24,7 +24,7 @@ export function ItemManagerWrapper(props: ItemManagerWrapperProps) {
     return (
         <div className="grow grid grid-cols-1 grid-rows-[1fr_auto] justify-between bg-base-0 dark:bg-base-50 w-full border border-t-0 border-base-300 dark:border-base-200">
             <div className="grow bg-base-0 dark:bg-base-50 w-full">
-                <div className="bg-base-0 dark:bg-base-50 flex justify-start items-center px-2 py-4 border-b border-b-base-300 dark:border-base-200">
+                <div className="sticky top-[32px] bg-base-0 dark:bg-base-50 flex justify-start items-center px-2 py-4 border-b border-b-base-300 dark:border-base-200">
                     <h6 className="font-medium text-sm tracking-wide text-base-700">
                         {props.header}
                     </h6>

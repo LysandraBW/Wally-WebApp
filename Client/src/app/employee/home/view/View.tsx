@@ -1,5 +1,5 @@
 import { Appointment as DB_Appointment } from "waltronics-types";
-import { toDisplayDate } from "@/utils/convert";
+import { toDisplayDate, toMoney } from "@/utils/convert";
 import { Fragment, useEffect, useState } from "react";
 import PaymentItem from "@/pages/items/PaymentItem";
 import DiagnosisItem from "@/pages/items/DiagnosisItem";
@@ -12,6 +12,7 @@ import { ViewSectionNonScalar } from "./ViewSectionNonScalar";
 import ViewSectionScalar from "./ViewSectionScalar";
 import Header from "@/pages/ReadWriteAppointment/Header";
 import resizeMainContent from "@/pages/ReadWriteAppointment/resizeMainContent";
+import { useRouter, useSearchParams } from "next/navigation";
 
 interface ViewProps {
     appointment: DB_Appointment;
@@ -20,27 +21,46 @@ interface ViewProps {
 }
 
 export default function View(props: ViewProps) {
+    const router = useRouter();
+    const searchParams = useSearchParams();
     const [tab, setTab] = useState("General");
     const [tabs] = useState(["General", "Vehicle", "Finances", "Diagnoses", "Parts", "Repairs", "Services", "Notes"])
 
 
     useEffect(() => {
+        if (searchParams) {
+            const tab = searchParams.get("tab") || "";
+            setTab(tab || "General");
+        }
+    }, []);
+
+
+    useEffect(() => {
+        console.log(props.appointment.Notes);
         resizeMainContent();
         window.addEventListener("resize", resizeMainContent);
     }, []);
+
+
+    const handleTabChange = async (tab: string) => {
+        setTab(tab);
+        const URL = `/employee/home/view?appointmentID=${props.appointmentID}&tab=${tab}`;
+        router.replace(URL);
+    }
 
 
     return (
         <div className="w-full flex flex-col grow">
             <Header
                 close={props.close}
+                goToEdit={true}
                 appointment={props.appointment}
                 appointmentID={props.appointmentID}
             />
             <Tabs
                 tab={tab}
                 tabs={tabs}
-                onClick={setTab}
+                onClick={handleTabChange}
             />
             <div
                 id="MainContent"
@@ -64,12 +84,12 @@ export default function View(props: ViewProps) {
                 {tab === "Vehicle" &&
                     <ViewSectionScalar
                         data={[
-                            ["VIN", props.appointment.VIN],
+                            ["VIN", props.appointment.VIN ? props.appointment.VIN.toUpperCase() : "N/A"],
                             ["Model Year", props.appointment.ModelYear],
                             ["Make", props.appointment.Make],
                             ["Model", props.appointment.Model],
-                            ["License Plate", props.appointment.LicensePlate],
-                            ["Mileage", props.appointment.Mileage]
+                            ["License Plate", props.appointment.LicensePlate ? props.appointment.LicensePlate.toUpperCase() : "N/A"],
+                            ["Mileage", (props.appointment.Mileage !== undefined && props.appointment.Mileage !== null) ? `${props.appointment.Mileage.toLocaleString()} miles` : ""]
                         ]}
                     />
                 }
@@ -79,8 +99,8 @@ export default function View(props: ViewProps) {
                         {/* Cost */}
                         <ViewSectionScalar
                             data={[
-                                ["Cost", props.appointment.Cost ? "$"+props.appointment.Cost.toFixed(2) : "N/A"],
-                                ["Amount Paid", props.appointment.Payments.length ? `$${props.appointment.Payments.map(payment => payment.Payment).reduce((accumulator, currentValue) => accumulator + currentValue, 0)}`: "N/A"]
+                                ["Cost", toMoney(props.appointment.Cost.toFixed(2)) || "N/A"],
+                                ["Amount Paid", props.appointment.Payments.length ? toMoney(props.appointment.Payments.map(payment => payment.Payment).reduce((accumulator, currentValue) => accumulator + currentValue, 0)) : "N/A"]
                             ]}
                         />
                         {/* Payments */}

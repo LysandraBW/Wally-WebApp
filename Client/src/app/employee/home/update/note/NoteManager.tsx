@@ -41,7 +41,7 @@ export default function NoteManager(props: ItemManagerProps<DB_Note, Note, Notes
         const test = props.itemsManager.item.test(isCreator, getValues(employees));
         itemManager.itemForm.setTest(test);
         
-    }, [employees]);
+    }, [props.itemID, employees]);
 
 
     return (

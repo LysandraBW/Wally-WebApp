@@ -54,6 +54,7 @@ export default function DiagnosesManager(props: DiagnosesManagerProps) {
                 />
             </div>
             <SaveResetButtons
+                changesMade={JSON.stringify(props.diagnosesManager.oldItems) !== JSON.stringify(props.diagnosesManager.newItems)}
                 onSave={props.diagnosesManager.saveUpdates}
                 onReset={props.diagnosesManager.resetUpdates}
             />

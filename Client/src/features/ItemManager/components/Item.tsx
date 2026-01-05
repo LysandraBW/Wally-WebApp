@@ -13,7 +13,7 @@ export default function Item(props: ItemProps) {
         <div className={clsx(
             "h-full w-full grid-cols-1 grid grid-rows-[min-content_auto_min-content] justify-between"
         )}>
-            <div className="flex bg-base-100 dark:bg-base-50 items-center border-b border-base-200 dark:border-base-100 justify-start">
+            <div className="h-[23px] flex bg-base-100 dark:bg-base-50 items-center border-b border-base-200 dark:border-base-100 justify-start">
                 <span 
                     className={clsx(
                         "block  p-0.5 px-1",
@@ -21,7 +21,7 @@ export default function Item(props: ItemProps) {
                         "tracking"
                     )}
                 >
-                    {props.ID === -1 ? "New" : `ID: ${props.ID}`}
+                    {props.ID <= -1 ? "New" : `ID: ${props.ID}`}
                 </span>
             </div>
             <div className="">
@@ -39,9 +39,9 @@ export default function Item(props: ItemProps) {
                 <div 
                     key={i}
                     className={clsx(
-                        "flex items-center px-1 py-0.5 gap-1",
-                        "bg-base-50 dark:bg-base-50 border-t border-t-base-200",
-                        "scroll-hide"
+                        "h-[23px] flex items-center px-1 py-0.5 gap-1",
+                        "bg-base-100 dark:bg-base-50 border-t border-t-base-200",
+                        "scroll-hide overflow-x-scroll"
                     )}
                 >
                     {tags.map((tag, i) => (

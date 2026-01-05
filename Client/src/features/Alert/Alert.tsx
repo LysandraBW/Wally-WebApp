@@ -1,4 +1,5 @@
 import { AlertState } from "@/features/Alert/alertReducer";
+import { Fragment } from "react";
 
 interface AlertProps {
     alert: AlertState;
@@ -6,13 +7,15 @@ interface AlertProps {
 
 export default function Alert(props: AlertProps) {
     return (
-        <div>
+        <Fragment>
             {props.alert.confirmation}
             {props.alert.messages.map(({node}, i) => (
-                <div key={i}>
+                <Fragment 
+                    key={i}
+                >
                     {node}
-                </div>
+                </Fragment>
             ))}
-        </div>
+        </Fragment>
     )
 }

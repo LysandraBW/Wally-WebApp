@@ -59,6 +59,7 @@ export default function ServicesManager(props: ServicesManagerProps) {
                 />
             </div>
             <SaveResetButtons
+                changesMade={JSON.stringify(props.servicesManager.oldItems) !== JSON.stringify(props.servicesManager.newItems)}
                 onSave={props.servicesManager.saveUpdates}
                 onReset={props.servicesManager.resetUpdates}
             />

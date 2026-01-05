@@ -53,6 +53,7 @@ export default function RepairsManager(props: RepairsManagerProps) {
                 />
             </div>
             <SaveResetButtons
+                changesMade={JSON.stringify(props.repairsManager.oldItems) !== JSON.stringify(props.repairsManager.newItems)}
                 onSave={props.repairsManager.saveUpdates}
                 onReset={props.repairsManager.resetUpdates}
             />

@@ -9,9 +9,33 @@ import PartManager from './part/PartManager';
 import RepairManager from './repair/RepairManager';
 import { Rnd as RND } from 'react-rnd';
 import clsx from 'clsx';
+import useTabsManager from '@/features/TabManager/useTabsManager';
+import useItemsManager from '@/features/ItemManager/useItemsManager';
+import usePaymentsManager from './payment/usePaymentsManager';
+import useServicesManager from './service/useServicesManager';
+import { Repair as DB_AppointmentRepair } from "waltronics-types";
+import { Repair, Repairs } from './repair/_DEF';
+import { Appointment as DB_Appointment } from "waltronics-types";
+import { Diagnosis as DB_AppointmentDiagnosis } from "waltronics-types";
+import { Part as DB_AppointmentPart } from "waltronics-types";
+import { Note as DB_AppointmentNote} from "waltronics-types";
+import { Part, Parts } from './part/_DEF';
+import { Diagnoses, Diagnosis } from './diagnosis/_DEF';
+import { Note, Notes } from './note/_DEF';
 
 
-export default function Forms(props: any) {
+interface FormsProps {
+    tabsManager: ReturnType<typeof useTabsManager>;
+    repairsManager: ReturnType<typeof useItemsManager<DB_AppointmentRepair, Repair, Repairs>>;
+    partsManager: ReturnType<typeof useItemsManager<DB_AppointmentPart, Part, Parts>>;
+    diagnosesManager: ReturnType<typeof useItemsManager<DB_AppointmentDiagnosis, Diagnosis, Diagnoses>>;
+    servicesManager: ReturnType<typeof useServicesManager>;
+    paymentsManager: ReturnType<typeof usePaymentsManager>;
+    notesManager: ReturnType<typeof useItemsManager<DB_AppointmentNote, Note, Notes>>;
+}
+
+
+export default function Forms(props: FormsProps) {
     const contentRef = useRef(null);
     const [hasOverflow, setHasOverflow] = useState(false);
 
@@ -26,20 +50,21 @@ export default function Forms(props: any) {
     useEffect(() => {
         checkOverflow();
     }, []);
+    
 
     return (
         <RND
             default={{
-                x: 100,
-                y: 100,
+                x: (window.innerWidth - (173 + 16) - 32) / 2 - 200,
+                y: 10,
                 width: 400,
                 height: 300,
             }}
             style={{ cursor: 'default' }}
-            minWidth={200}
+            minWidth={250}
             minHeight={150}
             bounds="parent"
-            className="absolute z-100"
+            className="absolute z-[200]"
             onResize={(e, direction, ref, delta, position) => {
                 checkOverflow();
             }}
@@ -47,15 +72,15 @@ export default function Forms(props: any) {
             <div
                 ref={contentRef} 
                 className={clsx(
-                "w-full h-full overflow-x-clip overflow-y-auto",
-                "grid grid-rows-[auto_1fr]",
-                "bg-white shadow-md",
+                "min-w-0 w-full h-full !bg-red-500 overflow-x-clip overflow-y-auto",
+                "grid grid-cols-1 grid-rows-[auto_1fr]",
+                "bg-base-0 dark:bg-base-50 shadow-md",
                 hasOverflow && "border-b border-base-300 dark:border-base-200"
             )}>
                 <OpenedTabs
                     tabsManager={props.tabsManager}
                 />
-                {(props.tabsManager.currentTab.form?.key === REPAIR) &&
+                {(props.tabsManager.currentTab && props.tabsManager.currentTab.form?.key === REPAIR) &&
                     <RepairManager
                         itemID={props.tabsManager.currentTab.form.itemID}
                         itemsManager={props.repairsManager as any}
@@ -63,15 +88,15 @@ export default function Forms(props: any) {
                         canDelete={props.tabsManager.currentTab.form.canDelete}
                     />
                 }
-                {(props.tabsManager.currentTab.form?.key === PART) &&
+                {(props.tabsManager.currentTab && props.tabsManager.currentTab.form?.key === PART) &&
                     <PartManager
                         itemID={props.tabsManager.currentTab.form.itemID}
                         itemsManager={props.partsManager as any}
                         header={props.tabsManager.currentTab.form.header}
-                        canDelete={props.props.tabsManager.currentTab.form.canDelete}
+                        canDelete={props.tabsManager.currentTab.form.canDelete}
                     />
                 }
-                {(props.tabsManager.currentTab.form?.key === DIAGNOSIS) &&
+                {(props.tabsManager.currentTab && props.tabsManager.currentTab.form?.key === DIAGNOSIS) &&
                     <DiagnosisManager
                         itemID={props.tabsManager.currentTab.form.itemID}
                         itemsManager={props.diagnosesManager as any}
@@ -79,7 +104,7 @@ export default function Forms(props: any) {
                         canDelete={props.tabsManager.currentTab.form.canDelete}
                     />
                 }
-                {(props.tabsManager.currentTab.form?.key === SERVICE) &&
+                {(props.tabsManager.currentTab && props.tabsManager.currentTab.form?.key === SERVICE) &&
                     <ServiceManager
                         itemID={props.tabsManager.currentTab.form.itemID}
                         itemsManager={props.servicesManager as any}
@@ -87,7 +112,7 @@ export default function Forms(props: any) {
                         canDelete={props.tabsManager.currentTab.form.canDelete}
                     />
                 }
-                {(props.tabsManager.currentTab.form?.key === PAYMENT) &&
+                {(props.tabsManager.currentTab && props.tabsManager.currentTab.form?.key === PAYMENT) &&
                     <PaymentManager
                         itemID={props.tabsManager.currentTab.form.itemID}
                         itemsManager={props.paymentsManager as any}
@@ -95,7 +120,7 @@ export default function Forms(props: any) {
                         canDelete={props.tabsManager.currentTab.form.canDelete}
                     />
                 }
-                {(props.tabsManager.currentTab.form?.key === NOTE) &&
+                {(props.tabsManager.currentTab && props.tabsManager.currentTab.form?.key === NOTE) &&
                     <NoteManager
                         itemID={props.tabsManager.currentTab.form.itemID}
                         itemsManager={props.notesManager as any}

@@ -70,5 +70,8 @@ export default function usePaymentsManager(props: UsePaymentsManagerProps) {
         resetUpdates,
         updateCostValue,
         costForm,
+        // This could be wrong...
+        // I'm too busy to check!
+        oldCost: props.cost
     }
 }

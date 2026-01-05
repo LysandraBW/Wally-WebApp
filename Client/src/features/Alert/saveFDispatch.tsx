@@ -11,6 +11,7 @@ export default function saveFDispatch(key: Key, alertDispatch: Dispatch<AlertAct
                 head="Failed to Save Changes"
                 body="Failed to save changes. Please try again."
                 type="Error"
+                absolute={true}
                 onClose={() => {
                     alertDispatch({
                         type: AlertActionType.DeleteMessage,

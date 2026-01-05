@@ -118,12 +118,20 @@ export default function AppointmentPane(props: AppointmentPaneProps) {
                         </div>
                     </div>
                     <div className="grid grid-cols-[30%_70%] gap-x-4 p-4 py-2 border-b border-b-base-300 dark:border-base-200 hover:bg-base-50">
-                        <span className="font-medium text-base-700 text-sm tracking-wide">Date Created</span>
-                        <span className="text-base-700 tracking-wide text-sm">{toDisplayDate(appointment.CreationDate, "MMMM Do, YYYY [at] h:mm A")}</span>
+                        <span className="font-medium text-base-700 text-sm tracking-wide">
+                            Date Created
+                        </span>
+                        <span className="text-base-700 tracking-wide text-sm">
+                            {toDisplayDate(appointment.CreationDate, "MMMM Do, YYYY [at] h:mm A")}
+                        </span>
                     </div>
                     <div className="grid grid-cols-[30%_70%] gap-x-4 p-4 py-2 border-b border-b-gray-300 dark:border-base-200 hover:bg-base-50">
-                        <span className="block font-medium text-base-700 text-sm tracking-wide">Appointment ID</span>
-                        <span className="block text-base-700 tracking-wide text-sm">{appointment.AppointmentID}</span>
+                        <span className="block font-medium text-base-700 text-sm tracking-wide">
+                            Appointment ID
+                        </span>
+                        <span className="block text-base-700 tracking-wide text-sm">
+                            {appointment.AppointmentID}
+                        </span>
                     </div>
                     <DataGroup
                         head="Contact"

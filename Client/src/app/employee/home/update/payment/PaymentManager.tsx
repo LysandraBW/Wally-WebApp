@@ -18,8 +18,8 @@ export default function PaymentManager(props: ItemManagerProps<DB_Payment, Payme
             return;
 
         const item = props.itemsManager.tempItems[props.itemID] as Payment;
-        setAddCard(!!item.CCN && !!item.EXP);
-    }, [props.itemsManager.tempItems]);
+        setAddCard((item as any).addCard || (!!item.CCN && !!item.EXP));
+    }, [props.itemID, props.itemsManager.tempItems]);
 
 
     return (
@@ -78,6 +78,10 @@ export default function PaymentManager(props: ItemManagerProps<DB_Payment, Payme
                     ]}
                     onChange={(name, value) => {
                         setAddCard(value[0] === "\0");
+                        // Payment-Items don't have this data, but this is a quick
+                        // add so that the value checked will remained that way.
+                        // It works fine!
+                        itemManager.updateInputValue("addCard", value[0] === "\0");
                     }}
                 />
             </ItemFormGroup>

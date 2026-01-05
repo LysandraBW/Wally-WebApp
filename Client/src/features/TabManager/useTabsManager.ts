@@ -1,5 +1,5 @@
 import { sameSemanticMap } from "@/lib";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export type TabID = {[k: string]: string|number};
 
@@ -19,7 +19,14 @@ export interface Tab {
 
 export default function useTabsManager<T extends Tab>() {
     const [tabs, setTabs] = useState<Array<T>>([]);
-    const [currentTab, setCurrentTab] = useState<T|null>();
+    const [currentTab, setCurrentTab] = useState<T|null>(null);
+
+
+    useEffect(() => {
+        if (tabs.length === 0)
+            setCurrentTab(null);
+    }, [tabs]);
+
 
     const openTab = (newTab: T) => {
         // Check if Tab Exists
@@ -41,17 +48,20 @@ export default function useTabsManager<T extends Tab>() {
         let updatedTabs = [...tabs];
         if (filterTab)
             updatedTabs = updatedTabs.filter((tab, i) => i !== tabIndex && filterTab(tab));
-
+        
         tabIndex = tabs.findIndex(tab => sameSemanticMap(tab.id, tabID));
         updatedTabs.splice(tabIndex, 1);
         setTabs(updatedTabs);
         
-        if (updatedTabs.length === 0)
+        if (updatedTabs.length === 0) {
             setCurrentTab(null);
-        else if (updatedTabs.length === 1 || tabIndex - 1 < 0)
+        }
+        else if (updatedTabs.length === 1 || tabIndex - 1 < 0) {
             setCurrentTab(updatedTabs[0]);
-        else if (updatedTabs.length > 1)
+        }
+        else if (updatedTabs.length > 1) {
             setCurrentTab(updatedTabs[tabIndex-1]);
+        }
     }
 
 

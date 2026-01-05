@@ -6,6 +6,13 @@ export function toFloat(v: any): number {
     return parseFloat(v);
 }
 
+export function toMoney(v: any): string {
+    if (v === undefined || v === null)
+        return "";
+    const money = parseFloat(v);
+    return `$${money.toFixed(2)}`
+}
+
 export function toDisplayDate(date: Date|string|null, format: string = "MM/DD/YYYY hh:mm A"): string {
     if (!date)
         return '';
@@ -19,6 +26,7 @@ export function toInputDate(date: string | null | undefined) {
     const inputDate = date.replace('Z', 'T').slice(0, -1);
     return inputDate;
 }
+
 export function toInteger(v: any): number {
     if (typeof v === 'number')
         return v;

@@ -1,12 +1,12 @@
 import { EmployeeNote as DB_EmployeeNote } from "waltronics-types";
-import { Note } from "../edit/note/_DEF";
 import Person from "@/component/Icons/Icons/UserIcon";
 import { Fragment, ReactNode, useEffect, useState } from "react";
-import { getCookie } from "@/utils/cookies/getCookie";
 import getValuesToLabels from "@/features/Form/helpers/getValuesToLabels";
 import Paperclip from "@/component/Icons/Icons/PaperclipIcon";
 import Item from "@/features/ItemManager/components/Item";
 import GetEmployeeNamePairs from "@/services/DB/Employee/GetEmployeeNamePairs";
+import { Note } from "@/app/employee/home/update/note/_DEF";
+import UserIcon from "@/component/Icons/Icons/UserIcon";
 
 interface NoteItemProps {
     note: DB_EmployeeNote|Note;
@@ -26,12 +26,11 @@ export default function NoteItem(props: NoteItemProps) {
             const sharees = [];
             for (const sharee of props.note.Sharees) {
                 sharees.push((
-                    <Fragment>
-                        <Person
-                            width="14"
-                            height="14"
-                            fill="#94a3b8"
-                            stroke="#94a3b8"
+                    <div
+                        className="flex items-center gap-1"
+                    >
+                        <UserIcon
+                            className="size-2.5 stroke-base-500"
                         />
                         {/* 
                         We have to account for the differing
@@ -47,46 +46,62 @@ export default function NoteItem(props: NoteItemProps) {
                                 Creator
                             </span>
                         }
-                    </Fragment>
+                    </div>
                 ));
             }
+
+            if (props.note.ShowCustomer === true) {
+                sharees.push((
+                    <div
+                        className="flex items-center gap-1"
+                    >
+                        <UserIcon
+                            className="size-2.5 stroke-base-500"
+                        />
+                        <span className="text-base-500 medium">
+                            Customer
+                        </span>
+                    </div>
+                )); 
+            }
+
             if (sharees.length > 0)
                 tags.push(sharees);
 
-            const attachments = [];
-            for (const attachment of props.note.Attachments) {
-                attachments.push((
-                    <Fragment>
-                        <Paperclip
-                            width="14"
-                            height="14"
-                            fill="#94A3B8"
-                            stroke="#94A3B8"
-                            strokeWidth="0.25"
-                        />
-                        {attachment.Name}
-                    </Fragment>
-                ));
-            }
+            // const attachments = [];
+            // for (const attachment of props.note.Attachments) {
+            //     attachments.push((
+            //         <Fragment>
+            //             <Paperclip
+            //                 width="14"
+            //                 height="14"
+            //                 fill="#94A3B8"
+            //                 stroke="#94A3B8"
+            //                 strokeWidth="0.25"
+            //             />
+            //             {attachment.Name}
+            //         </Fragment>
+            //     ));
+            // }
 
-            if ("UploadedAttachments" in props.note && props.note.UploadedAttachments) {
-                for (const attachment of props.note.UploadedAttachments) {
-                    <Fragment>
-                        <Paperclip
-                            width="14"
-                            height="14"
-                            fill="#94A3B8"
-                            stroke="#94A3B8"
-                            strokeWidth="0.25"
-                        />
-                        <span className="block">{attachment.name}</span>
-                        <span className="block text-red-500 bold">NEW</span>
-                    </Fragment>
-                }
-            }
+            // if ("UploadedAttachments" in props.note && props.note.UploadedAttachments) {
+            //     for (const attachment of props.note.UploadedAttachments) {
+            //         <Fragment>
+            //             <Paperclip
+            //                 width="14"
+            //                 height="14"
+            //                 fill="#94A3B8"
+            //                 stroke="#94A3B8"
+            //                 strokeWidth="0.25"
+            //             />
+            //             <span className="block">{attachment.name}</span>
+            //             <span className="block text-red-500 bold">NEW</span>
+            //         </Fragment>
+            //     }
+            // }
             
-            if (attachments.length > 0)
-                tags.push(attachments);
+            // if (attachments.length > 0)
+            //     tags.push(attachments);
             
             
             setTags(tags);

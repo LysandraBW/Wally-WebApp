@@ -121,6 +121,7 @@ export default function UpdateManager<BaseItem, Item, Items>(props: UpdateManage
 
 
     const alertMessage = async (good: boolean) => {
+        console.log("alertMessage")
         const key = randomKey();
         if (good) {
             const dispatch = saveTDispatch(key, alertDispatch);
@@ -245,12 +246,14 @@ export default function UpdateManager<BaseItem, Item, Items>(props: UpdateManage
             const insertKeys = ["Payment", "Name", "Type", "CCN", "EXP"];
             const updates = buildUpdate(oldItems, newItems, itemID, updateKeys, insertKeys, itemID);
             const output = await UpdateAppointmentPayments(props.appointmentID, updates);
+            console.log("Called");
             await alertMessage(output);
         },
         saveCostUpdates: async (oldItem: Cost, newItem: Cost) => {
             const updates = {
                 Cost: updatedValue(oldItem.Cost, newItem.Cost)
             } as CostUpdates;
+            console.log("Called Cost")
             const output = await UpdateAppointmentCost(props.appointmentID, updates);
             await alertMessage(output);
         },
@@ -276,6 +279,7 @@ export default function UpdateManager<BaseItem, Item, Items>(props: UpdateManage
         handleChangesMade
     });
 
+    
     return (
         <div className="flex flex-col grow">
             <Alert
@@ -286,6 +290,7 @@ export default function UpdateManager<BaseItem, Item, Items>(props: UpdateManage
             >
                 <Header
                     close={props.close}
+                    goToView={true}
                     appointment={props.appointment}
                     appointmentID={props.appointmentID}
                 />

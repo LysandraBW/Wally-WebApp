@@ -40,12 +40,18 @@ export default function UpdateItem(props: UpdateItemProps) {
                     "group-hover:grid grid-rows-2"
                 )}
             >
-                <div className="cursor-pointer bg-base-50 group hover:bg-base-100 w-[19.4px] border-b border-base-300 dark:border-base-200 stroke-base-700 flex justify-center items-center">
+                <div 
+                    onClick={props.onUpdate}
+                    className="cursor-pointer bg-base-50 group hover:bg-base-100 w-[19.4px] border-b border-base-300 dark:border-base-200 stroke-base-700 flex justify-center items-center"
+                >
                     <EditIcon
                         className="size-3.5 stroke-inherit"
                     />
                 </div>
-                <div className="cursor-pointer bg-base-50 group hover:bg-base-100 w-[19.4px] border-base-300 dark:border-base-200 stroke-base-700 flex justify-center items-center">
+                <div 
+                    onClick={props.onDelete}
+                    className="cursor-pointer bg-base-50 group hover:bg-base-100 w-[19.4px] border-base-300 dark:border-base-200 stroke-base-700 flex justify-center items-center"
+                >
                     <TrashIcon
                         className="size-3.5 stroke-inherit"
                     />
