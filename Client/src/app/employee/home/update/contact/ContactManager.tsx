@@ -8,9 +8,9 @@ import GetStatusPairs from "@/services/DB/Information/GetStatusPairs";
 import { Contact, contactTest, ContactUpdates, makeContact } from "@/app/employee/home/update/contact/_DEF";
 import makeForm from "@/features/Form/useForm/makeForm";
 import SaveResetButtons from "@/features/ItemManager/components/SaveResetButtons";
-import EntryTextField from "../../../../../pages/ReadWriteAppointment/Entry/EntryTextField";
-import EntrySegmentField from "../../../../../pages/ReadWriteAppointment/Entry/EntrySegmentField";
-import resizeMainContent from "@/pages/ReadWriteAppointment/resizeMainContent";
+import EntryTextField from "../../../../../shared/ReadWriteAppointment/Entry/EntryTextField";
+import EntrySegmentField from "../../../../../shared/ReadWriteAppointment/Entry/EntrySegmentField";
+import resizeMainContent from "@/shared/ReadWriteAppointment/resizeMainContent";
 
 
 interface ContactManagerProps {

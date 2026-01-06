@@ -3,7 +3,7 @@ import { useContext, useEffect, useState } from "react";
 import View from "@/app/employee/home/view/View";
 import { useRouter, useSearchParams } from "next/navigation";
 import useForm from "@/features/Form/useForm/useForm";
-import LoadAppointment from "@/pages/LoadAppointment/LoadAppointment";
+import LoadAppointment from "@/shared/LoadAppointment/LoadAppointment";
 import { Appointment as DB_Appointment } from "waltronics-types";
 import SelectAppointment from "@/services/DB/Appointment/SelectAppointment";
 import { AnimatePresence } from "motion/react";

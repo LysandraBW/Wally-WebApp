@@ -1,4 +1,4 @@
-import EntryRead from "@/pages/ReadWriteAppointment/Entry/EntryRead";
+import EntryRead from "@/shared/ReadWriteAppointment/Entry/EntryRead";
 import { Fragment, ReactNode } from "react";
 
 export default function ViewSectionScalar({data}: {

@@ -20,8 +20,8 @@ import ChevronLeftIcon from "@/component/Icons/Icons/ChevronLeftIcon";
 import UserIcon from "@/component/Icons/Icons/UserIcon";
 import CalendarIcon from "@/component/Icons/Icons/CalendarIcon";
 import DataGroup from "./DataGroup";
-import ViewAppointment from "@/pages/ReadWriteAppointment/Buttons/ViewAppointment";
-import EditAppointment from "@/pages/ReadWriteAppointment/Buttons/EditAppointment";
+import ViewAppointment from "@/shared/ReadWriteAppointment/Buttons/ViewAppointment";
+import EditAppointment from "@/shared/ReadWriteAppointment/Buttons/EditAppointment";
 
 interface AppointmentPaneProps {
     appointmentManager: AppointmentManager;

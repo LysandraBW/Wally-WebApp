@@ -1,17 +1,17 @@
 import { Appointment as DB_Appointment } from "waltronics-types";
 import { toDisplayDate, toMoney } from "@/utils/convert";
 import { Fragment, useEffect, useState } from "react";
-import PaymentItem from "@/pages/items/PaymentItem";
-import DiagnosisItem from "@/pages/items/DiagnosisItem";
-import RepairItem from "@/pages/items/RepairItem";
-import PartItem from "@/pages/items/PartItem";
-import ServiceItem from "@/pages/items/ServiceItem";
-import NoteItem from "@/pages/items/NoteItem";
-import Tabs from "@/pages/ReadWriteAppointment/Tabs";
+import PaymentItem from "@/shared/items/PaymentItem";
+import DiagnosisItem from "@/shared/items/DiagnosisItem";
+import RepairItem from "@/shared/items/RepairItem";
+import PartItem from "@/shared/items/PartItem";
+import ServiceItem from "@/shared/items/ServiceItem";
+import NoteItem from "@/shared/items/NoteItem";
+import Tabs from "@/shared/ReadWriteAppointment/Tabs";
 import { ViewSectionNonScalar } from "./ViewSectionNonScalar";
 import ViewSectionScalar from "./ViewSectionScalar";
-import Header from "@/pages/ReadWriteAppointment/Header";
-import resizeMainContent from "@/pages/ReadWriteAppointment/resizeMainContent";
+import Header from "@/shared/ReadWriteAppointment/Header";
+import resizeMainContent from "@/shared/ReadWriteAppointment/resizeMainContent";
 import { useRouter, useSearchParams } from "next/navigation";
 
 interface ViewProps {

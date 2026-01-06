@@ -9,7 +9,7 @@ import { useState, useEffect, Fragment } from "react";
 import ChevronUpDownIcon from "@/component/Icons/Icons/ChevronUpDownIcon";
 import { useRef } from 'react'
 import { useOnClickOutside } from 'usehooks-ts'
-import EntryField from "@/pages/ReadWriteAppointment/Entry/EntryField";
+import EntryField from "@/shared/ReadWriteAppointment/Entry/EntryField";
 
 export default function EntrySearchField(props: SelectProps) {
     const ref = useRef<any>(null);

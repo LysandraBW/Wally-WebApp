@@ -1,5 +1,5 @@
 import { TextProps } from "@/component/Form/Text/TextProps";
-import EntryField from "@/pages/ReadWriteAppointment/Entry/EntryField";
+import EntryField from "@/shared/ReadWriteAppointment/Entry/EntryField";
 import clsx from "clsx";
 
 export default function EntryTextField(props: TextProps) {

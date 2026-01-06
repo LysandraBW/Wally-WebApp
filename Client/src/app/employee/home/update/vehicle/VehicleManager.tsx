@@ -12,10 +12,10 @@ import getValues from "@/features/Form/helpers/getValues";
 import makeForm from "@/features/Form/useForm/makeForm";
 import { fetchVehicle } from "@/services/NHTSA/fetchVehicle";
 import { subsetOf } from "@/lib/Zod/InputTest";
-import EntrySearchField from "@/pages/ReadWriteAppointment/Entry/EntrySearchField";
+import EntrySearchField from "@/shared/ReadWriteAppointment/Entry/EntrySearchField";
 import SaveResetButtons from "@/features/ItemManager/components/SaveResetButtons";
-import EntryTextField from "../../../../../pages/ReadWriteAppointment/Entry/EntryTextField";
-import resizeMainContent from "@/pages/ReadWriteAppointment/resizeMainContent";
+import EntryTextField from "../../../../../shared/ReadWriteAppointment/Entry/EntryTextField";
+import resizeMainContent from "@/shared/ReadWriteAppointment/resizeMainContent";
 
 
 interface VehicleManagerProps {

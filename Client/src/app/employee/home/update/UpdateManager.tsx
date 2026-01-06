@@ -59,8 +59,8 @@ import clsx from "clsx";
 import CloseButton from "@/component/Button/CloseButton";
 import { sameSemanticMap } from "@/lib";
 import useTabsManager, { Tab, TabID } from "@/features/TabManager/useTabsManager";
-import Header from "@/pages/ReadWriteAppointment/Header";
-import Tabs from "@/pages/ReadWriteAppointment/Tabs";
+import Header from "@/shared/ReadWriteAppointment/Header";
+import Tabs from "@/shared/ReadWriteAppointment/Tabs";
 import { DndContext as DNDContext } from "@dnd-kit/core";
 import Forms from "./Forms";
 

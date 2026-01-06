@@ -3,12 +3,12 @@ import { Diagnosis, Diagnoses } from "@/app/employee/home/update/diagnosis/_DEF"
 import useItemsManager from "../../../../../features/ItemManager/useItemsManager";
 import SaveResetButtons from "@/features/ItemManager/components/SaveResetButtons";
 import { Fragment } from "react";
-import EntryCells from "@/pages/ReadWriteAppointment/Entry/EntryCells";
-import CellAddItem from "@/pages/ReadWriteAppointment/Cell/CellAddItem";
-import Cell from "@/pages/ReadWriteAppointment/Cell/Cell";
+import EntryCells from "@/shared/ReadWriteAppointment/Entry/EntryCells";
+import CellAddItem from "@/shared/ReadWriteAppointment/Cell/CellAddItem";
+import Cell from "@/shared/ReadWriteAppointment/Cell/Cell";
 import UpdateItem from "@/features/ItemManager/components/UpdateItem";
-import DiagnosisItem from "@/pages/items/DiagnosisItem";
-import PaddingCells from "@/pages/ReadWriteAppointment/Cell/PaddingCells";
+import DiagnosisItem from "@/shared/items/DiagnosisItem";
+import PaddingCells from "@/shared/ReadWriteAppointment/Cell/PaddingCells";
 
 
 interface DiagnosesManagerProps {

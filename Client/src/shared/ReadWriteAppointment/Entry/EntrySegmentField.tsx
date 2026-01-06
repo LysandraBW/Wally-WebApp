@@ -1,6 +1,6 @@
 import { OptionsWithNode, ReadWriteArrayInputProps } from "@/features/Form/DEF";
 import clsx from "clsx";
-import EntryField from "@/pages/ReadWriteAppointment/Entry/EntryField";
+import EntryField from "@/shared/ReadWriteAppointment/Entry/EntryField";
 
 interface SegmentGridProps extends Omit<ReadWriteArrayInputProps, "options"> {
     options: OptionsWithNode;

@@ -2,13 +2,13 @@ import useItemsManager from "../../../../../features/ItemManager/useItemsManager
 import SaveResetButtons from "@/features/ItemManager/components/SaveResetButtons";
 import { Note as DB_Note } from "waltronics-types";
 import { Note, Notes } from "./_DEF";
-import EntryCells from "@/pages/ReadWriteAppointment/Entry/EntryCells";
+import EntryCells from "@/shared/ReadWriteAppointment/Entry/EntryCells";
 import { Fragment } from "react";
-import CellAddItem from "@/pages/ReadWriteAppointment/Cell/CellAddItem";
-import Cell from "@/pages/ReadWriteAppointment/Cell/Cell";
+import CellAddItem from "@/shared/ReadWriteAppointment/Cell/CellAddItem";
+import Cell from "@/shared/ReadWriteAppointment/Cell/Cell";
 import UpdateItem from "@/features/ItemManager/components/UpdateItem";
-import NoteItem from "@/pages/items/NoteItem";
-import PaddingCells from "@/pages/ReadWriteAppointment/Cell/PaddingCells";
+import NoteItem from "@/shared/items/NoteItem";
+import PaddingCells from "@/shared/ReadWriteAppointment/Cell/PaddingCells";
 
 interface NotesManagerProps {
     notesManager: ReturnType<typeof useItemsManager<DB_Note, Note, Notes>>;

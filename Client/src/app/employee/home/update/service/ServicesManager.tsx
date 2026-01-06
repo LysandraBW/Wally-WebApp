@@ -2,11 +2,11 @@ import SaveResetButtons from "@/features/ItemManager/components/SaveResetButtons
 import useServicesManager from "./useServicesManager";
 import { Fragment } from "react";
 import UpdateItem from "@/features/ItemManager/components/UpdateItem";
-import ServiceItem from "@/pages/items/ServiceItem";
-import EntryCells from "@/pages/ReadWriteAppointment/Entry/EntryCells";
-import CellAddItem, { AddItem } from "@/pages/ReadWriteAppointment/Cell/CellAddItem";
-import Cell from "@/pages/ReadWriteAppointment/Cell/Cell";
-import PaddingCells from "@/pages/ReadWriteAppointment/Cell/PaddingCells";
+import ServiceItem from "@/shared/items/ServiceItem";
+import EntryCells from "@/shared/ReadWriteAppointment/Entry/EntryCells";
+import CellAddItem, { AddItem } from "@/shared/ReadWriteAppointment/Cell/CellAddItem";
+import Cell from "@/shared/ReadWriteAppointment/Cell/Cell";
+import PaddingCells from "@/shared/ReadWriteAppointment/Cell/PaddingCells";
 import AddHelper from "./AddHelper";
 
 interface ServicesManagerProps {

@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import useForm from "@/features/Form/useForm/useForm";
 import makeForm from "@/features/Form/useForm/makeForm";
 import { Appointment as DB_Appointment } from "waltronics-types";
-import LoadAppointment from "@/pages/LoadAppointment/LoadAppointment";
+import LoadAppointment from "@/shared/LoadAppointment/LoadAppointment";
 import SelectAppointment from "@/services/DB/Appointment/SelectAppointment";
 import { EmployeeContext } from "../layout";
 import clsx from "clsx";

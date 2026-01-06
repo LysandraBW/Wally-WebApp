@@ -3,12 +3,12 @@ import useItemsManager from "../../../../../features/ItemManager/useItemsManager
 import SaveResetButtons from "@/features/ItemManager/components/SaveResetButtons";
 import { Repair, Repairs } from "./_DEF";
 import { Fragment } from "react";
-import EntryCells from "@/pages/ReadWriteAppointment/Entry/EntryCells";
-import CellAddItem from "@/pages/ReadWriteAppointment/Cell/CellAddItem";
-import Cell from "@/pages/ReadWriteAppointment/Cell/Cell";
+import EntryCells from "@/shared/ReadWriteAppointment/Entry/EntryCells";
+import CellAddItem from "@/shared/ReadWriteAppointment/Cell/CellAddItem";
+import Cell from "@/shared/ReadWriteAppointment/Cell/Cell";
 import UpdateItem from "@/features/ItemManager/components/UpdateItem";
-import RepairItem from "@/pages/items/RepairItem";
-import PaddingCells from "@/pages/ReadWriteAppointment/Cell/PaddingCells";
+import RepairItem from "@/shared/items/RepairItem";
+import PaddingCells from "@/shared/ReadWriteAppointment/Cell/PaddingCells";
 
 interface RepairsManagerProps {
     repairsManager: ReturnType<typeof useItemsManager<DB_Repair, Repair, Repairs>>;

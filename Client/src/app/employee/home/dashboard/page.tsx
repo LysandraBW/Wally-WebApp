@@ -22,7 +22,7 @@ import StarIcon from "@/component/Icons/Icons/StarIcon";
 import BookmarkIcon from "@/component/Icons/Icons/BookmarkIcon";
 import EyeIcon from "@/component/Icons/Icons/EyeIcon";
 import SparklesIcon from "@/component/Icons/Icons/SparklesIcon";
-import resizeMainContent from "@/pages/ReadWriteAppointment/resizeMainContent";
+import resizeMainContent from "@/shared/ReadWriteAppointment/resizeMainContent";
 
 // after:absolute after:right-[-1px] after:top-0 after:w-[1px] after:h-full after:bg-gradient-to-b after:from-base-300 dark:after:from-base-200 dark:to-transparent
 // grid grid-cols-[minmax(0,1fr)_minmax(0,5fr)]

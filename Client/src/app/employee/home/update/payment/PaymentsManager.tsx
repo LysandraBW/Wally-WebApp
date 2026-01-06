@@ -1,13 +1,13 @@
 import SaveResetButtons from "@/features/ItemManager/components/SaveResetButtons";
 import usePaymentsManager from "./usePaymentsManager";
-import EntryTextField from "../../../../../pages/ReadWriteAppointment/Entry/EntryTextField";
+import EntryTextField from "../../../../../shared/ReadWriteAppointment/Entry/EntryTextField";
 import { Fragment } from "react";
-import EntryCells from "@/pages/ReadWriteAppointment/Entry/EntryCells";
-import CellAddItem from "@/pages/ReadWriteAppointment/Cell/CellAddItem";
-import Cell from "@/pages/ReadWriteAppointment/Cell/Cell";
+import EntryCells from "@/shared/ReadWriteAppointment/Entry/EntryCells";
+import CellAddItem from "@/shared/ReadWriteAppointment/Cell/CellAddItem";
+import Cell from "@/shared/ReadWriteAppointment/Cell/Cell";
 import UpdateItem from "@/features/ItemManager/components/UpdateItem";
-import PaymentItem from "@/pages/items/PaymentItem";
-import PaddingCells from "@/pages/ReadWriteAppointment/Cell/PaddingCells";
+import PaymentItem from "@/shared/items/PaymentItem";
+import PaddingCells from "@/shared/ReadWriteAppointment/Cell/PaddingCells";
 
 interface PaymentsManagerProps {
     paymentsManager: ReturnType<typeof usePaymentsManager>;
