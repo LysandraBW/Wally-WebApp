@@ -1,6 +1,5 @@
 "use client";
 import { InputState } from "@/features/Form/useForm/Input";
-import { Instrumental } from "@/public/fonts/Font";
 import clsx from "clsx";
 import { ReactNode } from "react";
 

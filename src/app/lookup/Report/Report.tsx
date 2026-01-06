@@ -46,7 +46,7 @@ export default function Report(props: ReportProps) {
                     "relative py-12 px-[var(--horizontalPadding)]",
                     "flex justify-between items-center gap-1 max-md:flex-col max-md:items-start max-md:gap-y-4",
                     "dark:border-b dark:border-b-base-200",
-                    "bg-[url('../public/patrick-mcgregor-NS0WZ8XnEdk-unsplash.jpg')] bg-center bg-cover",
+                    "bg-[url('/patrick-mcgregor-NS0WZ8XnEdk-unsplash.jpg')] bg-center bg-cover",
                     "after:absolute after:top-0 after:left-0 after:w-full after:h-full after:bg-gradient-to-r dark:after:bg-gradient-to-l after:from-blue-600 after:to-blue-500/97 dark:after:from-black dark:after:to-black/70"
                 )}
             >

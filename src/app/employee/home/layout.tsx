@@ -6,7 +6,6 @@ import { useEffect, createContext, useState } from "react";
 import { Employee as DB_Employee } from "waltronics-types";
 import clsx from "clsx";
 import Logo from "@/component/NavBar/Logo";
-import { Instrumental } from "@/public/fonts/Font";
 import Wrapper from "./Wrapper";
 import Squares2By2Icon from "@/component/Icons/Icons/Squares2By2Icon";
 import Bars3BottomLeftIcon from "@/component/Icons/Icons/Bars3BottomLeftIcon";
@@ -49,7 +48,7 @@ export default function Page({children}: Readonly<{children: React.ReactNode}>) 
         <div 
             className={clsx(
                 "h-full grow grid grid-cols-[auto_1fr] gap-x-4 p-4",
-                Instrumental.className,
+                "font-instrumental-sans",
                 mode,
                 mode === "dark" && "bg-base-0"
             )}

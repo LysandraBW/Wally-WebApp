@@ -20,7 +20,7 @@ export default function Page() {
     return (
         <div className="relative min-h-screen flex flex-col">
             <div className="grid grid-cols-[60%_40%] grow max-md:grid-cols-1">
-                <div className="relative bg-[url('../public/pexels-kelly-1179532-4066863.jpg')] dark:bg-[url('../public/pexels-karoldach-409701.jpg')] bg-center bg-cover max-md:hidden">
+                <div className="relative bg-[url('/pexels-kelly-1179532-4066863.jpg')] dark:bg-[url('/pexels-karoldach-409701.jpg')] bg-center bg-cover max-md:hidden">
                     <div className="relative top-8 left-8">
                         <Logo
                             white={true}

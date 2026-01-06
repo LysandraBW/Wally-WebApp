@@ -1,17 +1,20 @@
-import type { Config } from "tailwindcss";
-
-const config: Config = {
+const config = {
   content: [
-    "./app/**/*.{js,ts,jsx,tsx,mdx}",
-    "./shared/**/*.{js,ts,jsx,tsx,mdx}",
-    "./views/**/*.{js,ts,jsx,tsx,mdx}",
-    "./features/**/*.{js,ts,jsx,tsx,mdx}",
-    "./component/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/shared/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/views/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/features/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/component/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   darkMode: 'class',
   plugins: [],
   theme: {
     extend: {
+      fontFamily: {
+        "general-sans": ["general-sans", "sans-serif"],
+        "instrument-sans": ["var(--instrument-sans)", "sans-serif"],
+        "ibm": ["var(--ibm)", "sans-serif"]
+      },
       colors: {
         base: {
           0: "var(--base-0000)",

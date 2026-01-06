@@ -1,4 +1,3 @@
-import { Inter } from "@/public/fonts/Font";
 import clsx from "clsx";
 import { ReactNode } from "react";
 

@@ -1,11 +1,10 @@
-import { IBM } from "@/public/fonts/Font";
 import BoltIcon from "../Icons/Icons/BoltIcon";
 import clsx from "clsx";
 
 export default function Logo(props: {white?: boolean; blue?: boolean; metallic?: boolean;}) {
     return (
         <div
-            className={`${IBM.className} w-min cursor-pointer`}
+            className={`font-ibm w-min cursor-pointer`}
         >
             <a 
                 href="/" 

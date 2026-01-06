@@ -107,11 +107,11 @@ export default function Page() {
                     />
                 </div>
                 <img 
-                    src="../pexels-pixabay-210115.jpg" 
+                    src="/pexels-pixabay-210115.jpg" 
                     className="fixed object-cover object-center lg:w-[60%] md:w-[33%] h-screen block dark:!hidden"
                 />
                 <img 
-                    src="../shubham-dhage-KWj4NPwSQkc-unsplash.jpg" 
+                    src="/public/shubham-dhage-KWj4NPwSQkc-unsplash.jpg" 
                     className="fixed object-cover object-center lg:w-[60%] md:w-[33%] h-screen hidden dark:!block"
                 />
             </div>
