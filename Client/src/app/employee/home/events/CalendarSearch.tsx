@@ -10,6 +10,9 @@ import clsx from "clsx";
 import CalendarSelect from "./CalendarSelect";
 import ArrowLeft from "@/component/Icons/Icons/ArrowLeftIcon";
 import ArrowRight from "@/component/Icons/Icons/ArrowRightIcon";
+import IconButton from "@/component/Button/IconButton";
+import Select from "@/component/Form/Select/Select";
+import ChevronUpDownIcon from "@/component/Icons/Icons/ChevronUpDownIcon";
 
 interface CalendarSearchProps {
     year: number;
@@ -49,50 +52,50 @@ export default function CalendarSearch(props: CalendarSearchProps) {
 
     return (
         <div className="flex gap-1 items-center h-[26px]">
-            <button 
+            <IconButton
                 onClick={props.goToPrevMonth}
-                className={clsx(
-                    "h-full aspect-square flex items-center justify-center",
-                    "bg-white border border-gray-300 rounded cursor-pointer hover:bg-gray-50 shadow-sm stroke-gray-400 hover:stroke-black"
-                )}
             >
-                <ArrowLeft/>
-            </button>
+                <ArrowLeft
+                    className="size-2.5 stroke-[2.25px] stroke-inherit"
+                />
+            </IconButton>
             <div className="min-w-[5rem]">
-                <CalendarSelect
+                <Select
                     name="year"
                     values={form.getInput("year").data}
                     state={form.getInput("year").state}
                     onChange={(name, value) => {
                         props.onYearChange(parseInt(value[0]));
                     }}
+                    smaller={true}
+                    ToggleIcon={<ChevronUpDownIcon className="size-2.5 stroke-[1px] stroke-base-500"/>}
                     options={years}
                     disabled={false}
                     toggleLabel="Select Year"
                 />
             </div>
             <div className="min-w-[10rem]">
-                <CalendarSelect
+                <Select
                     name="month"
                     values={form.getInput("month").data}
                     state={form.getInput("month").state}
                     onChange={(name, value) => {
                         props.onMonthChange(parseInt(value[0]));
                     }}
+                    smaller={true}
+                    ToggleIcon={<ChevronUpDownIcon className="size-2.5 stroke-[1px] stroke-base-500"/>}
                     options={months}
                     disabled={false}
                     toggleLabel="Select Month"
                 />
             </div>
-            <button 
+            <IconButton 
                 onClick={props.goToNextMonth}
-                className={clsx(
-                    "h-full aspect-square bg-white flex items-center justify-center",
-                    "border border-gray-300 rounded cursor-pointer hover:bg-gray-50 shadow-sm stroke-gray-400 hover:stroke-black"
-                )}
             >
-                <ArrowRight/>
-            </button>
+                <ArrowRight
+                    className="size-2.5 stroke-[2.25px] stroke-inherit"
+                />
+            </IconButton>
         </div>
     )
 }

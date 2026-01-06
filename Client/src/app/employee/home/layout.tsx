@@ -14,6 +14,7 @@ import CalendarIcon from "@/component/Icons/Icons/CalendarIcon";
 import Tab from "./Tab";
 import PencilSquareIcon from "@/component/Icons/Icons/PencilSquareIcon";
 import Profile from "./Profile";
+import { getCookie } from "@/utils/cookies/getCookie";
 
 export const EmployeeContext = createContext<{employee?: DB_Employee, setCurrentPage?: (page: string) => void}>({});
 
@@ -21,10 +22,14 @@ export default function Page({children}: Readonly<{children: React.ReactNode}>) 
     const [employee, setEmployee] = useState<DB_Employee>();
     const [currPage, setCurrPage] = useState("Dashboard");
     const [authenticated, setAuthenticated] = useState<boolean>();
- 
+    const [mode, setMode] = useState("");
 
+    
     useEffect(() => {
         const load = async () => {
+            const mode = await getCookie("Mode");
+            setMode(mode);
+
             const employee = await AuthenticatedEmployee();
             setAuthenticated(!!employee);
             if (employee)
@@ -43,8 +48,10 @@ export default function Page({children}: Readonly<{children: React.ReactNode}>) 
     return (
         <div 
             className={clsx(
-                "h-full flex grow gap-x-4 p-4",
-                Instrumental.className
+                "h-full grow grid grid-cols-[auto_1fr] gap-x-4 p-4",
+                Instrumental.className,
+                mode,
+                mode === "dark" && "bg-base-0"
             )}
         >
             {authenticated &&
@@ -106,10 +113,10 @@ export default function Page({children}: Readonly<{children: React.ReactNode}>) 
                             />
                         </div>
                     </Wrapper>
-                    <div className="h-full flex flex-col grow gap-y-4">
+                    <div className="h-full grid grid-rows-[auto_1fr] grow gap-y-4">
                         <Wrapper
                             id="HNavBar"
-                            outerClassName="h-min"
+                            outerClassName="h-min min-h-0"
                             innerClassName="h-min p-2 flex items-center justify-between gap-2 overflow-y-auto"
                         >
                             <span className="block text-xs text-base-400 tracking font-medium">

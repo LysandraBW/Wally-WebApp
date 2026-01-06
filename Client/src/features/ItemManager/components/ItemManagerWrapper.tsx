@@ -4,6 +4,7 @@ import ResetButton from "@/features/ItemManager/components/ResetButton";
 import DeleteButton from "@/features/ItemManager/components/DeleteButton";
 import SaveCancelButtons from "@/features/ItemManager/components/SaveCancelButtons";
 import { UseItemManagerProps } from "../useItemManager";
+import clsx from "clsx";
 
 export interface ItemManagerProps<BaseThing, Thing, MappedThings> extends UseItemManagerProps<BaseThing, Thing, MappedThings> {
     header: string;
@@ -18,13 +19,19 @@ export interface ItemManagerWrapperProps {
     resetItem: () => void;
     closeItem: () => void;
     deleteItem: () => void;
+    noBorderL?: boolean;
 }
 
 export function ItemManagerWrapper(props: ItemManagerWrapperProps) {
     return (
-        <div className="grow grid grid-cols-1 grid-rows-[1fr_auto] justify-between bg-base-0 dark:bg-base-50 w-full border border-t-0 border-base-300 dark:border-base-200">
+        <div 
+            className={clsx(
+                "grow grid grid-cols-1 grid-rows-[1fr_auto] justify-between bg-base-0 dark:bg-base-50 w-full border border-t-0 border-base-300 dark:border-base-200",
+                props.noBorderL && "!border-l-0 !border-r-0 !border-b-0 rounded-br-[4px]"
+            )}
+        >
             <div className="grow bg-base-0 dark:bg-base-50 w-full">
-                <div className="sticky top-[32px] bg-base-0 dark:bg-base-50 flex justify-start items-center px-2 py-4 border-b border-b-base-300 dark:border-base-200">
+                <div className="sticky top-[32px] bg-base-0 dark:bg-[#121214] flex justify-start items-center px-2 py-4 border-b border-b-base-300 dark:border-base-200">
                     <h6 className="font-medium text-sm tracking-wide text-base-700">
                         {props.header}
                     </h6>

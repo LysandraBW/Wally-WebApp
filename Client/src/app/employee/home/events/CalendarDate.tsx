@@ -1,66 +1,69 @@
 import { getTimeFromDateString } from "@/utils/extract";
-import { Events } from "./_DEF";
+import { Event, Events } from "./_DEF";
 import { useEffect, useState } from "react";
-import ClockIcon from "@/component/Icon/Clock";
 import clsx from "clsx";
+import { toDisplayTime } from "@/utils/convert";
 
 interface CalendarDateProps {
     dateIndex: number;
     dateEvents: Events;
-    onOpenEvent: (eventID: string) => void;
+    onOpenEvent: (event: Event) => void;
     onOpenEvents: (dateIndex: number) => void;
 }
 
 export default function CalendarDate(props: CalendarDateProps) {
     const [events, setEvents] = useState(Object.entries(props.dateEvents));
 
-    const onOpenEvent = (e: any, eventID: string) => {
+
+    const onOpenEvent = (e: any, event: Event) => {
         e.stopPropagation();
-        props.onOpenEvent(eventID)
+        props.onOpenEvent(event);
     }
+
 
     useEffect(() => {
         setEvents(Object.entries(props.dateEvents));
     }, [props.dateEvents]);
+
 
     return (
         <div 
             onClick={() => props.onOpenEvents(props.dateIndex)}
             className={clsx(
                 "w-full h-full overflow-x-hidden overflow-y-scroll scroll-hide",
-                "flex flex-col items-center gap-1 p-0 px-1"
+                "flex flex-col gap-1 p-0 px-2"
             )}
         >
             {/* This is that corner that tells you the date. */}
             <div
                 className={clsx(
-                    "flex items-center justify-center",
-                    "aspect-square w-min h-min my-2.5",
+                    "flex items-center justify-start",
+                    "aspect-square w-min h-min  my-2 mb-1",
                 )}
             >
-                <span className="text-01 text-black">{props.dateIndex}</span>
+                <span className="text-[0.6rem] text-base-700 font-medium">
+                    {props.dateIndex}
+                </span>
             </div>
             {/* 
             This contains the events in that date. 
             The UI is a bit sketch.
             */}
-            <div className="flex flex-col gap-1 px-1 w-full">
+            <div className="flex flex-col gap-1  w-full">
                 {events.map(([eventID, event], i) => (
                     <div 
                         key={i}
-                        onClick={(e) => onOpenEvent(e, eventID)}
+                        onClick={(e) => onOpenEvent(e, event)}
                         className={clsx(
-                            "shadow-sm p-1 bg-white px-1 border border-gray-300 border-x-0- rounded hover:bg-blue-50 hover:border-blue-200",
-                            "cursor-pointer group w-full flex justify-between",
+                            "shadow-xs py-0.5 bg-blue-100 hover:bg-blue-200  dark:bg-blue-500/10 px-1 border-[1px] border-blue-500/50 dark:border-blue-500 rounded-[4px]",
+                            "cursor-pointer group w-full flex gap-4 justify-between items-center dark:hover:bg-blue-500/20",
                             // "after:top-0 hover:after:bg-blue-500 after:left-0 after:h-full after:w-[1px] after:bg-black after:absolute"
                         )}
                     >
-                        <p className="text-00 text-gray-700 font-medium whitespace-nowrap text-ellipsis overflow-hidden group-hover:text-blue-500">{event.Name}</p>
-                        <div className="flex items-center gap-0.5">
-                            <span className="whitespace-nowrap text-00 text-gray-400 tracking-wide font-medium relative top-[-0.5px] group-hover:text-blue-500">
-                                {getTimeFromDateString(event.Date)}
-                            </span>
-                        </div>
+                        <p className="text-[0.6rem] text-blue-500 tracking-wide font-medium whitespace-nowrap text-ellipsis overflow-hidden group-hover:text-blue-500">{event.Name}</p>
+                        <span className="block whitespace-nowrap text-[0.6rem] text-blue-500 tracking-wide font-medium- relative top-[-0.5px] group-hover:text-blue-500">
+                            {toDisplayTime(event.Date)}
+                        </span>
                     </div>
                 ))}
             </div>

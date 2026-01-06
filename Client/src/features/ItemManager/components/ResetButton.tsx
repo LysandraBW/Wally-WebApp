@@ -8,7 +8,9 @@ interface ResetButtonProps {
 export default function ResetButton(props: ResetButtonProps) {
     return (
         <IconButton
+            size={14}
             onClick={props.onReset}
+            className="rounded-[5px] shadow-xs dark:shadow-md"
         >
             <ArrowPathIcon
                 className="size-3.5 stroke-inherit"

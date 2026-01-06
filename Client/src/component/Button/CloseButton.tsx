@@ -9,6 +9,7 @@ export default function CloseButton(props: IconButtonProps) {
             paddingLess={props.paddingLess}
             roundedFull={true}
             onClick={props.onClick}
+            className="!rounded-full"
         >
             <XMarkIcon
                 className={clsx(

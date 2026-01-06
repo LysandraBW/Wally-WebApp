@@ -20,6 +20,8 @@ import ChevronLeftIcon from "@/component/Icons/Icons/ChevronLeftIcon";
 import UserIcon from "@/component/Icons/Icons/UserIcon";
 import CalendarIcon from "@/component/Icons/Icons/CalendarIcon";
 import DataGroup from "./DataGroup";
+import ViewAppointment from "@/pages/ReadWriteAppointment/Buttons/ViewAppointment";
+import EditAppointment from "@/pages/ReadWriteAppointment/Buttons/EditAppointment";
 
 interface AppointmentPaneProps {
     appointmentManager: AppointmentManager;
@@ -70,11 +72,13 @@ export default function AppointmentPane(props: AppointmentPaneProps) {
             {/* Close Button */}
             <div className="flex justify-between items-center px-4 py-3 border-b border-base-300 dark:border-base-200">
                 <CloseButton 
-                    size={12}
+                    size={10}
                     onClick={props.appointmentManager.closeAppointment}
                 />
                 <div className="flex gap-2">
                     <IconButton
+                        size={12}
+                        className="rounded-[5px] shadow-xs dark:shadow-md"
                         onClick={props.appointmentManager.goToPrevAppointment}
                     >
                         <ChevronLeftIcon
@@ -82,6 +86,8 @@ export default function AppointmentPane(props: AppointmentPaneProps) {
                         />
                     </IconButton>
                     <IconButton
+                        size={12}
+                        className="rounded-[5px] shadow-xs dark:shadow-md"
                         onClick={props.appointmentManager.goToNextAppointment}
                     >
                         <ChevronRightIcon
@@ -97,39 +103,31 @@ export default function AppointmentPane(props: AppointmentPaneProps) {
                             {appointment.FName} {appointment.LName}
                         </h6>
                     </div>
-                    <div className="border-b border-base-300 dark:border-base-200 p-1">
+                    <div className="border-b border-base-300 dark:border-base-200 py-1 px-3 bg-base-50">
                         <div className="flex gap-2">
-                            <SecondaryButton
-                                className="text-sm text-center w-full flex justify-center items-center"
-                                onClick={() => navigate(PAGE_VIEW_APPOINTMENT, {
-                                    appointmentID: props.appointmentManager.openedAppointment || ""
-                                })}
-                            >
-                                View
-                            </SecondaryButton>
-                            <PrimaryButton
-                                className="text-sm text-center w-full flex justify-center items-center"
-                                onClick={() => navigate(PAGE_EDIT_APPOINTMENT, {
-                                    appointmentID: props.appointmentManager.openedAppointment || ""
-                                })}
-                            >
-                                Update
-                            </PrimaryButton>
+                            <ViewAppointment
+                                size={14}
+                                appointmentID={props.appointmentManager.openedAppointment || ""}
+                            />
+                            <EditAppointment
+                                size={14}
+                                appointmentID={props.appointmentManager.openedAppointment || ""}
+                            />
                         </div>
                     </div>
                     <div className="grid grid-cols-[30%_70%] gap-x-4 p-4 py-2 border-b border-b-base-300 dark:border-base-200 hover:bg-base-50">
-                        <span className="font-medium text-base-700 text-sm tracking-wide">
+                        <span className="font-medium text-base-700 text-xs tracking-wide">
                             Date Created
                         </span>
-                        <span className="text-base-700 tracking-wide text-sm">
+                        <span className="text-base-700 tracking-wide text-xs">
                             {toDisplayDate(appointment.CreationDate, "MMMM Do, YYYY [at] h:mm A")}
                         </span>
                     </div>
                     <div className="grid grid-cols-[30%_70%] gap-x-4 p-4 py-2 border-b border-b-gray-300 dark:border-base-200 hover:bg-base-50">
-                        <span className="block font-medium text-base-700 text-sm tracking-wide">
+                        <span className="block font-medium text-base-700 text-xs tracking-wide">
                             Appointment ID
                         </span>
-                        <span className="block text-base-700 tracking-wide text-sm">
+                        <span className="block text-base-700 tracking-wide text-xs">
                             {appointment.AppointmentID}
                         </span>
                     </div>

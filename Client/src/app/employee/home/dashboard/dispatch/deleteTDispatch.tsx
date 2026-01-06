@@ -11,6 +11,7 @@ export default function deleteTDispatch(key: Key, alertDispatch: Dispatch<AlertA
                 head="Successfully Deleted Appointments"
                 body="Deleted Appointment(s)"
                 type="Success"
+                absolute={true}
                 onClose={() => {
                     alertDispatch({
                         type: AlertActionType.DeleteMessage,

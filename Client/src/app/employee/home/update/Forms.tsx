@@ -9,7 +9,7 @@ import PartManager from './part/PartManager';
 import RepairManager from './repair/RepairManager';
 import { Rnd as RND } from 'react-rnd';
 import clsx from 'clsx';
-import useTabsManager from '@/features/TabManager/useTabsManager';
+import useTabsManager, { Tab } from '@/features/TabManager/useTabsManager';
 import useItemsManager from '@/features/ItemManager/useItemsManager';
 import usePaymentsManager from './payment/usePaymentsManager';
 import useServicesManager from './service/useServicesManager';
@@ -79,6 +79,7 @@ export default function Forms(props: FormsProps) {
             )}>
                 <OpenedTabs
                     tabsManager={props.tabsManager}
+                    filterTabs={(tab: Tab) => !!tab.form}
                 />
                 {(props.tabsManager.currentTab && props.tabsManager.currentTab.form?.key === REPAIR) &&
                     <RepairManager

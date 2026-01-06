@@ -11,6 +11,11 @@ import clsx from "clsx";
 import GetEmployeeNamePairs from "@/services/DB/Employee/GetEmployeeNamePairs";
 import { navigate } from "@/utils/navigate";
 import { PAGE_EDIT_APPOINTMENT, PAGE_VIEW_APPOINTMENT } from "@/utils/constants";
+import UserIcon from "@/component/Icons/Icons/UserIcon";
+import SecondaryButton from "@/component/Button/SecondaryButton";
+import IconButton from "@/component/Button/IconButton";
+import DocumentIcon from "@/component/Icons/Icons/DocumentIcon";
+import { PencilIcon } from "lucide-react";
 
 interface EventModalProps {
     event: Event;
@@ -33,22 +38,17 @@ export default function EventModal(props: EventModalProps) {
     return (
         <>
             {props.event &&
-                <div className="bg-white border border-gray-300">
-                    <div className="flex justify-between items-start p-4 border-b border-b-gray-200">
-                        <h6 className="font-medium">Showing Event</h6>
-                        <div>
-                            <CloseButton
-                                onClose={() => {
-                                    props.onClose(props.event.EventID);
-                                }}
-                            />
-                        </div>
+                <div className="bg-base-0 dark:bg-base-50">
+                    <div className="dark:bg-[#121214] flex justify-between items-start py-4 px-2 border-b border-base-300 dark:border-base-200">
+                        <h6 className="font-medium text-base-700 text-sm">
+                            {props.event.AppointmentID === "" ? props.event.Name : "Appointment"}
+                        </h6>
                     </div>
                     {props.event.AppointmentID === "" &&
                         <div 
                             className={clsx(
-                                "flex items-center py-2 px-4 gap-2",
-                                "border-b border-b-gray-200 bg-gray-50"
+                                "flex items-center py-2 px-2 gap-2",
+                                "border-b border-base-300 dark:border-base-200 bg-base-100 dark:bg-base-50"
                             )}
                         >
                             <EditButton
@@ -63,59 +63,81 @@ export default function EventModal(props: EventModalProps) {
                             />
                         </div>
                     }
-                    <div className="flex-col p-1 border-b border-b-gray-200 bg-gray-50">
-                        <div className="flex flex-col gap-0 p-1 px-4">
+                    {props.event.AppointmentID !== "" &&
+                        <div 
+                            className={clsx(
+                                "flex items-center py-2 px-2 gap-2",
+                                "border-b border-base-300 dark:border-base-200 bg-base-100 dark:bg-base-50"
+                            )}
+                        >
+                            <IconButton
+                                size={14}
+                                onClick={() => navigate(PAGE_VIEW_APPOINTMENT, {appointmentID: props.event.AppointmentID || ""})}
+                                className="rounded-[5px] shadow-xs dark:shadow-md"
+                            >
+                                <DocumentIcon
+                                    className="size-4 stroke-inherit"
+                                />
+                            </IconButton>
+                            <IconButton
+                                size={14}
+                                onClick={() => navigate(PAGE_EDIT_APPOINTMENT, {appointmentID: props.event.AppointmentID || ""})}
+                                className="rounded-[5px] shadow-xs dark:shadow-md"
+                            >
+                                <PencilIcon
+                                    className="size-3 stroke-inherit"
+                                />
+                            </IconButton>
+                        </div>
+                    }
+                    <div className="flex-col p-1 border-b border-base-300 dark:border-base-200 bg-base-100 dark:bg-base-50">
+                        <div className="flex flex-col gap-0 p-1 px-2">
                             {props.event.AppointmentID !== "" &&
-                                <span className="text-01 tracking-wide text-gray-600 font-medium-">
-                                    Appointment {props.event.AppointmentID}
+                                <span className="text-xs tracking-wide text-base-500">
+                                    {props.event.AppointmentID}
                                 </span>
                             }
                             {props.event.AppointmentID === "" &&
-                                <span className="text-01 tracking-wide text-gray-600 font-medium-">
+                                <span className="text-xs tracking-wide text-base-500">
                                     {parseInt(props.event.EventID) >= 0 ? `Event #${props.event.EventID}` : "New Event"}
                                 </span>
                             }
-                            <span className="text-01 tracking-wide text-gray-600 font-medium-">
-                                {toDisplayDate(props.event.Date)}
+                            <span className="text-xs tracking-wide text-base-500">
+                                {toDisplayDate(props.event.Date, 'MMMM Do, YYYY [at] hh:mm A')}
                             </span>
                         </div>
                     </div>
-                    <div className="flex-col p-4 py-4 min-h-[200px]">
-                        <h6 className="font-medium text-black text-05 tracking-wide mb-1">{props.event.Name}</h6>
-                        <p className="text-sm tracking-wide text-gray-600">{props.event.Summary}</p>
+                    <div className="flex flex-col px-2 py-2 gap-y-0">
+                        {/* <h6 className="font-medium text-base-700 text-xs">{props.event.Name}</h6> */}
+                        <p className="text-xs tracking-wide text-base-500">{props.event.Summary}</p>
                     </div>
                     {props.event.Sharees.length !== 0 && 
                         <div className="overflow-scroll scroll-hide">
-                            <div className="flex bg-gray-50 py-2 px-4 border-t border-t-gray-200 items-center gap-2">
+                            <div 
+                                className="flex bg-base-100 dark:bg-base-50 py-2 px-2 border-t border-b border-b-dashed border-base-300 dark:border-base-200 items-center gap-2"
+                                style={{
+                                    borderBottomStyle: "dashed"
+                                }}    
+                            >
                                 {props.event.Sharees.map((sharee, i) => (
-                                    <span key={i} className="block flex gap-1 items-center tracking-wide text-00 font-medium shadow-sm tag border-solid text-01">
-                                        <Person
-                                            width="14"
-                                            height="14"
-                                            fill="#94a3b8"
-                                            stroke="#94a3b8"
-                                            strokeWidth="0.25"
+                                    <div
+                                        key={i}
+                                        className="flex items-center gap-1 py-0 px-1 surface-border w-min bg-base-0 dark:bg-[#121214] rounded-[4px]"
+                                    >
+                                        <UserIcon
+                                            className="size-2 stroke-base-500 stroke-[2px]"
                                         />
-                                        {idToName[sharee]}
-                                    </span>
+                                        <span className="text-[0.6rem] tracking-wide text-base-500 whitespace-nowrap">
+                                            {idToName[sharee]}
+                                        </span>
+                                        {/* {item.EmployeeID === sharee && 
+                                            <span className="text-blue-500 medium">
+                                                Creator
+                                            </span>
+                                        } */}
+                                    </div>
                                 ))}
                             </div>
-                        </div>
-                    }
-                    {props.event.AppointmentID !== "" &&
-                        <div className="flex gap-4 p-4 items-center border-t border-t-gray-200 justify-end">
-                            <button 
-                                onClick={() => navigate(PAGE_VIEW_APPOINTMENT, {"appointmentID": props.event.AppointmentID || ""})}
-                                className="px-4 py-1.5 h-min border border-gray-300 rounded bg-white shadow-sm tracking-wide text-xs font-medium text-black"
-                            >
-                                View Appointment    
-                            </button>
-                            <button 
-                                onClick={() => navigate(PAGE_EDIT_APPOINTMENT, {"appointmentID": props.event.AppointmentID || ""})}
-                                className="px-2 py-1.5 h-min border border-gray-300 rounded bg-white shadow-sm tracking-wide text-xs font-medium text-black"
-                            >
-                                Edit Appointment    
-                            </button>
                         </div>
                     }
                 </div> 

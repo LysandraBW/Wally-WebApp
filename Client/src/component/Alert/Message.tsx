@@ -17,8 +17,8 @@ export default function Message(props: MessageProps) {
     return (
         <div 
             className={clsx(
-                "bg-white/90 dark:bg-black/90 rounded-lg border border-base-300 shadow-sm backdrop-blur",
-                props.absolute && "absolute z-[10] top-[2rem]",
+                "bg-white/25 dark:bg-black/25 rounded-md border border-base-300 dark:border-base-200 shadow-sm backdrop-blur",
+                props.absolute && "absolute z-[10] top-[calc(1rem+4px)]",
                 props.absolute && props.spanScreenWidth && "left-[2rem] w-[calc(100%-2rem-2rem)]",
                 props.absolute && !props.spanScreenWidth && "[--width:min(700px,calc(100%-2rem-2rem))] left-[calc(50%-var(--width)/2)] w-[calc(var(--width))]",
             )}

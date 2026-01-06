@@ -57,7 +57,7 @@ export default function TableEntry(props: TableEntryProps) {
                 "border-r border-b border-base-300 dark:border-base-200",
                 "hover:!bg-white dark:hover:!bg-base-200",
                 "cursor-pointer",
-                !props.seen && "bg-base-100 dark:bg-base-0",
+                !props.seen && "bg-base-100 dark:bg-[#121214]",
                 props.seen && "bg-base-200 dark:bg-base-50",
                 props.style,
             )}

@@ -16,6 +16,18 @@ export interface Tab {
     [k: string]: any;
 }
 
+export interface TabForm {
+    id: TabID;
+    header: string;
+    form: {
+        key: string;
+        itemID: string;
+        header: string;
+        mutation: "Create"|"Update";
+        canDelete: boolean;
+    };
+}
+
 
 export default function useTabsManager<T extends Tab>() {
     const [tabs, setTabs] = useState<Array<T>>([]);
@@ -31,8 +43,10 @@ export default function useTabsManager<T extends Tab>() {
     const openTab = (newTab: T) => {
         // Check if Tab Exists
         const tabIndex = tabs.findIndex(tab => sameSemanticMap(tab.id, newTab.id));
-        if (tabIndex !== -1)
+        if (tabIndex !== -1) {
+            setCurrentTab(tabs[tabIndex]);
             return;
+        }
 
         setTabs([...tabs, newTab]);
         setCurrentTab(newTab);

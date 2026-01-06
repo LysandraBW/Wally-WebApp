@@ -11,6 +11,7 @@ export default function recoverFDispatch(key: Key, alertDispatch: Dispatch<Alert
                 head="Failed to Recover All Appointments"
                 body="An error occurred. Please refresh the browser and try again."
                 type="Error"
+                absolute={true}
                 onClose={() => {
                     alertDispatch({
                         type: AlertActionType.DeleteMessage,

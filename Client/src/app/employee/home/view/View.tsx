@@ -35,13 +35,6 @@ export default function View(props: ViewProps) {
     }, []);
 
 
-    useEffect(() => {
-        console.log(props.appointment.Notes);
-        resizeMainContent();
-        window.addEventListener("resize", resizeMainContent);
-    }, []);
-
-
     const handleTabChange = async (tab: string) => {
         setTab(tab);
         const URL = `/employee/home/view?appointmentID=${props.appointmentID}&tab=${tab}`;

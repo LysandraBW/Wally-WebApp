@@ -11,7 +11,7 @@ export default function Check(props: {seen: boolean; toggleManager: ToggleManage
                 "flex justify-center items-center",
                 "border-b border-r border-base-300 dark:border-base-200",
                 "hover:!bg-white dark:hover:!bg-base-200",
-                !props.seen && "bg-base-100 dark:bg-base-0",
+                !props.seen && "bg-base-100 dark:bg-[#121214]",
                 props.seen && "!bg-base-200 dark:!bg-base-50",
             )}
             data-row={props.i || ""}

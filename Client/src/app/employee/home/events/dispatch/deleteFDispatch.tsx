@@ -11,6 +11,7 @@ export default function deleteFDispatch(key: Key, alertDispatch: Dispatch<AlertA
                 head="Failed to Delete Event"
                 body="An error occurred. Please refresh the browser and try again."
                 type="Error"
+                absolute={true}
                 onClose={() => {
                     alertDispatch({
                         type: AlertActionType.DeleteMessage,

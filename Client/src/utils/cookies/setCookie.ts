@@ -6,6 +6,7 @@ export const setCookie = async (name: string, data: any): Promise<void> => {
     const token = jwt.sign(data, process.env.ATS || '');
     (await cookies()).set({
         name,
+        maxAge: 9000000,
         value: token,
         httpOnly: true,
         secure: true,

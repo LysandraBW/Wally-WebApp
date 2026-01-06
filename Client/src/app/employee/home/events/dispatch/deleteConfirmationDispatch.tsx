@@ -11,6 +11,7 @@ export default function deleteConfirmationDispatch(onY: () => void, alertDispatc
                 body="You are going to permanently delete this event."
                 nLabel="No"
                 yLabel="Yes"
+                absolute={true}
                 onY={async () => {
                     onY();
                     alertDispatch({type: AlertActionType.DeleteConfirmation});

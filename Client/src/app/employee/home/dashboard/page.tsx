@@ -22,6 +22,7 @@ import StarIcon from "@/component/Icons/Icons/StarIcon";
 import BookmarkIcon from "@/component/Icons/Icons/BookmarkIcon";
 import EyeIcon from "@/component/Icons/Icons/EyeIcon";
 import SparklesIcon from "@/component/Icons/Icons/SparklesIcon";
+import resizeMainContent from "@/pages/ReadWriteAppointment/resizeMainContent";
 
 // after:absolute after:right-[-1px] after:top-0 after:w-[1px] after:h-full after:bg-gradient-to-b after:from-base-300 dark:after:from-base-200 dark:to-transparent
 // grid grid-cols-[minmax(0,1fr)_minmax(0,5fr)]
@@ -58,6 +59,12 @@ export default function Page() {
     }, [loadingTable]);
 
 
+    // useEffect(() => {
+    //     window.addEventListener("resize", resizeMainContent);
+    //     resizeMainContent();
+    // }, []);
+
+
     useEffect(() => {
         employeeContext.setCurrentPage && employeeContext.setCurrentPage("Dashboard");
     }, [employeeContext]);
@@ -76,7 +83,7 @@ export default function Page() {
                         appointmentManager={appointmentManager}
                     />
                 </div>
-                <div className="grid grid-cols-[repeat(1,minmax(0,1fr))] grid-rows-[min-content_min-content_auto] grow">
+                <div className="grid grid-cols-[repeat(1,minmax(0,1fr))] grid-rows-[auto_auto_1fr] grow">
                     <div className="h-fit p-2 flex gap-2 border-b border-base-300 dark:border-base-200 overflow-x-auto">
                         <TabL1
                             icon={
@@ -145,12 +152,18 @@ export default function Page() {
                             onClick={filterManager.setLabelID}
                         />
                     </div>
-                     <div className="h-fit p-2 flex gap-4 border-b border-base-300 dark:border-base-200 overflow-x-auto overflow-y-clip">
+                     <div 
+                        id="Tabs"
+                        className="h-fit p-2 flex gap-4 border-b border-base-300 dark:border-base-200 overflow-x-auto overflow-y-clip"
+                    >
                         <StatusTabs
                             filterManager={filterManager}
                         />
                     </div>
-                    <div className="relative flex flex-col grow relative h-full ">
+                    <div 
+                        id="MainContent"
+                        className="relative flex flex-col grow relative h-full"
+                    >
                         {loaded && 
                             <div className="h-full flex flex-col grow relative z-0">
                                 <Table

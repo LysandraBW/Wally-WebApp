@@ -33,7 +33,7 @@ export default function Search(props: SearchProps) {
             return;
         }
         setToggleLabel(optionMap[props.values[0]]);
-    }, []);
+    }, [props.values, optionMap]);
 
     useEffect(() => {
         const matched = searchLabels(search, props.options);
@@ -71,7 +71,7 @@ export default function Search(props: SearchProps) {
                     <Toggle
                         onClick={() => setOpen(true)}
                         icon={props.ToggleIcon}
-                        label={props.multiple ? props.toggleLabel : props.values[0]}
+                        label={toggleLabel}
                     />
                     {open &&
                         <Wrapper>

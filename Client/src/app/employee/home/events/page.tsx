@@ -21,6 +21,10 @@ import CalendarSearch from "./CalendarSearch";
 import clsx from "clsx";
 import useTabsManager, { Tab } from "@/features/TabManager/useTabsManager";
 import Plus from "@/component/Icons/Icons/PlusIcon";
+import SecondaryButton from "@/component/Button/SecondaryButton";
+import PlusIcon from "@/component/Icons/Icons/PlusIcon";
+import OpenedTabs from "../update/OpenedTabs";
+import { AnimatePresence, motion } from "motion/react";
 
 export interface EventsTab extends Tab {
     event?: {
@@ -43,6 +47,8 @@ export default function EventsManager() {
 
     useEffect(() => {
         refresh();
+        resizeMainContent();
+        window.addEventListener("resize", resizeMainContent);
     }, []);
 
 
@@ -90,56 +96,92 @@ export default function EventsManager() {
     }
 
 
+    const resizeMainContent = () => {
+        const vNavBar = document.querySelector("#VNavBar");
+        if (!vNavBar)
+            return;
+        const vNavBarRect = vNavBar.getBoundingClientRect();
+
+        const mainContent = document.querySelector("#MainContent");
+        if (!mainContent)
+            return;
+
+        const mainContentRect = mainContent.getBoundingClientRect();
+        const mainContentHeight = vNavBarRect.bottom - mainContentRect.top;
+        // (mainContent as any).style.maxHeight = `${mainContentHeight}px`;
+
+        const mainContentElements = document.querySelectorAll("#MainContent");
+        for (const element of mainContentElements) {
+            (element as any).style.height = `${mainContentHeight}px`;
+            (element as any).style.maxHeight = `${mainContentHeight}px`;
+        }
+    }
+
+
     return (
-        <div className="flex flex-col overflow-x-clip grow">
+        <div className="h-full flex flex-col grow overflow-y-auto">
             <Alert
                 alert={alert}
             />
-            {/* <div className="flex grow">
-                <div className="p-4 flex flex-col grow gap-4">
-                    <div className="flex flex-col gap-4 row-start-1 row-span-1 col-start-1 w-full grow">
-                        <div className="w-full flex justify-between">
-                            <CalendarSearch
-                                year={eventsManager.year}
-                                monthIndex={eventsManager.monthIndex}
-                                goToNextMonth={eventsManager.goToNextMonth}
-                                goToPrevMonth={eventsManager.goToPrevMonth}
-                                onYearChange={eventsManager.setYear}
-                                onMonthChange={eventsManager.setMonthIndex}
-                            />
-                            <button 
-                                className={clsx(
-                                    "w-full max-w-[10rem] !h-[26px]",
-                                    "p-4 py-2 bg-white rounded",
-                                    "border border-gray-300 hover:stroke-black hover:fill-blue-500 stroke-gray-400 fill-gray-400 hover:text-black",
-                                    "hover:border hover:bg-gray-50",
-                                    "fill-gray-300 stroke-gray-300",
-                                    "shadow-sm flex items-center justify-center gap-2"
-                                )}
-                                onClick={eventsManager.startCreateEditor}
-                            >
-                                <Plus/>
-                            </button>
-                        </div>
-                        <Calendar
+            <div 
+                id="MainContent"
+                className="flex grow"
+            >
+                <div 
+                    className={clsx(
+                        "w-full h-full p-2",
+                        "grid grid-rows-[auto_1fr] gap-y-2",
+                    )}
+                >
+                    <div className="w-full flex justify-between">
+                        <CalendarSearch
                             year={eventsManager.year}
                             monthIndex={eventsManager.monthIndex}
-                            events={eventsManager.newItems}
-                            onOpenEvent={eventsManager.openEvent}
-                            onOpenEvents={eventsManager.openEvents}
+                            goToNextMonth={eventsManager.goToNextMonth}
+                            goToPrevMonth={eventsManager.goToPrevMonth}
+                            onYearChange={eventsManager.setYear}
+                            onMonthChange={eventsManager.setMonthIndex}
                         />
+                        <SecondaryButton
+                            onClick={eventsManager.startCreateEditor}
+                            className={clsx(
+                                "w-[200px]",
+                                "flex justify-center items-center",
+                                "stroke-base-500 hover:stroke-base-700"
+                            )}
+                        >
+                            <PlusIcon
+                                className="size-3 stroke-inherit"
+                            />
+                        </SecondaryButton>
                     </div>
+                    <Calendar
+                        year={eventsManager.year}
+                        monthIndex={eventsManager.monthIndex}
+                        events={eventsManager.newItems}
+                        onOpenEvent={eventsManager.openEvent}
+                        onOpenEvents={eventsManager.openEvents}
+                    />
                 </div>
-                <div>
-                    {tabsManager.tabs && (
-                        <>
-                            {
-                                tabsManager.tabs.map((tab, i) => (
-                                    <div key={i} onClick={() => tabsManager.openTab(tab)}>
-                                        {tab.header}
-                                    </div>
-                                ))
-                            }
+                <AnimatePresence>
+                    {!!tabsManager.tabs.length && (
+                        <motion.div 
+                            id="MainContent"
+                            className="grow grid grid-rows-[auto_1fr] w-[400px] h-full overflow-x-clip overflow-y-clip border-l border-base-300 dark:border-base-200"
+                            initial={{ width: "0px" }}
+                            animate={{ width: "400px" }}
+                            exit={{ width: "0px" }}
+                            transition={{ 
+                                duration: 0.3, 
+                                ease: "easeInOut" 
+                            }}
+                        >
+                            <OpenedTabs
+                                tabsManager={tabsManager}
+                                outerClassName="!border-t-0 !border-r-0 !border-l-0 !rounded-tr-md"
+                                closeClassName="!rounded-tr-[5px]"
+                                roundedTR={true}
+                            />
                             {tabsManager.currentTab && (
                                 <>
                                     {tabsManager.currentTab.form &&
@@ -152,7 +194,15 @@ export default function EventsManager() {
                                     }
                                     {tabsManager.currentTab.event &&
                                         <EventModal
-                                            event={eventsManager.newItems[tabsManager.currentTab.event.eventID]}
+                                            event={Object.values(eventsManager.newItems).find((event: Event) => {
+                                                if (tabsManager.currentTab && "appointmentID" in tabsManager.currentTab.id) {
+                                                    return event.AppointmentID === tabsManager.currentTab.id.appointmentID
+                                                }
+                                                if (tabsManager.currentTab && "eventID" in tabsManager.currentTab.id) {
+                                                    return event.EventID === tabsManager.currentTab.id.eventID
+                                                }
+                                                return false;
+                                            }) as any}
                                             onClose={eventsManager.closeOpenedEventTab}
                                             onUpdate={eventsManager.startUpdateEditor}
                                             onDelete={eventsManager.deleteFromOpenedEvent}
@@ -171,10 +221,10 @@ export default function EventsManager() {
                                     }
                                 </>
                             )}
-                        </>
+                        </motion.div>
                     )}
-                </div>
-            </div> */}
+                </AnimatePresence>
+            </div>
         </div>
     )
 }

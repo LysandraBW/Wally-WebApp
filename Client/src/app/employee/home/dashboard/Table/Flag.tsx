@@ -10,7 +10,7 @@ export default function Flag(props: {seen: boolean, flagged: boolean, markAsFlag
                 "border-r border-b border-base-300 dark:border-base-200",
                 "cursor-pointer",
                 "hover:!bg-white dark:hover:!bg-base-200",
-                !props.seen && "bg-base-100 dark:bg-base-0",
+                !props.seen && "bg-base-100 dark:bg-[#121214]",
                 props.seen && "!bg-base-200 dark:!bg-base-50",
             )}
             onClick={props.markAsFlagged}

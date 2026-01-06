@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Days, Events, ShortenedDays, Years } from "./_DEF";
+import { Days, Event, Events, ShortenedDays, Years } from "./_DEF";
 import CalendarDate from "./CalendarDate";
 import getEventsWhen from "./getEventsWhen";
 import clsx from "clsx";
@@ -8,7 +8,7 @@ interface CalendarProps {
     year: number;
     monthIndex: number;
     events: Events;
-    onOpenEvent: (eventID: string) => void;
+    onOpenEvent: (event: Event) => void;
     onOpenEvents: (dateIndex: number) => void;
 }
 
@@ -62,24 +62,29 @@ export default function Calendar(props: CalendarProps) {
     }, [props.events]);
 
     return (
-        <div className="">
+        <div 
+            id="Calendar"
+            className="min-h-0 grid grid-rows-[auto_1fr] gap-y-2"
+        >
             {/* These are the days of the week Sunday, Monday, etc. */}
-            <div className="grid grid-cols-7">
+            <div className="grid grid-cols-7 shadow-sm rounded-[7px]">
                 {ShortenedDays.map((day, i) => 
                     <div 
                         key={i} 
                         className={clsx(
-                            "first:rounded-l last:rounded-r",
                             "flex items-center justify-center p-1",
-                            "border-t first:border-l last:border-r border-gray-300 border-b",
-                            "text-center shadow-sm bg-white mb-2"
+                            "border-t border-b first:border-l last:border-r border-base-300 dark:border-base-200",
+                            "first:rounded-l-md last:rounded-r-md",
+                            "bg-base-0 dark:bg-base-50"
                         )}
                     >
-                        <span className="text-01 text-black tracking-wider font-medium">{day}</span>
+                        <span className="block text-[0.6rem] text-base-700 tracking-wider font-medium">
+                            {day}
+                        </span>
                     </div>
                 )}
             </div>
-            <div className='grid grid-cols-7 grid-rows-4 shadow-sm'>
+            <div className="min-h-0 grid grid-cols-7 grid-rows-5 shadow-sm rounded-md">
                 {eventMap &&
                     thirtyFiveDays.map(i => {
                         // These are days that aren't actually in
@@ -87,27 +92,26 @@ export default function Calendar(props: CalendarProps) {
                         // the previous or next month.
                         if (eventMap[props.year][props.monthIndex][i][0] > 25 && i < 5)
                             return (
-                                <div key={i} className="first:rounded-tl last:rounded-tr bg-gray-50 border-t border-r border-b border-gray-300 first:border-l"/>
+                                <div key={i} className="first:rounded-tl-md last:rounded-tr-md bg-base-100 dark:bg-[#121214] border-t border-r border-b border-base-300 dark:border-base-200 first:border-l"/>
                             );  
                         if (eventMap[props.year][props.monthIndex][i][0] <= 5 && i > 25)
                             return (
-                                <div key={i} className="first:rounded-bl last:rounded-br bg-gray-100 border-b border-r border-gray-300"/>
+                                <div key={i} className="first:rounded-bl-md last:rounded-br-md bg-base-100 dark:bg-[#121214] border-b border-r border-base-300 dark:border-base-200"/>
                             );
                         return (
                             <div 
                                 key={i}
                                 className={clsx(
-                                    "first:rounded-tl",
-                                    "aspect-square",
-                                    "border-r border-b",
-                                    "border-gray-300",
-                                    "hover:bg-blue-50 cursor-pointer", 
+                                    "first:rounded-tl-md",
+                                    "border-r border-b bg-base-0 dark:bg-base-50",
+                                    "border-base-300 dark:border-base-200",
+                                    "hover:bg-base-50 dark:hover:bg-base-0 cursor-pointer", 
                                     i < 7 && "border-t",
-                                    35 - i <= 7 && "border-b border-b-gray-300",
-                                    i == 28 && "rounded-bl", 
+                                    35 - i <= 7 && "border-b border-b-gray-300 dark:border-b-base-200",
+                                    i == 28 && "rounded-bl-md", 
                                     i % 7 == 0 && "border-l",
-                                    i== 6 && "rounded-tr",
-                                    i == 34 && "rounded-br"
+                                    i== 6 && "rounded-tr-md",
+                                    i == 34 && "rounded-br-md"
                                 )}
                             >
                                 <CalendarDate

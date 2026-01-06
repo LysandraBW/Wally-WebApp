@@ -11,6 +11,7 @@ export default function recoverTDispatch(key: Key, alertDispatch: Dispatch<Alert
                 head="Successfully Recovered Appointments"
                 body="Recovered Appointment(s)"
                 type="Success"
+                absolute={true}
                 onClose={() => {
                     alertDispatch({
                         type: AlertActionType.DeleteMessage,

@@ -20,6 +20,14 @@ export function toDisplayDate(date: Date|string|null, format: string = "MM/DD/YY
     return moment(dateObject).format(format);
 }
 
+export function toDisplayTime(date: Date|string|null, format: string = "MM/DD/YYYY hh:mm A"): string {
+    if (!date)
+        return '';
+    let dateObject = typeof date === "string" ? new Date(date) : date;
+    let dateTime = moment(dateObject).format(format);
+    return dateTime.slice(-8)
+}
+
 export function toInputDate(date: string | null | undefined) {
     if (!date)
         return "";

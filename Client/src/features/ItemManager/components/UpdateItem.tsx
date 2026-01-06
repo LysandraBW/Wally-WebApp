@@ -2,6 +2,7 @@ import IconButton from "@/component/Button/IconButton";
 import EditIcon from "@/component/Icons/Icons/PencilSquareIcon";
 import TrashIcon from "@/component/Icons/Icons/TrashIcon";
 import clsx from "clsx";
+import { PencilIcon } from "lucide-react";
 import { ReactNode } from "react";
 
 export interface UpdateItemProps {
@@ -44,8 +45,8 @@ export default function UpdateItem(props: UpdateItemProps) {
                     onClick={props.onUpdate}
                     className="cursor-pointer bg-base-50 group hover:bg-base-100 w-[19.4px] border-b border-base-300 dark:border-base-200 stroke-base-700 flex justify-center items-center"
                 >
-                    <EditIcon
-                        className="size-3.5 stroke-inherit"
+                    <PencilIcon
+                        className="size-3 stroke-inherit"
                     />
                 </div>
                 <div 

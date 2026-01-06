@@ -50,7 +50,7 @@ export default function TableHead(props: TableHeadProps) {
         if (!fName || !lName)
             return;
         
-        const fNameLength = (fName as any).offsetWidth;
+        const fNameLength = (fName as any).getBoundingClientRect().width;
         for (const cell of lNameCells) {
             (cell as any).style.left = fNameLength + 'px';
         }

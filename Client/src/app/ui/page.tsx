@@ -24,6 +24,12 @@ function Elements() {
     return (
         <div className="flex flex-col gap-8 p-4 w-full h-full relative">
             <div>
+                <p className="text-base-900">Colors</p>
+                <button className="border border-red-500">
+                    Hello
+                </button>
+            </div>
+            <div>
                 <p className="text-base-900">Call to Action Button</p>
                 <CallToActionButton
                     label="Label"
@@ -32,19 +38,32 @@ function Elements() {
             </div>
             <div>
                 <p className="text-base-900">Primary Button</p>
-                <PrimaryButton
-                    onClick={() => console.log("Clicked!")}
-                >
-                    Hello
-                </PrimaryButton>
+                <div className="flex gap-2">
+                    <PrimaryButton
+                        onClick={() => console.log("Clicked!")}
+                    >
+                        Hello
+                    </PrimaryButton>
+                    <PrimaryButton
+                        onClick={() => console.log("Clicked!")}
+                        disabled={true}
+                    >
+                        Hello
+                    </PrimaryButton>
+                </div>
             </div>
             <div>
                 <p className="text-base-900">Secondary Button</p>
                 <div className="flex gap-2">
-                    <SecondaryButton onClick={() => console.log("Clicked!")}>
+                    <SecondaryButton 
+                        onClick={() => console.log("Clicked!")}
+                    >
                         Hello
                     </SecondaryButton>
-                    <SecondaryButton onClick={() => console.log("Clicked!")}>
+                    <SecondaryButton 
+                        onClick={() => console.log("Clicked!")}
+                        disabled={true}
+                    >
                         Hello
                     </SecondaryButton>
                 </div>
@@ -106,7 +125,7 @@ function Elements() {
                     head="Message Head"
                     body="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
                     type="Default"
-                    absolute={true}
+                    absolute={false}
                     spanScreenWidth={true}
                     onClose={() => console.log("Close")}
                 />

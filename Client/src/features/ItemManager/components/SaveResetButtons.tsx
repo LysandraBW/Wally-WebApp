@@ -27,7 +27,7 @@ export default function SaveResetButtons(props: SaveResetButtonsProps) {
                 className="text-xs tracking-wide px-4"
                 onClick={props.onReset}
             >
-                Save Changes
+                Reset Changes
             </SecondaryButton>
             <PrimaryButton
                 disabled={!props.changesMade}

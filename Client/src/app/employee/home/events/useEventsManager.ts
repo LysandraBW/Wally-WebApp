@@ -20,6 +20,7 @@ export default function useEventsManager(props: UseEventsManagerProps) {
     const [year, setYear] = useState(today.getFullYear());
     const [monthIndex, setMonthIndex] = useState(today.getMonth());
 
+
     useEffect(() => {
         props.filterTabs((tab: EventsTab) => {
             if (tab.event && !(tab.event.eventID in itemsManager.newItems))
@@ -29,16 +30,29 @@ export default function useEventsManager(props: UseEventsManagerProps) {
     }, [itemsManager.newItems]);
 
 
-    const openEvent = (eventID: string) => {
-        props.openTab({
-            id: {
-                eventID
-            },
-            header: `Event #${eventID}`,
-            event: {
-                eventID
-            }
-        });
+    const openEvent = (event: Event) => {
+        if (event.AppointmentID !== "") {
+            props.openTab({
+                id: {
+                    appointmentID: event.AppointmentID || ""
+                },
+                header: event.Name,
+                event: {
+                    event
+                }
+            })
+        }
+        else {
+            props.openTab({
+                id: {
+                    eventID: event.EventID
+                },
+                header: event.Name,
+                event: {
+                    event
+                }
+            });
+        }
     }
 
     const openEvents = (dateIndex: number) => {
@@ -63,6 +77,7 @@ export default function useEventsManager(props: UseEventsManagerProps) {
         });
     }
 
+    
     const closeOpenedEventsTab = (year: number, monthIndex: number, dateIndex: number) => {
         props.closeTab({
             year,

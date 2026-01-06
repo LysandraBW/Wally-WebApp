@@ -8,10 +8,12 @@ interface DeleteButtonProps {
 export default function DeleteButton(props: DeleteButtonProps) {
     return (
         <IconButton
+            size={14}
             onClick={props.onDelete}
+            className="rounded-[5px] shadow-xs dark:shadow-md"
         >
             <TrashIcon
-                className="size-3 stroke-inherit"
+                className="size-4 stroke-inherit stroke-[1.75px]"
             />
         </IconButton>
     )

@@ -71,7 +71,16 @@ export default function useDeleteManager(alertDispatch: Dispatch<AlertAction>, t
         }
         
         // Naturally, we'll have to warn the user here.
-        alertDispatch(deleteConfirmationDispatch(() => deleteAppointments(appointmentIDs), alertDispatch));
+        alertDispatch(
+            deleteConfirmationDispatch(
+                () => {
+                    return deleteAppointments(appointmentIDs);
+                }, 
+                alertDispatch, 
+                appointmentIDs.length === 1 ? "Delete Appointment" : "Delete Appointments",
+                appointmentIDs.length === 1 ? "You are going to permanently delete these appointment." : "You are going to permanently delete these appointments."
+            )
+        );
     }
 
 

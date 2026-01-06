@@ -1,23 +1,18 @@
+import IconButton from "@/component/Button/IconButton";
 import EditIcon from "@/component/Icons/Icons/PencilSquareIcon";
 import clsx from "clsx";
+import { PencilIcon } from "lucide-react";
 
 export default function EditButton({onUpdate}: {onUpdate: () => void}) {
     return (
-        <button 
+        <IconButton
+            size={14}
             onClick={onUpdate}
-            className={clsx(
-                "flex justify-center items-center gap-1",
-                "h-min w-min aspect-square",
-                "bg-white hover:bg-gray-50",
-                "rounded p-1 border border-gray-300 shadow-sm"
-            )}
+            className="rounded-[5px] shadow-xs dark:shadow-md"
         >
-            <EditIcon
-                width="16"
-                height="16"
-                fill="#94A3B8"
-                cursor="pointer"
+            <PencilIcon
+                className="size-3 stroke-inherit stroke-[2px]"
             />
-        </button>
+        </IconButton>
     )
 }

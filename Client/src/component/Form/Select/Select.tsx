@@ -1,16 +1,33 @@
-import { Fragment, useState } from "react";
-import { Label, Value } from "@/features/Form/DEF";
+import { Fragment, useEffect, useState } from "react";
+import { Label, OptionMap, Value } from "@/features/Form/DEF";
 import toggleValue from "@/features/Form/helpers/toggleValue";
 import Toggle from "./Toggle";
 import Wrapper from "./Wrapper";
 import Element from "./Element";
 import { Field } from "../Field";
 import { SelectProps } from "./SelectProps";
+import getValuesToLabels from "@/features/Form/helpers/getValuesToLabels";
 
 
 export default function Select(props: SelectProps) {
     const [open, setOpen] = useState(false);
-    
+    const [optionMap, setOptionMap] = useState<OptionMap>();
+    const [toggleLabel, setToggleLabel] = useState(props.toggleLabel);
+        
+    useEffect(() => {
+        setOptionMap(getValuesToLabels(props.options));
+    }, [props.options]);
+
+
+    useEffect(() => {
+        if (props.multiple || !props.values.length || !optionMap) {
+            setToggleLabel(props.toggleLabel);
+            return;
+        }
+        setToggleLabel(optionMap[props.values[0]]);
+    }, [props.values, optionMap]);
+
+
     const openList = () => {
         if (props.disabled)
             return;
@@ -43,7 +60,7 @@ export default function Select(props: SelectProps) {
                     <Toggle
                         onClick={() => setOpen(true)}
                         icon={props.ToggleIcon}
-                        label={props.toggleLabel}
+                        label={toggleLabel}
                         smaller={props.smaller}
                     />
                     {open &&
