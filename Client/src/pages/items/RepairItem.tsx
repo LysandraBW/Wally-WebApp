@@ -1,7 +1,7 @@
 import { Repair as DB_AppointmentRepair } from "waltronics-types";
-import { Repair } from "../edit/service/repair/_DEF";
 import Item from "@/features/ItemManager/components/Item";
 import { toInteger } from "@/utils/convert";
+import { Repair } from "@/app/employee/home/update/repair/_DEF";
 
 interface RepairItemProps {
     repair: DB_AppointmentRepair | Repair;
@@ -10,8 +10,8 @@ interface RepairItemProps {
 export default function RepairItem(props: RepairItemProps) {
     return (
         <Item
-            ID={toInteger(props.repair.RepairID)}
-            head={props.repair.Repair}
+            ID={toInteger(props.repair?.RepairID)}
+            head={props.repair?.Repair}
             tags={[]}
         />
     )

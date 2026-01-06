@@ -4,7 +4,7 @@ import { ReactNode } from "react";
 
 interface ToggleProps {
     icon?: ReactNode;
-    label?: string;
+    label?: ReactNode;
     onClick: () => void;
     smaller?: boolean;
 }
@@ -14,7 +14,7 @@ export default function Toggle(props: ToggleProps) {
         <button
             onClick={props.onClick}
             className={clsx(
-                "w-full h-min px-2 py-1",
+                "w-full h-full px-2 py-1",
                 "flex items-center justify-between gap-2",
                 "field-hover field-border field-background field-border field-focus",
             )}

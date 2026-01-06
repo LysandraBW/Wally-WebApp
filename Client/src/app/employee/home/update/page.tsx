@@ -26,7 +26,10 @@ export default function Page() {
             // Loading Appointment, if Any
             if (searchParams && searchParams.get("appointmentID")) {
                 const appointmentID = searchParams.get("appointmentID") || "";
-                const appointment = await SelectAppointment({appointmentID});
+
+                let appointment = null;
+                if (appointmentID)
+                    appointment = await SelectAppointment({appointmentID});
                 
                 // Appointment Does Exist
                 if (appointment && appointment.FName) {

@@ -13,7 +13,7 @@ export default function Tabs(props: TabsProps) {
             id="Tabs"
             className="p-2 flex gap-2 border-b border-base-300 dark:border-base-200"
         >
-            {props.tabs.map((tab, i) => {
+            {props.tabs?.map((tab, i) => {
                 const hasID = Array.isArray(tab);
                 const tabID = hasID ? tab[0] : tab as string;
                 const tabName = hasID ? tab[1] : tab as string;

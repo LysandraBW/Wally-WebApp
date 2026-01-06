@@ -13,9 +13,9 @@ export default function ServiceItem(props: ServiceItemProps) {
 
     useEffect(() => {
         const tags = [];
-        if (props.service.Class) {
-            tags.push(props.service.Class);
-            tags.push(props.service.Division);
+        if (props.service?.Class) {
+            tags.push(props.service?.Class);
+            tags.push(props.service?.Division);
         }
         else {
             tags.push("Custom");
@@ -25,8 +25,8 @@ export default function ServiceItem(props: ServiceItemProps) {
 
     return (
         <Item
-            ID={toInteger(props.service.AppointmentServiceID)}
-            head={props.service.Service}
+            ID={toInteger(props.service?.AppointmentServiceID)}
+            head={props.service?.Service}
             tags={tags || []}
         />
     )

@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, ReactNode, useEffect, useState } from "react";
 import toggleValue from "@/features/Form/helpers/toggleValue";
 import Toggle from "./Toggle";
 import Wrapper from "./Wrapper";
@@ -21,10 +21,10 @@ export default function Search(props: SearchProps) {
     const [search, setSearch] = useState("");
     const [matched, setMatched] = useState(props.options.slice(0, 10));
     const [optionMap, setOptionMap] = useState<OptionMap>();
-    const [toggleLabel, setToggleLabel] = useState(props.toggleLabel);
+    const [toggleLabel, setToggleLabel] = useState<ReactNode>(props.toggleLabel);
     
     useEffect(() => {
-        setOptionMap(getValuesToLabels(props.options));
+        setOptionMap(getValuesToLabels(props.options.map((option) => [option[0], option.at(-1) as any])));
     }, [props.options]);
 
     useEffect(() => {
@@ -63,7 +63,7 @@ export default function Search(props: SearchProps) {
             state={props.state}
             input={
                 <div 
-                    className="relative"
+                    className="relative h-full"
                     tabIndex={0}
                     onBlur={closeList}
                     onClick={openList}
@@ -97,12 +97,12 @@ export default function Search(props: SearchProps) {
                                     </li>
                                 </ul>
                             }
-                            {matched.length > 0 && matched.map(([value, label], i) => (
+                            {matched.length > 0 && matched.map((option, i) => (
                                 <Fragment key={i}>
                                     <Element
-                                        label={label}
-                                        selectValue={() => selectValue(value)}
-                                        checked={props.values.includes(value)}
+                                        label={option.at(-1)}
+                                        selectValue={() => selectValue(option[0])}
+                                        checked={props.values.includes(option[0])}
                                         CheckedIcon={props.CheckedIcon}
                                         NotCheckedIcon={props.NotCheckedIcon}
                                     />

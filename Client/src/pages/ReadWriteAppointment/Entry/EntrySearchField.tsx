@@ -15,10 +15,10 @@ export default function EntrySearchField(props: SelectProps) {
     const ref = useRef<any>(null);
     const [open, setOpen] = useState(false);
     const [search, setSearch] = useState("");
-    const [matched, setMatched] = useState(props.options.slice(0, 10));
+    const [matched, setMatched] = useState(props.options ? props.options.slice(0, 10) : []);
 
     useEffect(() => {
-        if (props.values[0]) {
+        if (props.values?.[0]) {
             setOpen(false);
         }
     }, [props.values]);
@@ -71,7 +71,7 @@ export default function EntrySearchField(props: SelectProps) {
                                     "tracking-wide"
                                 )}
                             >
-                                {props.values[0] ? props.values[0] : props.toggleLabel}
+                                {props.values?.[0] ? props.values[0] : props.toggleLabel}
                             </span>
                             <ChevronUpDownIcon
                                 className="size-3 stroke-[0.5px] stroke-base-500"

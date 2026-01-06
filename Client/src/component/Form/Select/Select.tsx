@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, ReactNode, useEffect, useState } from "react";
 import { Label, OptionMap, Value } from "@/features/Form/DEF";
 import toggleValue from "@/features/Form/helpers/toggleValue";
 import Toggle from "./Toggle";
@@ -12,10 +12,10 @@ import getValuesToLabels from "@/features/Form/helpers/getValuesToLabels";
 export default function Select(props: SelectProps) {
     const [open, setOpen] = useState(false);
     const [optionMap, setOptionMap] = useState<OptionMap>();
-    const [toggleLabel, setToggleLabel] = useState(props.toggleLabel);
+    const [toggleLabel, setToggleLabel] = useState<ReactNode>(props.toggleLabel);
         
     useEffect(() => {
-        setOptionMap(getValuesToLabels(props.options));
+        setOptionMap(getValuesToLabels(props.options.map((option) => [option[0], option.at(-1) as any])));
     }, [props.options]);
 
 
@@ -52,7 +52,7 @@ export default function Select(props: SelectProps) {
             smaller={props.smaller}
             input={
                 <div 
-                    className="relative"
+                    className="relative h-full"
                     tabIndex={0}
                     onBlur={closeList}
                     onClick={openList}

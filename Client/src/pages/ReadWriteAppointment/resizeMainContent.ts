@@ -1,4 +1,8 @@
 export default function resizeMainContent() {
+    if (typeof window === "undefined" || typeof document === "undefined") {
+        return;
+    }
+    
     const vNavBar = document.querySelector("#VNavBar");
     if (!vNavBar)
         return;

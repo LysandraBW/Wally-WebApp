@@ -36,7 +36,7 @@ export default function Header(props: HeaderProps) {
                         />
                     </IconButton>
                     <h1 className="text-sm text-base-700 font-medium tracking-wide">
-                        Appointment: {props.appointment.FName} {props.appointment.LName}'s {props.appointment.ModelYear} {props.appointment.Make} {props.appointment.Model}
+                        Appointment: {props.appointment?.FName} {props.appointment?.LName}'s {props.appointment?.ModelYear} {props.appointment?.Make} {props.appointment?.Model}
                     </h1>
                 </div>
                 {props.goToEdit &&
@@ -69,11 +69,11 @@ export default function Header(props: HeaderProps) {
                 />
                 <HeaderData
                     k={"Created"}
-                    v={toDisplayDate(props.appointment.CreationDate)}
+                    v={toDisplayDate(props.appointment?.CreationDate)}
                 />
                 <HeaderData
                     k={"Updated"}
-                    v={toDisplayDate(props.appointment.UpdationDate)}
+                    v={toDisplayDate(props.appointment?.UpdationDate)}
                 />
             </div>
         </Fragment>

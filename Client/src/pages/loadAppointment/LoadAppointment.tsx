@@ -4,6 +4,10 @@ import { Tooltip } from "react-tooltip";
 import ArrowRight from "@/component/Icons/Icons/ArrowRightIcon";
 import ArrowLongRightIcon from "@/component/Icons/Icons/ArrowLongRightIcon";
 import SearchIcon from "@/component/Icons/Icons/SearchIcon";
+import { useEffect, useState } from "react";
+import SelectAllAppointments from "@/services/DB/Appointment/SelectAllAppointments";
+import Search from "@/component/Form/Select/Search";
+import { Appointment } from "waltronics-types";
 
 interface LoadAppointmentProps {
     form: UseForm;
@@ -15,6 +19,19 @@ interface LoadAppointmentProps {
 }
 
 export default function LoadAppointment(props: LoadAppointmentProps) {
+    const [appointments, setAppointments] = useState<Array<Appointment>>([]);
+
+
+    useEffect(() => {
+        const loadAppointments = async () => {
+            const appointments = await SelectAllAppointments({});
+            console.log(appointments);
+            setAppointments(appointments.Appointments);
+        }
+        loadAppointments();
+    }, []);
+
+
     return (
          <div className="flex flex-col gap-4 grow items-center justify-center">
             <div>
@@ -25,47 +42,43 @@ export default function LoadAppointment(props: LoadAppointmentProps) {
                     {props.body}
                 </span>
             </div>
-            <div>
-                <div 
-                    id="loadInput"
+            <div className="flex items-center h-min">
+                <div className="w-[400px] h-full">
+                    <Search
+                        name="id"
+                        toggleLabel="Select Appointment"
+                        state={props.form && props.form.getInput("id").state}
+                        values={props.form && props.form.getInput("id").data}
+                        options={appointments.map((appointment) => [
+                            appointment.AppointmentID, 
+                            `${appointment.AppointmentID}, ${appointment.FName} ${appointment.LName}, ${appointment.ModelYear} ${appointment.Make} ${appointment.Model}`, 
+                            <div className="flex flex-col items-start">
+                                <span className="block text-xs text-base-700 tracking-wide font-medium">
+                                    {appointment.FName} {appointment.LName}
+                                </span>
+                                <span className="block text-xs text-base-500 tracking-wide">
+                                    {appointment.ModelYear} {appointment.Make} {appointment.Model}
+                                </span>
+                            </div>
+                        ])}
+                        onChange={props.form?.updateInputData}
+                        disabled={false}
+                    />
+                </div>
+                <button 
+                    onClick={props.loadAppointment}
                     className={clsx(
-                        "w-[350px] flex gap-1 h-[32px]",
-                        "surface-background surface-border shadow-sm rounded-md",
-                        "focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-200 dark:focus-within:!ring-blue-700/10 focus-within:border-blue-500 dark:focus-within:shadow-blue-500/25"
+                        "h-full aspect-square ml-2",
+                        "flex items-center justify-center",
+                        "bg-base-50 border border-base-300 dark:border-base-200 shadow-sm",
+                        "group stroke-base-500",
+                        "cursor-pointer hover:bg-base-100 dark:hover:bg-base-50 "
                     )}
                 >
-                    <input
-                        name="id"
-                        type="text"
-                        value={props.form.getInput("id").data}
-                        onBlur={undefined}
-                        onChange={(event) => {
-                            // Remove the Tooltip
-                            props.appointmentNotFound &&  props.setAppointmentNotFound(false);
-                            props.form.updateInputData(event.target.name, event.target.value);
-                        }}
-                        className="rounded-[5px] surface-background w-full pl-2 outline-none peer text-sm text-base-700 tracking-wider"
+                    <ArrowLongRightIcon
+                        className="size-4 stroke-[2px] stroke-inherit cursor-pointer rotate-[360deg]"
                     />
-                    <div 
-                        onClick={props.loadAppointment}
-                        className={clsx(
-                            "ml-2 h-full aspect-square",
-                            "flex items-center justify-center",
-                            "bg-base-50 border-l border-l-base-300 dark:border-base-200 rounded-r-[5px]",
-                            "group stroke-base-500",
-                            "cursor-pointer hover:bg-base-100 dark:hover:bg-base-50 peer-focus:bg-blue-500- "
-                        )}
-                    >
-                        <ArrowLongRightIcon
-                            className="size-4 stroke-[2px] stroke-inherit cursor-pointer rotate-[360deg]"
-                        />
-                    </div>
-                </div>
-                {!props.form.getInput("id").state[0] &&
-                    <span className="text-sm text-red-500 tracking-wide">
-                        {props.form.getInput("id").state[1]}
-                    </span>
-                }
+                </button>
             </div>
             <Tooltip
                 isOpen={props.appointmentNotFound}

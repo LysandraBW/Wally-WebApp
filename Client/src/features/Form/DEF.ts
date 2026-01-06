@@ -5,8 +5,8 @@ export type Value = string;
 export type Label = string;
 export type Values = Array<Value>;
 export type Options = Array<[Value, Label]>;
-export type OptionsWithNode = Options|Array<[Value, Label, ReactNode]>;
-export type OptionMap = {[value: Value]: Label};
+export type OptionsWithNode = Array<[Value, Label, ReactNode?]>;
+export type OptionMap = {[value: Value]: string};
 
 export interface ReadInputProps {
     name: string;

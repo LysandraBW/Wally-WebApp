@@ -20,7 +20,7 @@ interface EventMap {
     }
 }
 
-const thirtyFiveDays = Array.from(Array(35).keys());
+const fortyTwoDays = Array.from(Array(42).keys());
 
 export default function Calendar(props: CalendarProps) {
     const [eventMap, setEventMap] = useState<EventMap>();
@@ -42,10 +42,11 @@ export default function Calendar(props: CalendarProps) {
                 const startDate = new Date(year, monthIndex, 1);
                 const startDay = startDate.getDay();
 
-                for (let dateIndex = 0; dateIndex < 35; dateIndex++) {
+                for (let dateIndex = 0; dateIndex < 42; dateIndex++) {
                     const date = new Date(startDate);
                     if (dateIndex !== startDay)
                         date.setDate(dateIndex - startDay + 1);
+                    
                     eventMap[year][monthIndex][dateIndex] = [
                         date.getDate(), 
                         getEventsWhen(
@@ -84,19 +85,20 @@ export default function Calendar(props: CalendarProps) {
                     </div>
                 )}
             </div>
-            <div className="min-h-0 grid grid-cols-7 grid-rows-5 shadow-sm rounded-md">
+            <div className="min-h-0 grid grid-cols-7 grid-rows-6 shadow-sm rounded-md">
                 {eventMap &&
-                    thirtyFiveDays.map(i => {
+                    fortyTwoDays.map(i => {
                         // These are days that aren't actually in
                         // the month, they're like leftovers of
                         // the previous or next month.
-                        if (eventMap[props.year][props.monthIndex][i][0] > 25 && i < 5)
+                        console.log(eventMap[props.year][props.monthIndex])
+                        if (eventMap[props.year][props.monthIndex][i][0] > 25 && i < 6)
                             return (
                                 <div key={i} className="first:rounded-tl-md last:rounded-tr-md bg-base-100 dark:bg-[#121214] border-t border-r border-b border-base-300 dark:border-base-200 first:border-l"/>
                             );  
-                        if (eventMap[props.year][props.monthIndex][i][0] <= 5 && i > 25)
+                        if (eventMap[props.year][props.monthIndex][i][0] <= 14 && i > 25)
                             return (
-                                <div key={i} className="first:rounded-bl-md last:rounded-br-md bg-base-100 dark:bg-[#121214] border-b border-r border-base-300 dark:border-base-200"/>
+                                <div key={i} className="first:rounded-bl-md last:rounded-br-md bg-base-100 [&:nth-last-child(7)]:rounded-bl-md [&:nth-last-child(7)]:border-l [&:nth-child(7n-6)]:border-l  dark:bg-[#121214] border-b border-r border-base-300 dark:border-base-200"/>
                             );
                         return (
                             <div 
@@ -107,11 +109,11 @@ export default function Calendar(props: CalendarProps) {
                                     "border-base-300 dark:border-base-200",
                                     "hover:bg-base-50 dark:hover:bg-base-0 cursor-pointer", 
                                     i < 7 && "border-t",
-                                    35 - i <= 7 && "border-b border-b-gray-300 dark:border-b-base-200",
-                                    i == 28 && "rounded-bl-md", 
+                                    i >= 35 && "border-b border-b-gray-300 dark:border-b-base-200",
+                                    i == 35 && "rounded-bl-md", 
                                     i % 7 == 0 && "border-l",
                                     i== 6 && "rounded-tr-md",
-                                    i == 34 && "rounded-br-md"
+                                    i == 41 && "rounded-br-md"
                                 )}
                             >
                                 <CalendarDate

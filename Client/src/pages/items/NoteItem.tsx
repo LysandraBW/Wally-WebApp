@@ -1,8 +1,6 @@
 import { EmployeeNote as DB_EmployeeNote } from "waltronics-types";
-import Person from "@/component/Icons/Icons/UserIcon";
 import { Fragment, ReactNode, useEffect, useState } from "react";
 import getValuesToLabels from "@/features/Form/helpers/getValuesToLabels";
-import Paperclip from "@/component/Icons/Icons/PaperclipIcon";
 import Item from "@/features/ItemManager/components/Item";
 import GetEmployeeNamePairs from "@/services/DB/Employee/GetEmployeeNamePairs";
 import { Note } from "@/app/employee/home/update/note/_DEF";
@@ -24,7 +22,7 @@ export default function NoteItem(props: NoteItemProps) {
             const tags = [];
 
             const sharees = [];
-            for (const sharee of props.note.Sharees) {
+            for (const sharee of props.note?.Sharees) {
                 sharees.push((
                     <div
                         className="flex items-center gap-1"
@@ -41,7 +39,7 @@ export default function NoteItem(props: NoteItemProps) {
                                 sharee : 
                                 sharee.ShareeID
                         ]}
-                        {props.note.EmployeeID === sharee && 
+                        {props.note?.EmployeeID === sharee && 
                             <span className="text-blue-500 medium">
                                 Creator
                             </span>
@@ -50,7 +48,7 @@ export default function NoteItem(props: NoteItemProps) {
                 ));
             }
 
-            if (props.note.ShowCustomer === true) {
+            if (props.note?.ShowCustomer === true) {
                 sharees.push((
                     <div
                         className="flex items-center gap-1"
@@ -69,7 +67,7 @@ export default function NoteItem(props: NoteItemProps) {
                 tags.push(sharees);
 
             // const attachments = [];
-            // for (const attachment of props.note.Attachments) {
+            // for (const attachment of props.note?.Attachments) {
             //     attachments.push((
             //         <Fragment>
             //             <Paperclip
@@ -84,8 +82,8 @@ export default function NoteItem(props: NoteItemProps) {
             //     ));
             // }
 
-            // if ("UploadedAttachments" in props.note && props.note.UploadedAttachments) {
-            //     for (const attachment of props.note.UploadedAttachments) {
+            // if ("UploadedAttachments" in props.note && props.note?.UploadedAttachments) {
+            //     for (const attachment of props.note?.UploadedAttachments) {
             //         <Fragment>
             //             <Paperclip
             //                 width="14"
@@ -113,11 +111,11 @@ export default function NoteItem(props: NoteItemProps) {
         <Fragment>
             {tags &&
                 <Item
-                    ID={parseInt(props.note.NoteID)}
+                    ID={parseInt(props.note?.NoteID)}
                     head={(
                         <div>
-                            <h6 className="font-medium text-04 tracking-wide">{props.note.Head}</h6>
-                            <p className="text-03 border-l- border-gray-300 border-dashed ml-0 pl-0">{props.note.Body}</p>
+                            <h6 className="font-medium text-04 tracking-wide">{props.note?.Head}</h6>
+                            <p className="text-03 border-l- border-gray-300 border-dashed ml-0 pl-0">{props.note?.Body}</p>
                         </div>
                     )}
                     tags={tags || []}

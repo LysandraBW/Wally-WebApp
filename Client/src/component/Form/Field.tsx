@@ -18,7 +18,7 @@ export function Field(props: FieldProps) {
     return (
         <Wrapper 
             className={clsx(
-                "flex flex-col gap-[2px]",
+                "h-full flex flex-col gap-[2px]",
                 "cursor-default", 
                 props.state && props.state[0] === false && "error"
             )}

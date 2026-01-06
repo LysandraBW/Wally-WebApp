@@ -2,7 +2,6 @@
 import LoginForm from "./LoginForm";
 import { useEffect, useState } from "react";
 import { setCookie } from "@/utils/cookies/setCookie";
-import NavBar from "@/component/NavBar/NavBar";
 import { Tooltip } from "react-tooltip";
 import { navigate } from "@/utils/navigate";
 import { PAGE_DASHBOARD } from "@/utils/constants";

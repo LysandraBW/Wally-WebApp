@@ -3,7 +3,7 @@ import clsx from "clsx";
 import { ReactNode } from "react";
 
 interface ElementProps {
-    label: string;
+    label: ReactNode;
     selectValue: (event: any) => void;
     checked: boolean;
     smallText?: boolean;

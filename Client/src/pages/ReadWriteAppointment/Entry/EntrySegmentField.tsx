@@ -13,7 +13,7 @@ export default function EntrySegmentField(props: SegmentGridProps) {
             label={props.label}
             input={
                 <div className="h-full flex justify-between shadow-sm">
-                    {props.options.map((option, i) => (
+                    {props.options && props.options.map((option, i) => (
                         <button 
                             key={i}
                             type="button"

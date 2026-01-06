@@ -13,20 +13,20 @@ export default function PaymentItem(props: PaymentItemProps) {
 
     useEffect(() => {
         const tags = [];
-        tags.push(toDisplayDate(props.payment.PaymentDate));
+        tags.push(toDisplayDate(props.payment?.PaymentDate));
         if (!props.payment.Name) {
             setTags([["Cash"]]);
             return;
         }
-        tags.push(props.payment.Type);
-        tags.push(`${props.payment.EXP.substring(0, 2)}/${props.payment.EXP.substring(2)}`);
+        tags.push(props.payment?.Type);
+        tags.push(`${props.payment?.EXP.substring(0, 2)}/${props.payment?.EXP.substring(2)}`);
         setTags([tags]);
     }, []);
 
     return (
         <Item
-            ID={parseInt(props.payment.PaymentID)}
-            head={toMoney(props.payment.Payment)}
+            ID={parseInt(props.payment?.PaymentID as any)}
+            head={toMoney(props.payment?.Payment)}
             tags={tags || []}
         />
     )
