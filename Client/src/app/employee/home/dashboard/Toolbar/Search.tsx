@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { FilterManager } from "../managers/useFilterManager";
 import clsx from "clsx";
-
+ 
 interface SearchProps {
     filterManager: FilterManager;
 }
