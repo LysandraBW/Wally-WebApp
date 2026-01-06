@@ -13,7 +13,7 @@ import { updatedValue } from "@/features/ItemManager/helpers/updatedValue";
 export interface Note extends Omit<DB_Note, "Sharees" | "UpdationDate" | "CreationDate" | "ShowCustomer"> {
     UploadedAttachments: FileList | null;
     Sharees: Array<string>;
-    ShowCustomer: Array<string>;
+    ShowCustomer: string;
 }
 
 export interface Notes {
@@ -92,7 +92,7 @@ export class DefineNote extends Define<DB_Note, Note, Notes> {
             AppointmentID: baseItem?.AppointmentID || "",
             Head: toString(baseItem?.Head),
             Body: toString(baseItem?.Body),
-            ShowCustomer: baseItem ? [baseItem.ShowCustomer ? "1" : "0"] : ["0"],
+            ShowCustomer: baseItem ? baseItem.ShowCustomer ? "1" : "0" : "0",
             Attachments: baseItem?.Attachments || [],
             UploadedAttachments: null,
             Sharees: baseItem ? baseItem.Sharees.map(s => s.ShareeID) : []
