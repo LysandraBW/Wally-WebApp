@@ -48,7 +48,7 @@ export default function NoteItem(props: NoteItemProps) {
                 ));
             }
 
-            if (props.note?.ShowCustomer === true) {
+            if ((props.note?.ShowCustomer as any) === true) {
                 sharees.push((
                     <div
                         className="flex items-center gap-1"
