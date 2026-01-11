@@ -4,9 +4,9 @@ export default function SearchBar(props: {searchPlaceholder?: string; search: st
     return (
         <input 
             className={clsx(
-                "w-full px-2 py-1",
-                "bg-base-0 border-b border-b-base-300 outline-none",
-                "text-sm text-base-500 placeholder:text-base-500 tracking-wide"
+                "w-full px-2 py-2",
+                "bg-base-0 dark:bg-base-50 border-b border-b-base-300 dark:border-b-base-200 outline-none",
+                "text-sm text-base-500 dark:text-base-400 placeholder:text-base-500 dark:text-base-400 tracking-wide"
             )}
             value={props.search} 
             placeholder={props.searchPlaceholder || "Search"}

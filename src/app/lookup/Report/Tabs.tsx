@@ -2,7 +2,7 @@ import clsx from "clsx";
 
 export default function Tabs(props: {tabs: Array<string>; tab: string; setTab: (tab: string) => void}) {
     return (
-        <div className="flex gap-x-4 relative surface-background rounded-md">
+        <div className="flex gap-x-4 relative bg-base-0 w-full p-4 border-b border-base-300 dark:border-base-200 bg-base-100 dark:bg-base-50">
             {props.tabs.map((t, i) => (
                 <div
                     key={i}
@@ -13,8 +13,8 @@ export default function Tabs(props: {tabs: Array<string>; tab: string; setTab: (
                         t !== props.tab && "bg-base-0 surface-border",
                         t === props.tab && `
                             relative z-[1]
-                            bg-gradient-to-b from-blue-400 to-blue-500
-                            after:w-[calc(100%-2px)] after:h-[calc(100%-2px)] after:bg-gradient-to-b after:from-blue-500 after:to-blue-500 after:absolute after:rounded after:z-[10] after:top-[1px] after:left-[1px]
+                            bg-gradient-to-b from-blue-100 to-blue-600 border !border-blue-500
+                            after:w-[calc(100%-1px)] after:h-[calc(100%-1px)] after:bg-gradient-to-b after:from-blue-500 after:to-blue-600 after:absolute after:rounded after:z-[10] after:top-[0.5px] after:left-[0.5px]
                         `
                     )}
                     onClick={() => props.setTab(t)}
@@ -23,7 +23,7 @@ export default function Tabs(props: {tabs: Array<string>; tab: string; setTab: (
                         className={clsx(
                             "block relative z-20",
                             "text-sm tracking-wide",
-                            t !== props.tab && "text-base-500",
+                            t !== props.tab && "text-base-500 dark:text-base-400",
                             t === props.tab && "text-white font-medium"
                         )}
                     >

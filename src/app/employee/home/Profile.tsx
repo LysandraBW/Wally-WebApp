@@ -1,13 +1,11 @@
 import SecondaryButton from "@/component/Button/SecondaryButton";
 import Toggle from "@/component/Form/Toggle";
 import ArrowLeftStartOnRectangleIcon from "@/component/Icons/Icons/ArrowLeftStartOnRectangleIcon";
-import UserIcon from "@/component/Icons/Icons/UserIcon";
-import { request } from "@/services/DB/request";
 import { PAGE_EMPLOYEE_LOGIN } from "@/utils/constants";
 import { deleteCookie } from "@/utils/cookies/deleteCookie";
 import { getCookie } from "@/utils/cookies/getCookie";
 import { setCookie } from "@/utils/cookies/setCookie";
-import { navigate } from "@/utils/navigate";
+import { navigateToPage } from "@/utils/navigate";
 import clsx from "clsx";
 import { useEffect, useState } from "react";
 import { Tooltip as ToolTip } from "react-tooltip";
@@ -40,7 +38,7 @@ export default function Profile(props: {employee: Employee}) {
 
     const logOut = () => {
         deleteCookie("sessionID");
-        navigate(PAGE_EMPLOYEE_LOGIN);
+        navigateToPage(PAGE_EMPLOYEE_LOGIN);
     }
 
     const updateDarkMode = async () => {
@@ -48,7 +46,7 @@ export default function Profile(props: {employee: Employee}) {
         setCookie("Mode", nextMode);
         setDarkMode(!darkMode);
 
-        const root = document.querySelector("html");
+        const root = document.querySelector("#EmployeeLayout");
         if (!root)
             return;
         if (nextMode === "dark")
@@ -87,7 +85,7 @@ export default function Profile(props: {employee: Employee}) {
                         zIndex: 200,
                         pointerEvents: "auto"
                     }}
-                    className="!bg-base-0 dark:!bg-base-50"
+                    className="!bg-base-0 dark:!bg-base-50 relative !z-[2000]"
                 >
                     <div className="w-full cursor-auto">
                         {/* Description */}
@@ -101,7 +99,7 @@ export default function Profile(props: {employee: Employee}) {
                             <span className="text-base-900 text-sm font-medium tracking-wide">
                                 {props.employee?.FName} {props.employee?.LName}
                             </span>
-                            <span className="tracking-wide text-base-500 text-xs">
+                            <span className="tracking-wide text-base-500 dark:text-base-400 text-xs">
                                 {props.employee?.Email}
                             </span>
                         </div>
@@ -116,7 +114,7 @@ export default function Profile(props: {employee: Employee}) {
                                 <span className="block text-xs text-base-700 font-medium">
                                     Dark Mode
                                 </span>
-                                <span className="block text-xs text-base-500 tracking-wide">
+                                <span className="block text-xs text-base-500 dark:text-base-400 tracking-wide">
                                     Switch between light and dark themes
                                 </span>
                             </div>

@@ -18,7 +18,7 @@ import Text from "@/component/Form/Text/Text";
 import TextArea from "@/component/Form/Text/TextArea";
 import ArrowLongLeftIcon from "@/component/Icons/Icons/ArrowLongLeftIcon";
 import Logo from "@/component/NavBar/Logo";
-import { ArrowLeft } from "lucide-react";
+import { notFound } from 'next/navigation';
 
 function Elements() {
     return (
@@ -272,7 +272,7 @@ function Elements() {
                                     />
                                 </IconButton>
                             </div>
-                            <input type="text" className="w-full text-sm px-2 py-2 bg-base-0 text-base-500 placeholder:text-base-500 tracking-wide outline-none" placeholder="Search Colors"/>
+                            <input type="text" className="w-full text-sm px-2 py-2 bg-base-0 text-base-500 dark:text-base-400 placeholder:text-base-500 dark:text-base-400 tracking-wide outline-none" placeholder="Search Colors"/>
                         </div>
                     )}
                     options={[["Red", "Red"], ["Blue", "Blue"], ["Yellow", "Yellow"], ["Green", "Green"]]}
@@ -376,6 +376,10 @@ function Elements() {
 }
 
 export default function Page() {
+    if (process.env.NODE_ENV !== "development") {
+        notFound();
+    }
+
     return (
         <section className="grid grid-cols-2 relative">
             <div className="relative">

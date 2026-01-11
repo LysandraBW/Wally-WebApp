@@ -1,10 +1,13 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import SelectAllAppointments from "@/services/DB/Appointment/SelectAllAppointments";
+import SelectAllAppointments from "@/services/db/Appointment/SelectAllAppointments";
 import { FilterManager } from "./useFilterManager";
-import { AppointmentLabels, AppointmentList, AppointmentEntry } from "waltronics-types";
+import { AppointmentLabels, AppointmentsTable, AppointmentRow } from "waltronics-types";
+import useInterval from "@/features/Alert/useInterval";
+import { ToggleManager } from "./useToggleManager";
+import UpdateAppointmentLabel from "@/services/db/Appointment/UpdateAppointmentLabel";
 
-export interface Appointment extends AppointmentEntry {Labels: AppointmentLabels}
+export interface Appointment extends AppointmentRow {Labels: AppointmentLabels}
 export interface Appointments {[appointmentID: string]: Appointment}
 export type AppointmentManager = ReturnType<typeof useAppointmentManager>;
 
@@ -43,7 +46,13 @@ export default function useAppointmentManager(filterManager: FilterManager, setL
     }, [appointments, filterManager.pageIndex]);
 
 
-    const formatAppointments = (appointments: AppointmentList) => {
+    // Updates Appointments Every 5 Minutes
+    useInterval(() => {
+        loadAppointments(false);
+    }, 1000 * 60 * 5);
+
+
+    const formatAppointments = (appointments: AppointmentsTable) => {
         if (!appointments)
             return [];
         return appointments.Appointments;
@@ -61,17 +70,23 @@ export default function useAppointmentManager(filterManager: FilterManager, setL
     }
 
 
-    const loadAppointments = async () => {
+    const loadAppointments = async (resetPage: boolean = true) => {
         const filter = filterManager.filter();
-        const appointments = await SelectAllAppointments(filter) as AppointmentList;
+        const appointments = await SelectAllAppointments(filter) as AppointmentsTable;
+       
         setAppointments(sortAppointments(formatAppointments(appointments)));
-        filterManager.updateMaxPageIndex(appointments.Count);
+        
+        if (resetPage) {
+            filterManager.setPageIndex(0);
+            filterManager.updateMaxPageIndex(appointments.Count);
+        }
     }
 
 
     const loadOpenedAppointment = () => {
         if (!searchParams)
             return;
+        
         const apptID = searchParams.get("ApptID");
         if (apptID)
             openAppointment(apptID);
@@ -95,16 +110,21 @@ export default function useAppointmentManager(filterManager: FilterManager, setL
     const updateAppointmentLabel = (appointmentID: string, labels: AppointmentLabels) => {
         if (!tableAppointments)
             return;
+        
         const index = tableAppointments.findIndex(app => app.AppointmentID === appointmentID);
         if (index === -1)
             throw "Appointment Not Found!";
+        
         const updatedAppointments = [...tableAppointments];
-        updatedAppointments[index].Labels = labels;
+        updatedAppointments[index] = {
+            ...updatedAppointments[index],
+            "Labels": labels
+        }
         setTableAppointments(updatedAppointments);
     }
 
 
-    const sortAppointments = (appointments: Array<AppointmentEntry>) => {
+    const sortAppointments = (appointments: Array<AppointmentRow>) => {
         if (appointments.length === 0)
             return [];
 
@@ -160,7 +180,7 @@ export default function useAppointmentManager(filterManager: FilterManager, setL
     }
 
 
-    const goToNextAppointment = () => {
+    const goToNextAppointment = async () => {
         if (!openedAppointment)
             return;
         const appointmentIndex = appointments.findIndex(appt => appt.AppointmentID === openedAppointment);
@@ -169,10 +189,25 @@ export default function useAppointmentManager(filterManager: FilterManager, setL
             nextAppointmentIndex = 0;
         }
         setOpenedAppointment(appointments[nextAppointmentIndex].AppointmentID);
+
+        if (!(await UpdateAppointmentLabel({
+            labelID: 1, 
+            labelValue: 1,
+            appointmentID: appointments[nextAppointmentIndex].AppointmentID,
+        })))
+            return;
+        
+        updateAppointmentLabel(appointments[nextAppointmentIndex].AppointmentID, {
+            ...appointments[nextAppointmentIndex].Labels,
+            "Seen": {
+                ...appointments[nextAppointmentIndex].Labels.Seen,
+                "Value": 1
+            }
+        });
     }
 
 
-    const goToPrevAppointment = () => {
+    const goToPrevAppointment = async () => {
         if (!openedAppointment)
             return;
         const appointmentIndex = appointments.findIndex(appt => appt.AppointmentID === openedAppointment);
@@ -181,6 +216,21 @@ export default function useAppointmentManager(filterManager: FilterManager, setL
             prevAppointmentIndex = appointments.length - 1;
         }
         setOpenedAppointment(appointments[prevAppointmentIndex].AppointmentID);
+
+        if (!(await UpdateAppointmentLabel({
+            labelID: 1, 
+            labelValue: 1,
+            appointmentID: appointments[prevAppointmentIndex].AppointmentID,
+        })))
+            return;
+
+        updateAppointmentLabel(appointments[prevAppointmentIndex].AppointmentID, {
+            ...appointments[prevAppointmentIndex].Labels,
+            "Seen": {
+                ...appointments[prevAppointmentIndex].Labels.Seen,
+                "Value": 1
+            }
+        });
     }
 
 

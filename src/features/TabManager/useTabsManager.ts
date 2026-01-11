@@ -1,4 +1,4 @@
-import { sameSemanticMap } from "@/lib";
+import { sameSemanticMap } from "@/features/TabManager/sameSemanticMap";
 import { useEffect, useState } from "react";
 
 export type TabID = {[k: string]: string|number};
@@ -58,24 +58,38 @@ export default function useTabsManager<T extends Tab>() {
         let tabIndex = tabs.findIndex(tab => sameSemanticMap(tab.id, tabID));
         if (tabIndex === -1)
             return;
-        
+
         let updatedTabs = [...tabs];
         if (filterTab)
             updatedTabs = updatedTabs.filter((tab, i) => i !== tabIndex && filterTab(tab));
         
         tabIndex = tabs.findIndex(tab => sameSemanticMap(tab.id, tabID));
         updatedTabs.splice(tabIndex, 1);
-        setTabs(updatedTabs);
-        
-        if (updatedTabs.length === 0) {
-            setCurrentTab(null);
-        }
-        else if (updatedTabs.length === 1 || tabIndex - 1 < 0) {
-            setCurrentTab(updatedTabs[0]);
-        }
-        else if (updatedTabs.length > 1) {
-            setCurrentTab(updatedTabs[tabIndex-1]);
-        }
+
+        setTabs(tabs => {
+            let tabIndex = tabs.findIndex(tab => sameSemanticMap(tab.id, tabID));
+            if (tabIndex === -1)
+                return tabs;
+            
+            let updatedTabs = [...tabs];
+            if (filterTab)
+                updatedTabs = updatedTabs.filter((tab, i) => i !== tabIndex && filterTab(tab));
+
+            tabIndex = tabs.findIndex(tab => sameSemanticMap(tab.id, tabID));
+            updatedTabs.splice(tabIndex, 1);
+
+            if (updatedTabs.length === 0) {
+                setCurrentTab(null);
+            }
+            else if (updatedTabs.length === 1 || tabIndex - 1 < 0) {
+                setCurrentTab(updatedTabs[0]);
+            }
+            else if (updatedTabs.length > 1) {
+                setCurrentTab({...updatedTabs[tabIndex-1]});
+            }
+
+            return updatedTabs;
+        });
     }
 
 

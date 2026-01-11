@@ -7,12 +7,8 @@ export default function Check(props: {seen: boolean; toggleManager: ToggleManage
     return (
         <div 
             className={clsx(
-                "size-8 aspect-square",
-                "flex justify-center items-center",
-                "border-b border-r border-base-300 dark:border-base-200",
-                "hover:!bg-white dark:hover:!bg-base-200",
-                !props.seen && "bg-base-100 dark:bg-[#121214]",
-                props.seen && "!bg-base-200 dark:!bg-base-50",
+                "table-entry",
+                props.seen && "seen",
             )}
             data-row={props.i || ""}
         >

@@ -12,26 +12,26 @@ interface LookupFormProps {
 
 export default function Form(props: LookupFormProps) {
     return (
-        <div className="flex flex-col w-[min(320px,100%)]">
+        <div className="flex flex-col w-full">
             <form
                 onSubmit={(e) => e.preventDefault()}
-                className="w-full flex flex-col gap-4"
+                className="w-full flex flex-col gap-6"
             >
-                <TextField
-                    type="text"
-                    name="appointmentID"
-                    label="ID"
-                    value={props.form.getInput("appointmentID").data}
-                    state={props.form.getInput("appointmentID").state}
-                    onChange={props.form.updateInputData}
-                    onBlur={undefined}
-                />
                 <TextField
                     type="text"
                     name="email"
                     label="Email Address"
                     value={props.form.getInput("email").data}
                     state={props.form.getInput("email").state}
+                    onChange={props.form.updateInputData}
+                    onBlur={undefined}
+                />
+                <TextField
+                    type="text"
+                    name="appointmentID"
+                    label="Appointment ID"
+                    value={props.form.getInput("appointmentID").data}
+                    state={props.form.getInput("appointmentID").state}
                     onChange={props.form.updateInputData}
                     onBlur={undefined}
                 />

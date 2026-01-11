@@ -1,5 +1,5 @@
 import { Appointment as DB_Appointment } from "waltronics-types";
-import { toDisplayDate, toMoney } from "@/utils/convert";
+import { formatDate, formatMoney } from "@/utils/convert";
 import { Fragment, useEffect, useState } from "react";
 import PaymentItem from "@/shared/items/PaymentItem";
 import DiagnosisItem from "@/shared/items/DiagnosisItem";
@@ -7,11 +7,10 @@ import RepairItem from "@/shared/items/RepairItem";
 import PartItem from "@/shared/items/PartItem";
 import ServiceItem from "@/shared/items/ServiceItem";
 import NoteItem from "@/shared/items/NoteItem";
-import Tabs from "@/shared/ReadWriteAppointment/Tabs";
+import Tabs from "@/shared/appointment/Tabs";
 import { ViewSectionNonScalar } from "./ViewSectionNonScalar";
 import ViewSectionScalar from "./ViewSectionScalar";
-import Header from "@/shared/ReadWriteAppointment/Header";
-import resizeMainContent from "@/shared/ReadWriteAppointment/resizeMainContent";
+import Header from "@/shared/appointment/Header";
 import { useRouter, useSearchParams } from "next/navigation";
 
 interface ViewProps {
@@ -68,8 +67,8 @@ export default function View(props: ViewProps) {
                             ["Email Address", props.appointment.Email],
                             ["Phone Number", props.appointment.Phone],
                             ["Status", props.appointment.Status],
-                            ["Start Date", toDisplayDate(props.appointment.StartDate) || "N/A"],
-                            ["End Date", toDisplayDate(props.appointment.EndDate) || "N/A"]
+                            ["Start Date", formatDate(props.appointment.StartDate) || "N/A"],
+                            ["End Date", formatDate(props.appointment.EndDate) || "N/A"]
                         ]}
                     />
                 }
@@ -92,8 +91,8 @@ export default function View(props: ViewProps) {
                         {/* Cost */}
                         <ViewSectionScalar
                             data={[
-                                ["Cost", toMoney(props.appointment.Cost.toFixed(2)) || "N/A"],
-                                ["Amount Paid", props.appointment.Payments.length ? toMoney(props.appointment.Payments.map(payment => payment.Payment).reduce((accumulator, currentValue) => accumulator + currentValue, 0)) : "N/A"]
+                                ["Cost", formatMoney(props.appointment.Cost) || "N/A"],
+                                ["Amount Paid", props.appointment.Payments.length ? formatMoney(props.appointment.Payments.map(payment => payment.Payment).reduce((accumulator, currentValue) => accumulator + currentValue, 0)) : "N/A"]
                             ]}
                         />
                         {/* Payments */}

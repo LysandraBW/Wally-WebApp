@@ -1,33 +1,32 @@
-import Logo from "@/component/NavBar/Logo";
+import clsx from "clsx";
 import { ReactNode } from "react";
 
 interface ShowResultProps {
     Icon: ReactNode;
-    head: string;
-    body: string;
+    head: ReactNode;
+    body: ReactNode;
     More: ReactNode;
+    success?: boolean;
 }
 
 export default function ShowResults(props: ShowResultProps) {
     return (
-        <div className="h-full flex flex-col grow items-center justify-center grow gap-10">
-            <div className="flex justify-center items-center">
-                {props.Icon}
-            </div>
-            <div className="flex flex-col justify-self-center items-center relative">
-                <header className="flex flex-col gap-2 items-center relative">
-                    <div className="md:hidden">
-                        <Logo/>
-                    </div>
-                    <h1 className="text-2xl text-base-900 font-medium text-center tracking-tight">
-                        {props.head}
-                    </h1>
-                    <p className="text-base text-base-500 text-center font-normal tracking-wide max-w-[420px]">
-                        {props.body}
-                    </p>
-                </header>
-            </div>
-            <div className="flex justify-center">
+        <div className="h-full flex flex-col grow items-center grow gap-8 justify-center items-center py-4 bg-black/60 backdrop-blur-sm relative z-10">
+            <header className="flex flex-col gap-2 items-center relative">
+                <h1 
+                    className={clsx(
+                        "text-3xl text-base-900 font-medium text-center tracking-tight",
+                        props.success === true && "!text-blue-500",
+                        props.success === false && "!text-red-500"
+                    )}
+                >
+                    {props.head}
+                </h1>
+                <p className="text-sm text-base-700 text-center tracking-wide max-w-[300px]">
+                    {props.body}
+                </p>
+            </header>
+            <div className="flex justify-center w-full">
                 {props.More}
             </div>
         </div>

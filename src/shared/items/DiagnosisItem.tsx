@@ -1,6 +1,7 @@
 import { Diagnosis as DB_AppointmentDiagnosis } from "waltronics-types";
 import Item from "@/features/ItemManager/components/Item";
 import { Diagnosis } from "@/app/employee/home/update/diagnosis/_DEF";
+import { toInteger } from "@/utils/convert";
 
 interface DiagnosisItemProps {
     diagnosis: DB_AppointmentDiagnosis | Diagnosis;
@@ -9,7 +10,7 @@ interface DiagnosisItemProps {
 export default function DiagnosisItem(props: DiagnosisItemProps) {
     return (
         <Item
-            ID={parseInt(props.diagnosis?.DiagnosisID as any)}
+            ID={toInteger(props.diagnosis?.DiagnosisID)}
             head={props.diagnosis?.Message}
             tags={[[props.diagnosis?.Code]]}
         />

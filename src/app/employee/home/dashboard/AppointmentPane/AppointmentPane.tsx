@@ -1,30 +1,21 @@
-import SelectAppointment from "@/services/DB/Appointment/SelectAppointment";
-import { Fragment, useEffect, useState } from "react";
+import SelectAppointment from "@/services/db/Appointment/SelectAppointment";
+import { useEffect, useState } from "react";
 import CloseButton from "@/component/Button/CloseButton";
-import { toDisplayDate } from "@/utils/convert";
-import clsx from "clsx";
+import { formatDate } from "@/utils/convert";
 import { Appointment as DB_Appointment } from "waltronics-types";
-import { navigate } from "@/utils/navigate";
-import { PAGE_EDIT_APPOINTMENT, PAGE_VIEW_APPOINTMENT } from '@/utils/constants';
 import { motion } from "motion/react";
 import { AppointmentManager } from "../managers/useAppointmentManager";
-import ArrowLeft from "@/component/Icons/Icons/ArrowLeftIcon";
-import ArrowRight from "@/component/Icons/Icons/ArrowRightIcon";
-import SecondaryButton from "@/component/Button/SecondaryButton";
-import PrimaryButton from "@/component/Button/PrimaryButton";
 import IconButton from "@/component/Button/IconButton";
-import ArrowLongLeftIcon from "@/component/Icons/Icons/ArrowLongLeftIcon";
-import ArrowLongRightIcon from "@/component/Icons/Icons/ArrowLongRightIcon";
 import ChevronRightIcon from "@/component/Icons/Icons/ChevonRightIcon";
 import ChevronLeftIcon from "@/component/Icons/Icons/ChevronLeftIcon";
-import UserIcon from "@/component/Icons/Icons/UserIcon";
-import CalendarIcon from "@/component/Icons/Icons/CalendarIcon";
 import DataGroup from "./DataGroup";
-import ViewAppointment from "@/shared/ReadWriteAppointment/Buttons/ViewAppointment";
-import EditAppointment from "@/shared/ReadWriteAppointment/Buttons/EditAppointment";
+import ViewAppointmentButton from "@/shared/appointment/Buttons/ViewAppointmentButton";
+import EditAppointmentButton from "@/shared/appointment/Buttons/EditAppointmentButton";
+import { ToggleManager } from "../managers/useToggleManager";
 
 interface AppointmentPaneProps {
     appointmentManager: AppointmentManager;
+    toggleManager: ToggleManager;
 }
 
 
@@ -70,7 +61,7 @@ export default function AppointmentPane(props: AppointmentPaneProps) {
             key="OpenedAppointment"
         >
             {/* Close Button */}
-            <div className="flex justify-between items-center px-4 py-3 border-b border-base-300 dark:border-base-200">
+            <div className="flex justify-between items-center px-2 py-3 border-b border-base-300 dark:border-base-200">
                 <CloseButton 
                     size={10}
                     onClick={props.appointmentManager.closeAppointment}
@@ -82,7 +73,7 @@ export default function AppointmentPane(props: AppointmentPaneProps) {
                         onClick={props.appointmentManager.goToPrevAppointment}
                     >
                         <ChevronLeftIcon
-                            className="stroke-[2.25px] stroke-base-500 size-3"
+                            className="stroke-[2.25px] stroke-base-500 dark:stroke-base-400 size-3"
                         />
                     </IconButton>
                     <IconButton
@@ -91,25 +82,25 @@ export default function AppointmentPane(props: AppointmentPaneProps) {
                         onClick={props.appointmentManager.goToNextAppointment}
                     >
                         <ChevronRightIcon
-                            className="stroke-[2.25px] stroke-base-500 size-3"
+                            className="stroke-[2.25px] stroke-base-500 dark:stroke-base-400 size-3"
                         />
                     </IconButton>
                 </div>
             </div>
             {appointment &&
                 <div>
-                    <div className="px-4 py-4 flex flex-col items-center border-b border-base-300 dark:border-base-200 bg-base-100 dark:bg-[#121214]">
+                    <div className="px-4 py-4 flex flex-col items-center border-b border-base-300 dark:border-base-200 bg-base-100 dark:bg-base-50">
                         <h6 className="text-base-900 font-medium text-2xl text-center">
                             {appointment.FName} {appointment.LName}
                         </h6>
                     </div>
-                    <div className="border-b border-base-300 dark:border-base-200 py-1 px-3 bg-base-50">
+                    <div className="border-b border-base-300 dark:border-base-200 py-2 px-2 bg-base-0">
                         <div className="flex gap-2">
-                            <ViewAppointment
+                            <ViewAppointmentButton
                                 size={14}
                                 appointmentID={props.appointmentManager.openedAppointment || ""}
                             />
-                            <EditAppointment
+                            <EditAppointmentButton
                                 size={14}
                                 appointmentID={props.appointmentManager.openedAppointment || ""}
                             />
@@ -120,7 +111,7 @@ export default function AppointmentPane(props: AppointmentPaneProps) {
                             Date Created
                         </span>
                         <span className="text-base-700 tracking-wide text-xs">
-                            {toDisplayDate(appointment.CreationDate, "MMMM Do, YYYY [at] h:mm A")}
+                            {formatDate(appointment.CreationDate, "MMMM Do, YYYY [at] h:mm A")}
                         </span>
                     </div>
                     <div className="grid grid-cols-[30%_70%] gap-x-4 p-4 py-2 border-b border-b-gray-300 dark:border-base-200 hover:bg-base-50">
@@ -143,8 +134,8 @@ export default function AppointmentPane(props: AppointmentPaneProps) {
                         head="Date"
                         data={[
                             ["Status", appointment.Status],
-                            ["Start Date", toDisplayDate(appointment.StartDate) || "N/A"],
-                            ["End Date", toDisplayDate(appointment.EndDate) || "N/A"]
+                            ["Start Date", formatDate(appointment.StartDate) || "N/A"],
+                            ["End Date", formatDate(appointment.EndDate) || "N/A"]
                         ]}
                     />
                     <DataGroup

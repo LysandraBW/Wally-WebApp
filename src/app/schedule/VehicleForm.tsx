@@ -1,9 +1,9 @@
 import { Fragment, useEffect, useState } from "react";
-import { strictSubsetOf } from "@/lib/Zod/InputTest";
-import { fetchModels } from "@/services/NHTSA/fetchModels";
-import { fetchVehicle } from "@/services/NHTSA/fetchVehicle";
-import VehicleMakePairs from "@/services/DB/Information/SelectVehicleMakePairs";
-import { loadModelYears } from "@/services/NHTSA/loadModelYears";
+import { strictSubsetOf } from "@/utils/validate";
+import { fetchModels } from "@/services/vehicle/fetchModels";
+import { fetchVehicle } from "@/services/vehicle/fetchVehicle";
+import VehicleMakePairs from "@/services/db/Information/SelectVehicleMakePairs";
+import { fetchModelYears } from "@/services/vehicle/fetchModelYears";
 import { UseForm } from "@/features/Form/useForm/useForm";
 import { Options } from "@/features/Form/DEF";
 import getValues from "@/features/Form/helpers/getValues";
@@ -36,7 +36,7 @@ export default function VehicleForm(props: VehicleFormProps) {
     }
 
     const initializeModelYears = async () => {
-        const modelYears = loadModelYears();
+        const modelYears = fetchModelYears();
         setModelYears(modelYears);
 
         const modelYearValues = getValues(modelYears);
@@ -103,6 +103,7 @@ export default function VehicleForm(props: VehicleFormProps) {
                 name="vin"
                 type="text"
                 label="Vehicle Identification Number"
+                placeholder="Optional"
                 value={props.form.getInput("vin").data}
                 state={props.form.getInput("vin").state}
                 onChange={updateVIN}
@@ -116,6 +117,7 @@ export default function VehicleForm(props: VehicleFormProps) {
                 options={modelYears}
                 onChange={updateModelYear}
                 disabled={false}
+                sortNums={true}
             />
             <Search
                 name="make"
@@ -135,7 +137,7 @@ export default function VehicleForm(props: VehicleFormProps) {
                 values={props.form.getInput("model").data}
                 options={models}
                 onChange={props.form.updateInputData}
-                disabled={false}
+                disabled={!props.form.getInput("make").data[0] || !props.form.getInput("modelYear").data[0]}
             />
         </Fragment>
     )

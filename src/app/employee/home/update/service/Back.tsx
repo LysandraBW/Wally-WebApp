@@ -10,7 +10,7 @@ export default function Back(props: {onClick: () => void}) {
                 onClick={props.onClick}
             >
                 <ArrowLongLeftIcon
-                    className="size-3 stroke-base-500 stroke-[2px]"
+                    className="size-3 stroke-base-500 dark:stroke-base-400 stroke-[2px]"
                 />
             </IconButton>
         </div>

@@ -8,7 +8,6 @@ interface TableEntryProps {
     style?: string;
     seen: boolean;
     i?: number;
-    showNewFlag?: boolean;
     children?: ReactNode;
     onClick: () => void;
 }
@@ -53,28 +52,19 @@ export default function TableEntry(props: TableEntryProps) {
         <div 
             data-row={props.i || ""}
             className={clsx(
-                "w-full h-full px-2 py-0 flex gap-2 items-center overflow-clip",
-                "border-r border-b border-base-300 dark:border-base-200",
-                "hover:!bg-white dark:hover:!bg-base-200",
-                "cursor-pointer",
-                !props.seen && "bg-base-100 dark:bg-[#121214]",
-                props.seen && "bg-base-200 dark:bg-base-50",
+                "table-entry",
+                props.seen && "seen",
                 props.style,
             )}
             onClick={props.onClick}
         >
-            {(props.showNewFlag && !props.seen) &&
-                <div className="bg-blue-500 size-1"/>
-            }
+            
             {props.children}
-            <p 
-                className={clsx(
-                    "w-min text-gray-700 tracking-wide text-xs whitespace-nowrap group-hover:text-blue-500 overflow-hidden text-ellipsis",
-                    !props.seen && "font-medium"
-                )}
-            >
+            <p className="table-entry-text">
                 {stringL}
-                <b className="bg-blue-500 font-medium text-white">{stringM}</b>
+                <b className="bg-blue-500 font-medium text-white">
+                    {stringM}
+                </b>
                 {stringR}
             </p>
         </div>

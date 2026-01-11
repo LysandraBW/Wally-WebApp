@@ -13,6 +13,8 @@ import getValuesToLabels from "@/features/Form/helpers/getValuesToLabels";
 
 export interface SearchProps extends SelectProps {
     searchPlaceholder?: string;
+    sortNums?: boolean;
+    toggleClassName?: string;
 }
 
 
@@ -36,7 +38,7 @@ export default function Search(props: SearchProps) {
     }, [props.values, optionMap]);
 
     useEffect(() => {
-        const matched = searchLabels(search, props.options);
+        const matched = searchLabels(search, props.options, props.sortNums);
         setMatched(matched);
     }, [open, search]);
 
@@ -69,9 +71,12 @@ export default function Search(props: SearchProps) {
                     onClick={openList}
                 >
                     <Toggle
-                        onClick={() => setOpen(true)}
+                        onClick={openList}
                         icon={props.ToggleIcon}
                         label={toggleLabel}
+                        smaller={props.smaller}
+                        disabled={props.disabled}
+                        className={props.toggleClassName}
                     />
                     {open &&
                         <Wrapper>
@@ -91,8 +96,8 @@ export default function Search(props: SearchProps) {
                                 />
                             }
                             {matched.length === 0 &&
-                                <ul className="px-2 py-1">
-                                    <li className="text-center text-base-500 text-sm">
+                                <ul className="px-2 py-1 bg-base-0 dark:bg-base-50">
+                                    <li className="text-center text-base-500 dark:text-base-400 text-sm">
                                         No Results
                                     </li>
                                 </ul>

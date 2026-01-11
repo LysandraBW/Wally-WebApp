@@ -1,7 +1,7 @@
 import { z } from "zod";
-import { Appointment as DB_Appointment } from "waltronics-types";
+import { Appointment as DB_Appointment, isEmptyString, isInteger, isVIN } from "waltronics-types";
 import { toString } from "@/utils/convert";
-import { isVIN, subsetOf } from "@/lib/Zod/InputTest";
+import { subsetOf } from "@/utils/validate";
 
 export interface Vehicle {
     VIN: string;
@@ -29,8 +29,11 @@ export function vehicleTest(makes: Array<string>, models: Array<string>, modelYe
         Make: subsetOf(makes),
         Model: subsetOf(models),
         ModelYear: subsetOf(modelYears),
-        Mileage: z.string().optional(),
-        LicensePlate: z.string().optional()
+        Mileage: z.union([
+            isEmptyString(),
+            isInteger
+        ]),
+        LicensePlate: z.string().optional().or(z.literal(""))
     }
 )}
 

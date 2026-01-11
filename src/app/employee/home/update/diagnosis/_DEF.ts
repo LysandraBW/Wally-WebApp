@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { toString } from "@/utils/convert";
-import { Diagnosis as DB_AppointmentDiagnosis } from "waltronics-types";
+import { Diagnosis as DB_AppointmentDiagnosis, isCode, isMessage } from "waltronics-types";
 import { Define } from "@/features/ItemManager/Define";
 import { FormTest } from "@/features/Form/useForm/Form";
 import { DIAGNOSIS } from "../_DEF";
@@ -35,8 +35,9 @@ export class DefineDiagnosis extends Define<DB_AppointmentDiagnosis, Diagnosis, 
 
     test(..._: any[]): FormTest {
         return z.object({
-            Code: z.string().min(1, {message: "Must enter a code."}),
-            Message: z.string().min(1, {message: "Must enter a message."})
+            DiagnosisID: z.string(),
+            Code: isCode,
+            Message: isMessage
         });
     }
 

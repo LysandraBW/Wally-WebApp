@@ -5,8 +5,10 @@ import { ReactNode } from "react";
 interface ToggleProps {
     icon?: ReactNode;
     label?: ReactNode;
-    onClick: () => void;
     smaller?: boolean;
+    disabled?: boolean;
+    onClick: () => void;
+    className?: string;
 }
 
 export default function Toggle(props: ToggleProps) {
@@ -16,13 +18,17 @@ export default function Toggle(props: ToggleProps) {
             className={clsx(
                 "w-full h-full px-2 py-1",
                 "flex items-center justify-between gap-2",
-                "field-hover field-border field-background field-border field-focus",
+                "field-border field-background field-border",
+                props.disabled && "cursor-default",
+                !props.disabled && "field-hover field-focus",
+                props.className
             )}
         >
             <span 
                 className={clsx(
                     "field-text",
-                    props.smaller && "!text-xs"
+                    props.smaller && "!text-xs",
+                    props.disabled && "!text-base-400"
                 )}
             >
                 {props.label || "Select"}
@@ -31,7 +37,7 @@ export default function Toggle(props: ToggleProps) {
                 props.icon 
                 :
                 <ChevronDownIcon
-                    className="size-3 stroke-base-500 stroke-[3px]"
+                    className="size-3 stroke-base-500 dark:stroke-base-400 stroke-[3px]"
                 />
             }
         </button>

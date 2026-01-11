@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Days, Event, Events, ShortenedDays, Years } from "./_DEF";
+import { Event, Events, ShortenedDays, Years } from "./_DEF";
 import CalendarDate from "./CalendarDate";
 import getEventsWhen from "./getEventsWhen";
 import clsx from "clsx";
@@ -91,14 +91,13 @@ export default function Calendar(props: CalendarProps) {
                         // These are days that aren't actually in
                         // the month, they're like leftovers of
                         // the previous or next month.
-                        console.log(eventMap[props.year][props.monthIndex])
                         if (eventMap[props.year][props.monthIndex][i][0] > 25 && i < 6)
                             return (
-                                <div key={i} className="first:rounded-tl-md last:rounded-tr-md bg-base-100 dark:bg-[#121214] border-t border-r border-b border-base-300 dark:border-base-200 first:border-l"/>
+                                <div key={i} className="first:rounded-tl-md last:rounded-tr-md bg-base-100 dark:bg-[#121315] border-t border-r border-b border-base-300 dark:border-base-200 first:border-l"/>
                             );  
                         if (eventMap[props.year][props.monthIndex][i][0] <= 14 && i > 25)
                             return (
-                                <div key={i} className="first:rounded-bl-md last:rounded-br-md bg-base-100 [&:nth-last-child(7)]:rounded-bl-md [&:nth-last-child(7)]:border-l [&:nth-child(7n-6)]:border-l  dark:bg-[#121214] border-b border-r border-base-300 dark:border-base-200"/>
+                                <div key={i} className="first:rounded-bl-md last:rounded-br-md bg-base-100 [&:nth-last-child(7)]:rounded-bl-md [&:nth-last-child(7)]:border-l [&:nth-child(7n-6)]:border-l  dark:bg-[#121315] border-b border-r border-base-300 dark:border-base-200"/>
                             );
                         return (
                             <div 

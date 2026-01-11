@@ -10,11 +10,19 @@ export default function Alert(props: AlertProps) {
         <Fragment>
             {props.alert.confirmation}
             {props.alert.messages.map(({node}, i) => (
-                <Fragment 
+                <div 
                     key={i}
+                    style={{
+                        position: "absolute",
+                        top: 0,
+                        left: 0,
+                        zIndex: (100 + props.alert.messages.length) - i,
+                        translate: `0px ${i * 15}px`                      
+                    }}
+                    className="w-full h-min"
                 >
                     {node}
-                </Fragment>
+                </div>
             ))}
         </Fragment>
     )

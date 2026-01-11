@@ -1,5 +1,5 @@
 import { Define } from "@/features/ItemManager/Define";
-import { Repair as DB_AppointmentRepair } from "waltronics-types";
+import { Repair as DB_AppointmentRepair, isRepair } from "waltronics-types";
 import { toString } from "@/utils/convert";
 import { z } from "zod";
 import { REPAIR } from "../_DEF";
@@ -26,14 +26,17 @@ export interface RepairUpdates {
     }>;
 }
 
+
 export class DefineRepair extends Define<DB_AppointmentRepair, Repair, Repairs> {
     formID = REPAIR;
     itemID = "RepairID";
     itemName = "Repair";
 
+    
     test(..._: any[]): FormTest {
         return z.object({
-            Repair: z.string()
+            RepairID: z.string(),
+            Repair: isRepair
         });
     }
 

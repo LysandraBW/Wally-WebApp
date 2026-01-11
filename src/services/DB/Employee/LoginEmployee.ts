@@ -9,7 +9,6 @@ export async function LoginEmployee(body: Body) {
         return output || "";
     }
     catch (err) {
-        // console.log("!!!");
         return "";
     }
 }

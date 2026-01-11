@@ -3,7 +3,7 @@ import { toString } from "@/utils/convert";
 import { z } from "zod";
 import { SERVICE } from "../_DEF";
 import { FormTest } from "@/features/Form/useForm/Form";
-import { Service as DB_Service } from "waltronics-types";
+import { Service as DB_Service, isClass, isDivision, isService } from "waltronics-types";
 
 export interface Service extends Omit<DB_Service, "AppointmentServiceID" | "ServiceID"> {
     AppointmentServiceID: string;
@@ -38,9 +38,10 @@ export class DefineService extends Define<DB_Service, Service, Services> {
 
     test(..._: any[]): FormTest {
         return z.object({
-            Class: z.string(),
-            Division: z.string(),
-            Service: z.string()
+            AppointmentServiceID: z.string(),
+            Class: isClass,
+            Division: isDivision,
+            Service: isService,
         });
     }
 

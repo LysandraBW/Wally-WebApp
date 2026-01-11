@@ -1,12 +1,8 @@
 "use client";
-import ChevronRight from "@/component/Icons/Icons/ChevonRightIcon";
-import ChevronLeft from "@/component/Icons/Icons/ChevronLeftIcon";
 import { FilterManager } from "../managers/useFilterManager";
-import { ReactNode, useEffect } from "react";
+import { useEffect } from "react";
 import clsx from "clsx";
 import MinusIcon from "@/component/Icons/Icons/MinusIcon";
-import ChevronLeftIcon from "@/component/Icons/Icons/ChevronLeftIcon";
-import ChevronRightIcon from "@/component/Icons/Icons/ChevonRightIcon";
 import IconButton from "@/component/Button/IconButton";
 import ArrowLongLeftIcon from "@/component/Icons/Icons/ArrowLongLeftIcon";
 import ArrowLongRightIcon from "@/component/Icons/Icons/ArrowLongRightIcon";
@@ -53,7 +49,7 @@ export default function Navigation(props: NavigationProps) {
                     type="text"
                     className={clsx(
                         "h-[28px] min-w-[1ch] max-w-[5ch] p-0",
-                        "text-center text-xs text-base-500 font-medium tracking-wide",
+                        "text-center text-xs text-base-500 dark:text-base-400 font-medium tracking-wide",
                         "bg-transparent border-b border-b-base-300 dark:border-b-base-200",
                         "hover:bg-base-100 focus:bg-base-100",
                         "focus:outline-none"
@@ -63,14 +59,14 @@ export default function Navigation(props: NavigationProps) {
                     onChange={(event) => onPageIndexChange(event.target.name, event.target.value)}
                 />
                 <MinusIcon
-                    className="size-2 stroke-[2px] stroke-base-500"
+                    className="size-2 stroke-[2px] stroke-base-500 dark:stroke-base-400"
                 /> 
                 <input
                     name="maxPageIndex"
                     type="text"
                     className={clsx(
                         "h-[28px] min-w-[1ch] max-w-[5ch] p-0",
-                        "text-center text-xs text-base-500 font-medium tracking-wide",
+                        "text-center text-xs text-base-500 dark:text-base-400 font-medium tracking-wide",
                         "bg-transparent border-b border-b-base-300 dark:border-b-base-200",
                         "focus:outline-none"
                     )}
@@ -79,7 +75,7 @@ export default function Navigation(props: NavigationProps) {
                 />               
             </div>
             {/* L and R Buttons */}
-            <div className="flex gap-2 items-center stroke-base-500">
+            <div className="flex gap-2 items-center stroke-base-500 dark:stroke-base-400">
                 <IconButton
                     className="dark:!bg-base-50"
                     onClick={props.filterManager.goToPrevPage}

@@ -6,11 +6,8 @@ export default function Star(props: {seen: boolean; starred: boolean; markAsStar
         <div 
             data-row={props.i || ""}
             className={clsx(
-                "flex justify-center items-center",
-                "border-r border-b border-base-300 dark:border-base-200",
-                "hover:!bg-white dark:hover:!bg-base-200",
-                !props.seen && "bg-base-100 dark:bg-[#121214]",
-                props.seen && "!bg-base-200 dark:!bg-base-50",
+                "table-entry",
+                props.seen && "seen",
             )}
             onClick={props.markAsStarred}
         >
@@ -21,7 +18,7 @@ export default function Star(props: {seen: boolean; starred: boolean; markAsStar
             }
             {props.starred &&
                 <StarIcon
-                    className="size-4 fill-blue-500 stroke-[1.25px] stroke-blue-500 cursor-pointer"
+                    className="size-4 fill-yellow-400 stroke-yellow-400 cursor-pointer"
                 />
             }
         </div>

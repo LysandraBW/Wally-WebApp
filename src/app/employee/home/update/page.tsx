@@ -4,11 +4,10 @@ import { useContext, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import useForm from "@/features/Form/useForm/useForm";
 import makeForm from "@/features/Form/useForm/makeForm";
-import { Appointment as DB_Appointment } from "waltronics-types";
-import LoadAppointment from "@/shared/LoadAppointment/LoadAppointment";
-import SelectAppointment from "@/services/DB/Appointment/SelectAppointment";
+import { Appointment as DB_Appointment, isUUID, isUUIDArray } from "waltronics-types";
+import LoadAppointment from "@/shared/appointment/LoadAppointment";
+import SelectAppointment from "@/services/db/Appointment/SelectAppointment";
 import { EmployeeContext } from "../layout";
-import clsx from "clsx";
 import UpdateManager from "./UpdateManager";
 
 export default function Page() {
@@ -32,7 +31,7 @@ export default function Page() {
                     appointment = await SelectAppointment({appointmentID});
                 
                 // Appointment Does Exist
-                if (appointment && appointment.FName) {
+                if (appointment && Object.keys(appointment).length) {
                     setAppointment(appointment);
                     setAppointmentID(appointmentID);
                 }
@@ -43,7 +42,9 @@ export default function Page() {
             }
 
             // Preparing Input for Manual Appointment ID
-            const test = z.object({id: z.string({"message": "Must be a string."}).length(36, {"message": "This is an invalid appointment ID."})});
+            const test = z.object({id: 
+                isUUIDArray
+            });
             form.resetForm(makeForm({id: ""}, test));
         }
         load();
@@ -59,7 +60,7 @@ export default function Page() {
         if (!form.getState())
             return;
         
-        const ID = form.getInput("id").data;
+        const ID = form.getInput("id").data[0];
         const appointment = await SelectAppointment({appointmentID: ID});
         
         // Appointment Does Not Exist

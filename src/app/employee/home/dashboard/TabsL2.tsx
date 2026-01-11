@@ -28,7 +28,7 @@ export default function TabsL2(props: TabsL2Props) {
                     <span 
                         className={clsx(
                             "text-xs tracking-wide whitespace-nowrap",
-                            status[0] !== props.filterManager.statusID && "text-base-500",
+                            status[0] !== props.filterManager.statusID && "text-base-500 dark:text-base-400",
                             status[0] === props.filterManager.statusID && "text-blue-500 font-medium"
                         )}
                     >

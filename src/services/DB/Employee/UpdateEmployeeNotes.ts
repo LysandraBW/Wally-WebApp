@@ -1,6 +1,4 @@
 import { request } from "../request";
-import { uploadFile } from "@/services/Cloud/uploadFile";
-import { generateURL } from "@/services/Cloud/generateURL";
 import { NoteUpdates } from "@/app/employee/home/update/note/_DEF";
 
 export async function UpdateEmployeeNotes(updates: NoteUpdates) {
@@ -16,21 +14,6 @@ export async function UpdateEmployeeNotes(updates: NoteUpdates) {
             allOutput = allOutput && output !== false;
         }
 
-        // for (const INSERT of updates.Insert.Attachment) {
-        //     const files = INSERT.Files.getAll("Files");
-        //     for (const file of files) {
-        //         if (!(file instanceof File))
-        //             continue;
-        //         const _file = file as File;
-        //         const URL = await uploadFile(await generateURL(), _file);
-        //         request("PUT", `/appointment/note/${INSERT.NoteID}/attachment`, {
-        //             name: _file.name,
-        //             type: _file.type,
-        //             url: URL
-        //         });
-        //     }
-        // }
-
         for (const INSERT of updates.Insert.Note) {
             const output = await request("PUT", `/appointment/${INSERT.AppointmentID}/note`, {
                 head: INSERT.Head,
@@ -42,22 +25,6 @@ export async function UpdateEmployeeNotes(updates: NoteUpdates) {
                 allOutput = false;
                 continue;
             }
-
-            // if (INSERT.Files) {
-            //     const files = INSERT.Files.getAll("Files");
-            //     for (const file of files) {
-            //         if (!(file instanceof File))
-            //             continue;
-            //         const _file = file as File;
-            //         const URL = await uploadFile(await generateURL(), _file);
-            //         console.log(3.1);
-            //         request("PUT", `/appointment/note/${output.output}/attachment`, {
-            //             name: _file.name,
-            //             type: _file.type,
-            //             url: URL
-            //         });
-            //     }
-            // }
 
             if (INSERT.Sharees) {
                 for (const noteShareeID of INSERT.Sharees) {
@@ -98,7 +65,6 @@ export async function UpdateEmployeeNotes(updates: NoteUpdates) {
         return allOutput;
     }
     catch (error) {
-        console.log("helllur? WTF")
         console.error(error);
         return false;
     }

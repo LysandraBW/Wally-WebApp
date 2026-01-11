@@ -3,21 +3,13 @@ export default function resizeMainContent() {
         return;
     }
     
-    const vNavBar = document.querySelector("#VNavBar");
-    if (!vNavBar)
-        return;
-    const vNavBarRect = vNavBar.getBoundingClientRect();
-    console.log(vNavBar, vNavBarRect);
-
     const tabs = document.querySelector("#Tabs");
     if (!tabs)
         return;
     const tabsRect = tabs.getBoundingClientRect();
-    console.log(tabs, tabsRect);
     
     const mainContentElements = document.querySelectorAll("#MainContent");
-    const mainContentHeight = vNavBarRect.bottom - tabsRect.bottom;
-    console.log(mainContentHeight);
+    const mainContentHeight = window.innerHeight - 16 - tabsRect.bottom;
     
     for (const element of mainContentElements) {
         (element as any).style.height = `${mainContentHeight}px`;

@@ -1,8 +1,8 @@
 import { z } from "zod";
 import { Form } from "@/features/Form/useForm/Form";
 import makeForm from "@/features/Form/useForm/makeForm";
-import { strictSubsetOf } from "@/lib/Zod/InputTest";
-import { isEmail, isName, isPhone, isVIN } from "@/utils/validate";
+import { strictSubsetOf } from "@/utils/validate";
+import { isEmail, isName, isPhone, isVIN } from "waltronics-types";
 
 export const MAKE_ERR_MSG = "Must select a make."
 export const MODEL_ERR_MSG = "Must select a model."
@@ -22,7 +22,8 @@ export const startContactForm = (): Form => makeForm(
 export const startVehicleForm = (): Form => makeForm(
     {vin: "", make: [], model: [], modelYear: [] },
     z.object({
-        vin: isVIN,
+        // The VIN can be optional
+        vin: z.union([isVIN, z.null(), z.string().trim().refine(s => s === "")]),
         make: strictSubsetOf([], MAKE_ERR_MSG),
         model: strictSubsetOf([], MODEL_ERR_MSG),
         modelYear: strictSubsetOf([], MODEL_YEAR_ERR_MSG)

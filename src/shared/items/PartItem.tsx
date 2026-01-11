@@ -4,11 +4,11 @@ import { toInteger } from "@/utils/convert";
 import { useEffect, useState } from "react";
 import { Part } from "@/app/employee/home/update/part/_DEF";
 
-interface PartIemProps {
+interface PartItemProps {
     part: DB_AppointmentPart | Part;
 }
 
-export default function PartItem(props: PartIemProps) {
+export default function PartItem(props: PartItemProps) {
     const [amountSpent, setAmountSpent] = useState(0);
 
     useEffect(() => {
@@ -30,7 +30,7 @@ export default function PartItem(props: PartIemProps) {
             quantity = props.part?.Quantity;
 
         setAmountSpent(unitCost * quantity);
-    }, []);
+    }, [props.part]);
 
     return (
         <Item

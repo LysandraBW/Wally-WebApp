@@ -1,5 +1,5 @@
 import { TextProps } from "@/component/Form/Text/TextProps";
-import EntryField from "@/shared/ReadWriteAppointment/Entry/EntryField";
+import EntryField from "@/shared/appointment/Entry/EntryField";
 import clsx from "clsx";
 
 export default function EntryTextField(props: TextProps) {
@@ -17,7 +17,7 @@ export default function EntryTextField(props: TextProps) {
             input={
                 <div className="w-full flex">
                     {props.prefix &&
-                        <span className="p-2 text-xs text-base-500 tracking-wide font-medium bg-base-100 dark:bg-base-200 entry-border-r">
+                        <span className="p-2 text-xs text-base-500 dark:text-base-400 tracking-wide font-medium bg-base-100 dark:bg-base-200 entry-border-r">
                             {props.prefix}
                         </span>
                     }
@@ -34,9 +34,13 @@ export default function EntryTextField(props: TextProps) {
                             "bg-base-0 dark:bg-base-50 !rounded-none outline-none",
                             "field-hover dark:focus:bg-gray-800/10 focus:text-blue-500"
                         )}
+                        onClick={(e) => {
+                            if (props.type === "datetime-local")
+                                e.currentTarget.showPicker();
+                        }}
                     />
                     {props.suffix &&
-                        <span className="p-2 text-xs text-base-500 tracking-wide font-medium bg-base-100 entry-border-l">
+                        <span className="p-2 text-xs text-base-500 dark:text-base-400 tracking-wide font-medium bg-base-100 entry-border-l">
                             {props.suffix}
                         </span>
                     }

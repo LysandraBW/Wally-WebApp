@@ -39,6 +39,7 @@ export default function useItemManager<BaseItem, Item, Items>(props: UseItemMana
     const saveItem = async () => {
         const state = itemForm.getState();
         props.itemsManager.itemsManagerForm.setInputState(props.itemID, [state, ""]);
+        
         if (!state)
             return;
         props.itemsManager.saveItemInEditor(props.itemID);

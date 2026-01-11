@@ -6,8 +6,8 @@ import saveFDispatch from "@/features/Alert/saveFDispatch";
 import saveTDispatch from "@/features/Alert/saveTDispatch";
 import useForm from "@/features/Form/useForm/useForm";
 import { Event, Events, buildEventUpdates, DefineEvent } from "./_DEF";
-import SelectEvents from "@/services/DB/Employee/SelectEvents";
-import { UpdateEmployeeEvents } from "@/services/DB/Employee/UpdateEmployeeEvents";
+import SelectEvents from "@/services/db/Employee/SelectEvents";
+import { UpdateEmployeeEvents } from "@/services/db/Employee/UpdateEmployeeEvents";
 import { Event as DB_Event } from "waltronics-types";
 import { useContext, useEffect, useReducer, useState } from "react";
 import { EmployeeContext } from "../layout";
@@ -23,7 +23,7 @@ import useTabsManager, { Tab } from "@/features/TabManager/useTabsManager";
 import Plus from "@/component/Icons/Icons/PlusIcon";
 import SecondaryButton from "@/component/Button/SecondaryButton";
 import PlusIcon from "@/component/Icons/Icons/PlusIcon";
-import OpenedTabs from "../update/OpenedTabs";
+import OpenedTabs from "../../../../component/Tabs/PopUpTabs";
 import { AnimatePresence, motion } from "motion/react";
 
 export interface EventsTab extends Tab {
@@ -147,7 +147,7 @@ export default function EventsManager() {
                             className={clsx(
                                 "w-[200px]",
                                 "flex justify-center items-center",
-                                "stroke-base-500 hover:stroke-base-700"
+                                "stroke-base-500 dark:stroke-base-400 hover:stroke-base-700"
                             )}
                         >
                             <PlusIcon

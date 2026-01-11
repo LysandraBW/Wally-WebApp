@@ -1,7 +1,7 @@
 import { Payment as DB_AppointmentPayment } from "waltronics-types";
 import { Payment } from "@/app/employee/home/update/payment/_DEF";
 import { ReactNode, useEffect, useState } from "react";
-import { toDisplayDate, toMoney } from "@/utils/convert";
+import { formatDate, formatMoney, toInteger } from "@/utils/convert";
 import Item from "@/features/ItemManager/components/Item";
 
 interface PaymentItemProps {
@@ -13,20 +13,21 @@ export default function PaymentItem(props: PaymentItemProps) {
 
     useEffect(() => {
         const tags = [];
-        tags.push(toDisplayDate(props.payment?.PaymentDate));
+        
         if (!props.payment.Name) {
             setTags([["Cash"]]);
             return;
         }
+
         tags.push(props.payment?.Type);
         tags.push(`${props.payment?.EXP.substring(0, 2)}/${props.payment?.EXP.substring(2)}`);
         setTags([tags]);
-    }, []);
+    }, [props.payment]);
 
     return (
         <Item
-            ID={parseInt(props.payment?.PaymentID as any)}
-            head={toMoney(props.payment?.Payment)}
+            ID={toInteger(props.payment?.PaymentID)}
+            head={formatMoney(props.payment?.Payment)}
             tags={tags || []}
         />
     )

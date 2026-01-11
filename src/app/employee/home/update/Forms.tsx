@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import OpenedTabs from './OpenedTabs';
+import OpenedTabs from '../../../../component/Tabs/PopUpTabs';
 import { DIAGNOSIS, NOTE, PART, PAYMENT, REPAIR, SERVICE } from './_DEF';
 import NoteManager from './note/NoteManager';
 import PaymentManager from './payment/PaymentManager';
@@ -51,7 +51,7 @@ export default function Forms(props: FormsProps) {
         checkOverflow();
     }, []);
     
-
+    
     return (
         <RND
             default={{
@@ -63,18 +63,19 @@ export default function Forms(props: FormsProps) {
             style={{ cursor: 'default' }}
             minWidth={250}
             minHeight={150}
-            bounds="parent"
+            // bounds="parent"
             className="absolute z-[200]"
             onResize={(e, direction, ref, delta, position) => {
                 checkOverflow();
             }}
+            cancel='.close'
         >
             <div
                 ref={contentRef} 
                 className={clsx(
                 "min-w-0 w-full h-full !bg-red-500 overflow-x-clip overflow-y-auto",
                 "grid grid-cols-1 grid-rows-[auto_1fr]",
-                "bg-base-0 dark:bg-base-50 shadow-md",
+                "bg-base-0 dark:bg-base-50 shadow-md dark:shadow-xl",
                 hasOverflow && "border-b border-base-300 dark:border-base-200"
             )}>
                 <OpenedTabs

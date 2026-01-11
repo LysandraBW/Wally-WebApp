@@ -49,7 +49,7 @@ export default function File(props: FileProps) {
                         <ArrowUpTrayIcon
                             className="size-5 stroke-inherit"
                         />
-                        <span className="text-base-500 text-sm tracking-wide text-inherit">
+                        <span className="text-base-500 dark:text-base-400 text-sm tracking-wide text-inherit">
                             Click to Upload
                         </span>
                     </label>
@@ -68,7 +68,7 @@ export default function File(props: FileProps) {
                                 >
                                     {/* File */}
                                     <div className="flex">
-                                        <div className="text-xs text-base-500 tracking-wide p-1 whitespace-nowrap">
+                                        <div className="text-xs text-base-500 dark:text-base-400 tracking-wide p-1 whitespace-nowrap">
                                             {file.name}
                                         </div>
                                         {/* Delete File Button */}
@@ -82,7 +82,7 @@ export default function File(props: FileProps) {
                                             )}
                                         >
                                             <XMarkIcon
-                                                className="size-2 stroke-base-500 group-hover:stroke-base-700 stroke-[3px]"
+                                                className="size-2 stroke-base-500 dark:stroke-base-400 group-hover:stroke-base-700 stroke-[3px]"
                                             />
                                         </div>
                                     </div>

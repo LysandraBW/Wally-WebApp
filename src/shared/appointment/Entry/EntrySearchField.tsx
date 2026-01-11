@@ -1,5 +1,4 @@
 "use client";
-
 import { SelectProps } from "@/component/Form/Select/SelectProps";
 import CheckIcon from "@/component/Icons/Icons/CheckIcon";
 import { Value } from "@/features/Form/DEF";
@@ -9,7 +8,7 @@ import { useState, useEffect, Fragment } from "react";
 import ChevronUpDownIcon from "@/component/Icons/Icons/ChevronUpDownIcon";
 import { useRef } from 'react'
 import { useOnClickOutside } from 'usehooks-ts'
-import EntryField from "@/shared/ReadWriteAppointment/Entry/EntryField";
+import EntryField from "@/shared/appointment/Entry/EntryField";
 
 export default function EntrySearchField(props: SelectProps) {
     const ref = useRef<any>(null);
@@ -74,7 +73,7 @@ export default function EntrySearchField(props: SelectProps) {
                                 {props.values?.[0] ? props.values[0] : props.toggleLabel}
                             </span>
                             <ChevronUpDownIcon
-                                className="size-3 stroke-[0.5px] stroke-base-500"
+                                className="size-3 stroke-[0.5px] stroke-base-500 dark:stroke-base-400"
                             />
                         </div>
                     }
@@ -115,7 +114,7 @@ export default function EntrySearchField(props: SelectProps) {
                                 >
                                     <span 
                                         className={clsx(
-                                            "text-base-500 text-xs tracking-wide", 
+                                            "text-base-500 dark:text-base-400 text-xs tracking-wide", 
                                             props.values.includes(value) && "font-medium text-blue-500"
                                         )}
                                     >

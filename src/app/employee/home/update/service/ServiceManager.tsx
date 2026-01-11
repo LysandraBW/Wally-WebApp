@@ -1,7 +1,7 @@
 import TextField from "@/component/Form/Text/Text";
 import ItemFormGroup from "@/features/ItemManager/components/ItemFormGroup";
 import useItemManager from "../../../../../features/ItemManager/useItemManager";
-import { ItemManagerProps, ItemManagerWrapper } from "@/features/ItemManager/components/ItemManagerWrapper";
+import { ItemManagerProps, ItemForm } from "@/features/ItemManager/components/ItemForm";
 import { Service, Services } from "./_DEF";
 import { Service as DB_AppointmentService } from "waltronics-types";
 
@@ -9,7 +9,7 @@ export default function ServiceManager(props: ItemManagerProps<DB_AppointmentSer
     const itemManager = useItemManager(props as any);
 
     return (
-        <ItemManagerWrapper
+        <ItemForm
             header={props.header}
             canDelete={props.canDelete}
             saveItem={itemManager.saveItem}
@@ -49,6 +49,6 @@ export default function ServiceManager(props: ItemManagerProps<DB_AppointmentSer
                     onBlur={undefined}
                 />
             </ItemFormGroup>
-        </ItemManagerWrapper>
+        </ItemForm>
     )
 }

@@ -1,9 +1,11 @@
 import { OptionsWithNode, ReadWriteArrayInputProps } from "@/features/Form/DEF";
 import clsx from "clsx";
-import EntryField from "@/shared/ReadWriteAppointment/Entry/EntryField";
+import EntryField from "@/shared/appointment/Entry/EntryField";
+import { ReactNode } from "react";
 
 interface SegmentGridProps extends Omit<ReadWriteArrayInputProps, "options"> {
     options: OptionsWithNode;
+    tip?: ReactNode;
 }
 
 export default function EntrySegmentField(props: SegmentGridProps) {
@@ -11,6 +13,7 @@ export default function EntrySegmentField(props: SegmentGridProps) {
         <EntryField
             state={props.state}
             label={props.label}
+            tip={props.tip}
             input={
                 <div className="h-full flex justify-between shadow-sm">
                     {props.options && props.options.map((option, i) => (

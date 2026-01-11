@@ -16,7 +16,7 @@ export default function SaveResetButtons(props: SaveResetButtonsProps) {
     return (
         <div 
             className={clsx(
-                "w-full p-2",
+                "w-full p-2 mt-[-1px]",
                 "relative z-0",
                 "flex gap-2 justify-end",
                 "bg-base-50 border-t border-base-300 dark:border-base-200 rounded-b-md",

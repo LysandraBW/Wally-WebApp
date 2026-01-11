@@ -15,7 +15,7 @@ export default function Search(props: SearchProps) {
                 "h-[28px] flex grow",
                 "focus-within:bg-base-0 bg-base-100 dark:bg-base-50",
                 "border border-base-300 dark:border-base-200 shadow-sm rounded-md",
-                "focus-within:text-gray-700 text-gray-500"
+                "focus-within:text-base-700 text-base-500 dark:text-base-400"
             )}
         >
             <div
@@ -35,7 +35,7 @@ export default function Search(props: SearchProps) {
                 value={search}
                 onKeyDown={(event) => event.key === "Enter" && props.filterManager.setSearch(search)}
                 onChange={(event) => setSearch(event.target.value)}
-                className="bg-base-0 dark:bg-base-50 peer w-full px-2 tracking-wide !rounded-r-md !h-[26px] text-xs focus:outline-none focus:text-gray-700"
+                className="bg-base-0 dark:bg-base-50 peer w-full px-2 tracking-wide !rounded-r-md !h-[26px] text-xs focus:outline-none focus:text-base-700"
             />
         </div>
     )

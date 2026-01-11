@@ -10,7 +10,7 @@ export default function DataGroup({head, data}: {
             <div className="grid grid-cols-[30%_70%] gap-x-4 gap-y-1">
                 {data.map(([key, value], i) => (
                     <Fragment key={i}>
-                        <span className="text-base-500 tracking-wide text-xs">{key}</span>
+                        <span className="text-base-500 dark:text-base-400 tracking-wide text-xs">{key}</span>
                         <span className="text-base-700 tracking-wide text-xs">{value}</span>
                     </Fragment>
                 ))}

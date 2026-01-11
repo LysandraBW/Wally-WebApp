@@ -1,13 +1,13 @@
 import TextField from "@/component/Form/Text/Text";
 import ItemFormGroup from "@/features/ItemManager/components/ItemFormGroup";
-import { ItemManagerProps, ItemManagerWrapper } from "@/features/ItemManager/components/ItemManagerWrapper";
+import { ItemManagerProps, ItemForm } from "@/features/ItemManager/components/ItemForm";
 import useItemManager from "@/features/ItemManager/useItemManager";
 
 export default function RepairManager<DB_AppointmentRepair, Repair, Repairs>(props: ItemManagerProps<DB_AppointmentRepair, Repair, Repairs>) {
     const itemManager = useItemManager(props);
 
     return (
-        <ItemManagerWrapper
+        <ItemForm
             header={props.header}
             canDelete={props.canDelete}
             saveItem={itemManager.saveItem}
@@ -27,6 +27,6 @@ export default function RepairManager<DB_AppointmentRepair, Repair, Repairs>(pro
                     onBlur={undefined}
                 />
             </ItemFormGroup>
-        </ItemManagerWrapper>
+        </ItemForm>
     )
 }

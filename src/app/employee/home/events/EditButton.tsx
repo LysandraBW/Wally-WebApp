@@ -1,6 +1,4 @@
 import IconButton from "@/component/Button/IconButton";
-import EditIcon from "@/component/Icons/Icons/PencilSquareIcon";
-import clsx from "clsx";
 import { PencilIcon } from "lucide-react";
 
 export default function EditButton({onUpdate}: {onUpdate: () => void}) {

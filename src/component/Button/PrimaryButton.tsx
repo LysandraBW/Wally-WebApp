@@ -31,11 +31,11 @@ export default function PrimaryButton(props: ButtonProps) {
                     cursor-default
                     !border-base-300 dark:!border-base-200
 
-                    !from-white !to-base-200
-                    before:!from-base-100 before:!to-base-200
+                    !from-white !to-base-100
+                    before:!from-base-50 before:!to-base-100
                     
                     dark:!from-base-400 dark:!to-base-0
-                    dark:before:!from-[#121214] dark:before:!to-base-50
+                    dark:before:!from-[#121315] dark:before:!to-base-50
                     
                     !text-base-400
                     

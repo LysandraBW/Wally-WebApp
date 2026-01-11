@@ -90,6 +90,7 @@ export default function SearchServices(props: SearchServicesProps) {
                                             <IconButton
                                                 size={16}
                                                 roundedLess={true}
+                                                className="rounded-[2px]"
                                                 onClick={() => setTab("")}
                                             >
                                                 <ArrowLongLeftIcon
@@ -107,11 +108,12 @@ export default function SearchServices(props: SearchServicesProps) {
                                             />
                                         </div>
                                         {matched.map((m, i) => (
-                                            <Fragment key={i}>
+                                            <Fragment key={m[0]}>
                                                 <Element
                                                     label={m[1]}
                                                     selectValue={() => selectValue(m[0])}
                                                     checked={props.values.includes(m[0])}
+                                                    obvious={true}
                                                 />
                                             </Fragment>
                                         ))}
@@ -139,15 +141,15 @@ export default function SearchServices(props: SearchServicesProps) {
                                             className={clsx(
                                                 "px-2 py-1",
                                                 "flex items-center gap-1",
-                                                "field-background field-border field-hover rounded-full shadow-sm",
+                                                "surface-background field-border surface-background-hover rounded-full shadow-sm",
                                                 "cursor-pointer"
                                             )}
                                         >
-                                            <span className="block text-xs text-base-500 tracking-wide">
+                                            <span className="block text-xs text-base-700 tracking-wide">
                                                 {valueToLabel[value]}
                                             </span>
                                             <XMarkIcon
-                                                className="size-2 stroke-[3px] stroke-base-500"
+                                                className="size-2 stroke-[3px] stroke-base-500 dark:stroke-base-400"
                                             />
                                         </li>
                                     ))}

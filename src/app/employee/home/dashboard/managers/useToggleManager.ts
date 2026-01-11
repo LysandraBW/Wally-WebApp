@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { AppointmentManager } from "./useAppointmentManager";
-import UpdateAppointmentLabel from "@/services/DB/Appointment/UpdateAppointmentLabel";
+import UpdateAppointmentLabel from "@/services/db/Appointment/UpdateAppointmentLabel";
 
 export type ToggleManager = ReturnType<typeof useToggleManager>;
 
@@ -70,7 +70,7 @@ export default function useToggleManager(appointmentManager: AppointmentManager,
     }
 
 
-    const toggleAppointmentLabel = async (appointmentID: string, labelName: string) => {
+    const toggleAppointmentLabel = async (appointmentID: string, labelName: string, value?: number) => {
         if (!appointmentManager.appointments)
             return;
 
@@ -81,7 +81,7 @@ export default function useToggleManager(appointmentManager: AppointmentManager,
         const labels = appointment.Labels;
         const label = labels[labelName];
         const labelID = labelName === "Seen" ? 1 : (labelName === "Flag") ? 2 : (labelName === "Star") ? 3 : -1;
-        const labelValue = !label ? 0 : (label.Value || 0);
+        const labelValue = value !== undefined ? value : !label ? 0 : (label.Value || 0);
 
         // Here, we query the database to update the appointment label.
         // If something bad happened, we don't actually update the label (early return).

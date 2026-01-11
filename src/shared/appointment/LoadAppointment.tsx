@@ -1,11 +1,9 @@
 import clsx from "clsx";
 import { UseForm } from "../../features/Form/useForm/useForm";
 import { Tooltip } from "react-tooltip";
-import ArrowRight from "@/component/Icons/Icons/ArrowRightIcon";
 import ArrowLongRightIcon from "@/component/Icons/Icons/ArrowLongRightIcon";
-import SearchIcon from "@/component/Icons/Icons/SearchIcon";
 import { useEffect, useState } from "react";
-import SelectAllAppointments from "@/services/DB/Appointment/SelectAllAppointments";
+import SelectAllAppointments from "@/services/db/Appointment/SelectAllAppointments";
 import Search from "@/component/Form/Select/Search";
 import { Appointment } from "waltronics-types";
 
@@ -25,7 +23,6 @@ export default function LoadAppointment(props: LoadAppointmentProps) {
     useEffect(() => {
         const loadAppointments = async () => {
             const appointments = await SelectAllAppointments({});
-            console.log(appointments);
             setAppointments(appointments.Appointments);
         }
         loadAppointments();
@@ -38,7 +35,7 @@ export default function LoadAppointment(props: LoadAppointmentProps) {
                 <p className="text-base text-center text-base-900 font-medium whitespace-nowrap">
                     {props.head}
                 </p>
-                <span className="block text-sm text-center tracking-wide text-base-500 font-normal">
+                <span className="block text-sm text-center tracking-wide text-base-500 dark:text-base-400 font-normal">
                     {props.body}
                 </span>
             </div>
@@ -52,15 +49,16 @@ export default function LoadAppointment(props: LoadAppointmentProps) {
                         options={appointments.map((appointment) => [
                             appointment.AppointmentID, 
                             `${appointment.AppointmentID}, ${appointment.FName} ${appointment.LName}, ${appointment.ModelYear} ${appointment.Make} ${appointment.Model}`, 
-                            <div className="flex flex-col items-start">
+                            <div className="flex flex-col items-start py-1">
                                 <span className="block text-xs text-base-700 tracking-wide font-medium">
                                     {appointment.FName} {appointment.LName}
                                 </span>
-                                <span className="block text-xs text-base-500 tracking-wide">
+                                <span className="block text-xs text-base-500 dark:text-base-400 tracking-wide">
                                     {appointment.ModelYear} {appointment.Make} {appointment.Model}
                                 </span>
                             </div>
                         ])}
+                        toggleClassName="dark:shadow-md"
                         onChange={props.form?.updateInputData}
                         disabled={false}
                     />
@@ -70,13 +68,13 @@ export default function LoadAppointment(props: LoadAppointmentProps) {
                     className={clsx(
                         "h-full aspect-square ml-2",
                         "flex items-center justify-center",
-                        "bg-base-50 border border-base-300 dark:border-base-200 shadow-sm",
-                        "group stroke-base-500",
-                        "cursor-pointer hover:bg-base-100 dark:hover:bg-base-50 "
+                        "bg-base-50 border border-base-300 dark:border-base-200 dark:shadow-md shadow-sm",
+                        "group stroke-base-500 dark:stroke-white",
+                        "cursor-pointer hover:bg-base-100 dark:hover:bg-blue-500 "
                     )}
                 >
                     <ArrowLongRightIcon
-                        className="size-4 stroke-[2px] stroke-inherit cursor-pointer rotate-[360deg]"
+                        className="size-4 stroke-[2px] cursor-pointer rotate-[360deg] dark:stroke-white"
                     />
                 </button>
             </div>

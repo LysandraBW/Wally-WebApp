@@ -29,21 +29,21 @@ export default function UpdateItem(props: UpdateItemProps) {
             <div 
                 className={clsx(
                     "row-start-1",
-                    "col-start-1 col-span-1"
+                    "col-start-1 col-span-2"
                 )}
             >
                 {props.children}
             </div>
             <div
                 className={clsx(
-                    "hidden bg-base-100 z-10 w-min h-full",
-                    "row-start-1 col-start-2 col-span-1 border-l border-base-300 dark:border-base-200",
-                    "group-hover:grid grid-rows-2"
+                    "hidden z-10 w-min h-min p-1",
+                    "row-start-1 col-start-2 col-span-1",
+                    "group-hover:flex gap-1"
                 )}
             >
                 <div 
                     onClick={props.onUpdate}
-                    className="cursor-pointer bg-base-50 group hover:bg-base-100 w-[19.4px] border-b border-base-300 dark:border-base-200 stroke-base-700 flex justify-center items-center"
+                    className="cursor-pointer bg-base-50 group hover:bg-base-100 w-[24px] rounded shadow-sm aspect-square border border-base-300 dark:border-base-200 stroke-base-700 flex justify-center items-center"
                 >
                     <PencilIcon
                         className="size-3 stroke-inherit"
@@ -51,7 +51,7 @@ export default function UpdateItem(props: UpdateItemProps) {
                 </div>
                 <div 
                     onClick={props.onDelete}
-                    className="cursor-pointer bg-base-50 group hover:bg-base-100 w-[19.4px] border-base-300 dark:border-base-200 stroke-base-700 flex justify-center items-center"
+                    className="cursor-pointer bg-base-50 group hover:bg-base-100 w-[24px] rounded shadow-sm spect-square border border-base-300 dark:border-base-200 stroke-base-700 flex justify-center items-center"
                 >
                     <TrashIcon
                         className="size-3.5 stroke-inherit"

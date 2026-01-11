@@ -1,4 +1,4 @@
-import { toDisplayDate } from "@/utils/convert";
+import { formatDate } from "@/utils/convert";
 import { Note as DB_Note } from "waltronics-types";
 
 export default function Note(props: {note: DB_Note}) {
@@ -9,11 +9,11 @@ export default function Note(props: {note: DB_Note}) {
                     {props.note.Head}
                 </span>
             </div>
-            <span className="block text-sm tracking-wide text-base-500">
+            <span className="block text-sm tracking-wide text-base-500 dark:text-base-400">
                 {props.note.Body}
             </span>
-            <span className="text-xs text-base-400 tracking-wide">
-                {toDisplayDate(props.note.UpdationDate)}
+            <span className="text-xs text-blue-500 tracking-wide font-medium">
+                {formatDate(props.note.UpdationDate)}
             </span>
         </div>
     )

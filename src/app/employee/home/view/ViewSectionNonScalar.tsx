@@ -1,20 +1,12 @@
-import Cell from "@/shared/ReadWriteAppointment/Cell/Cell";
-import PaddingCells from "@/shared/ReadWriteAppointment/Cell/PaddingCells";
-import EntryCells from "@/shared/ReadWriteAppointment/Entry/EntryCells";
+import Cell from "@/shared/appointment/Cell/Cell";
+import PaddingCells from "@/shared/appointment/Cell/PaddingCells";
+import EntryCells from "@/shared/appointment/Entry/EntryCells";
 import { Fragment, ReactNode } from "react";
 
 export function ViewSectionNonScalar({head, data}: {
     head: string;
     data: Array<ReactNode>;
 }) {
-
-    const arrN = (n: number) => {
-        const arr = [];
-        for (let i = 0; i < n; i++)
-            arr.push(i);
-        return arr;
-    }
-
 
     return (
         <EntryCells

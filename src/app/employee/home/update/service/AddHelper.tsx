@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import searchLabels from "@/features/Form/helpers/searchLabels";
 import { Options } from "@/features/Form/DEF";
 import { Field } from "@/component/Form/Field";
@@ -20,6 +20,7 @@ interface AddHelperProps {
 }
 
 export default function AddHelper(props: AddHelperProps) {
+    const dropdownRef = useRef<HTMLDivElement>(null);
     const [open, setOpen] = useState(false);
     const [search, setSearch] = useState("");
     const [matched, setMatched] = useState<Options>([]);
@@ -29,6 +30,17 @@ export default function AddHelper(props: AddHelperProps) {
         const matched = searchLabels(search, props.servicesManager.values);
         setMatched(matched);
     }, [search, props.servicesManager.values]);
+
+    useEffect(() => {
+        const handleClickOutside = (event: any) => {
+        if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+            setOpen(false);
+        }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
 
 
     const openList = () => {
@@ -61,7 +73,8 @@ export default function AddHelper(props: AddHelperProps) {
     return (
         <div
             tabIndex={0}
-            onBlur={closeList}
+            ref={dropdownRef}
+            // onBlur={closeList}
             onClick={openList}
             className="w-full relative"
         >
@@ -81,7 +94,9 @@ export default function AddHelper(props: AddHelperProps) {
             {open &&
                 <>
                     {!props.servicesManager.upperDivision &&
-                        <Wrapper>
+                        <Wrapper
+                            className="static top-[4px] left-[2.5px] w-[calc(100%+48px)]"
+                        >
                             <div className="bg-base-0 dark:bg-base-50 px-2 py-1 text-base-400 text-xs tracking-wide border-b border-base-300 dark:border-base-200 rounded-t-md">
                                 Select Upper Division
                             </div>
@@ -100,11 +115,13 @@ export default function AddHelper(props: AddHelperProps) {
                     {props.servicesManager.upperDivision &&
                         <>
                             {!props.servicesManager.lowerDivision &&
-                                <Wrapper>
+                                <Wrapper
+                                    className="static top-[4px] left-[2.5px] w-[calc(100%+48px)]"
+                                >
                                     <Back
                                         onClick={() => props.servicesManager.selectUpperDivision("")}
                                     />
-                                    <div className="bg-base-0 dark:bg-base-50 px-2 py-1 text-base-500 font-medium text-xs tracking-wide border-t border-base-300 dark:border-base-200">
+                                    <div className="bg-base-0 dark:bg-base-50 px-2 py-1 text-base-500 dark:text-base-400 font-medium text-xs tracking-wide border-t border-base-300 dark:border-base-200">
                                         {props.servicesManager.upperDivision}
                                     </div>
                                     <div className="bg-base-0 dark:bg-base-50 px-2 py-1 text-base-400 text-xs tracking-wide border-y border-base-300 dark:border-base-200">
@@ -123,11 +140,13 @@ export default function AddHelper(props: AddHelperProps) {
                                 </Wrapper>
                             }
                             {props.servicesManager.lowerDivision &&
-                                <Wrapper>
+                                <Wrapper
+                                    className="static top-[4px] left-[2.5px] w-[calc(100%+48px)]"
+                                >
                                     <Back
                                         onClick={() => props.servicesManager.selectLowerDivision("")}
                                     />
-                                    <div className="bg-base-0 dark:bg-base-50 px-2 py-1 text-base-500 font-medium text-xs tracking-wide border-t border-base-300 dark:border-base-200">
+                                    <div className="bg-base-0 dark:bg-base-50 px-2 py-1 text-base-500 dark:text-base-400 font-medium text-xs tracking-wide border-t border-base-300 dark:border-base-200">
                                         {props.servicesManager.upperDivision}, {props.servicesManager.lowerDivision}
                                     </div>
                                     <input
@@ -137,7 +156,7 @@ export default function AddHelper(props: AddHelperProps) {
                                         placeholder={`Search ${props.servicesManager.lowerDivision}`}
                                         className={clsx(
                                             "w-full px-2 py-1.5",
-                                            "text-xs tracking-wide text-base-500",
+                                            "text-xs tracking-wide text-base-500 dark:text-base-400",
                                             "bg-base-0 dark:bg-base-50",
                                             "border-y border-base-300 dark:border-base-200",
                                             "focus:outline-none focus:bg-blue-100 focus:text-black"
@@ -155,8 +174,8 @@ export default function AddHelper(props: AddHelperProps) {
                                                         onClick={() => null}
                                                         className="!shadow-none rounded-[4px]"
                                                     >
-                                                        <CheckIcon 
-                                                            className="stroke-blue-500 size-3 stroke-[2.5px]"
+                                                        <PlusIcon 
+                                                            className="stroke-inherit size-3 stroke-[2.5px]"
                                                         />
                                                     </IconButton>
                                                 }

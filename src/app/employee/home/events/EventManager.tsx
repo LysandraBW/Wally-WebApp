@@ -3,12 +3,13 @@ import { Options } from "@/features/Form/DEF";
 import getValues from "@/features/Form/helpers/getValues";
 import TextField from "@/component/Form/Text/Text";
 import ItemFormGroup from "@/features/ItemManager/components/ItemFormGroup";
-import GetEmployeeNamePairs from "@/services/DB/Employee/GetEmployeeNamePairs";
+import GetEmployeeNamePairs from "@/services/db/Employee/GetEmployeeNamePairs";
 import useItemManager from "../../../../features/ItemManager/useItemManager";
 import { Event as DB_Event } from "waltronics-types";
 import { Event, Events } from "./_DEF";
-import { ItemManagerProps, ItemManagerWrapper } from "@/features/ItemManager/components/ItemManagerWrapper";
+import { ItemManagerProps, ItemForm } from "@/features/ItemManager/components/ItemForm";
 import Select from "@/component/Form/Select/Select";
+import TextArea from "@/component/Form/Text/TextArea";
 
 export default function EventManager(props: ItemManagerProps<DB_Event, Event, Events>) {
     const itemManager = useItemManager(props as any);
@@ -42,7 +43,7 @@ export default function EventManager(props: ItemManagerProps<DB_Event, Event, Ev
 
 
     return (
-        <ItemManagerWrapper
+        <ItemForm
             header={props.header}
             canDelete={props.canDelete}
             saveItem={itemManager.saveItem}
@@ -62,7 +63,7 @@ export default function EventManager(props: ItemManagerProps<DB_Event, Event, Ev
                     onChange={itemManager.updateInputValue}
                     onBlur={undefined}
                 />
-                <TextField
+                <TextArea
                     type="text"
                     name="Summary"
                     label="Summary"
@@ -99,6 +100,6 @@ export default function EventManager(props: ItemManagerProps<DB_Event, Event, Ev
                     />
                 </ItemFormGroup>
             }
-        </ItemManagerWrapper>
+        </ItemForm>
     )
 }

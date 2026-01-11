@@ -9,11 +9,10 @@ import useToggleManager from "@/app/employee/home/dashboard/managers/useToggleMa
 import AppointmentPane from "@/app/employee/home/dashboard/AppointmentPane/AppointmentPane";
 import StatusTabs from "@/app/employee/home/dashboard/TabsL2";
 import Table from "@/app/employee/home/dashboard/Table/Table";
-import { Fragment, useContext, useEffect, useReducer, useState } from "react";
-import { BarLoader, FadeLoader, MoonLoader, SquareLoader } from "react-spinners";
+import { useContext, useEffect, useReducer, useState } from "react";
+import { BarLoader } from "react-spinners";
 import { AnimatePresence } from "motion/react";
 import { EmployeeContext } from "../layout";
-import TabsL1 from "./TabL1";
 import TabL1 from "./TabL1";
 import InboxStackIcon from "@/component/Icons/Icons/InboxStackIcon";
 import TrashIcon from "@/component/Icons/Icons/TrashIcon";
@@ -21,12 +20,9 @@ import StarIcon from "@/component/Icons/Icons/StarIcon";
 import BookmarkIcon from "@/component/Icons/Icons/BookmarkIcon";
 import EyeIcon from "@/component/Icons/Icons/EyeIcon";
 import SparklesIcon from "@/component/Icons/Icons/SparklesIcon";
-import resizeMainContent from "@/shared/ReadWriteAppointment/resizeMainContent";
 import ToolBar from "./Toolbar/ToolBar";
+import resizeMainContent from "@/shared/appointment/resizeMainContent";
 
-// after:absolute after:right-[-1px] after:top-0 after:w-[1px] after:h-full after:bg-gradient-to-b after:from-base-300 dark:after:from-base-200 dark:to-transparent
-// grid grid-cols-[minmax(0,1fr)_minmax(0,5fr)]
-// after:absolute after:left-[0px] after:top-0 after:w-[1px] after:h-full after:bg-gradient-to-b after:from-base-300 dark:after:from-base-200 dark:to-transparent
 
 export default function Page() {
     const [alert, alertDispatch] =  useReducer(alertReducer, startAlert);
@@ -57,12 +53,6 @@ export default function Page() {
         }
         setLoaded(loaded);
     }, [loadingTable]);
-
-
-    // useEffect(() => {
-    //     window.addEventListener("resize", resizeMainContent);
-    //     resizeMainContent();
-    // }, []);
 
 
     useEffect(() => {
@@ -191,6 +181,7 @@ export default function Page() {
                 {appointmentManager.openedAppointment &&
                     <AppointmentPane
                         appointmentManager={appointmentManager}
+                        toggleManager={toggleManager}
                     />
                 } 
             </AnimatePresence>

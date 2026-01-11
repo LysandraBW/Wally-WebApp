@@ -1,6 +1,6 @@
 import { z } from "zod";
-import { toInputDate, toString } from "@/utils/convert";
-import { Appointment as DB_Appointment } from "waltronics-types";
+import { toSQLDateTime, toString } from "@/utils/convert";
+import { Appointment as DB_Appointment, isName, isEmail, isPhone, isDate, isInteger, isEmptyString } from "waltronics-types";
 
 export interface Contact {
     FName: string
@@ -18,8 +18,8 @@ export function makeContact(appointment: DB_Appointment): Contact {
         LName: appointment.LName,
         Email: appointment.Email,
         Phone: appointment.Phone,
-        StartDate: toInputDate(appointment.StartDate),
-        EndDate: toInputDate(appointment.EndDate),
+        StartDate: appointment.StartDate ? appointment.StartDate.slice(0, -1)  : "",
+        EndDate: appointment.EndDate ? appointment.EndDate.slice(0, -1)  : "",
         StatusID: [toString(appointment.StatusID)]
     };
 }
@@ -35,11 +35,17 @@ export interface ContactUpdates {
 }
 
 export const contactTest = z.object({
-    FName: z.string(),
-    LName: z.string(),
-    Email: z.string(),
-    Phone: z.string(),
-    StartDate: z.string(),
-    EndDate: z.string(),
-    StatusID: z.any()
+    FName: isName,
+    LName: isName,
+    Email: isEmail,
+    Phone: isPhone,
+    StartDate: z.union([
+        isEmptyString(),
+        isDate
+    ]),
+    EndDate: z.union([
+        isEmptyString(),
+        isDate
+    ]),
+    StatusID: isInteger
 });

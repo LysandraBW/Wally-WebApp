@@ -1,6 +1,6 @@
 import { Options } from "@/features/Form/DEF";
-import GetLabelPairs from "@/services/DB/Information/GetLabelPairs";
-import GetStatusPairs from "@/services/DB/Information/GetStatusPairs";
+import GetLabelPairs from "@/services/db/Information/GetLabelPairs";
+import GetStatusPairs from "@/services/db/Information/GetStatusPairs";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
 export type Bit = "0"|"1";
@@ -125,6 +125,7 @@ export default function useFilterManager(setLoadedTable: Dispatch<SetStateAction
         maxPageIndex,
         stringPageIndex,
         columnDirections,
+        setPageIndex,
         filter,
         goToNextPage,
         goToPrevPage,

@@ -1,4 +1,4 @@
-import { ServiceMap, ServiceT2Pairs as ServiceDeep, GetT2Services as DeepServices } from "@/services/DB/Information/GetT2Services";
+import { ServiceMap, ServiceT2Pairs as ServiceDeep, GetT2Services as DeepServices } from "@/services/db/Information/GetT2Services";
 import { useEffect, useState } from "react";
 import { Service as DB_AppointmentService } from "waltronics-types";
 import { sameMap } from "@/features/ItemManager/helpers/sameMap";
@@ -78,14 +78,16 @@ export default function useServicesManager(props: UseItemsManagerProps<DB_Appoin
         if (!serviceMap)
             return;
 
+        const itemID = itemsManager.getNewItemID();
+
         const item = props.item.buildItem({
             ...serviceMap[serviceID],
             AppointmentID: "",
-            AppointmentServiceID: -1
+            AppointmentServiceID: parseInt(itemID)
         });
 
         const updatedItems = {...itemsManager.newItems as any};
-        updatedItems[itemsManager.getNewItemID()] = item;
+        updatedItems[itemID] = item;
         itemsManager.setNewItems(updatedItems);
     }
 

@@ -1,4 +1,4 @@
-import { request } from "@/services/DB/request";
+import { request } from "@/services/db/request";
 import { Employee as DB_Employee } from "waltronics-types";
 
 export default async function AuthenticatedEmployee(): Promise<false|DB_Employee> {

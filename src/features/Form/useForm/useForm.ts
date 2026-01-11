@@ -107,7 +107,7 @@ export default function useForm(fName: string, startForm: Form = {data: {}, test
             return true;
         
         const output = form.test.safeParse(getData());
-
+        
         if (output.success || !update)
             return output.success;
 

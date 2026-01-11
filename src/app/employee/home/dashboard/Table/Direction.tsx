@@ -7,9 +7,6 @@ interface DirectionProps {
     updateDirection: () => void;
 }
 
-const BLUE = "#3B82F6";
-const GRAY = "#CBD5E1";
-
 export default function Direction(props: DirectionProps) {
     return (
         <div 
@@ -23,16 +20,16 @@ export default function Direction(props: DirectionProps) {
         >
             <ChevronUpIcon
                 className={clsx(
-                    "size-1 stroke-[4px] cursor-pointer",
-                    props.direction === "1" && "stroke-blue-500",
-                    (props.direction === "0" || !props.direction) && "stroke-base-500",
+                    "size-1.5 stroke-[4px] cursor-pointer",
+                    props.direction === "1" && "stroke-green-500",
+                    (props.direction === "0" || !props.direction) && "stroke-base-500 dark:stroke-base-400",
                 )}
             />
             <ChevronDownIcon
                 className={clsx(
-                    "size-1 stroke-[4px] cursor-pointer",
-                    props.direction === "1" && "stroke-blue-500",
-                    (props.direction === "0" || !props.direction) && "stroke-base-500",
+                    "size-1.5 stroke-[4px] cursor-pointer",
+                    props.direction === "0" && "stroke-red-500",
+                    (props.direction === "1" || !props.direction) && "stroke-base-500 dark:stroke-base-400",
                 )}
             />
         </div>

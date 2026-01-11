@@ -11,7 +11,7 @@ export default function EntryCells(props: EntryCellsProps) {
             <span className="block entry-size entry-padding entry-text text-center entry-border-b entry-border-r">
                 {props.label}
             </span>
-            <span className="block entry-size entry-text entry-border-b grid grid-cols-5">
+            <span className="block entry-size entry-text entry-border-b grid grid-cols-5 auto-rows-[100px] !overflow-y-visible">
                 {props.cells}
             </span>
         </Fragment>

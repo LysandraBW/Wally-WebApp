@@ -1,9 +1,7 @@
-import { capitalize } from "@/utils/capitalize";
+import { capitalize } from "@/utils/convert";
 import { request, Body } from "../request";
 
 export default async function ScheduleAppointment(body: Body) {
-    // console.log("Body")
-    // console.log(body)
     try {
         const {output} = await request("PUT", "/appointment", {
             fName: capitalize(body.fName.trim()),
@@ -16,13 +14,11 @@ export default async function ScheduleAppointment(body: Body) {
             modelYear: body.modelYear[0],
             services: body.services
         });
-        // console.log("OUTPUT")
-        // console.log(output)
+
         // Returns the ID of the Created Appointment
         return output;
     }
     catch (error) {
-        // console.log(error);
         return "";
     }
 };

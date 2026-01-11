@@ -2,8 +2,8 @@ import alertReducer, { AlertActionType, startAlert } from "@/features/Alert/aler
 import randomKey from "@/features/Alert/randomKey";
 import saveFDispatch from "@/features/Alert/saveFDispatch";
 import saveTDispatch from "@/features/Alert/saveTDispatch";
-import SelectAppointment from "@/services/DB/Appointment/SelectAppointment";
-import { Fragment, useCallback, useEffect, useReducer, useState } from "react";
+import SelectAppointment from "@/services/db/Appointment/SelectAppointment";
+import { useCallback, useEffect, useReducer, useState } from "react";
 import { Appointment as DB_Appointment } from "waltronics-types";
 import { Diagnosis as DB_AppointmentDiagnosis } from "waltronics-types";
 import useItemsManager from "../../../../features/ItemManager/useItemsManager";
@@ -11,57 +11,46 @@ import { DefineRepair, Repair, Repairs } from "@/app/employee/home/update/repair
 import useForm from "@/features/Form/useForm/useForm";
 import { MasterForm, PART, PAYMENT, REPAIR } from "./_DEF";
 import buildUpdate from "@/features/ItemManager/buildUpdate";
-import { UpdateAppointmentRepairs } from "@/services/DB/Appointment/UpdateAppointmentRepairs";
-import RepairManager from "./repair/RepairManager";
+import { UpdateAppointmentRepairs } from "@/services/db/Appointment/UpdateAppointmentRepairs";
 import { Repair as DB_AppointmentRepair } from "waltronics-types";
 import { Part as DB_AppointmentPart } from "waltronics-types";
 import RepairsManager from "./repair/RepairsManager";
 import { DefinePart, Part, Parts } from "@/app/employee/home/update/part/_DEF";
-import { UpdateAppointmentParts } from "@/services/DB/Appointment/UpdateAppointmentParts";
+import { UpdateAppointmentParts } from "@/services/db/Appointment/UpdateAppointmentParts";
 import PartsManager from "./part/PartsManager";
-import PartManager from "./part/PartManager";
 import { DefineDiagnosis, Diagnoses, Diagnosis } from "@/app/employee/home/update/diagnosis/_DEF";
 import { CONTACT, DIAGNOSIS, NOTE, SERVICE, VEHICLE } from "./_DEF";
-import DiagnosisManager from "./diagnosis/DiagnosisManager";
 import DiagnosesManager from "./diagnosis/DiagnosesManager";
-import { UpdateAppointmentDiagnoses } from "@/services/DB/Appointment/UpdateAppointmentDiagnoses";
+import { UpdateAppointmentDiagnoses } from "@/services/db/Appointment/UpdateAppointmentDiagnoses";
 import { DefineService, Services } from "@/app/employee/home/update/service/_DEF";
-import { UpdateAppointmentServices } from "@/services/DB/Appointment/UpdateAppointmentServices";
-import ServiceManager from "./service/ServiceManager";
+import { UpdateAppointmentServices } from "@/services/db/Appointment/UpdateAppointmentServices";
 import ServicesManager from "./service/ServicesManager";
 import useServicesManager from "./service/useServicesManager";
 import usePaymentsManager from "./payment/usePaymentsManager";
 import { DefinePayment, Payments } from "./payment/_DEF";
-import { UpdateAppointmentPayments } from "@/services/DB/Appointment/UpdateAppointmentPayments";
+import { UpdateAppointmentPayments } from "@/services/db/Appointment/UpdateAppointmentPayments";
 import { Cost, CostUpdates } from "@/app/employee/home/update/payment/_DEF";
-import { UpdateAppointmentCost } from "@/services/DB/Appointment/UpdateAppointmentCost";
+import { UpdateAppointmentCost } from "@/services/db/Appointment/UpdateAppointmentCost";
 import { toString } from "@/utils/convert";
 import { updatedValue } from "@/features/ItemManager/helpers/updatedValue";
-import PaymentManager from "./payment/PaymentManager";
 import PaymentsManager from "./payment/PaymentsManager";
 import { buildNoteUpdate, DefineNote } from "@/app/employee/home/update/note/_DEF";
 import { Note as DB_AppointmentNote} from "waltronics-types";
 import { Note, Notes } from "@/app/employee/home/update/note/_DEF";
-import { UpdateEmployeeNotes } from "@/services/DB/Employee/UpdateEmployeeNotes";
-import NoteManager from "./note/NoteManager";
+import { UpdateEmployeeNotes } from "@/services/db/Employee/UpdateEmployeeNotes";
 import NotesManager from "./note/NotesManager";
 import { ContactUpdates } from "@/app/employee/home/update/contact/_DEF";
 import { VehicleUpdates } from "@/app/employee/home/update/vehicle/_DEF";
-import { UpdateAppointmentContact } from "@/services/DB/Appointment/UpdateAppointmentContact";
-import { UpdateAppointmentVehicle } from "@/services/DB/Appointment/UpdateAppointmentVehicle";
+import { UpdateAppointmentContact } from "@/services/db/Appointment/UpdateAppointmentContact";
+import { UpdateAppointmentVehicle } from "@/services/db/Appointment/UpdateAppointmentVehicle";
 import ContactManager from "./contact/ContactManager";
 import VehicleManager from "./vehicle/VehicleManager";
 import Alert from "@/features/Alert/Alert";
 import { useRouter, useSearchParams } from "next/navigation";
-import { AnimatePresence, motion } from "motion/react";
 import useInterval from "@/features/Alert/useInterval";
-import clsx from "clsx";
-import CloseButton from "@/component/Button/CloseButton";
-import { sameSemanticMap } from "@/lib";
-import useTabsManager, { Tab, TabID } from "@/features/TabManager/useTabsManager";
-import Header from "@/shared/ReadWriteAppointment/Header";
-import Tabs from "@/shared/ReadWriteAppointment/Tabs";
-import { DndContext as DNDContext } from "@dnd-kit/core";
+import useTabsManager, {  } from "@/features/TabManager/useTabsManager";
+import Header from "@/shared/appointment/Header";
+import Tabs from "@/shared/appointment/Tabs";
 import Forms from "./Forms";
 
 
@@ -121,7 +110,6 @@ export default function UpdateManager<BaseItem, Item, Items>(props: UpdateManage
 
 
     const alertMessage = async (good: boolean) => {
-        console.log("alertMessage")
         const key = randomKey();
         if (good) {
             const dispatch = saveTDispatch(key, alertDispatch);
@@ -246,14 +234,13 @@ export default function UpdateManager<BaseItem, Item, Items>(props: UpdateManage
             const insertKeys = ["Payment", "Name", "Type", "CCN", "EXP"];
             const updates = buildUpdate(oldItems, newItems, itemID, updateKeys, insertKeys, itemID);
             const output = await UpdateAppointmentPayments(props.appointmentID, updates);
-            console.log("Called");
             await alertMessage(output);
         },
         saveCostUpdates: async (oldItem: Cost, newItem: Cost) => {
             const updates = {
                 Cost: updatedValue(oldItem.Cost, newItem.Cost)
             } as CostUpdates;
-            console.log("Called Cost")
+            
             const output = await UpdateAppointmentCost(props.appointmentID, updates);
             await alertMessage(output);
         },

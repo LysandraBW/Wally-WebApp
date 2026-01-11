@@ -22,12 +22,12 @@ export default function Confirm(props: ConfirmProps) {
         <div 
             className={clsx(
                 "flex",
-                props.absolute && "fixed z-[400] top-0 left-0 w-screen h-screen bg-black/80 flex justify-center items-center"
+                props.absolute && "fixed z-[4000] top-0 left-0 w-screen h-screen bg-black/80 flex justify-center items-center"
             )}
         >
             <div 
                 className={clsx(
-                    "flex flex-col w-[700px]",
+                    "flex flex-col w-[400px]",
                     "bg-base-0 dark:bg-base-50 border border-base-300 dark:border-base-200 rounded-md shadow-sm",
                     // !props.absolute && ""
                 )}
@@ -60,7 +60,7 @@ export default function Confirm(props: ConfirmProps) {
                         {props.body}
                     </p>
                 </div>
-            <div className="flex justify-end gap-2 p-2 border-t border-base-300 dark:border-base-200 bg-base-50 dark:bg-[#121214] rounded-b-lg">
+            <div className="flex justify-end gap-2 p-2 border-t border-base-300 dark:border-base-200 bg-base-50 dark:bg-[#121315] rounded-b-lg">
                     <SecondaryButton
                         className="text-xs"
                         onClick={props.onN}

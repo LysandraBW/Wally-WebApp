@@ -6,7 +6,8 @@ import { Payment as DB_Payment} from "waltronics-types"
 import clsx from "clsx";
 import useItemManager from "../../../../../features/ItemManager/useItemManager";
 import { Payment, Payments } from "./_DEF";
-import { ItemManagerProps, ItemManagerWrapper } from "@/features/ItemManager/components/ItemManagerWrapper";
+import { ItemManagerProps, ItemForm } from "@/features/ItemManager/components/ItemForm";
+import Segment from "@/component/Form/Segment/Segment";
 
 export default function PaymentManager(props: ItemManagerProps<DB_Payment, Payment, Payments>) {
     const itemManager = useItemManager(props as any);
@@ -22,8 +23,13 @@ export default function PaymentManager(props: ItemManagerProps<DB_Payment, Payme
     }, [props.itemID, props.itemsManager.tempItems]);
 
 
+    useEffect(() => {
+        itemManager.itemForm.setTest(props.itemsManager.item.test(addCard));
+    }, [addCard]);
+
+
     return (
-        <ItemManagerWrapper
+        <ItemForm
             header={props.header}
             canDelete={props.canDelete}
             saveItem={itemManager.saveItem}
@@ -60,7 +66,7 @@ export default function PaymentManager(props: ItemManagerProps<DB_Payment, Payme
                                 <p className={clsx("tracking-wide text-base-700 text-xs text-left font-medium", !addCard && "text-blue-500")}>
                                     Cash
                                 </p>
-                                <span className="block text-left text-xs text-base-500 min-w-[100px] tracking-wide">
+                                <span className="block text-left text-xs text-base-500 dark:text-base-400 min-w-[100px] tracking-wide">
                                     Paid with cash. Must be USD.
                                 </span>
                             </div>
@@ -70,7 +76,7 @@ export default function PaymentManager(props: ItemManagerProps<DB_Payment, Payme
                                 <p className={clsx("tracking-wide text-base-700 text-xs text-left font-medium", addCard && "text-blue-500")}>
                                     Credit
                                 </p>
-                                <span className="block text-left text-xs text-base-500 min-w-[100px] tracking-wide">
+                                <span className="block text-left text-xs text-base-500 dark:text-base-400 min-w-[100px] tracking-wide">
                                     Paid with VISA or Mastercard.
                                 </span>
                             </div>
@@ -98,15 +104,16 @@ export default function PaymentManager(props: ItemManagerProps<DB_Payment, Payme
                         onChange={itemManager.updateInputValue}
                         onBlur={undefined}
                     />
-                    <TextField
-                        type="text"
+                    <Segment
                         name="Type"
                         label="Type"
                         smaller={true}
-                        value={itemManager.itemForm.getInput("Type").data}
+                        values={itemManager.itemForm.getInput("Type").data}
+                        options={[["VISA", "VISA"], ["AMEX", "AMEX"], ["MASTERCARD", "MASTERCARD"]]}
                         state={itemManager.itemForm.getInput("Type").state}
                         onChange={itemManager.updateInputValue}
                         onBlur={undefined}
+                        
                     />
                     <TextField
                         type="text"
@@ -127,9 +134,10 @@ export default function PaymentManager(props: ItemManagerProps<DB_Payment, Payme
                         state={itemManager.itemForm.getInput("EXP").state}
                         onChange={itemManager.updateInputValue}
                         onBlur={undefined}
+                        placeholder="MMYY"
                     />
                 </ItemFormGroup>
             }
-        </ItemManagerWrapper>
+        </ItemForm>
     )    
 }

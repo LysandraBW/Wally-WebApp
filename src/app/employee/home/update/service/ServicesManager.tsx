@@ -1,13 +1,14 @@
 import SaveResetButtons from "@/features/ItemManager/components/SaveResetButtons";
 import useServicesManager from "./useServicesManager";
-import { Fragment } from "react";
+import { Fragment, useEffect } from "react";
 import UpdateItem from "@/features/ItemManager/components/UpdateItem";
 import ServiceItem from "@/shared/items/ServiceItem";
-import EntryCells from "@/shared/ReadWriteAppointment/Entry/EntryCells";
-import CellAddItem, { AddItem } from "@/shared/ReadWriteAppointment/Cell/CellAddItem";
-import Cell from "@/shared/ReadWriteAppointment/Cell/Cell";
-import PaddingCells from "@/shared/ReadWriteAppointment/Cell/PaddingCells";
+import EntryCells from "@/shared/appointment/Entry/EntryCells";
+import { AddItem } from "@/shared/appointment/Cell/CellAddItem";
+import Cell from "@/shared/appointment/Cell/Cell";
+import { padArray } from "@/shared/appointment/Cell/PaddingCells";
 import AddHelper from "./AddHelper";
+import EntryWrapper from "@/shared/appointment/Entry/EntryWrapper";
 
 interface ServicesManagerProps {
     servicesManager: ReturnType<typeof useServicesManager>;
@@ -15,13 +16,10 @@ interface ServicesManagerProps {
 
 export default function ServicesManager(props: ServicesManagerProps) {
     return (
-        <div 
-            id="MainContent"
-            className="w-full grow grid grid-rows-[auto_48px] overflow-y-clip"
-        >
-            <div className="w-full h-min grid grid-cols-[124px_auto] bg-base-0 dark:bg-base-50">
+        <EntryWrapper
+            entries={
                 <EntryCells
-                    label="Parts"
+                    label="Services"
                     cells={
                         <Fragment>
                             <Cell
@@ -34,35 +32,35 @@ export default function ServicesManager(props: ServicesManagerProps) {
                                     servicesManager={props.servicesManager}
                                 />
                             </Cell>
-                            {Object.entries(props.servicesManager.newItems).map(([itemID, item], i) => (
-                                <Fragment key={i}>
+                            {[...Object.entries(props.servicesManager.newItems), ...padArray(Object.entries(props.servicesManager.newItems).length + 1, [null, null])].map(([itemID, item], i) => (
+                                <Fragment key={itemID || i}>
                                     <Cell>
-                                        <UpdateItem
-                                            canEdit={true}
-                                            canDelete={true}
-                                            onUpdate={() => props.servicesManager.startUpdateEditor(itemID)}
-                                            onDelete={() => props.servicesManager.deleteItemByDisplay(itemID)}
-                                        >
-                                            <ServiceItem
-                                                service={item}
-                                            />
-                                        </UpdateItem>
+                                        {(item && itemID) &&
+                                            <UpdateItem
+                                                canEdit={true}
+                                                canDelete={true}
+                                                onUpdate={() => props.servicesManager.startUpdateEditor(itemID)}
+                                                onDelete={() => props.servicesManager.deleteItemByDisplay(itemID)}
+                                            >
+                                                <ServiceItem
+                                                    service={item}
+                                                />
+                                            </UpdateItem>
+                                        }
                                     </Cell>
                                 </Fragment>
                             ))}
-                            <PaddingCells
-                                offset={1}
-                                numberCells={Object.keys(props.servicesManager.newItems).length}
-                            />
                         </Fragment>
                     }
                 />
-            </div>
-            <SaveResetButtons
-                changesMade={JSON.stringify(props.servicesManager.oldItems) !== JSON.stringify(props.servicesManager.newItems)}
-                onSave={props.servicesManager.saveUpdates}
-                onReset={props.servicesManager.resetUpdates}
-            />
-        </div>
+            }
+            saveResetButtons={
+                <SaveResetButtons
+                    changesMade={JSON.stringify(props.servicesManager.oldItems) !== JSON.stringify(props.servicesManager.newItems)}
+                    onSave={props.servicesManager.saveUpdates}
+                    onReset={props.servicesManager.resetUpdates}
+                />
+            }
+        />
     )
 }

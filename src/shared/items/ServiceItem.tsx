@@ -21,7 +21,7 @@ export default function ServiceItem(props: ServiceItemProps) {
             tags.push("Custom");
         }
         setTags([tags]);
-    }, []);
+    }, [props.service]);
 
     return (
         <Item

@@ -40,7 +40,7 @@ export default function Copy(props: CopyProps) {
                 className={clsx(
                     "py-1 px-2",
                     "surface-border !border-y-0 !border-l-0 border-r border-r-base-300 rounded-l-[5px]",
-                    "text-base-500 text-xs",
+                    "text-base-500 dark:text-base-400 text-xs max-md:text-sm",
                     "bg-base-100 dark:bg-base-50"
                 )}
             >
@@ -49,8 +49,8 @@ export default function Copy(props: CopyProps) {
             <span 
                 className={clsx(
                     "py-1 px-2",
-                    "font-medium text-xs text-base-700",
-                    "tracking-wide whitespace-nowrap max-md:text-ellipsis max-md:w-[100px] max-md:overflow-x-clip"
+                    "font-medium text-xs max-md:text-sm text-base-700",
+                    "tracking-wide whitespace-nowrap max-md:text-ellipsis max-md:overflow-x-clip"
                 )}
             >
                 {props.value}

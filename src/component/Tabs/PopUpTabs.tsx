@@ -1,6 +1,6 @@
 import XMarkIcon from "@/component/Icons/Icons/XMarkIcon";
 import useTabsManager, { Tab } from "@/features/TabManager/useTabsManager";
-import { sameSemanticMap } from "@/lib";
+import { sameSemanticMap } from "@/features/TabManager/sameSemanticMap";
 import clsx from "clsx";
 import { Fragment, useEffect, useState } from "react";
 
@@ -31,7 +31,7 @@ export default function OpenedTabs(props: OpenedTabsProps) {
                 className={clsx(
                     "[--containerHeight:32px] [--containerPadding:4px] [--dividerHeight:60%] [--dividerWidth:4px]",
                     "w-full min-h-0 h-[var(--containerHeight)]",
-                    "relative sticky top-0",
+                    "relative sticky top-0 z-[1000]",
                     "grid grid-cols-[1fr_auto] grid-rows-1",
                     "border-t border-l border-r border-base-300 dark:border-base-200",
                     "overflow-x-clip overflow-y-visible backdrop-blur-sm",
@@ -43,8 +43,8 @@ export default function OpenedTabs(props: OpenedTabsProps) {
                         "min-w-0 h-full py-[var(--containerPadding)]",
                         "flex gap-x-0 items-center",
                         "overflow-x-auto overflow-y-visible scroll-hide",
-                        "bg-base-0 dark:bg-[#121214]",
-                        "relative after:absolute after:top-0 after:left-0 after:w-[calc(100%+2*var(--containerPadding))] after:h-[calc(100%-var(--containerPadding))] after:bg-base-100 dark:after:bg-base-50",
+                        "bg-base-0 dark:bg-[#121315]",
+                        "relative after:fixed after:top-0 after:left-0 after:w-[calc(100%)]  after:h-[calc(100%-var(--containerPadding))] after:bg-base-100 dark:after:bg-base-50",
                         props.roundedTR && "after:!rounded-tr-md"
                     )}
                 >
@@ -73,7 +73,7 @@ export default function OpenedTabs(props: OpenedTabsProps) {
                             prevTabSelected = sameSemanticMap((prevTab as any).id, props.tabsManager.currentTab.id);
 
                         return (
-                            <Fragment key={i}>
+                            <Fragment key={JSON.stringify(tab.id)}>
                                 <div 
                                     onClick={() => props.tabsManager.setCurrentTab(tab)}
                                     className={clsx(
@@ -89,9 +89,9 @@ export default function OpenedTabs(props: OpenedTabsProps) {
                                             "w-full h-full p-1 px-2",
                                             "grid grid-cols-[1fr_auto] items-center",
                                             "relative z-10 overflow-x-clip",
-                                            "stroke-base-500",
-                                            selected && "rounded-t-md bg-base-0 dark:bg-[#121214]",
-                                            !selected && "rounded-[4px] bg-base-100 dark:bg-base-50 group hover:bg-base-200 dark:hover:bg-[#121214] hover:shadow-xs"
+                                            "stroke-base-500 dark:stroke-base-400",
+                                            selected && "rounded-t-md bg-base-0 dark:bg-[#121315]",
+                                            !selected && "rounded-[4px] bg-base-100 dark:bg-base-50 group hover:bg-base-200 dark:hover:bg-[#121315] hover:shadow-xs"
                                         )}
                                     >
                                         <span 
@@ -99,11 +99,11 @@ export default function OpenedTabs(props: OpenedTabsProps) {
                                                 "block min-w-0 overflow-hidden",
                                                 "relative z-10",
                                                 "text-xs whitespace-nowrap tracking-wide",
-                                                "[--shadingWidth:min(calc(100%-1px),max(20px,50%))]",
+                                                "[--shadingWidth:min(calc(100%-1px),max(20px,40%))]",
                                                 "relative after:absolute after:top-0 after:left-[calc(100%-var(--shadingWidth))] after:w-[var(--shadingWidth)] after:h-full",
                                                 "after:bg-gradient-to-l after:to-transparent after:from-40%",
-                                                !selected && "after:from-base-100 dark:after:from-base-50 group-hover:after:from-base-200 dark:group-hover:after:from-[#121214] text-base-500",
-                                                selected && "after:from-base-0 dark:after:from-[#121214] text-base-700"
+                                                !selected && "after:from-base-100 dark:after:from-base-50 group-hover:after:from-base-200 dark:group-hover:after:from-[#121315] text-base-500 dark:text-base-400",
+                                                selected && "after:from-base-0 dark:after:from-[#121315] text-base-700"
 
                                             )}
                                         >
@@ -149,10 +149,11 @@ export default function OpenedTabs(props: OpenedTabsProps) {
                 <div 
                     onClick={props.tabsManager.closeAllTabs}
                     className={clsx(
-                        "w-min aspect-square",
+                        "close",
+                        "h-full aspect-square",
                         "relative z-300",
                         "flex justify-center items-center",
-                        "stroke-base-500 bg-base-100 dark:bg-base-50 cursor-default",
+                        "stroke-base-500 dark:stroke-base-400 bg-base-100 dark:bg-base-50 cursor-default",
                         "hover:!bg-red-500 hover:!border-red-500 hover:!stroke-white",
                         props.closeClassName
                     )}

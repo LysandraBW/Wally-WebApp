@@ -1,8 +1,8 @@
 import getValues from "@/features/Form/helpers/getValues";
 import { Options } from "@/features/Form/DEF";
 import { UseForm } from "@/features/Form/useForm/useForm";
-import { strictSubsetOf } from "@/lib/Zod/InputTest";
-import { GetT1Services } from "@/services/DB/Information/GetT1Services";
+import { strictSubsetOf } from "@/utils/validate";
+import { GetT1Services } from "@/services/db/Information/GetT1Services";
 import { Fragment, useEffect, useState } from "react";
 import SearchServices from "./SearchServices";
 import { SERVICE_ERR_MSG } from "./_DEF";

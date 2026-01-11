@@ -1,7 +1,7 @@
 "use client";
-import AuthenticatedEmployee from "@/services/DB/Employee/AuthenticatedEmployee";
-import { navigate } from "@/utils/navigate";
-import { PAGE_EMPLOYEE_LOGIN } from '@/utils/constants';
+import AuthenticatedEmployee from "@/services/db/Employee/AuthenticatedEmployee";
+import { navigateToPage } from "@/utils/navigate";
+import { PAGE_EMPLOYEE_LOGIN } from "@/utils/constants";
 import { useEffect, createContext, useState } from "react";
 import { Employee as DB_Employee } from "waltronics-types";
 import clsx from "clsx";
@@ -10,7 +10,7 @@ import Wrapper from "./Wrapper";
 import Squares2By2Icon from "@/component/Icons/Icons/Squares2By2Icon";
 import Bars3BottomLeftIcon from "@/component/Icons/Icons/Bars3BottomLeftIcon";
 import CalendarIcon from "@/component/Icons/Icons/CalendarIcon";
-import Tab from "./Tab";
+import NavBarTab from "./NavBarTab";
 import PencilSquareIcon from "@/component/Icons/Icons/PencilSquareIcon";
 import Profile from "./Profile";
 import { getCookie } from "@/utils/cookies/getCookie";
@@ -40,17 +40,18 @@ export default function Page({children}: Readonly<{children: React.ReactNode}>) 
 
     useEffect(() => {
         if (authenticated !== undefined && !authenticated)
-            navigate(PAGE_EMPLOYEE_LOGIN);
+            navigateToPage(PAGE_EMPLOYEE_LOGIN);
     }, [authenticated]);
 
 
     return (
         <div 
+            id="EmployeeLayout"
             className={clsx(
                 "h-full grow grid grid-cols-[auto_1fr] gap-x-4 p-4",
                 "font-instrumental-sans",
                 mode,
-                mode === "dark" && "bg-base-0"
+                "bg-base-0"
             )}
         >
             {authenticated &&
@@ -70,7 +71,7 @@ export default function Page({children}: Readonly<{children: React.ReactNode}>) 
                             </div>
                         </div>
                         <div className="w-full h-full pt-2 flex flex-col gap-2 border-t border-base-300 dark:border-base-200">
-                            <Tab
+                            <NavBarTab
                                 icon={
                                     <Squares2By2Icon 
                                         className="size-4 stroke-inherit"
@@ -80,7 +81,7 @@ export default function Page({children}: Readonly<{children: React.ReactNode}>) 
                                 href="/employee/home/dashboard"
                                 currentTab={currPage === "Dashboard"}
                             />
-                            <Tab
+                            <NavBarTab
                                 icon={
                                     <Bars3BottomLeftIcon 
                                         className="size-4 stroke-inherit"
@@ -90,7 +91,7 @@ export default function Page({children}: Readonly<{children: React.ReactNode}>) 
                                 href="/employee/home/view"
                                 currentTab={currPage === "View Appointment"}
                             />
-                            <Tab
+                            <NavBarTab
                                 icon={
                                     <PencilSquareIcon 
                                         className="size-4 stroke-inherit"
@@ -100,7 +101,7 @@ export default function Page({children}: Readonly<{children: React.ReactNode}>) 
                                 href="/employee/home/update"
                                 currentTab={currPage === "Edit Appointment"}
                             />
-                            <Tab
+                            <NavBarTab
                                 icon={
                                     <CalendarIcon 
                                         className="size-4 stroke-inherit"

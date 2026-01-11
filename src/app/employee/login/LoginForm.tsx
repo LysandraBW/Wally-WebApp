@@ -2,7 +2,7 @@ import { startLoginForm } from "./_DEF";
 import useForm from "@/features/Form/useForm/useForm";
 import TextField from "@/component/Form/Text/Text";
 import { Fragment } from "react";
-import { LoginEmployee } from "@/services/DB/Employee/LoginEmployee";
+import { LoginEmployee } from "@/services/db/Employee/LoginEmployee";
 import PrimaryButton from "@/component/Button/PrimaryButton";
 
 interface LoginFormProps {
@@ -24,7 +24,7 @@ export default function LoginForm(props: LoginFormProps) {
     return (
         <form
             onSubmit={(e) => e.preventDefault()}
-            className="w-full max-w-[320px] flex flex-col gap-4"
+            className="w-full flex flex-col gap-4"
         >
             <TextField
                 type="text"

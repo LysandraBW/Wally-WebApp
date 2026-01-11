@@ -19,7 +19,7 @@ export default function TabL1(props: TabL1Props) {
                 "rounded-md",
                 "cursor-pointer",
                 props.filterManager.labelID !== props.labelID && "surface-border hover:bg-base-200 dark:bg-base-50 dark:hover:bg-base-0 stroke-base-400",
-                props.filterManager.labelID === props.labelID && "surface-border bg-base-0 dark:bg-[#121214] shadow-sm stroke-base-500"
+                props.filterManager.labelID === props.labelID && "surface-border bg-base-0 dark:bg-[#121315] shadow-sm stroke-base-700"
             )}
             onClick={() => props.onClick(props.labelID)}
         >
@@ -28,7 +28,7 @@ export default function TabL1(props: TabL1Props) {
                 className={clsx(
                     "text-xs tracking-wide",
                     props.filterManager.labelID !== props.labelID && "text-base-400",
-                    props.filterManager.labelID === props.labelID && "text-base-500"
+                    props.filterManager.labelID === props.labelID && "text-base-700"
                 )}
             >
                 {props.label}

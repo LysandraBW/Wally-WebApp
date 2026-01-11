@@ -4,11 +4,11 @@ import getValues from "@/features/Form/helpers/getValues";
 import TextField from "@/component/Form/Text/Text";
 import Radio from "@/component/Form/Radio/Radio";
 import ItemFormGroup from "@/features/ItemManager/components/ItemFormGroup";
-import GetEmployeeNamePairs from "@/services/DB/Employee/GetEmployeeNamePairs";
+import GetEmployeeNamePairs from "@/services/db/Employee/GetEmployeeNamePairs";
 import clsx from "clsx";
 import useItemManager from "../../../../../features/ItemManager/useItemManager";
 import { Note as DB_Note} from "waltronics-types";
-import { ItemManagerProps, ItemManagerWrapper } from "@/features/ItemManager/components/ItemManagerWrapper";
+import { ItemManagerProps, ItemForm } from "@/features/ItemManager/components/ItemForm";
 import { Note, Notes } from "./_DEF";
 import Select from "@/component/Form/Select/Select";
 import TextArea from "@/component/Form/Text/TextArea";
@@ -45,7 +45,7 @@ export default function NoteManager(props: ItemManagerProps<DB_Note, Note, Notes
 
 
     return (
-        <ItemManagerWrapper
+        <ItemForm
             header={props.header}
             canDelete={props.canDelete}
             saveItem={itemManager.saveItem}
@@ -78,24 +78,6 @@ export default function NoteManager(props: ItemManagerProps<DB_Note, Note, Notes
                     />
                 </div>
             </ItemFormGroup>
-            {/* Attachments */}
-            {/*
-                 Currently out of service, I don't have my AWS set up anymore. 
-                I was afraid that they'd randomly charge me an arm and a leg. 
-            */}
-            {/* 
-            <ItemFormGroup head="Attachments">
-                <FileManager
-                    files={itemManager.itemForm.getInput("Attachments").data || []}
-                    updateFiles={(files) => {
-                        itemManager.updateInputValue("Attachments", files);
-                    }}
-                    uploadFiles={(fileList) => {
-                        itemManager.updateInputValue("UploadedAttachments", fileList);
-                    }}
-                />
-            </ItemFormGroup> 
-            */}
             {/* Sharees */}
             {isCreator &&
                 <ItemFormGroup head="Control Access">
@@ -119,8 +101,8 @@ export default function NoteManager(props: ItemManagerProps<DB_Note, Note, Notes
                                 smaller={true}
                                 values={itemManager.itemForm.getInput("ShowCustomer").data}
                                 state={itemManager.itemForm.getInput("ShowCustomer").state}
-                                options={[
-                                    ["0", "No", 
+                                options={[ 
+                                    ["0", "No",
                                         <div className="relative">
                                             <p 
                                                 className={clsx(
@@ -128,16 +110,16 @@ export default function NoteManager(props: ItemManagerProps<DB_Note, Note, Notes
                                                     itemManager.itemForm.getInput("ShowCustomer").data[0] === "0" && "text-blue-500"
                                                 )}
                                             >
-                                                Show
+                                                Hide
                                             </p>
                                             <span 
-                                                className="block text-left text-xs text-base-500 tracking-wide"
+                                                className="block text-left text-xs text-base-500 dark:text-base-400 tracking-wide"
                                             >
-                                                The customer will be able to see this note.
+                                                The customer will not be able to see this note.
                                             </span>
                                         </div>
-                                    ], 
-                                    ["1", "Yes",
+                                    ],
+                                    ["1", "Yes", 
                                         <div className="relative">
                                             <p 
                                                 className={clsx(
@@ -145,12 +127,12 @@ export default function NoteManager(props: ItemManagerProps<DB_Note, Note, Notes
                                                     itemManager.itemForm.getInput("ShowCustomer").data[0] === "1" && "text-blue-500"
                                                 )}
                                             >
-                                                Hide
+                                                Show
                                             </p>
                                             <span 
-                                                className="block text-left text-xs text-base-500 tracking-wide"
+                                                className="block text-left text-xs text-base-500 dark:text-base-400 tracking-wide"
                                             >
-                                                The customer will not be able to see this note.
+                                                The customer will be able to see this note.
                                             </span>
                                         </div>
                                     ]
@@ -161,6 +143,6 @@ export default function NoteManager(props: ItemManagerProps<DB_Note, Note, Notes
                     </div>  
                 </ItemFormGroup>
             }
-        </ItemManagerWrapper>
+        </ItemForm>
     )
 }

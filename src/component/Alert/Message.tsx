@@ -20,7 +20,7 @@ export default function Message(props: MessageProps) {
                 "bg-white/25 dark:bg-black/25 rounded-md border border-base-300 dark:border-base-200 shadow-sm backdrop-blur",
                 props.absolute && "absolute z-[10] top-[calc(1rem+4px)]",
                 props.absolute && props.spanScreenWidth && "left-[2rem] w-[calc(100%-2rem-2rem)]",
-                props.absolute && !props.spanScreenWidth && "[--width:min(700px,calc(100%-2rem-2rem))] left-[calc(50%-var(--width)/2)] w-[calc(var(--width))]",
+                props.absolute && !props.spanScreenWidth && "[--width:min(400px,calc(100%-2rem-2rem))] left-[calc(50%-var(--width)/2)] w-[calc(var(--width))]",
             )}
         >
             <div className="p-3 grid grid-cols-[min-content_auto_min-content] grid-rows-[min-content_min-content] gap-x-2 gap-y-0 items-center">

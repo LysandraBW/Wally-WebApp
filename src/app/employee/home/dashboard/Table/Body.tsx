@@ -1,6 +1,6 @@
 import { Fragment, useEffect } from "react";
 import TableRow from "./Row";
-import useAppointmentManager, { AppointmentManager } from "../managers/useAppointmentManager";
+import { AppointmentManager } from "../managers/useAppointmentManager";
 import { FilterManager } from "../managers/useFilterManager";
 import { ToggleManager } from "../managers/useToggleManager";
 import { DeleteManager } from "../managers/useDeleteManager";
@@ -21,7 +21,7 @@ export default function TableBody(props: TableBodyProps) {
                 const rowCells = document.querySelectorAll(`[data-row="${row}"]`);
                 for (const rowCell of rowCells) {
                     rowCell.classList.add("!bg-slate-200");
-                    rowCell.classList.add("dark:!bg-[#121214]");
+                    rowCell.classList.add("dark:!bg-base-0");
                 }
             });
 
@@ -30,7 +30,7 @@ export default function TableBody(props: TableBodyProps) {
                 const rowCells = document.querySelectorAll(`[data-row="${row}"]`);
                 for (const rowCell of rowCells) {
                     rowCell.classList.remove("!bg-slate-200");
-                    rowCell.classList.remove("dark:!bg-[#121214]");
+                    rowCell.classList.remove("dark:!bg-base-0");
                 }
             });
         }
@@ -40,7 +40,7 @@ export default function TableBody(props: TableBodyProps) {
         <Fragment>
             {props.appointmentManager.appointments && props.appointmentManager.appointments.map((appointment, i) => (
                 <Fragment
-                    key={i}
+                    key={appointment.AppointmentID}
                 >
                     <TableRow
                         i={i}

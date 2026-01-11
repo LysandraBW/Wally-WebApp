@@ -8,6 +8,21 @@ export const generateNArray = (n: number) => {
     return arr;
 }
 
+export function padArray<T>(arrLength: number, paddingValue: T): T[] {
+    const arr: T[] = [];
+    if (arrLength < 10) {
+        return [...Array(10 - arrLength).fill(paddingValue)];
+    }
+  
+    const remainder = arrLength % 5;
+    if (remainder === 0) {
+        return [];
+    }
+  
+    const paddingNeeded = 5 - remainder;
+    return [...Array(paddingNeeded).fill(paddingValue)];
+}
+
 export default function PaddingCells(props: {numberCells: number; offset?: number}) {
     const [nArray, setNArray] = useState<Array<number>>([]);
 

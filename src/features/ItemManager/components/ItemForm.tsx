@@ -1,5 +1,4 @@
 import { ReactNode } from "react";
-import CloseButton from "@/component/Button/CloseButton";
 import ResetButton from "@/features/ItemManager/components/ResetButton";
 import DeleteButton from "@/features/ItemManager/components/DeleteButton";
 import SaveCancelButtons from "@/features/ItemManager/components/SaveCancelButtons";
@@ -11,7 +10,7 @@ export interface ItemManagerProps<BaseThing, Thing, MappedThings> extends UseIte
     canDelete: boolean;
 }
 
-export interface ItemManagerWrapperProps {
+export interface ItemFormProps {
     header: string;
     children: ReactNode;
     canDelete: boolean;
@@ -22,16 +21,18 @@ export interface ItemManagerWrapperProps {
     noBorderL?: boolean;
 }
 
-export function ItemManagerWrapper(props: ItemManagerWrapperProps) {
+export function 
+ItemForm(props: ItemFormProps) {
     return (
         <div 
             className={clsx(
+                "",
                 "grow grid grid-cols-1 grid-rows-[1fr_auto] justify-between bg-base-0 dark:bg-base-50 w-full border border-t-0 border-base-300 dark:border-base-200",
                 props.noBorderL && "!border-l-0 !border-r-0 !border-b-0 rounded-br-[4px]"
             )}
         >
-            <div className="grow bg-base-0 dark:bg-base-50 w-full">
-                <div className="sticky top-[32px] bg-base-0 dark:bg-[#121214] flex justify-start items-center px-2 py-4 border-b border-b-base-300 dark:border-base-200">
+            <div className="flex flex-col grow bg-base-0 dark:bg-base-50 w-full ">
+                <div className="sticky top-[32px] z-[1000] bg-base-0 dark:bg-[#121315] flex justify-start items-center px-2 py-4 border-b border-b-base-300 dark:border-base-200">
                     <h6 className="font-medium text-sm tracking-wide text-base-700">
                         {props.header}
                     </h6>
@@ -54,8 +55,10 @@ export function ItemManagerWrapper(props: ItemManagerWrapperProps) {
                         />
                     }
                 </div>
-                {/* Form */}
-                {props.children}
+                <div className="grow close">
+                    {/* Form */}
+                    {props.children}
+                </div>
             </div>
             {/* Save and Cancel Buttons */}
             <div className="h-min p-2 border-t border-base-300 dark:border-base-200 relative">
@@ -66,4 +69,4 @@ export function ItemManagerWrapper(props: ItemManagerWrapperProps) {
             </div>
         </div>
     )
-}
+}   

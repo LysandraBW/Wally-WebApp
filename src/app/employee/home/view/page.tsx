@@ -3,19 +3,22 @@ import { useContext, useEffect, useState } from "react";
 import View from "@/app/employee/home/view/View";
 import { useRouter, useSearchParams } from "next/navigation";
 import useForm from "@/features/Form/useForm/useForm";
-import LoadAppointment from "@/shared/LoadAppointment/LoadAppointment";
-import { Appointment as DB_Appointment } from "waltronics-types";
-import SelectAppointment from "@/services/DB/Appointment/SelectAppointment";
+import LoadAppointment from "@/shared/appointment/LoadAppointment";
+import { Appointment as DB_Appointment, isUUIDArray } from "waltronics-types";
+import SelectAppointment from "@/services/db/Appointment/SelectAppointment";
 import { AnimatePresence } from "motion/react";
 import { EmployeeContext } from "../layout";
+import z from "zod";
+import makeForm from "@/features/Form/useForm/makeForm";
+import { BarLoader, MoonLoader } from "react-spinners";
 
 export default function Page() {
     const form = useForm("ID");
     const router = useRouter();
     const searchParams = useSearchParams();
     const [appointment, setAppointment] = useState<DB_Appointment>();
-    const [appointmentID, setAppointmentID] = useState("");
     const [appointmentNotFound, setAppointmentNotFound] = useState(false);
+    const [loading, setLoading] = useState(true);
     const employeeContext = useContext(EmployeeContext);
 
     
@@ -31,15 +34,27 @@ export default function Page() {
                 
                 // Appointment Does Exist
                 if (appointment && appointment.FName) {
-                    setAppointment(appointment);
-                    setAppointmentID(appointmentID);
+                    setAppointment(() => {
+                        setLoading(false);
+                        return appointment;
+                    });
                 }
                 // Appointment Does Not Exist
                 else {
-                    setAppointmentNotFound(true);
+                    setAppointmentNotFound(() => {
+                        setLoading(false);
+                        return true;
+                    });
                 }
             }
-            form.resetForm();
+            else {
+                setLoading(false);
+            }
+
+            const test = z.object({id: 
+                isUUIDArray
+            });
+            form.resetForm(makeForm({id: ""}, test));
         }
         load();
     }, []);
@@ -54,7 +69,8 @@ export default function Page() {
         if (!form.getState())
             return;
         
-        const ID = form.getInput("id").data;
+        setLoading(true);
+        const ID = form.getInput("id").data[0];
         const appointment = await SelectAppointment({appointmentID: ID});
         
         // Appointment Does Not Exist
@@ -65,8 +81,10 @@ export default function Page() {
 
         const URL = "/employee/home/view?appointmentID=" + ID;
         router.replace(URL);
-        setAppointmentID(ID);
-        setAppointment(appointment);
+        setAppointment(() => {
+            setLoading(false);
+            return appointment
+        });
         form.resetForm();
     }
     
@@ -74,19 +92,18 @@ export default function Page() {
     return (
         <div className="flex flex-col grow w-full h-full">
             <AnimatePresence>
-                {(appointment && appointmentID) &&
+                {(appointment) &&
                     <View
                         appointment={appointment}
-                        appointmentID={appointmentID}
+                        appointmentID={appointment.AppointmentID}
                         close={() => {
                             setAppointment(undefined);
-                            setAppointmentID("");
                             router.replace("/employee/home/view");
                         }}
                     />
                 }
             </AnimatePresence>
-            {!appointmentID &&
+            {(!appointment || !Object.keys(appointment).length) &&
                 <LoadAppointment
                     head="Load Appointment"
                     body="To view an appointment, enter its ID below."

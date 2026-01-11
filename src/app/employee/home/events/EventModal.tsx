@@ -1,21 +1,19 @@
 import { Event } from "./_DEF";
-import CloseButton from "@/component/Button/CloseButton";
-import { toDisplayDate } from "@/utils/convert";
-import { useEffect, useState } from "react";
+import { formatDate } from "@/utils/convert";
+import { useContext, useEffect, useState } from "react";
 import { OptionMap } from "@/features/Form/DEF";
 import getValuesToLabels from "@/features/Form/helpers/getValuesToLabels";
-import Person from "@/component/Icons/Icons/UserIcon";
 import EditButton from "./EditButton";
 import DeleteButton from "@/features/ItemManager/components/DeleteButton";
 import clsx from "clsx";
-import GetEmployeeNamePairs from "@/services/DB/Employee/GetEmployeeNamePairs";
-import { navigate } from "@/utils/navigate";
+import GetEmployeeNamePairs from "@/services/db/Employee/GetEmployeeNamePairs";
+import { navigateToPage } from "@/utils/navigate";
 import { PAGE_EDIT_APPOINTMENT, PAGE_VIEW_APPOINTMENT } from "@/utils/constants";
 import UserIcon from "@/component/Icons/Icons/UserIcon";
-import SecondaryButton from "@/component/Button/SecondaryButton";
 import IconButton from "@/component/Button/IconButton";
 import DocumentIcon from "@/component/Icons/Icons/DocumentIcon";
 import { PencilIcon } from "lucide-react";
+import { EmployeeContext } from "../layout";
 
 interface EventModalProps {
     event: Event;
@@ -26,6 +24,8 @@ interface EventModalProps {
 
 export default function EventModal(props: EventModalProps) {
     const [idToName, setIDToName] = useState<OptionMap>({});
+    const [isOwner, setIsOwner] = useState(false);
+    const employeeContext = useContext(EmployeeContext);
 
     useEffect(() => {
         const load = async () => {
@@ -35,22 +35,28 @@ export default function EventModal(props: EventModalProps) {
         load();
     }, []);
     
+
+    useEffect(() => {
+        setIsOwner(employeeContext.employee?.EmployeeID === props.event.EmployeeID);
+    }, [props.event]);
+
+
     return (
         <>
             {props.event &&
                 <div className="bg-base-0 dark:bg-base-50">
-                    <div className="dark:bg-[#121214] flex justify-between items-start py-4 px-2 border-b border-base-300 dark:border-base-200">
+                    <div className="dark:bg-[#121315] flex justify-between items-start py-4 px-2 border-b border-base-300 dark:border-base-200">
                         <h6 className="font-medium text-base-700 text-sm">
                             {props.event.AppointmentID === "" ? props.event.Name : "Appointment"}
                         </h6>
                     </div>
-                    {props.event.AppointmentID === "" &&
+                    {(isOwner && props.event.AppointmentID === "") &&
                         <div 
                             className={clsx(
                                 "flex items-center py-2 px-2 gap-2",
                                 "border-b border-base-300 dark:border-base-200 bg-base-100 dark:bg-base-50"
                             )}
-                        >
+                        >   
                             <EditButton
                                 onUpdate={() => {
                                     props.onUpdate(props.event.EventID);
@@ -72,7 +78,7 @@ export default function EventModal(props: EventModalProps) {
                         >
                             <IconButton
                                 size={14}
-                                onClick={() => navigate(PAGE_VIEW_APPOINTMENT, {appointmentID: props.event.AppointmentID || ""})}
+                                onClick={() => navigateToPage(PAGE_VIEW_APPOINTMENT, {appointmentID: props.event.AppointmentID || ""})}
                                 className="rounded-[5px] shadow-xs dark:shadow-md"
                             >
                                 <DocumentIcon
@@ -81,7 +87,7 @@ export default function EventModal(props: EventModalProps) {
                             </IconButton>
                             <IconButton
                                 size={14}
-                                onClick={() => navigate(PAGE_EDIT_APPOINTMENT, {appointmentID: props.event.AppointmentID || ""})}
+                                onClick={() => navigateToPage(PAGE_EDIT_APPOINTMENT, {appointmentID: props.event.AppointmentID || ""})}
                                 className="rounded-[5px] shadow-xs dark:shadow-md"
                             >
                                 <PencilIcon
@@ -93,50 +99,59 @@ export default function EventModal(props: EventModalProps) {
                     <div className="flex-col p-1 border-b border-base-300 dark:border-base-200 bg-base-100 dark:bg-base-50">
                         <div className="flex flex-col gap-0 p-1 px-2">
                             {props.event.AppointmentID !== "" &&
-                                <span className="text-xs tracking-wide text-base-500">
+                                <span className="text-[0.6rem] tracking-wide text-base-500 dark:text-base-400">
                                     {props.event.AppointmentID}
                                 </span>
                             }
                             {props.event.AppointmentID === "" &&
-                                <span className="text-xs tracking-wide text-base-500">
+                                <span className="text-[0.6rem] tracking-wide text-base-500 dark:text-base-400">
                                     {parseInt(props.event.EventID) >= 0 ? `Event #${props.event.EventID}` : "New Event"}
                                 </span>
                             }
-                            <span className="text-xs tracking-wide text-base-500">
-                                {toDisplayDate(props.event.Date, 'MMMM Do, YYYY [at] hh:mm A')}
+                            <span className="text-[0.6rem] tracking-wide text-base-500 dark:text-base-400">
+                                {formatDate(props.event.Date, 'MMMM Do, YYYY [at] hh:mm A')}
                             </span>
+                            {!isOwner &&
+                                <span className="text-[0.6rem] tracking-wide text-base-500 dark:text-base-400">
+                                    Created by {idToName[props.event.EmployeeID]}
+                                </span>
+                            }
                         </div>
                     </div>
-                    <div className="flex flex-col px-2 py-2 gap-y-0">
-                        {/* <h6 className="font-medium text-base-700 text-xs">{props.event.Name}</h6> */}
-                        <p className="text-xs tracking-wide text-base-500">{props.event.Summary}</p>
+                    <div className="flex flex-col px-2 py-3 gap-y-1">
+                        {/* <span className="block text-[0.6rem] tracking-wide text-base-500 dark:text-blue-500 font-medium">
+                            Summary
+                        </span> */}
+                        <p className="text-sm tracking-wide text-base-700">
+                            {props.event.Summary}
+                        </p>
                     </div>
                     {props.event.Sharees.length !== 0 && 
-                        <div className="overflow-scroll scroll-hide">
-                            <div 
-                                className="flex bg-base-100 dark:bg-base-50 py-2 px-2 border-t border-b border-b-dashed border-base-300 dark:border-base-200 items-center gap-2"
-                                style={{
-                                    borderBottomStyle: "dashed"
-                                }}    
-                            >
-                                {props.event.Sharees.map((sharee, i) => (
-                                    <div
-                                        key={i}
-                                        className="flex items-center gap-1 py-0 px-1 surface-border w-min bg-base-0 dark:bg-[#121214] rounded-[4px]"
-                                    >
-                                        <UserIcon
-                                            className="size-2 stroke-base-500 stroke-[2px]"
-                                        />
-                                        <span className="text-[0.6rem] tracking-wide text-base-500 whitespace-nowrap">
-                                            {idToName[sharee]}
-                                        </span>
-                                        {/* {item.EmployeeID === sharee && 
-                                            <span className="text-blue-500 medium">
-                                                Creator
+                        <div className="flex flex-col gap-y-1 bg-base-100 dark:bg-base-50 py-1 px-1 border-t border-b border-b-dashed border-base-300 dark:border-base-200">
+                            {/* <span className="block text-[0.6rem] tracking-wide text-base-500 dark:text-blue-500 font-medium">
+                                Sharees
+                            </span> */}
+                            <div className="overflow-scroll scroll-hide">
+                                <div 
+                                    className="flex  items-center gap-2"
+                                    style={{
+                                        borderBottomStyle: "dashed"
+                                    }}    
+                                >
+                                    {props.event.Sharees.map((sharee, i) => (
+                                        <div
+                                            key={i}
+                                            className="flex items-center gap-1 py-0 px-1 border border-blue-500 w-min bg-blue-500 rounded-sm shadow-sm"
+                                        >
+                                            {/* <UserIcon
+                                                className="size-2 stroke-white stroke-[2px]"
+                                            /> */}
+                                            <span className="text-[0.6rem] tracking-wide text-white whitespace-nowrap">
+                                                {idToName[sharee]}
                                             </span>
-                                        } */}
-                                    </div>
-                                ))}
+                                        </div>
+                                    ))}
+                                </div>
                             </div>
                         </div>
                     }

@@ -6,12 +6,12 @@ interface TabProps {
 
 export default function Tab(props: TabProps) {
     return (
-        <div className="grid grid-cols-[min-content_auto] surface-border surface-border-radius">
+        <div className="grid grid-cols-[min-content_auto] surface-border !border-t-0 !border-x-0">
             {props.data.map(([k, v], i) => (
                 <Fragment 
                     key={i}
                 >
-                    <span className="block text-sm tracking-wide whitespace-nowrap text-base-900 border-r border-b [&:nth-last-child(2)]:border-b-0 border-base-300 dark:border-base-200 px-4 py-2">
+                    <span className="block text-sm tracking-wide whitespace-nowrap text-base-900 border-r border-b [&:nth-last-child(2)]:border-b-0 border-base-300 dark:border-base-200 bg-base-100 dark:bg-base-50 px-4 py-2">
                         {k}
                     </span>
                     <span className="block text-sm tracking-wide whitespace-nowrap text-base-900 font-medium  px-4 py-2">

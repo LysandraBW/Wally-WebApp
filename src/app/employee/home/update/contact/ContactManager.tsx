@@ -4,13 +4,15 @@ import { Appointment as DB_Appointment } from "waltronics-types";
 import { CONTACT } from "../_DEF";
 import { Fragment, useEffect, useState } from "react";
 import { Options } from "@/features/Form/DEF";
-import GetStatusPairs from "@/services/DB/Information/GetStatusPairs";
+import GetStatusPairs from "@/services/db/Information/GetStatusPairs";
 import { Contact, contactTest, ContactUpdates, makeContact } from "@/app/employee/home/update/contact/_DEF";
 import makeForm from "@/features/Form/useForm/makeForm";
 import SaveResetButtons from "@/features/ItemManager/components/SaveResetButtons";
-import EntryTextField from "../../../../../shared/ReadWriteAppointment/Entry/EntryTextField";
-import EntrySegmentField from "../../../../../shared/ReadWriteAppointment/Entry/EntrySegmentField";
-import resizeMainContent from "@/shared/ReadWriteAppointment/resizeMainContent";
+import EntryTextField from "../../../../../shared/appointment/Entry/EntryTextField";
+import EntrySegmentField from "../../../../../shared/appointment/Entry/EntrySegmentField";
+import resizeMainContent from "@/shared/appointment/resizeMainContent";
+import EntryWrapper from "@/shared/appointment/Entry/EntryWrapper";
+import StatusColor from "@/shared/appointment/StatusColor";
 
 
 interface ContactManagerProps {
@@ -92,79 +94,81 @@ export default function ContactManager(props: ContactManagerProps) {
 
 
     return (
-        <div 
-            id="MainContent"
-            className="w-full grow grid grid-rows-[auto_48px] overflow-y-clip"
-        >
-            <div className="w-full h-min grid grid-cols-[124px_auto] bg-base-0 dark:bg-base-50 overflow-y-auto">
-                <EntryTextField
-                    type="text"
-                    name="FName"
-                    label="First Name"
-                    value={form.getInput("FName").data}
-                    state={form.getInput("FName").state}
-                    onChange={updateValue}
-                    onBlur={undefined}
+        <EntryWrapper
+            entries={
+                <Fragment>
+                    <EntryTextField
+                        type="text"
+                        name="FName"
+                        label="First Name"
+                        value={form.getInput("FName").data}
+                        state={form.getInput("FName").state}
+                        onChange={updateValue}
+                        onBlur={undefined}
+                    />
+                    <EntryTextField
+                        type="text"
+                        name="LName"
+                        label="Last Name"
+                        value={form.getInput("LName").data}
+                        state={form.getInput("LName").state}
+                        onChange={updateValue}
+                        onBlur={undefined}
+                    />
+                    <EntryTextField
+                        type="text"
+                        name="Email"
+                        label="Email Address"
+                        value={form.getInput("Email").data}
+                        state={form.getInput("Email").state}
+                        onChange={updateValue}
+                        onBlur={undefined}
+                    />
+                    <EntryTextField
+                        type="text"
+                        name="Phone"
+                        label="Phone Number"
+                        value={form.getInput("Phone").data}
+                        state={form.getInput("Phone").state}
+                        onChange={updateValue}
+                        onBlur={undefined}
+                    />
+                    <EntrySegmentField
+                        name="StatusID"
+                        label="Status"
+                        options={statuses.map((status, i) => [status[0], status[1], <StatusColor status={status[1]}/>])}
+                        values={form.getInput("StatusID").data}
+                        state={form.getInput("StatusID").state}
+                        onChange={updateValue}
+                        tip="You need to add a start date if the appointment is no longer pending. Furthermore, you need to add an end date if the appointment has been completed."
+                    />
+                    <EntryTextField
+                        type="datetime-local"
+                        name="StartDate"
+                        label="Start Date"
+                        value={form.getInput("StartDate").data}
+                        state={form.getInput("StartDate").state}
+                        onChange={updateValue}
+                        onBlur={undefined}
+                    />
+                    <EntryTextField
+                        type="datetime-local"
+                        name="EndDate"
+                        label="End Date"
+                        value={form.getInput("EndDate").data}
+                        state={form.getInput("EndDate").state}
+                        onChange={updateValue}
+                        onBlur={undefined}
+                    />
+                </Fragment>
+            }
+            saveResetButtons={
+                <SaveResetButtons
+                    onSave={saveUpdates}
+                    onReset={resetUpdates}
+                    changesMade={changesMade}
                 />
-                <EntryTextField
-                    type="text"
-                    name="LName"
-                    label="Last Name"
-                    value={form.getInput("LName").data}
-                    state={form.getInput("LName").state}
-                    onChange={updateValue}
-                    onBlur={undefined}
-                />
-                <EntryTextField
-                    type="text"
-                    name="Email"
-                    label="Email Address"
-                    value={form.getInput("Email").data}
-                    state={form.getInput("Email").state}
-                    onChange={updateValue}
-                    onBlur={undefined}
-                />
-                <EntryTextField
-                    type="text"
-                    name="Phone"
-                    label="Phone Number"
-                    value={form.getInput("Phone").data}
-                    state={form.getInput("Phone").state}
-                    onChange={updateValue}
-                    onBlur={undefined}
-                />
-                <EntryTextField
-                    type="datetime-local"
-                    name="StartDate"
-                    label="Start Date"
-                    value={form.getInput("StartDate").data}
-                    state={form.getInput("StartDate").state}
-                    onChange={updateValue}
-                    onBlur={undefined}
-                />
-                <EntryTextField
-                    type="datetime-local"
-                    name="EndDate"
-                    label="End Date"
-                    value={form.getInput("EndDate").data}
-                    state={form.getInput("EndDate").state}
-                    onChange={updateValue}
-                    onBlur={undefined}
-                />
-                <EntrySegmentField
-                    name="StatusID"
-                    label="Status"
-                    options={statuses}
-                    values={form.getInput("StatusID").data}
-                    state={form.getInput("StatusID").state}
-                    onChange={updateValue}
-                />
-            </div>
-            <SaveResetButtons
-                onSave={saveUpdates}
-                onReset={resetUpdates}
-                changesMade={changesMade}
-            />
-        </div>
+            }
+        />
     )
 }

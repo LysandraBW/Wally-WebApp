@@ -1,8 +1,8 @@
 import { Define } from "@/features/ItemManager/Define";
 import { Event as DB_Event } from "waltronics-types";
 import { z } from "zod";
-import { toString, toInputDate } from "@/utils/convert";
-import { subsetOf } from "@/lib/Zod/InputTest";
+import { toString, toSQLDateTime } from "@/utils/convert";
+import { subsetOf } from "@/utils/validate";
 import { MathSet } from "@/features/ItemManager/helpers/MathSet";
 import { sameMap } from "@/features/ItemManager/helpers/sameMap";
 import { updatedValue } from "@/features/ItemManager/helpers/updatedValue";
@@ -61,8 +61,8 @@ export class DefineEvent extends Define<DB_Event, Event, Events> {
         return z.object({
             EventID: z.string().or(z.literal("")),
             EmployeeID: z.string().or(z.literal("")),
-            Name: z.string().min(1),
-            Summary: z.string().min(1),
+            Name: z.string().trim().min(1, "Must enter a value.").max(50, "Must enter a value less than 50 characters").transform(s => s.replace(/\s+/g, ' ')).refine(s => s.length > 0, "Must enter a value."),
+            Summary: z.string().trim().min(1, "Must enter a value.").max(1000, "Must enter a value less than 1000 characters").transform(s => s.replace(/\s+/g, ' ')).refine(s => s.length > 0, "Must enter a value."),
             Sharees: subsetOf(shareeIDs)
         })
     }
@@ -73,7 +73,7 @@ export class DefineEvent extends Define<DB_Event, Event, Events> {
             EmployeeID: toString(baseItem?.EmployeeID),
             Name: toString(baseItem?.Name),
             Summary: toString(baseItem?.Summary),
-            Date: toInputDate(baseItem?.Date),
+            Date: baseItem?.Date ? baseItem.Date.slice(0, -1) : "",
             AppointmentID: baseItem?.AppointmentID || "",
             Sharees: baseItem ? baseItem.Sharees.map(s => s.ShareeID) : []
         }

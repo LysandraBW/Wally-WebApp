@@ -1,19 +1,19 @@
 import { z } from "zod";
 import { toString } from "@/utils/convert";
-import { subsetOf } from "@/lib/Zod/InputTest";
+import { subsetOf } from "@/utils/validate";
 import { NOTE } from "../_DEF";
 import { Define } from "@/features/ItemManager/Define";
 import { FormTest } from "@/features/Form/useForm/Form";
-import { Note as DB_Note } from "waltronics-types";
-import { filesToFormData } from "@/services/Cloud/filesToFormData";
+import { Note as DB_Note, isBody, isHead, isID, isUUID } from "waltronics-types";
 import { MathSet } from "@/features/ItemManager/helpers/MathSet";
 import { sameMap } from "@/features/ItemManager/helpers/sameMap";
 import { updatedValue } from "@/features/ItemManager/helpers/updatedValue";
 
-export interface Note extends Omit<DB_Note, "Sharees" | "UpdationDate" | "CreationDate" | "ShowCustomer"> {
+export interface Note extends Omit<DB_Note, "NoteID" | "Sharees" | "UpdationDate" | "CreationDate" | "ShowCustomer"> {
+    NoteID: string;
     UploadedAttachments: FileList | null;
     Sharees: Array<string>;
-    ShowCustomer: string;
+    ShowCustomer: [string];
 }
 
 export interface Notes {
@@ -69,10 +69,10 @@ export class DefineNote extends Define<DB_Note, Note, Notes> {
     
     test(isCreator: boolean, shareeIDs: Array<string>): FormTest {
         return z.object({
-            NoteID: z.string().or(z.literal("")),
-            EmployeeID: z.string().or(z.literal("")),
-            Head: z.string().min(1),
-            Body: z.string().min(1),
+            NoteID: z.string(),
+            EmployeeID: z.string(),
+            Head: isHead,
+            Body: isBody,
             Sharees: subsetOf(shareeIDs),
             ShowCustomer: subsetOf(["0", "1"]).or(z.string().refine(v => !isCreator && v === "")),
             Attachments: z.array(z.object({
@@ -92,7 +92,7 @@ export class DefineNote extends Define<DB_Note, Note, Notes> {
             AppointmentID: baseItem?.AppointmentID || "",
             Head: toString(baseItem?.Head),
             Body: toString(baseItem?.Body),
-            ShowCustomer: baseItem ? baseItem.ShowCustomer ? "1" : "0" : "0",
+            ShowCustomer: [baseItem ? baseItem.ShowCustomer ? "1" : "0" : "0"],
             Attachments: baseItem?.Attachments || [],
             UploadedAttachments: null,
             Sharees: baseItem ? baseItem.Sharees.map(s => s.ShareeID) : []
@@ -143,25 +143,6 @@ export const buildNoteUpdate = (appointmentID: string, oldItems: Notes, newItems
             });
         }
 
-        // ATTACHMENTS
-        const oldAttachmentIDs = new MathSet(oldItem.Attachments.map(a => a.AttachmentID));
-        const newAttachmentIDs = new MathSet(newItem.Attachments.map(a => a.AttachmentID));
-        const toDeleteAttachmentIDs = oldAttachmentIDs.difference(newAttachmentIDs);
-
-        for (const attachmentID of toDeleteAttachmentIDs) {
-            updates.Delete.Attachment.push({
-                NoteID: ID,
-                AttachmentID: attachmentID
-            });
-        }
-
-        if (newItem.UploadedAttachments) {
-            updates.Insert.Attachment.push({
-                NoteID: ID,
-                Files: filesToFormData(newItem.UploadedAttachments)
-            });
-        }
-
         // SHAREES
         const oldShareeIDs = new MathSet(oldItem.Sharees);
         const newShareeIDs = new MathSet(newItem.Sharees);
@@ -190,7 +171,7 @@ export const buildNoteUpdate = (appointmentID: string, oldItems: Notes, newItems
             Head: newItem.Head,
             Body: newItem.Body,
             ShowCustomer: newItem.ShowCustomer[0],
-            Files: filesToFormData(newItem.UploadedAttachments),
+            Files: null,
             Sharees: newItem.Sharees
         });
     }

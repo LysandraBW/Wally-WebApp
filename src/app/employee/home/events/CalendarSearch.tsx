@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Months, Years } from "./_DEF";
 import { z } from "zod";
-import { subsetOf } from "@/lib/Zod/InputTest";
+import { subsetOf } from "@/utils/validate";
 import useForm from "@/features/Form/useForm/useForm";
 import { Options } from "@/features/Form/DEF";
 import getValues from "@/features/Form/helpers/getValues";
@@ -66,7 +66,7 @@ export default function CalendarSearch(props: CalendarSearchProps) {
                         props.onYearChange(parseInt(value[0]));
                     }}
                     smaller={true}
-                    ToggleIcon={<ChevronUpDownIcon className="size-2.5 stroke-[1px] stroke-base-500"/>}
+                    ToggleIcon={<ChevronUpDownIcon className="size-2.5 stroke-[1px] stroke-base-500 dark:stroke-base-400"/>}
                     options={years}
                     disabled={false}
                     toggleLabel="Select Year"
@@ -81,7 +81,7 @@ export default function CalendarSearch(props: CalendarSearchProps) {
                         props.onMonthChange(parseInt(value[0]));
                     }}
                     smaller={true}
-                    ToggleIcon={<ChevronUpDownIcon className="size-2.5 stroke-[1px] stroke-base-500"/>}
+                    ToggleIcon={<ChevronUpDownIcon className="size-2.5 stroke-[1px] stroke-base-500 dark:stroke-base-400"/>}
                     options={months}
                     disabled={false}
                     toggleLabel="Select Month"

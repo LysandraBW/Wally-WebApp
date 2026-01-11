@@ -1,5 +1,5 @@
 import { Define } from "@/features/ItemManager/Define";
-import { Part as DB_AppointmentPart } from "waltronics-types";
+import { Part as DB_AppointmentPart, isInteger, isMoney, isPartName, isPartNumber } from "waltronics-types";
 import { toString } from "@/utils/convert";
 import { z } from "zod";
 import { PART } from "../_DEF";
@@ -39,10 +39,11 @@ export class DefinePart extends Define<DB_AppointmentPart, Part, Parts> {
 
     test(..._: any[]): FormTest {
         return z.object({
-            PartName: z.string(),
-            PartNumber: z.string(),
-            Quantity: z.string(),
-            UnitCost: z.string()
+            PartID: z.string(),
+            PartName: isPartName,
+            PartNumber: isPartNumber,
+            Quantity: isInteger,
+            UnitCost: isMoney
         });
     }
 

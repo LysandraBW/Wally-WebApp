@@ -1,15 +1,11 @@
-import { toDisplayDate } from "@/utils/convert";
+import { formatDate } from "@/utils/convert";
 import { Fragment } from "react";
 import HeaderData from "./HeaderData";
 import IconButton from "@/component/Button/IconButton";
 import ArrowLongLeftIcon from "@/component/Icons/Icons/ArrowLongLeftIcon";
 import { Appointment } from "waltronics-types";
-import { navigate } from "@/utils/navigate";
-import { PAGE_EDIT_APPOINTMENT, PAGE_VIEW_APPOINTMENT } from "@/utils/constants";
-import PencilSquareIcon from "@/component/Icons/Icons/PencilSquareIcon";
-import { PencilIcon } from "lucide-react";
-import EyeIcon from "@/component/Icons/Icons/EyeIcon";
-import DocumentIcon from "@/component/Icons/Icons/DocumentIcon";
+import ViewAppointmentButton from "./Buttons/ViewAppointmentButton";
+import EditAppointmentButton from "./Buttons/EditAppointmentButton";
 
 
 interface HeaderProps {
@@ -40,26 +36,14 @@ export default function Header(props: HeaderProps) {
                     </h1>
                 </div>
                 {props.goToEdit &&
-                    <IconButton
-                        size={14}
-                        onClick={() => navigate(PAGE_EDIT_APPOINTMENT, {appointmentID: props.appointmentID})}
-                        className="rounded-[5px] shadow-xs dark:shadow-md"
-                    >
-                        <PencilIcon
-                            className="size-3 stroke-inherit"
-                        />
-                    </IconButton>
+                    <EditAppointmentButton
+                        appointmentID={props.appointmentID}
+                    />
                 }
                 {props.goToView &&
-                    <IconButton
-                        size={14}
-                        onClick={() => navigate(PAGE_VIEW_APPOINTMENT, {appointmentID: props.appointmentID})}
-                        className="rounded-[5px] shadow-xs dark:shadow-md"
-                    >
-                        <DocumentIcon
-                            className="size-4 stroke-inherit"
-                        />
-                    </IconButton>
+                    <ViewAppointmentButton
+                        appointmentID={props.appointmentID}
+                    />
                 }
             </div>
             <div className="flex border-b border-base-300 dark:border-base-200">
@@ -69,11 +53,11 @@ export default function Header(props: HeaderProps) {
                 />
                 <HeaderData
                     k={"Created"}
-                    v={toDisplayDate(props.appointment?.CreationDate)}
+                    v={formatDate(props.appointment?.CreationDate)}
                 />
                 <HeaderData
                     k={"Updated"}
-                    v={toDisplayDate(props.appointment?.UpdationDate)}
+                    v={formatDate(props.appointment?.UpdationDate)}
                 />
             </div>
         </Fragment>

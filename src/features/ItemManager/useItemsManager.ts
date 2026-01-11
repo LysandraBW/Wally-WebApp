@@ -131,11 +131,11 @@ export default function useItemsManager<BaseItem, Item, Items>(props: UseItemsMa
                 itemsManagerKey: props.keyForUpdateManagerForm,
                 itemID: itemID
             },
-            header: `Update ${props.item.itemName} #${itemID}`,
+            header: parseInt(itemID) < 0 ? `Update New ${props.item.itemName}` : `Update ${props.item.itemName} #${itemID}`,
             form: {
                 key: props.keyForUpdateManagerForm, 
                 itemID: itemID, 
-                header: `Update ${props.item.itemName} #${itemID}`,
+                header: parseInt(itemID) < 0 ? `Update New ${props.item.itemName}` : `Update ${props.item.itemName} #${itemID}`,
                 mutation: "Update",
                 canDelete: true
             }

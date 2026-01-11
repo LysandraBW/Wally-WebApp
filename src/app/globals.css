@@ -79,7 +79,7 @@ html {
     --base-0200: #1B1D1F;
     --base-0300: var(--neutral-0700);
     --base-0400: var(--neutral-0600);
-    --base-0500: #51565D;
+    --base-0500: #2c3543;
     --base-0600: var(--neutral-0400);
     --base-0700: var(--neutral-0300);
     --base-0800: var(--neutral-0200);
@@ -88,6 +88,13 @@ html {
     --base-1000: var(--neutral-0000);
 }
 
+.dark .background {
+    background: var(--base-0000);
+}
+
+.background:has(.dark) {
+    background: var(--base-1000);
+}
 
 @layer base {
     * { 
@@ -136,8 +143,8 @@ html {
 @layer utilities {
     .surface-color {
         @apply
-            text-base-500
-            stroke-base-500
+            text-base-500 dark:text-base-400
+            stroke-base-500 dark:stroke-base-400
         ;
     }
 
@@ -315,13 +322,13 @@ html {
         @apply
             tracking-wide 
             text-xs
-            text-base-500
+            text-base-500 dark:text-base-400
         ;
     }
 
 
     .entry-text {
-        @apply text-xs text-base-700 tracking-wide whitespace-nowrap;
+        @apply text-xs text-base-700 tracking-wide whitespace-nowrap overflow-clip text-ellipsis;
     }
 
 
@@ -372,6 +379,33 @@ html {
 
     .dark .entry-border-b {
         @apply border-b border-b-base-200;
+    }
+
+
+    .table-entry {
+        @apply 
+            w-full h-full px-2 py-2 flex gap-2 items-center overflow-clip
+            border-r border-b border-base-300 dark:border-base-200
+            cursor-pointer
+        ;
+    }
+
+
+    .table-entry.seen {
+        @apply bg-base-200 dark:bg-base-50;
+    }
+
+
+    .table-entry:not(.seen) {
+        @apply bg-base-100 dark:bg-[#121315];
+    }
+
+    .table-entry-text {
+        @apply w-min text-gray-700 tracking-wide text-xs whitespace-nowrap group-hover:text-blue-500 overflow-hidden text-ellipsis;
+    }
+
+    .table-entry-text:not(.seen .table-entry-text) {
+        @apply font-medium;
     }
 
 

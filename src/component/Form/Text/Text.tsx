@@ -5,12 +5,11 @@ import { TextProps } from "./TextProps";
 import clsx from "clsx";
 
 export default function Text(props: TextProps) {
+    const [hadFocus, setHadFocus] = useState(false);
     const [showErrorMessage, setShowErrorMessage] = useState(false);
 
     useEffect(() => {
-        if (showErrorMessage)
-            return;
-        if (props.state && props.state[0] === false && !props.value.length)
+        if (props.state && props.state[0] === false && (!props.value.length || !hadFocus))
             setShowErrorMessage(true)
     }, [props.state, props.value]);
 
@@ -21,6 +20,10 @@ export default function Text(props: TextProps) {
     const onBlur = (event: any) => {
         setShowErrorMessage(true);
         props.onBlur && props.onBlur();
+    }
+
+    const onFocus = (event: any) => {
+        setHadFocus(true);
     }
 
     return (
@@ -34,7 +37,8 @@ export default function Text(props: TextProps) {
                     {props.prefix &&
                         <div 
                             className={clsx(
-                                "bg-base-100 field-text field-padding field-border !rounded-r-none !border-r-0",
+                                "bg-base-100 field-text field-padding",
+                                "field-border !rounded-r-none !border-r-0",
                                 props.smaller && "!text-xs"
                             )}
                         >
@@ -46,6 +50,7 @@ export default function Text(props: TextProps) {
                         name={props.name}
                         value={props.value}
                         onBlur={onBlur}
+                        onFocus={onFocus}
                         onChange={onChange}
                         placeholder={props.placeholder}
                         className={clsx(
@@ -58,7 +63,8 @@ export default function Text(props: TextProps) {
                     {props.suffix &&
                         <div 
                             className={clsx(
-                                "bg-base-100 field-text field-padding field-border !rounded-l-none !border-l-0",
+                                "bg-base-100 field-text field-padding",
+                                "field-border !rounded-l-none !border-l-0",
                                 props.smaller && "!text-xs"
                             )}
                         >
