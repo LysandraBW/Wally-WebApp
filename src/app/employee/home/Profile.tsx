@@ -1,6 +1,7 @@
 import SecondaryButton from "@/component/Button/SecondaryButton";
 import Toggle from "@/component/Form/Toggle";
 import ArrowLeftStartOnRectangleIcon from "@/component/Icons/Icons/ArrowLeftStartOnRectangleIcon";
+import { LogoutEmployee } from "@/services/db/Employee/LogoutEmployee";
 import { PAGE_EMPLOYEE_LOGIN } from "@/utils/constants";
 import { deleteCookie } from "@/utils/cookies/deleteCookie";
 import { getCookie } from "@/utils/cookies/getCookie";
@@ -36,7 +37,8 @@ export default function Profile(props: {employee: Employee}) {
         setOpen(false);
     }
 
-    const logOut = () => {
+    const logOut = async () => {
+        LogoutEmployee();
         deleteCookie("sessionID");
         navigateToPage(PAGE_EMPLOYEE_LOGIN);
     }

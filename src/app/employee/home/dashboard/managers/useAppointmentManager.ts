@@ -111,9 +111,10 @@ export default function useAppointmentManager(filterManager: FilterManager, setL
         if (!tableAppointments)
             return;
         
+        
         const index = tableAppointments.findIndex(app => app.AppointmentID === appointmentID);
         if (index === -1)
-            throw "Appointment Not Found!";
+            return;
         
         const updatedAppointments = [...tableAppointments];
         updatedAppointments[index] = {

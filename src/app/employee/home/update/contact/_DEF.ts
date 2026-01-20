@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { toSQLDateTime, toString } from "@/utils/convert";
-import { Appointment as DB_Appointment, isName, isEmail, isPhone, isDate, isInteger, isEmptyString } from "waltronics-types";
+import { Appointment as DB_Appointment, isName, isEmail, isPhone, isDate, isInteger, isEmptyString, isIntegerArray } from "waltronics-types";
 
 export interface Contact {
     FName: string
@@ -47,5 +47,5 @@ export const contactTest = z.object({
         isEmptyString(),
         isDate
     ]),
-    StatusID: isInteger
+    StatusID: isIntegerArray
 });

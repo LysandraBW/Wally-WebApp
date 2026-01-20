@@ -35,7 +35,7 @@ export default function Page() {
     useEffect(() => {
         const load = async () => {
             const authenticated = await AuthenticatedEmployee();
-            if (authenticated)
+            if (authenticated !== false)
                 navigateToPage(PAGE_DASHBOARD);
         }
         load();
@@ -75,31 +75,9 @@ export default function Page() {
                         </header>
                         <div className="w-full flex flex-col items-center">
                             <LoginForm 
+                                sessionID={sessionID}
                                 setSessionID={setSessionID}
                             />
-                            {sessionID === "" && 
-                                <Tooltip
-                                    isOpen={true}
-                                    anchorSelect="#errorPopup"
-                                    opacity={1}
-                                    place="bottom"
-                                    border="1px solid #FCF34D"
-                                    style={{
-                                        backgroundColor: "#fffbeb",
-                                        display: "flex",
-                                        gap: "0rem",
-                                        borderRadius: "6px",
-                                        alignItems: "center",
-                                        flexDirection: "column",
-                                        boxShadow: "0px 2px 2px 0px #00000010",
-                                    }}
-                                >
-                                    <h6 className="text-xs tracking-wide text-base-500 dark:text-base-400">
-                                        No login matches this information. 
-                                        Please try again.
-                                    </h6>
-                                </Tooltip> 
-                            }
                         </div>
                     </div>
                 </div>

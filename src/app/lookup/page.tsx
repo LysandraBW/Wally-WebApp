@@ -73,7 +73,7 @@ export default function Page() {
                                 svgClassName="dark:stroke-white dark:fill-white"
                             />
                         </div>
-                        <div className="relative w-full grow px-12 flex flex-col justify-center gap-6">
+                        <div className="relative w-full grow px-12 flex flex-col items-center justify-center gap-6">
                             <div className="flex flex-col items-center gap-4 w-[min(100%,400px)]">
                                 <header className="text-center flex flex-col gap-1 items-center">
                                     <h3 className="text-base-900 text-2xl tracking-tight font-medium">
@@ -84,7 +84,7 @@ export default function Page() {
                                     </p>
                                 </header>
                             </div>
-                            <div className="w-full flex flex-col items-center w-[min(100%,400px)]">
+                            <div className="flex flex-col items-center w-[min(100%,400px)]">
                                 <Form
                                     user={user}
                                     form={form}

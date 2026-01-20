@@ -138,7 +138,7 @@ export default function Page() {
                 />
             </div>
             <div className="flex flex-col justify-center py-8 px-20 grow max-md:px-8 max-md:py-4 max-sm:p-4">
-                <div className="h-min flex justify-center max-md:border-b max-md:border-base-300 max-md:dark:border-base-200 max-md:pb-4 max-sm:pb-4">
+                <div className="h-min flex justify-center relative max-md:after:absolute max-md:after:bottom-0 max-md:after:left-0 max-md:after:w-full max-md:after:h-[1px] max-md:after:bg-gradient-to-r max-md:after:from-base-0 max-md:after:via-base-300 max-md:after:to-base-0 max-md:after:to-90% max-md:after:from-10% max-md:dark:after:bg-gradient-to-r max-md:dark:after:from-base-0 max-md:dark:after:via-base-200 max-md:dark:after:to-base-0 max-md:dark:after:to-90% max-md:dark:after:from-10% max-md:pb-4 max-sm:pb-4">
                     <div className="md:hidden mb-1 mr-1">
                         <Logo
                             svgClassName="!size-3 dark:!stroke-white dark:!fill-white"

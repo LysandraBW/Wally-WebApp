@@ -25,10 +25,10 @@ export default function RootLayout({
 		<html 
 			lang="en" 
 			className={clsx(
-				"h-full background", 
+				"h-screen background dark", 
 				InstrumentSans.variable, IBM.variable
 			)}>
-			<body className="font-instrument-sans h-full">
+			<body className="font-instrument-sans h-screen">
 				{children}
 			</body>
 		</html>

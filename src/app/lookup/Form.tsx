@@ -2,6 +2,7 @@
 import PrimaryButton from "@/component/Button/PrimaryButton";
 import TextField from "@/component/Form/Text/Text";
 import { UseForm } from "@/features/Form/useForm/useForm";
+import { useEffect, useState } from "react";
 import { Tooltip } from "react-tooltip";
 
 interface LookupFormProps {
@@ -11,6 +12,12 @@ interface LookupFormProps {
 }
 
 export default function Form(props: LookupFormProps) {
+    const [showError, setShowError] = useState(false);
+
+    useEffect(() => {
+        setShowError(props.user === null);
+    }, [props.user]);
+
     return (
         <div className="flex flex-col w-full">
             <form
@@ -23,7 +30,10 @@ export default function Form(props: LookupFormProps) {
                     label="Email Address"
                     value={props.form.getInput("email").data}
                     state={props.form.getInput("email").state}
-                    onChange={props.form.updateInputData}
+                    onChange={(n, v) => {
+                        props.form.updateInputData(n, v);
+                        setShowError(false);
+                    }}
                     onBlur={undefined}
                 />
                 <TextField
@@ -32,7 +42,10 @@ export default function Form(props: LookupFormProps) {
                     label="Appointment ID"
                     value={props.form.getInput("appointmentID").data}
                     state={props.form.getInput("appointmentID").state}
-                    onChange={props.form.updateInputData}
+                    onChange={(n, v) => {
+                        props.form.updateInputData(n, v);
+                        setShowError(false);
+                    }}
                     onBlur={undefined}
                 />
                 <PrimaryButton
@@ -43,7 +56,7 @@ export default function Form(props: LookupFormProps) {
                     Search
                 </PrimaryButton>
             </form>
-            {props.user === null && 
+            {showError && 
                 <Tooltip
                     isOpen={true}
                     anchorSelect="#errorPopup"
