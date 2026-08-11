@@ -56,13 +56,24 @@ However, I think these would still be good features to develop in the future if 
 I'm too lazy to make a portfolio, so here are some pictures and videos of the application! I never made a landing page for this project because I just didn't have the sauce (yet).
 
 <img width="2880" height="1350" alt="Screenshot 2026-08-09 080422" src="https://github.com/user-attachments/assets/86d363d7-e653-48cb-99bd-60c3b91b7370" />
+
 <img width="2880" height="1343" alt="Screenshot 2026-08-11 054454" src="https://github.com/user-attachments/assets/e9aef3af-1d66-4b81-b2d9-40e6d5e5fe62" />
+
 <img width="2880" height="1350" alt="Screenshot 2026-08-11 054524" src="https://github.com/user-attachments/assets/15a48c0a-edec-43f4-a5a2-a7de697cb34c" />
+
 <img width="2879" height="1343" alt="Screenshot 2026-08-09 075034" src="https://github.com/user-attachments/assets/5e5f6f1d-4e50-4851-aaa3-77d1c4d97d15" />
+
 <img width="2879" height="1339" alt="Screenshot 2026-08-09 075108" src="https://github.com/user-attachments/assets/52d42a60-af99-427e-9ab7-308c748799e5" />
+
 <img width="2879" height="1339" alt="Screenshot 2026-08-09 080228" src="https://github.com/user-attachments/assets/044da995-88fb-4c34-b79c-2e52a345d667" />
+
 <img width="2880" height="1339" alt="Screenshot 2026-08-09 080315" src="https://github.com/user-attachments/assets/b6ef1538-446e-4f75-8037-c7bde2bf8e4c" />
+
 <img width="2880" height="1335" alt="Screenshot 2026-08-09 080330" src="https://github.com/user-attachments/assets/fea67449-d51d-4876-b1b2-45ceeabe3040" />
+
 <img width="2880" height="1339" alt="Screenshot 2026-08-09 080344" src="https://github.com/user-attachments/assets/ad235cab-6215-4bc2-b9f8-e0719d309271" />
+
 https://github.com/user-attachments/assets/40a4e921-b867-4833-93c6-d72752deefa9
+
 https://github.com/user-attachments/assets/7ca251d0-c6b8-4b4b-b14a-81656fba26ec
+
